@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.aion.clientpackets;
 
@@ -37,52 +37,60 @@ import com.aionemu.chatserver.service.BroadcastService;
  */
 public class CM_CHANNEL_MESSAGE extends AbstractClientPacket {
 
-	@SuppressWarnings("unused")
-	private static final Logger log = LoggerFactory.getLogger(CM_CHANNEL_MESSAGE.class);
+    @SuppressWarnings("unused")
+    private static final Logger log = LoggerFactory.getLogger(CM_CHANNEL_MESSAGE.class);
+    private int channelId;
+    private byte[] content;
+    private BroadcastService broadcastService;
 
-	private int channelId;
-	private byte[] content;
+    /**
+     * @param channelBuffer
+     * @param gameChannelHandler
+     * @param opCode
+     */
+    public CM_CHANNEL_MESSAGE(ChannelBuffer channelBuffer, ClientChannelHandler gameChannelHandler, BroadcastService broadcastService) {
+        super(channelBuffer, gameChannelHandler, 0x18);
+        this.broadcastService = broadcastService;
+    }
 
-	private BroadcastService broadcastService;
+    @Override
+    protected void readImpl() {
+        readH();
+        readC();
+        readD();
+        readD();
+        readD();
+        readD();
+        channelId = readD();
+        readC();
+        int lenght = readH() * 2;
+        content = readB(lenght);
+    }
 
-	/**
-	 * @param channelBuffer
-	 * @param gameChannelHandler
-	 * @param opCode
-	 */
-	public CM_CHANNEL_MESSAGE(ChannelBuffer channelBuffer, ClientChannelHandler gameChannelHandler, BroadcastService broadcastService) {
-		super(channelBuffer, gameChannelHandler, 0x18);
-		this.broadcastService = broadcastService;
-	}
+    @Override
+    protected void runImpl() {
+        Channel channel = ChatChannels.getChannelById(channelId);
+        Message message = new Message(channel, content, clientChannelHandler.getChatClient());
+        if (!clientChannelHandler.getChatClient().verifyLastMessage()) {
+            message.setText("You can use chat only once every 30 second.");
+            clientChannelHandler.sendPacket(new SM_CHANNEL_MESSAGE(message));
+            return;
+        }
+        if (clientChannelHandler.getChatClient().isGagged()) {
+            long endTime = (clientChannelHandler.getChatClient().getGagTime() - System.currentTimeMillis()) / 1000 / 60;
+            message.setText("You have been gagged for " + endTime + " minutes");
+            clientChannelHandler.sendPacket(new SM_CHANNEL_MESSAGE(message));
+            return;
+        }
+        broadcastService.broadcastMessage(message);
 
-	@Override
-	protected void readImpl() {
-		readH();
-		readC();
-		readD();
-		readD();
-		channelId = readD();
-		int lenght = readH() * 2;
-		content = readB(lenght);
-	}
+        if (Config.LOG_CHAT) {
+            LoggerFactory.getLogger("CHAT_LOG").info(String.format("[MESSAGE] <%s>: [%s]> %s", message.getChannelString(), message.getSenderString(), message.getTextString()));
+        }
+    }
 
-	@Override
-	protected void runImpl() {
-		Channel channel = ChatChannels.getChannelById(channelId);
-		Message message = new Message(channel, content, clientChannelHandler.getChatClient());
-		if(!clientChannelHandler.getChatClient().verifyLastMessage()) {
-			message.setText("You can use chat only once every 30 second.");
-			clientChannelHandler.sendPacket(new SM_CHANNEL_MESSAGE(message));
-			return;
-		}
-		broadcastService.broadcastMessage(message);
-
-		if(Config.LOG_CHAT)
-			LoggerFactory.getLogger("CHAT_LOG").info(String.format("[MESSAGE] <%s>: [%s]> %s", message.getChannelString(), message.getSenderString(), message.getTextString()));
-	}
-
-	@Override
-	public String toString() {
-		return "CM_CHANNEL_MESSAGE [channelId=" + channelId + ", content=" + Arrays.toString(content) + "]";
-	}
+    @Override
+    public String toString() {
+        return "CM_CHANNEL_MESSAGE [channelId=" + channelId + ", content=" + Arrays.toString(content) + "]";
+    }
 }

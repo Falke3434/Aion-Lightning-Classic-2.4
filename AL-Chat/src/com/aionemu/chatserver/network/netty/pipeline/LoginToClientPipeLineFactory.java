@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.netty.pipeline;
 
@@ -36,35 +36,33 @@ import com.aionemu.chatserver.network.netty.handler.ClientChannelHandler;
  */
 public class LoginToClientPipeLineFactory implements ChannelPipelineFactory {
 
-	private static final int THREADS_MAX = 10;
-	private static final int MEMORY_PER_CHANNEL = 1048576;
-	private static final int TOTAL_MEMORY = 134217728;
-	private static final int TIMEOUT = 100;
+    private static final int THREADS_MAX = 10;
+    private static final int MEMORY_PER_CHANNEL = 1048576;
+    private static final int TOTAL_MEMORY = 134217728;
+    private static final int TIMEOUT = 100;
+    private ExecutionHandler executionHandler;
+    private final ClientPacketHandler clientPacketHandler;
 
-	private ExecutionHandler executionHandler;
+    public LoginToClientPipeLineFactory(ClientPacketHandler clientPacketHandler) {
+        this.clientPacketHandler = clientPacketHandler;
+        this.executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(THREADS_MAX, MEMORY_PER_CHANNEL, TOTAL_MEMORY, TIMEOUT, TimeUnit.MILLISECONDS, Executors.defaultThreadFactory()));
+    }
 
-	private final ClientPacketHandler clientPacketHandler;
+    /**
+     * Decoding process will include the following handlers: - framedecoder -
+     * packetdecoder - handler Encoding process: - packetencoder Please note the
+     * sequence of handlers
+     */
+    @Override
+    public ChannelPipeline getPipeline() throws Exception {
+        ChannelPipeline pipeline = Channels.pipeline();
 
-	public LoginToClientPipeLineFactory(ClientPacketHandler clientPacketHandler) {
-		this.clientPacketHandler = clientPacketHandler;
-		this.executionHandler = new ExecutionHandler(new OrderedMemoryAwareThreadPoolExecutor(THREADS_MAX,
-			MEMORY_PER_CHANNEL, TOTAL_MEMORY, TIMEOUT, TimeUnit.MILLISECONDS, Executors.defaultThreadFactory()));
-	}
+        pipeline.addLast("framedecoder", new PacketFrameDecoder());
+        pipeline.addLast("packetdecoder", new LoginPacketDecoder());
+        pipeline.addLast("packetencoder", new LoginPacketEncoder());
+        pipeline.addLast("executor", executionHandler);
+        pipeline.addLast("handler", new ClientChannelHandler(clientPacketHandler));
 
-	/**
-	 * Decoding process will include the following handlers: - framedecoder - packetdecoder - handler Encoding process: -
-	 * packetencoder Please note the sequence of handlers
-	 */
-	@Override
-	public ChannelPipeline getPipeline() throws Exception {
-		ChannelPipeline pipeline = Channels.pipeline();
-
-		pipeline.addLast("framedecoder", new PacketFrameDecoder());
-		pipeline.addLast("packetdecoder", new LoginPacketDecoder());
-		pipeline.addLast("packetencoder", new LoginPacketEncoder());
-		pipeline.addLast("executor", executionHandler);
-		pipeline.addLast("handler", new ClientChannelHandler(clientPacketHandler));
-
-		return pipeline;
-	}
+        return pipeline;
+    }
 }

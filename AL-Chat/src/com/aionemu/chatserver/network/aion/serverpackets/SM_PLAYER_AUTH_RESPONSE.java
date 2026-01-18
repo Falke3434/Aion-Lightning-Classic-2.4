@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.aion.serverpackets;
 
@@ -26,16 +26,16 @@ import com.aionemu.chatserver.network.netty.handler.ClientChannelHandler;
  */
 public class SM_PLAYER_AUTH_RESPONSE extends AbstractServerPacket {
 
-	public SM_PLAYER_AUTH_RESPONSE() {
-		super(0x02);
-	}
+    public SM_PLAYER_AUTH_RESPONSE() {
+        super(0x02);
+    }
 
-	@Override
-	protected void writeImpl(ClientChannelHandler clientChannelHandler, ChannelBuffer buf) {
-		writeC(buf, getOpCode());
-		writeC(buf, 0x40); // ?
-		writeH(buf, 0x01); // ?
-		writeD(buf, 0x0BDD0000); // TODO this is actually dynamic
-	}
-
+    @Override
+    protected void writeImpl(ClientChannelHandler clientChannelHandler, ChannelBuffer buf) {
+        writeC(buf, getOpCode());
+        writeC(buf, 0x40); // ?
+        writeH(buf, 0x01); // ?
+        writeD(buf, 0x00); // ?
+        writeH(buf, 0x0822); // ?
+    }
 }

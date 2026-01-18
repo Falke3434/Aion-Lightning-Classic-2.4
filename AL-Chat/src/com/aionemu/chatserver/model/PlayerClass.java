@@ -1,25 +1,23 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.model;
 
-/**
- * @author ATracer
- */
-public enum PlayerClass {
+public enum PlayerClass
+{
 	WARRIOR(0),
 	GLADIATOR(1),
 	TEMPLAR(2),
@@ -31,20 +29,17 @@ public enum PlayerClass {
 	SPIRIT_MASTER(8),
 	PRIEST(9),
 	CLERIC(10),
-	CHANTER(11);
-
+	CHANTER(11),
+	MONK(12),
+	THUNDERER(13),
+	ALL(14);
+	
 	private byte classId;
-
-	/**
-	 * @param classId
-	 */
+	
 	private PlayerClass(int classId) {
 		this.classId = (byte) classId;
 	}
-
-	/**
-	 * @return classId
-	 */
+	
 	public byte getClassId() {
 		return classId;
 	}

@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.netty.handler;
 
@@ -38,94 +38,93 @@ import com.google.inject.Inject;
  */
 public class ClientChannelHandler extends AbstractChannelHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(ClientChannelHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(ClientChannelHandler.class);
+    private final ClientPacketHandler clientPacketHandler;
+    private State state;
+    private ChatClient chatClient;
 
-	private final ClientPacketHandler clientPacketHandler;
+    @Inject
+    public ClientChannelHandler(ClientPacketHandler clientPacketHandler) {
+        this.clientPacketHandler = clientPacketHandler;
+    }
 
-	private State state;
+    @Override
+    public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        super.channelConnected(ctx, e);
 
-	private ChatClient chatClient;
+        state = State.CONNECTED;
+        inetAddress = ((InetSocketAddress) e.getChannel().getRemoteAddress()).getAddress();
+        channel = ctx.getChannel();
+        log.info("Channel connected Ip:" + inetAddress.getHostAddress());
+    }
 
-	@Inject
-	public ClientChannelHandler(ClientPacketHandler clientPacketHandler) {
-		this.clientPacketHandler = clientPacketHandler;
-	}
+    @Override
+    public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
+        super.messageReceived(ctx, e);
 
-	@Override
-	public void channelConnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		super.channelConnected(ctx, e);
+        AbstractClientPacket clientPacket = clientPacketHandler.handle((ChannelBuffer) e.getMessage(), this);
+        if (clientPacket != null && clientPacket.read()) {
+            clientPacket.run();
+        }
+        if (clientPacket != null) {
+            if (log.isDebugEnabled()) {
+                log.debug("Received packet: " + clientPacket);
+            }
+        }
+    }
 
-		state = State.CONNECTED;
-		inetAddress = ((InetSocketAddress) e.getChannel().getRemoteAddress()).getAddress();
-		channel = ctx.getChannel();
-		log.info("Channel connected Ip:" + inetAddress.getHostAddress());
-	}
+    /**
+     * @param packet
+     */
+    public void sendPacket(AbstractServerPacket packet) {
+        ChannelBuffer cb = ChannelBuffers.buffer(ByteOrder.LITTLE_ENDIAN, 2 * 8192);
+        packet.write(this, cb);
+        channel.write(cb);
+        if (log.isDebugEnabled()) {
+            log.debug("Sent packet: " + packet);
+        }
+    }
 
-	@Override
-	public void messageReceived(ChannelHandlerContext ctx, MessageEvent e) throws Exception {
-		super.messageReceived(ctx, e);
+    /**
+     * Possible states of channel handler
+     */
+    public static enum State {
 
-		AbstractClientPacket clientPacket = clientPacketHandler.handle((ChannelBuffer) e.getMessage(), this);
-		if (clientPacket != null && clientPacket.read()) {
-			clientPacket.run();
-		}
-		if (clientPacket != null)
-			if(log.isDebugEnabled())
-				log.debug("Received packet: " + clientPacket);
-	}
+        /**
+         * client just connected
+         */
+        CONNECTED,
+        /**
+         * client is authenticated
+         */
+        AUTHED,
+    }
 
-	/**
-	 * @param packet
-	 */
-	public void sendPacket(AbstractServerPacket packet) {
-		ChannelBuffer cb = ChannelBuffers.buffer(ByteOrder.LITTLE_ENDIAN, 2 * 8192);
-		packet.write(this, cb);
-		channel.write(cb);
-		if(log.isDebugEnabled())
-			log.debug("Sent packet: " + packet);
-	}
+    /**
+     * @return the state
+     */
+    public State getState() {
+        return state;
+    }
 
-	/**
-	 * Possible states of channel handler
-	 */
-	public static enum State {
-		/**
-		 * client just connected
-		 */
-		CONNECTED,
-		/**
-		 * client is authenticated
-		 */
-		AUTHED,
-	}
+    /**
+     * @param state the state to set
+     */
+    public void setState(State state) {
+        this.state = state;
+    }
 
-	/**
-	 * @return the state
-	 */
-	public State getState() {
-		return state;
-	}
+    /**
+     * @return the chatClient
+     */
+    public ChatClient getChatClient() {
+        return chatClient;
+    }
 
-	/**
-	 * @param state
-	 *          the state to set
-	 */
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	/**
-	 * @return the chatClient
-	 */
-	public ChatClient getChatClient() {
-		return chatClient;
-	}
-
-	/**
-	 * @param chatClient
-	 *          the chatClient to set
-	 */
-	public void setChatClient(ChatClient chatClient) {
-		this.chatClient = chatClient;
-	}
+    /**
+     * @param chatClient the chatClient to set
+     */
+    public void setChatClient(ChatClient chatClient) {
+        this.chatClient = chatClient;
+    }
 }

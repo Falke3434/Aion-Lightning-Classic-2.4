@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.gameserver.clientpackets;
 
@@ -34,43 +34,37 @@ import com.aionemu.chatserver.service.ChatService;
  */
 public class CM_PLAYER_AUTH extends GsClientPacket {
 
-	private static final Logger log = LoggerFactory.getLogger(CM_PLAYER_AUTH.class);
+    private static final Logger log = LoggerFactory.getLogger(CM_PLAYER_AUTH.class);
+    private int playerId;
+    private String playerLogin;
+    private String nick;
 
-	private int playerId;
+    public CM_PLAYER_AUTH(ByteBuffer buf, GsConnection connection) {
+        super(buf, connection, 0x01);
+    }
 
-	private String playerLogin;
+    @Override
+    protected void readImpl() {
+        playerId = readD();
+        playerLogin = readS();
+        nick = readS();
+    }
 
-	private String nick;
+    @Override
+    protected void runImpl() {
+        ChatClient chatClient = null;
+        try {
+            chatClient = ChatService.getInstance().registerPlayer(playerId, playerLogin, nick);
+        } catch (NoSuchAlgorithmException e) {
+            log.error("Error registering player on ChatServer: " + e.getMessage());
+        } catch (UnsupportedEncodingException e) {
+            log.error("Error registering player on ChatServer: " + e.getMessage());
+        }
 
-	public CM_PLAYER_AUTH(ByteBuffer buf, GsConnection connection) {
-		super(buf, connection, 0x01);
-	}
-
-	@Override
-	protected void readImpl() {
-		playerId = readD();
-		playerLogin = readS();
-		nick = readS();
-	}
-
-	@Override
-	protected void runImpl() {
-		ChatClient chatClient = null;
-		try {
-			chatClient = ChatService.getInstance().registerPlayer(playerId, playerLogin, nick);
-		}
-		catch (NoSuchAlgorithmException e) {
-			log.error("Error registering player on ChatServer: " + e.getMessage());
-		}
-		catch (UnsupportedEncodingException e) {
-			log.error("Error registering player on ChatServer: " + e.getMessage());
-		}
-
-		if (chatClient != null) {
-			getConnection().sendPacket(new SM_PLAYER_AUTH_RESPONSE(chatClient));
-		}
-		else {
-			log.info("Player was not authed " + playerId);
-		}
-	}
+        if (chatClient != null) {
+            getConnection().sendPacket(new SM_PLAYER_AUTH_RESPONSE(chatClient));
+        } else {
+            log.info("Player was not authed " + playerId);
+        }
+    }
 }

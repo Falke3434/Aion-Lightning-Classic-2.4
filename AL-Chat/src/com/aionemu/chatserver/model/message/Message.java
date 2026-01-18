@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.model.message;
 
@@ -26,76 +26,74 @@ import com.aionemu.chatserver.model.channel.Channel;
  */
 public class Message {
 
-	private Channel channel;
+    private Channel channel;
+    private byte[] text;
+    private ChatClient sender;
 
-	private byte[] text;
+    /**
+     * @param channel
+     * @param text
+     */
+    public Message(Channel channel, byte[] text, ChatClient sender) {
+        this.channel = channel;
+        this.text = text;
+        this.sender = sender;
+    }
 
-	private ChatClient sender;
+    public void setText(String str) {
+        try {
+            this.text = str.getBytes("utf-16le");
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+    }
 
-	/**
-	 * @param channel
-	 * @param text
-	 */
-	public Message(Channel channel, byte[] text, ChatClient sender) {
-		this.channel = channel;
-		this.text = text;
-		this.sender = sender;
-	}
+    /**
+     * @return the channel
+     */
+    public Channel getChannel() {
+        return channel;
+    }
 
-	public void setText(String str) {
-		try {
-			this.text = str.getBytes("utf-16le");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-	}
+    /**
+     * @return the text
+     */
+    public byte[] getText() {
+        return text;
+    }
 
-	/**
-	 * @return the channel
-	 */
-	public Channel getChannel() {
-		return channel;
-	}
+    public int size() {
+        return text.length;
+    }
 
-	/**
-	 * @return the text
-	 */
-	public byte[] getText() {
-		return text;
-	}
+    /**
+     * @return the sender
+     */
+    public ChatClient getSender() {
+        return sender;
+    }
 
-	public int size() {
-		return text.length;
-	}
+    public String getSenderString() {
+        try {
+            String s = new String(sender.getIdentifier(), "UTF-16le");
+            int pos = s.indexOf('@');
+            s = s.substring(0, pos);
+            return s;
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
-	/**
-	 * @return the sender
-	 */
-	public ChatClient getSender() {
-		return sender;
-	}
+    public String getTextString() {
+        try {
+            String s = new String(text, "UTF-16le");
+            return s;
+        } catch (Exception e) {
+            return "";
+        }
+    }
 
-	public String getSenderString()	{
-		try {
-			String s = new String(sender.getIdentifier(), "UTF-16le");
-			int pos = s.indexOf('@');
-			s = s.substring(0, pos);
-			return s;
-		}catch(Exception e){
-			return "";
-		}
-	}
-
-	public String getTextString() {
-		try {
-			String s = new String(text, "UTF-16le");
-			return s;
-		}catch(Exception e){
-			return "";
-		}
-	}
-
-	public String getChannelString() {
-		return channel.getChannelType().name();
-	}
+    public String getChannelString() {
+        return channel.getChannelType().name();
+    }
 }

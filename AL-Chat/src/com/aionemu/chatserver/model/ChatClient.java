@@ -1,76 +1,72 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.model;
-
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import com.aionemu.chatserver.configs.Config;
 import com.aionemu.chatserver.model.channel.Channel;
 import com.aionemu.chatserver.network.netty.handler.ClientChannelHandler;
+import com.aionemu.commons.utils.internal.chmv8.PlatformDependent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.util.Map;
 
 /**
  * @author ATracer
  */
-public class ChatClient {
-	private final Logger log = LoggerFactory.getLogger(ChatClient.class);
+public class ChatClient
+{
 
+	private final Logger log = LoggerFactory.getLogger(ChatClient.class);
 	/**
 	 * Id of chat client (player id)
 	 */
 	private int clientId;
-
 	/**
 	 * Identifier used when sending message
 	 */
 	private byte[] identifier;
-
 	/**
 	 * Token used during auth with GS
 	 */
 	private byte[] token;
-
 	/**
 	 * Channel handler of chat client
 	 */
 	private ClientChannelHandler channelHandler;
-
 	/**
 	 * Map with all connected channels<br>
 	 * Only one channel of specific type can be added
 	 */
-	private Map<ChannelType, Channel> channelsList = new ConcurrentHashMap<ChannelType, Channel>();
-
+	private Map<ChannelType, Channel> channelsList = PlatformDependent.newConcurrentHashMap();
 	// last time message was requested and broadcasted
 	private long lastMessage;
-
 	private String realName;
+	private long gagTime;
 
 	/**
 	 * @param clientId
 	 * @param token
-	 * @param playerLogin 
-	 * @param nick 
+	 * @param playerLogin
+	 * @param nick
 	 * @param identifier
 	 */
-	public ChatClient(int clientId, byte[] token, String nick) {
+	public ChatClient(int clientId, byte[] token, String nick)
+	{
 		this.clientId = clientId;
 		this.token = token;
 		this.realName = nick;
@@ -79,78 +75,87 @@ public class ChatClient {
 	/**
 	 * @param channel
 	 */
-	public void addChannel(Channel channel) {
+	public void addChannel(Channel channel)
+	{
 		channelsList.put(channel.getChannelType(), channel);
 	}
 
 	/**
 	 * @return the channelHandler
 	 */
-	public ClientChannelHandler getChannelHandler() {
+	public ClientChannelHandler getChannelHandler()
+	{
 		return channelHandler;
 	}
 
 	/**
 	 * @return the clientId
 	 */
-	public int getClientId() {
+	public int getClientId()
+	{
 		return clientId;
 	}
 
 	/**
 	 * @return the identifier
 	 */
-	public byte[] getIdentifier() {
+	public byte[] getIdentifier()
+	{
 		return identifier;
 	}
 
-	public String getRealName() {
+	public String getRealName()
+	{
 		return realName;
 	}
 
 	/**
 	 * @return the token
 	 */
-	public byte[] getToken() {
+	public byte[] getToken()
+	{
 		return token;
 	}
 
 	/**
 	 * @param channel
 	 */
-	public boolean isInChannel(Channel channel) {
+	public boolean isInChannel(Channel channel)
+	{
 		return channelsList.containsKey(channel.getChannelType());
 	}
 
 	/**
-	 * @param channelHandler
-	 *          the channelHandler to set
+	 * @param channelHandler the channelHandler to set
 	 */
-	public void setChannelHandler(ClientChannelHandler channelHandler) {
+	public void setChannelHandler(ClientChannelHandler channelHandler)
+	{
 		this.channelHandler = channelHandler;
 	}
 
 	/**
-	 * @param identifier
-	 *          the identifier to set
-	 * @param realAccount 
-	 * @param realName 
+	 * @param identifier  the identifier to set
+	 * @param realAccount
+	 * @param realName
 	 */
-	public void setIdentifier(byte[] identifier) {
+	public void setIdentifier(byte[] identifier)
+	{
 		this.identifier = identifier;
 	}
 
-	public boolean verifyLastMessage() {
-		if(Config.MESSAGE_DELAY == 0)
+	public boolean verifyLastMessage()
+	{
+		if (Config.MESSAGE_DELAY == 0) {
 			return true;
-		
+		}
+
 		if (this.lastMessage == 0) {
 			this.lastMessage = System.currentTimeMillis();
 			return true;
 		} else {
 			long diff = System.currentTimeMillis() - this.lastMessage;
 			if (Config.MESSAGE_DELAY * 1000 > diff) {
-				log.warn("player " + this.getClientId()+" tried to flood ("+diff+"ms) traffic. skipped");
+				log.warn("player " + this.getClientId() + " tried to flood (" + diff + "ms) traffic. skipped");
 				return false;
 			} else {
 				this.lastMessage = System.currentTimeMillis();
@@ -159,9 +164,36 @@ public class ChatClient {
 		}
 	}
 
-	public boolean same(String nick) {
-		if(!this.realName.equals(nick)) {
-			log.warn("chat hack! different name "+nick+". expected "+this.realName);
+	public boolean isGagged()
+	{
+		if (this.gagTime == 0)
+			return false;
+		if (System.currentTimeMillis() > this.gagTime)
+			return false;
+		return true;
+	}
+
+	public void setGagTime(long gagTime)
+	{
+		this.gagTime = gagTime;
+	}
+
+	public long getGagTime()
+	{
+		return this.gagTime;
+	}
+
+	public boolean same(String nick)
+	{
+		String newNick = nick;
+		String[] parts = nick.split(" ");
+		// fixme what if player has names like "Lorem Ipsum" - look at whitespace -.-
+		if (parts.length >= 3) {
+			newNick = parts[parts.length - 1];
+		}
+
+		if (!this.realName.equals(newNick)) {
+			log.warn("chat hack! different name " + newNick + ". expected " + this.realName);
 			return true;
 		}
 		return true;

@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.netty.handler;
 
@@ -36,52 +36,51 @@ import com.aionemu.chatserver.common.netty.BaseServerPacket;
  */
 public abstract class AbstractChannelHandler extends SimpleChannelUpstreamHandler {
 
-	private static final Logger log = LoggerFactory.getLogger(AbstractChannelHandler.class);
+    private static final Logger log = LoggerFactory.getLogger(AbstractChannelHandler.class);
+    /**
+     * IP address of channel client
+     */
+    protected InetAddress inetAddress;
+    /**
+     * Associated channel
+     */
+    protected Channel channel;
 
-	/**
-	 * IP address of channel client
-	 */
-	protected InetAddress inetAddress;
-	/**
-	 * Associated channel
-	 */
-	protected Channel channel;
+    /**
+     * Invoked when a Channel was disconnected from its remote peer
+     */
+    @Override
+    public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
+        log.info("Channel disconnected IP: " + inetAddress.getHostAddress());
+    }
 
-	/**
-	 * Invoked when a Channel was disconnected from its remote peer
-	 */
-	@Override
-	public void channelDisconnected(ChannelHandlerContext ctx, ChannelStateEvent e) throws Exception {
-		log.info("Channel disconnected IP: " + inetAddress.getHostAddress());
-	}
+    @Override
+    public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
+        if (!(e.getCause() instanceof IOException)) {
+            log.error("NETTY: Exception caught: ", e.getCause());
+        }
+    }
 
-	@Override
-	public void exceptionCaught(ChannelHandlerContext ctx, ExceptionEvent e) throws Exception {
-		if (!(e.getCause() instanceof IOException)) {
-			log.error("NETTY: Exception caught: ", e.getCause());
-		}
-	}
+    /**
+     * Closes the channel but ensures that packet is send before close
+     *
+     * @param packet
+     */
+    public void close(BaseServerPacket packet) {
+        channel.write(packet).addListener(ChannelFutureListener.CLOSE);
+    }
 
-	/**
-	 * Closes the channel but ensures that packet is send before close
-	 * 
-	 * @param packet
-	 */
-	public void close(BaseServerPacket packet) {
-		channel.write(packet).addListener(ChannelFutureListener.CLOSE);
-	}
+    /**
+     * Closes the channel
+     */
+    public void close() {
+        channel.close();
+    }
 
-	/**
-	 * Closes the channel
-	 */
-	public void close() {
-		channel.close();
-	}
-
-	/**
-	 * @return the IP address string
-	 */
-	public String getIP() {
-		return inetAddress.getHostAddress();
-	}
+    /**
+     * @return the IP address string
+     */
+    public String getIP() {
+        return inetAddress.getHostAddress();
+    }
 }

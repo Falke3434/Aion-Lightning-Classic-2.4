@@ -1,18 +1,18 @@
 /*
- * This file is part of InPanic Core <Ver:3.1>.
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
  *
- *  InPanic-Core is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU General Public License as published by
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
  *  the Free Software Foundation, either version 3 of the License, or
  *  (at your option) any later version.
  *
- *  InPanic-Core is distributed in the hope that it will be useful,
+ *  Encom is distributed in the hope that it will be useful,
  *  but WITHOUT ANY WARRANTY; without even the implied warranty of
  *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU General Public License for more details.
+ *  GNU Lesser Public License for more details.
  *
- *  You should have received a copy of the GNU General Public License
- *  along with InPanic-Core.  If not, see <http://www.gnu.org/licenses/>.
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
  */
 package com.aionemu.chatserver.network.aion.clientpackets;
 
@@ -36,53 +36,50 @@ import com.aionemu.chatserver.service.ChatService;
  */
 public class CM_CHANNEL_REQUEST extends AbstractClientPacket {
 
-	private static final Logger log = LoggerFactory.getLogger(CM_CHANNEL_REQUEST.class);
+    private static final Logger log = LoggerFactory.getLogger(CM_CHANNEL_REQUEST.class);
+    private int channelIndex;
+    private byte[] channelIdentifier;
+    private ChatService chatService;
 
-	private int channelIndex;
-	private byte[] channelIdentifier;
+    /**
+     * @param channelBuffer
+     * @param gameChannelHandler
+     * @param opCode
+     */
+    public CM_CHANNEL_REQUEST(ChannelBuffer channelBuffer, ClientChannelHandler gameChannelHandler, ChatService chatService) {
+        super(channelBuffer, gameChannelHandler, 0x10);
+        this.chatService = chatService;
+    }
 
-	private ChatService chatService;
+    @Override
+    protected void readImpl() {
+        readC(); // 0x40
+        readH(); // 0x00
+        channelIndex = readH();
+        readB(18); //?
+        int length = (readH() * 2);
+        channelIdentifier = readB(length);
+        readD(); // ?
+    }
 
-	/**
-	 * @param channelBuffer
-	 * @param gameChannelHandler
-	 * @param opCode
-	 */
-	public CM_CHANNEL_REQUEST(ChannelBuffer channelBuffer, ClientChannelHandler gameChannelHandler, ChatService chatService) {
-		super(channelBuffer, gameChannelHandler, 0x10);
-		this.chatService = chatService;
-	}
+    @Override
+    protected void runImpl() {
+        try {
+            if (Config.LOG_CHANNEL_REQUEST) {
+                log.info("Channel requested " + new String(channelIdentifier, "UTF-16le"));
+            }
+        } catch (UnsupportedEncodingException e) {
+            e.printStackTrace();
+        }
+        ChatClient chatClient = clientChannelHandler.getChatClient();
+        Channel channel = chatService.registerPlayerWithChannel(chatClient, channelIndex, channelIdentifier);
+        if (channel != null) {
+            clientChannelHandler.sendPacket(new SM_CHANNEL_RESPONSE(channel, channelIndex));
+        }
+    }
 
-	@Override
-	protected void readImpl() {
-		readC(); // 0x40
-		readH(); // 0x00
-		channelIndex = readH();
-		int length = readH() * 2;
-		channelIdentifier = readB(length);
-	}
-
-	@Override
-	protected void runImpl() {
-		try {
-			if (Config.LOG_CHANNEL_REQUEST) {
-				log.info("Channel requested " + new String(channelIdentifier, "UTF-16le"));
-			}
-		}
-		catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		ChatClient chatClient = clientChannelHandler.getChatClient();
-		Channel channel = chatService.registerPlayerWithChannel(chatClient, channelIndex, channelIdentifier);
-		if (channel != null) {
-			clientChannelHandler.sendPacket(new SM_CHANNEL_RESPONSE(channel, channelIndex));
-		}
-	}
-
-	@Override
-	public String toString() {
-		return "CM_CHANNEL_REQUEST [channelIndex=" + channelIndex + ", channelIdentifier=" + new String(channelIdentifier)
-			+ "]";
-	}
-
+    @Override
+    public String toString() {
+        return "CM_CHANNEL_REQUEST [channelIndex=" + channelIndex + ", channelIdentifier=" + new String(channelIdentifier) + "]";
+    }
 }

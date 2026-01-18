@@ -1,3 +1,19 @@
+/*
+ * This file is part of Encom. **ENCOM FUCK OTHER SVN**
+ *
+ *  Encom is free software: you can redistribute it and/or modify
+ *  it under the terms of the GNU Lesser Public License as published by
+ *  the Free Software Foundation, either version 3 of the License, or
+ *  (at your option) any later version.
+ *
+ *  Encom is distributed in the hope that it will be useful,
+ *  but WITHOUT ANY WARRANTY; without even the implied warranty of
+ *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ *  GNU Lesser Public License for more details.
+ *
+ *  You should have received a copy of the GNU Lesser Public License
+ *  along with Encom.  If not, see <http://www.gnu.org/licenses/>.
+ */
 package com.aionemu.chatserver.network.gameserver;
 
 import java.io.IOException;
@@ -20,91 +36,95 @@ import com.aionemu.commons.network.util.ThreadPoolManager;
  */
 public class GsConnection extends AConnection {
 
-	private static final Logger log = LoggerFactory.getLogger(GsConnection.class);
+    private static final Logger log = LoggerFactory.getLogger(GsConnection.class);
 
-	public static enum State {
-		CONNECTED,
-		AUTHED
-	}
+    public static enum State {
 
-	private final Deque<GsServerPacket> sendMsgQueue = new ArrayDeque<GsServerPacket>();
+        CONNECTED,
+        AUTHED
+    }
+    private final Deque<GsServerPacket> sendMsgQueue = new ArrayDeque<GsServerPacket>();
+    private State state;
 
-	private State state;
+    public GsConnection(SocketChannel sc, Dispatcher d) throws IOException {
+        super(sc, d, 8192 * 8, 8192 * 8);
+    }
 
-	public GsConnection(SocketChannel sc, Dispatcher d) throws IOException {
-		super(sc, d, 65536, 65536);
-	}
+    @Override
+    public boolean processData(ByteBuffer data) {
+        GsClientPacket pck = GsPacketHandlerFactory.handle(data, this);
 
-	@Override
-	public boolean processData(ByteBuffer data) {
-		GsClientPacket pck = GsPacketHandlerFactory.handle(data, this);
+        if (pck != null && pck.read()) {
+            ThreadPoolManager.getInstance().execute(pck);
+        }
 
-		if (pck != null && pck.read())
-			ThreadPoolManager.getInstance().execute(pck);
+        return true;
+    }
 
-		return true;
-	}
+    @Override
+    protected final boolean writeData(ByteBuffer data) {
+        synchronized (guard) {
+            GsServerPacket packet = sendMsgQueue.pollFirst();
+            if (packet == null) {
+                return false;
+            }
 
-	@Override
-	protected final boolean writeData(ByteBuffer data) {
-		synchronized (guard) {
-			GsServerPacket packet = sendMsgQueue.pollFirst();
-			if (packet == null)
-				return false;
+            packet.write(this, data);
+            return true;
+        }
+    }
 
-			packet.write(this, data);
-			return true;
-		}
-	}
+    @Override
+    protected final long getDisconnectionDelay() {
+        return 0;
+    }
 
-	@Override
-	protected final long getDisconnectionDelay() {
-		return 0;
-	}
+    @Override
+    protected final void onDisconnect() {
+        GameServerService.getInstance().setOffline();
+    }
 
-	@Override
-	protected final void onDisconnect() {
-		GameServerService.getInstance().setOffline();
-	}
+    @Override
+    protected final void onServerClose() {
+        close(true);
+    }
 
-	@Override
-	protected final void onServerClose() {
-		close(true);
-	}
+    public final void sendPacket(GsServerPacket bp) {
+        synchronized (guard) {
+            if (isWriteDisabled()) {
+                return;
+            }
 
-	public final void sendPacket(GsServerPacket bp) {
-		synchronized (guard) {
-			if (isWriteDisabled())
-				return;
+            sendMsgQueue.addLast(bp);
+            enableWriteInterest();
+        }
+    }
 
-			sendMsgQueue.addLast(bp);
-			enableWriteInterest();
-		}
-	}
+    public final void close(GsServerPacket closePacket, boolean forced) {
+        synchronized (guard) {
+            if (isWriteDisabled()) {
+                return;
+            }
 
-	public final void close(GsServerPacket closePacket, boolean forced) {
-		synchronized (guard) {
-			if (isWriteDisabled())
-				return;
+            pendingClose = true;
+            isForcedClosing = forced;
+            sendMsgQueue.clear();
+            sendMsgQueue.addLast(closePacket);
+            enableWriteInterest();
+        }
+    }
 
-			pendingClose = true;
-			isForcedClosing = forced;
-			sendMsgQueue.clear();
-			sendMsgQueue.addLast(closePacket);
-			enableWriteInterest();
-		}
-	}
+    public State getState() {
+        return state;
+    }
 
-	public State getState() {
-		return state;
-	}
+    public void setState(State state) {
+        this.state = state;
+    }
 
-	public void setState(State state) {
-		this.state = state;
-	}
-
-	protected void initialized() {
-		this.state = State.CONNECTED;
-		log.info("Gameserver connection attemp from: " + getIP());
-	}
+    @Override
+    protected void initialized() {
+        state = State.CONNECTED;
+        log.info("Gameserver connection attemp from: " + getIP());
+    }
 }
