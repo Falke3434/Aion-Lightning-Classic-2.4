@@ -23,30 +23,30 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
  */
 public class SerialKiller {
 
-    private Player owner;
-    private int killerRank;
-    public int victims;
+	private Player owner;
+	private int killerRank;
+	public int victims;
 
-    public SerialKiller(Player owner) {
-        this.owner = owner;
-    }
+	public SerialKiller(Player owner) {
+		this.owner = owner;
+	}
 
-    public void refreshOwner(Player player) {
-        owner = player;
-    }
+	public void refreshOwner(Player player) {
+		owner = player;
+	}
 
-    public Player getOwner() {
-        return owner;
-    }
+	public Player getOwner() {
+		return owner;
+	}
 
-    public void setRank(int rank) {
-    	if(rank < 0 || rank > 2)
-    		return;
-        killerRank = rank;
-    }
+	public void setRank(int rank) {
+		if (rank < 0 || rank > 2)
+			return;
+		killerRank = rank;
+	}
 
-    public int getRank() {
-        return killerRank;
-    }
+	public int getRank() {
+		return killerRank;
+	}
 
 }

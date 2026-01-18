@@ -1,7 +1,5 @@
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.THashMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -17,6 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aionemu.gameserver.model.PlayerClass;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.templates.item.ItemTemplate;
+
+import gnu.trove.map.hash.THashMap;
 
 /**
  * This table contains all nesessary data for new players. <br/>
@@ -57,12 +57,12 @@ public class PlayerInitialData {
 
 	public LocationData getSpawnLocation(Race race) {
 		switch (race) {
-			case ASMODIANS:
-				return asmodianSpawnLocation;
-			case ELYOS:
-				return elyosSpawnLocation;
-			default:
-				throw new IllegalArgumentException();
+		case ASMODIANS:
+			return asmodianSpawnLocation;
+		case ELYOS:
+			return elyosSpawnLocation;
+		default:
+			throw new IllegalArgumentException();
 		}
 	}
 

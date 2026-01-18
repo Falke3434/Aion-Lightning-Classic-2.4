@@ -16,8 +16,12 @@
  */
 package com.aionemu.gameserver.network.aion.clientpackets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SERVER_ENV;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_VERSION_CHECK;
 
 /**
@@ -25,10 +29,19 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_VERSION_CHECK;
  */
 public class CM_VERSION_CHECK extends AionClientPacket {
 
+	private int version;
 	@SuppressWarnings("unused")
-	private int unk1;
+	private int subversion;
 	@SuppressWarnings("unused")
-	private int unk2;
+	private int windowsEncoding;
+	@SuppressWarnings("unused")
+	private int windowsVersion;
+	@SuppressWarnings("unused")
+	private int windowsSubVersion;
+	@SuppressWarnings("unused")
+	private int unk;
+
+	private static Logger log = LoggerFactory.getLogger(CM_VERSION_CHECK.class);
 
 	/**
 	 * Constructs new instance of <tt>CM_VERSION_CHECK </tt> packet
@@ -44,8 +57,11 @@ public class CM_VERSION_CHECK extends AionClientPacket {
 	 */
 	@Override
 	protected void readImpl() {
-		unk1 = readD();
-		unk2 = readD();
+		version = readH();
+		subversion = readH();
+		windowsEncoding = readD();
+		windowsVersion = readD();
+		windowsSubVersion = readD();
 	}
 
 	/**
@@ -53,6 +69,8 @@ public class CM_VERSION_CHECK extends AionClientPacket {
 	 */
 	@Override
 	protected void runImpl() {
-		sendPacket(new SM_VERSION_CHECK());
+		sendPacket(new SM_VERSION_CHECK(version));
+		sendPacket(new SM_SERVER_ENV());
+		log.info("version : " + this.version);
 	}
 }

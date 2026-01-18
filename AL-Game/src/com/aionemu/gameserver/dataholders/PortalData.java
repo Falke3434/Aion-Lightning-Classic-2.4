@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -31,6 +29,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.templates.portal.PortalTemplate;
 import com.aionemu.gameserver.services.teleport.TeleportService;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer
@@ -48,7 +48,8 @@ public class PortalData {
 	private HashMap<String, PortalTemplate> namedPortals = new HashMap<String, PortalTemplate>();
 
 	/**
-	 * - Inititialize all maps for subsequent use - Don't nullify initial portal list as it will be used during reload
+	 * - Inititialize all maps for subsequent use - Don't nullify initial portal
+	 * list as it will be used during reload
 	 * 
 	 * @param u
 	 * @param parent
@@ -129,7 +130,7 @@ public class PortalData {
 
 	/**
 	 * @param portals
-	 *          the portals to set
+	 *            the portals to set
 	 */
 	public void setPortals(List<PortalTemplate> portals) {
 		this.portals = portals;

@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.List;
 
 import javax.xml.bind.Unmarshaller;
@@ -27,6 +25,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.goods.GoodsList;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer
@@ -40,7 +40,7 @@ public class GoodsListData {
 
 	@XmlElement(name = "in_list")
 	protected List<GoodsList> inList;
-	
+
 	/** A map containing all goodslist templates */
 	private TIntObjectHashMap<GoodsList> goodsListData;
 	private TIntObjectHashMap<GoodsList> goodsInListData;
@@ -65,10 +65,11 @@ public class GoodsListData {
 	public GoodsList getGoodsInListById(int id) {
 		return goodsInListData.get(id);
 	}
+
 	/**
 	 * @return goodListData.size()
 	 */
 	public int size() {
-		return goodsListData.size()+goodsInListData.size();
+		return goodsListData.size() + goodsInListData.size();
 	}
 }

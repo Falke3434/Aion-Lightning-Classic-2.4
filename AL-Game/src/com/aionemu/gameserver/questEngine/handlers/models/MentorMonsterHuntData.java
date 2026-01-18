@@ -22,10 +22,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.MentorMonsterHunt;
+
+import javolution.util.FastMap;
 
 /**
  * @author MrPoke
@@ -53,7 +53,7 @@ public class MentorMonsterHuntData extends MonsterHuntData {
 		for (Monster m : monster)
 			monsterNpcs.put(m.getNpcId(), m);
 		MentorMonsterHunt template = new MentorMonsterHunt(id, startNpcId, endNpcId, monsterNpcs, minMenteLevel,
-			maxMenteLevel);
+				maxMenteLevel);
 		questEngine.addQuestHandler(template);
 	}
 }

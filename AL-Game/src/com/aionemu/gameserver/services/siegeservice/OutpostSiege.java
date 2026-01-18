@@ -42,7 +42,8 @@ public class OutpostSiege extends Siege<OutpostLocation> {
 
 			@Override
 			public void visit(Player player) {
-				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(getSiegeLocationId() == 2111 ? 1400317 : 1400318));
+				PacketSendUtility.sendPacket(player,
+						new SM_SYSTEM_MESSAGE(getSiegeLocationId() == 2111 ? 1400317 : 1400318));
 			}
 		});
 
@@ -78,13 +79,13 @@ public class OutpostSiege extends Siege<OutpostLocation> {
 					}
 				});
 			}
-		}
-		else {
+		} else {
 			World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 
 				@Override
 				public void visit(Player player) {
-					PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(getSiegeLocationId() == 2111 ? 1400319 : 1400320));
+					PacketSendUtility.sendPacket(player,
+							new SM_SYSTEM_MESSAGE(getSiegeLocationId() == 2111 ? 1400319 : 1400320));
 				}
 			});
 		}

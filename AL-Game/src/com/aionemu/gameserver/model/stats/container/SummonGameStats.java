@@ -71,26 +71,26 @@ public class SummonGameStats extends CreatureGameStats<Summon> {
 		if (owner.getMaster() == null)
 			return stat;
 		switch (statEnum) {
-			case MAXHP:
-			case PHYSICAL_DEFENSE:
-			case EVASION:
-			case BOOST_MAGICAL_SKILL:
-			case MAGICAL_ACCURACY:
-			case MAGICAL_RESIST:
-				stat.setBonusRate(0.2f);
-				return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
-			case PHYSICAL_ACCURACY:
-				stat.setBonusRate(0.2f);
-				owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_ACCURACY, stat);
-				return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
-			case PHYSICAL_CRITICAL:
-				stat.setBonusRate(0.2f);
-				owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_CRITICAL, stat);
-				return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
-			case PHYSICAL_ATTACK:
-				stat.setBonusRate(0.2f);
-				owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_POWER, stat);
-				return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
+		case MAXHP:
+		case PHYSICAL_DEFENSE:
+		case EVASION:
+		case BOOST_MAGICAL_SKILL:
+		case MAGICAL_ACCURACY:
+		case MAGICAL_RESIST:
+			stat.setBonusRate(0.2f);
+			return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
+		case PHYSICAL_ACCURACY:
+			stat.setBonusRate(0.2f);
+			owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_ACCURACY, stat);
+			return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
+		case PHYSICAL_CRITICAL:
+			stat.setBonusRate(0.2f);
+			owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_CRITICAL, stat);
+			return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
+		case PHYSICAL_ATTACK:
+			stat.setBonusRate(0.2f);
+			owner.getMaster().getGameStats().getItemStatBoost(StatEnum.MAIN_HAND_POWER, stat);
+			return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
 		default:
 			break;
 

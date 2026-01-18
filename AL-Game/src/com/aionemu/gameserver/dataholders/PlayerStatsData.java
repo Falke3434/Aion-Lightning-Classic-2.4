@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,6 +30,8 @@ import com.aionemu.gameserver.model.PlayerClass;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.stats.CalculatedPlayerStatsTemplate;
 import com.aionemu.gameserver.model.templates.stats.PlayerStatsTemplate;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * Created on: 31.07.2009 14:20:03
@@ -51,14 +51,14 @@ public class PlayerStatsData {
 		for (PlayerStatsType pt : templatesList) {
 			int code = makeHash(pt.getRequiredPlayerClass(), pt.getRequiredLevel());
 			PlayerStatsTemplate template = pt.getTemplate();
-			//TODO move to DP
-			template.setMaxMp(Math.round(template.getMaxMp()*100f/template.getWill()));
-			template.setMaxHp(Math.round(template.getMaxHp()*100f/template.getHealth()));
+			// TODO move to DP
+			template.setMaxMp(Math.round(template.getMaxMp() * 100f / template.getWill()));
+			template.setMaxHp(Math.round(template.getMaxHp() * 100f / template.getHealth()));
 			int agility = template.getAgility();
-			agility = (agility-100);
-			template.setEvasion(Math.round(template.getEvasion() - template.getEvasion()*agility*0.003f));
-			template.setBlock(Math.round(template.getBlock() - template.getBlock()*agility*0.0025f));
-			template.setParry(Math.round(template.getParry() - template.getParry()*agility*0.0025f));
+			agility = (agility - 100);
+			template.setEvasion(Math.round(template.getEvasion() - template.getEvasion() * agility * 0.003f));
+			template.setBlock(Math.round(template.getBlock() - template.getBlock() * agility * 0.0025f));
+			template.setParry(Math.round(template.getParry() - template.getParry() * agility * 0.0025f));
 			playerTemplates.put(code, pt.getTemplate());
 		}
 
@@ -67,14 +67,15 @@ public class PlayerStatsData {
 		playerTemplates.put(makeHash(PlayerClass.ASSASSIN, 0), new CalculatedPlayerStatsTemplate(PlayerClass.ASSASSIN));
 		playerTemplates.put(makeHash(PlayerClass.CHANTER, 0), new CalculatedPlayerStatsTemplate(PlayerClass.CHANTER));
 		playerTemplates.put(makeHash(PlayerClass.CLERIC, 0), new CalculatedPlayerStatsTemplate(PlayerClass.CLERIC));
-		playerTemplates.put(makeHash(PlayerClass.GLADIATOR, 0), new CalculatedPlayerStatsTemplate(PlayerClass.GLADIATOR));
+		playerTemplates.put(makeHash(PlayerClass.GLADIATOR, 0),
+				new CalculatedPlayerStatsTemplate(PlayerClass.GLADIATOR));
 		playerTemplates.put(makeHash(PlayerClass.MAGE, 0), new CalculatedPlayerStatsTemplate(PlayerClass.MAGE));
 		playerTemplates.put(makeHash(PlayerClass.PRIEST, 0), new CalculatedPlayerStatsTemplate(PlayerClass.PRIEST));
 		playerTemplates.put(makeHash(PlayerClass.RANGER, 0), new CalculatedPlayerStatsTemplate(PlayerClass.RANGER));
 		playerTemplates.put(makeHash(PlayerClass.SCOUT, 0), new CalculatedPlayerStatsTemplate(PlayerClass.SCOUT));
 		playerTemplates.put(makeHash(PlayerClass.SORCERER, 0), new CalculatedPlayerStatsTemplate(PlayerClass.SORCERER));
-		playerTemplates.put(makeHash(PlayerClass.SPIRIT_MASTER, 0), new CalculatedPlayerStatsTemplate(
-			PlayerClass.SPIRIT_MASTER));
+		playerTemplates.put(makeHash(PlayerClass.SPIRIT_MASTER, 0),
+				new CalculatedPlayerStatsTemplate(PlayerClass.SPIRIT_MASTER));
 		playerTemplates.put(makeHash(PlayerClass.TEMPLAR, 0), new CalculatedPlayerStatsTemplate(PlayerClass.TEMPLAR));
 
 		templatesList.clear();

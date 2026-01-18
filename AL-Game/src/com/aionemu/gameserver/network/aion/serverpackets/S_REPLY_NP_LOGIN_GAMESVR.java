@@ -10,9 +10,9 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
  */
 public class S_REPLY_NP_LOGIN_GAMESVR extends AionServerPacket {
 
-    @Override
-    protected void writeImpl(AionConnection con) {
-    	writeC(0);
-    	writeC(1);
-    }
+	@Override
+	protected void writeImpl(AionConnection con) {
+		writeC(0);
+		writeC(1);
+	}
 }

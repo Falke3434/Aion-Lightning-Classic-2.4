@@ -44,7 +44,7 @@ public class ExchangeItem {
 
 	/**
 	 * @param item
-	 *          the item to set
+	 *            the item to set
 	 */
 	public void setItem(Item item) {
 		this.item = item;

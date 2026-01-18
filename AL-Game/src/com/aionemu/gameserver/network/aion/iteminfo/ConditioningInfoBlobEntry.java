@@ -27,15 +27,14 @@ import com.aionemu.gameserver.network.aion.iteminfo.ItemInfoBlob.ItemBlobType;
  * @author -Nemesiss-
  *
  */
-public class ConditioningInfoBlobEntry extends ItemBlobEntry{
+public class ConditioningInfoBlobEntry extends ItemBlobEntry {
 
 	ConditioningInfoBlobEntry() {
 		super(ItemBlobType.CONDITIONING_INFO);
 	}
 
 	@Override
-	public
-	void writeThisBlob(ByteBuffer buf) {
+	public void writeThisBlob(ByteBuffer buf) {
 		Item item = parent.item;
 
 		writeD(buf, item.getChargePoints());

@@ -9,41 +9,33 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_UPDATE_PLAYER_APPEAR
 import com.aionemu.gameserver.services.item.ItemPacketService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
-
 public class CmdDye extends BaseCommand {
 
-	
-	
-	
 	public void execute(Player admin, String... params) {
 		Player target;
-		
+
 		// Add a check to prevent players to dye other people
 		if (admin.getAccessLevel() > 1 && admin.getTarget() instanceof Player) {
 			target = (Player) admin.getTarget();
-		}
-		else {
+		} else {
 			target = admin;
 		}
 
 		if (target == null) {
 			target = admin;
 		}
-		
+
 		String color = "";
 		if (params.length == 2) {
 			if (params[1].equalsIgnoreCase("petal")) {
 				color = params[0];
-			}
-			else {
+			} else {
 				color = params[0] + " " + params[1];
 			}
-		}
-		else {
+		} else {
 			color = params[0];
 		}
-		
+
 		// Add Aion Phenix : /.dye no/ can be used by players for free
 		if (admin.getAccessLevel() == 0) {
 			if (color.equals("no")) {
@@ -51,12 +43,11 @@ public class CmdDye extends BaseCommand {
 					targetItem.setItemColor(0);
 					ItemPacketService.updateItemAfterInfoChange(target, targetItem);
 				}
-				PacketSendUtility.broadcastPacket(target, new SM_UPDATE_PLAYER_APPEARANCE(target.getObjectId(), target
-					.getEquipment().getEquippedItemsWithoutStigma()), true);
+				PacketSendUtility.broadcastPacket(target, new SM_UPDATE_PLAYER_APPEARANCE(target.getObjectId(),
+						target.getEquipment().getEquippedItemsWithoutStigma()), true);
 				target.getEquipment().setPersistentState(PersistentState.UPDATE_REQUIRED);
 				PacketSendUtility.sendMessage(target, "Colors have been removed.");
-			}
-			else {
+			} else {
 				PacketSendUtility.sendMessage(target, "Players can use dye command only with parameter : no.");
 			}
 			return;
@@ -182,14 +173,13 @@ public class CmdDye extends BaseCommand {
 		for (Item targetItem : target.getEquipment().getEquippedItemsWithoutStigma()) {
 			if (color.equals("no")) {
 				targetItem.setItemColor(0);
-			}
-			else {
+			} else {
 				targetItem.setItemColor(bgra);
 			}
 			ItemPacketService.updateItemAfterInfoChange(target, targetItem);
 		}
-		PacketSendUtility.broadcastPacket(target, new SM_UPDATE_PLAYER_APPEARANCE(target.getObjectId(), target
-			.getEquipment().getEquippedItemsWithoutStigma()), true);
+		PacketSendUtility.broadcastPacket(target, new SM_UPDATE_PLAYER_APPEARANCE(target.getObjectId(),
+				target.getEquipment().getEquippedItemsWithoutStigma()), true);
 		target.getEquipment().setPersistentState(PersistentState.UPDATE_REQUIRED);
 		if (target.getObjectId() != admin.getObjectId()) {
 			PacketSendUtility.sendMessage(target, "You have been dyed by " + admin.getName() + "!");
@@ -197,5 +187,4 @@ public class CmdDye extends BaseCommand {
 		PacketSendUtility.sendMessage(admin, "Dyed " + target.getName() + " successfully!");
 	}
 
-	
 }

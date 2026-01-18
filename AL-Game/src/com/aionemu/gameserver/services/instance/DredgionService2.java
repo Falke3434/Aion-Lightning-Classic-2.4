@@ -16,10 +16,12 @@
  */
 package com.aionemu.gameserver.services.instance;
 
-import com.aionemu.commons.network.util.ThreadPoolManager;
+import java.util.Iterator;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aionemu.commons.network.util.ThreadPoolManager;
 import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.configs.main.DredgionConfig;
 import com.aionemu.gameserver.model.autogroup.AutoGroupsType;
@@ -29,7 +31,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.AutoGroupService2;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
-import java.util.Iterator;
+
 import javolution.util.FastList;
 
 /**
@@ -55,7 +57,8 @@ public class DredgionService2 {
 			}
 
 		}, DredgionConfig.DREDGION_TIMES);
-		log.info("Scheduled Dredgion: based on cron expression: " + times + " Duration: " + DredgionConfig.DREDGION_TIMER + " in minutes");
+		log.info("Scheduled Dredgion: based on cron expression: " + times + " Duration: "
+				+ DredgionConfig.DREDGION_TIMER + " in minutes");
 	}
 
 	private void startUregisterDredgionTask() {
@@ -111,9 +114,8 @@ public class DredgionService2 {
 	public byte getInstanceMaskId(Player player) {
 		int level = player.getLevel();
 		if (level > 45 && level < 51) {
-			return 1 ;
-		}
-		else if (level > 50 && level< 56) {
+			return 1;
+		} else if (level > 50 && level < 56) {
 			return 2;
 		}
 		return 0;

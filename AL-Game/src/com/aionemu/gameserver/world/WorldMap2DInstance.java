@@ -54,8 +54,8 @@ public class WorldMap2DInstance extends WorldMapInstance {
 			for (int y = 0; y <= size; y = y + regionSize) {
 				int regionId = RegionUtil.get2dRegionId(x, y);
 				MapRegion mapRegion = regions.get(regionId);
-				for (int x2 = x - regionSize; x2 <= x + regionSize; x2+=regionSize) {
-					for (int y2 = y - regionSize; y2 <= y + regionSize; y2+=regionSize) {
+				for (int x2 = x - regionSize; x2 <= x + regionSize; x2 += regionSize) {
+					for (int y2 = y - regionSize; y2 <= y + regionSize; y2 += regionSize) {
 						if (x2 == x && y2 == y)
 							continue;
 						int neighbourId = RegionUtil.get2dRegionId(x2, y2);

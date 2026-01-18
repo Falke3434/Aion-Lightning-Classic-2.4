@@ -30,8 +30,8 @@ public class MagicCounterAtkEffect extends EffectTemplate {
 	@XmlAttribute
 	protected int maxdmg;
 
-	//TODO bosses are resistent to this?
-	
+	// TODO bosses are resistent to this?
+
 	@Override
 	public void applyEffect(Effect effect) {
 		effect.addToEffectedController();
@@ -51,27 +51,26 @@ public class MagicCounterAtkEffect extends EffectTemplate {
 				ThreadPoolManager.getInstance().schedule(new Runnable() {
 					@Override
 					public void run() {
-						if(skill.isCancelled()){
+						if (skill.isCancelled()) {
 							return;
 						}
 
 						SkillSubType subType = skill.getSkillTemplate().getSubType();
 						// Proc on magical skill
-						if (skill.getSkillTemplate().getType() != SkillType.MAGICAL){
+						if (skill.getSkillTemplate().getType() != SkillType.MAGICAL) {
 							return;
 						}
-						if(subType == SkillSubType.CHANT ||
-								subType == SkillSubType.SUMMONHOMING){
+						if (subType == SkillSubType.CHANT || subType == SkillSubType.SUMMONHOMING) {
 							return;
 						}
-						
+
 						int applyDmg = maxdmg;
-						
-						if (cls.getMaxHp() / 100 * value <= maxdmg){
+
+						if (cls.getMaxHp() / 100 * value <= maxdmg) {
 							applyDmg = cls.getMaxHp() / 100 * value;
-							effected.getController().onAttack(effector, effect.getSkillId(), TYPE.DAMAGE,
-									applyDmg, true, LOG.REGULAR);
-						}else{
+							effected.getController().onAttack(effector, effect.getSkillId(), TYPE.DAMAGE, applyDmg,
+									true, LOG.REGULAR);
+						} else {
 							effected.getController().onAttack(effector, applyDmg, true);
 						}
 					}

@@ -25,20 +25,20 @@ public class PvpArenaObserver extends ActionObserver {
 	public void setStarted(boolean isStarted) {
 		this.isStarted = isStarted;
 	}
-	
-	private boolean isOnDiscipline(){
+
+	private boolean isOnDiscipline() {
 		return (player.getWorldId() == 300430000 || player.getWorldId() == 300360000);
 	}
-	
-	private boolean isOnChaos(){
+
+	private boolean isOnChaos() {
 		return (player.getWorldId() == 300350000 || player.getWorldId() == 300420000);
 	}
-	
+
 	@Override
 	public void moved() {
 		checkUnderBridge();
 	}
-	
+
 	@Override
 	public void skilluse(Skill skill) {
 		checkSkillBeforeStart(skill);
@@ -57,7 +57,7 @@ public class PvpArenaObserver extends ActionObserver {
 	public void equip(Item item, Player owner) {
 		checkUnderBridge();
 	};
-	
+
 	public void unequip(Item item, Player owner) {
 		checkUnderBridge();
 	};
@@ -65,46 +65,48 @@ public class PvpArenaObserver extends ActionObserver {
 	public void dotattacked(Creature creature, Effect dotEffect) {
 		checkUnderBridge();
 	};
-	
+
 	public void itemused(Item item) {
 	};
 
 	private void looseAtkPoint() {
-		if((!isOnDiscipline() && !isOnChaos()) || isStarted){
+		if ((!isOnDiscipline() && !isOnChaos()) || isStarted) {
 			return;
 		}
 		instanceReward.regPlayerReward(player);
 		((PvPArenaPlayerReward) instanceReward.getPlayerReward(player)).addPoints(-200);
 		instanceReward.sendPacket();
 	}
-	
-	private void checkSkillBeforeStart(Skill skill){
-		if((!isOnDiscipline() && !isOnChaos()) || isStarted){
+
+	private void checkSkillBeforeStart(Skill skill) {
+		if ((!isOnDiscipline() && !isOnChaos()) || isStarted) {
 			return;
 		}
 
-		if(skill.getSkillTemplate().getSubType() == SkillSubType.ATTACK || skill.getSkillTemplate().getSubType() == SkillSubType.SUMMONTRAP || skill.getSkillTemplate().getSubType() == SkillSubType.DEBUFF){
+		if (skill.getSkillTemplate().getSubType() == SkillSubType.ATTACK
+				|| skill.getSkillTemplate().getSubType() == SkillSubType.SUMMONTRAP
+				|| skill.getSkillTemplate().getSubType() == SkillSubType.DEBUFF) {
 			skill.cancelCast();
 		}
 	}
-	
-	private void checkUnderBridge(){
+
+	private void checkUnderBridge() {
 		boolean passedThrough = false;
 
-		if(!isOnDiscipline()){
+		if (!isOnDiscipline()) {
 			return;
 		}
-		
+
 		passedThrough = (MathUtil.isInRange(player.getX(), player.getY(), 290, 1249, 200) && player.getZ() < 234);
 
 		if (!passedThrough) {
 			return;
 		}
 
-		if (!(player.getLifeStats().isAlreadyDead())){
+		if (!(player.getLifeStats().isAlreadyDead())) {
 			player.getController().die();
 		}
-		
+
 		player.getFlyController().endFly();
 		player.getObserveController().removeObserver(this);
 	}

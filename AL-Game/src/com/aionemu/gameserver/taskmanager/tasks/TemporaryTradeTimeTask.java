@@ -21,14 +21,14 @@ package com.aionemu.gameserver.taskmanager.tasks;
 import java.util.Collection;
 import java.util.Map;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.taskmanager.AbstractPeriodicTaskManager;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
+
+import javolution.util.FastMap;
 
 /**
  * @author Mr. Poke
@@ -54,8 +54,7 @@ public class TemporaryTradeTimeTask extends AbstractPeriodicTaskManager {
 		try {
 			items.put(item, players);
 			itemById.put(item.getObjectId(), item);
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}
@@ -71,8 +70,7 @@ public class TemporaryTradeTimeTask extends AbstractPeriodicTaskManager {
 		readLock();
 		try {
 			return items.containsKey(item);
-		}
-		finally {
+		} finally {
 			readUnlock();
 		}
 	}
@@ -81,8 +79,7 @@ public class TemporaryTradeTimeTask extends AbstractPeriodicTaskManager {
 		readLock();
 		try {
 			return itemById.get(objectId);
-		}
-		finally {
+		} finally {
 			readUnlock();
 		}
 	}
@@ -98,22 +95,22 @@ public class TemporaryTradeTimeTask extends AbstractPeriodicTaskManager {
 					for (int playerId : entry.getValue()) {
 						Player player = World.getInstance().findPlayer(playerId);
 						if (player != null)
-							PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_END_OF_EXCHANGE_TIME(item.getNameID(), time));
+							PacketSendUtility.sendPacket(player,
+									SM_SYSTEM_MESSAGE.STR_MSG_END_OF_EXCHANGE_TIME(item.getNameID(), time));
 					}
-				}
-				else if (time <= 0) {
+				} else if (time <= 0) {
 					for (int playerId : entry.getValue()) {
 						Player player = World.getInstance().findPlayer(playerId);
 						if (player != null)
-							PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_EXCHANGE_TIME_OVER(item.getNameID()));
+							PacketSendUtility.sendPacket(player,
+									SM_SYSTEM_MESSAGE.STR_MSG_EXCHANGE_TIME_OVER(item.getNameID()));
 					}
 					item.setTemporaryExchangeTime(0);
 					items.remove(item);
 					itemById.remove(item.getObjectId());
 				}
 			}
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}

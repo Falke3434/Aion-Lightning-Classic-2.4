@@ -47,13 +47,17 @@ public class SignetBurstEffect extends DamageEffect {
 			return;
 		}
 		int valueWithDelta = value + delta * effect.getSkillLevel();
-		//int critAddDmg = this.critAddDmg2 + this.critAddDmg1 * effect.getSkillLevel();
+		// int critAddDmg = this.critAddDmg2 + this.critAddDmg1 *
+		// effect.getSkillLevel();
 
 		if (signetEffect == null) {
 			valueWithDelta *= 0.05f;
 			AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, 0, getElement(), true, false);
-			/*AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, null, getElement(), true, true, false,
-					getMode(), this.critProbMod2, critAddDmg, shared, false);*/
+			/*
+			 * AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, null,
+			 * getElement(), true, true, false, getMode(), this.critProbMod2, critAddDmg,
+			 * shared, false);
+			 */
 			effect.setLaunchSubEffect(false);
 		} else {
 
@@ -79,8 +83,8 @@ public class SignetBurstEffect extends DamageEffect {
 			}
 
 			/**
-			 * custom bonuses for magical accurancy according to rune level and
-			 * effector level follows same logic as damage
+			 * custom bonuses for magical accurancy according to rune level and effector
+			 * level follows same logic as damage
 			 */
 			int accmod = 0;
 			int mAccurancy = effect.getEffector().getGameStats().getMAccuracy().getCurrent();

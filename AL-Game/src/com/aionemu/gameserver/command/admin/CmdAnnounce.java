@@ -18,34 +18,30 @@ public class CmdAnnounce extends BaseCommand {
 			showHelp(admin);
 			return;
 		}
-		
+
 		String message = "";
 		Race raceToSend = Race.PC_ALL;
-		
+
 		if (params[0].equalsIgnoreCase("e")) {
 			raceToSend = Race.ELYOS;
 			message = "Elyos : ";
-		}
-		else if (params[0].equalsIgnoreCase("en")) {
+		} else if (params[0].equalsIgnoreCase("en")) {
 			raceToSend = Race.ELYOS;
 			message = "[" + admin.getName() + "]>Elyos : ";
-		}
-		else if (params[0].equalsIgnoreCase("a")) {
+		} else if (params[0].equalsIgnoreCase("a")) {
 			raceToSend = Race.ASMODIANS;
 			message = "Asmodians : ";
-		}
-		else if (params[0].equalsIgnoreCase("an")) {
+		} else if (params[0].equalsIgnoreCase("an")) {
 			raceToSend = Race.ASMODIANS;
 			message = "[" + admin.getName() + "]>Asmodians : ";
-		}
-		else if (params[0].equalsIgnoreCase("n"))
+		} else if (params[0].equalsIgnoreCase("n"))
 			message = "[" + admin.getName() + "] : ";
 		else
 			message = params[0] + " ";
-		
+
 		for (int i = 1; i < params.length; i++)
 			message += params[i] + " ";
-		
+
 		for (Player player : World.getInstance().getAllPlayers()) {
 			if (raceToSend == Race.PC_ALL)
 				PacketSendUtility.sendBrightYellowMessageOnCenter(player, message);
@@ -57,5 +53,5 @@ public class CmdAnnounce extends BaseCommand {
 				PacketSendUtility.sendBrightYellowMessageOnCenter(player, message);
 		}
 	}
-	
+
 }

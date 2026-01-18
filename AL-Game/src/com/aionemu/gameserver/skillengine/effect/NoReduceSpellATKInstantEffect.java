@@ -38,7 +38,7 @@ public class NoReduceSpellATKInstantEffect extends DamageEffect {
 	public void calculate(Effect effect) {
 		if (!super.calculate(effect, null, null))
 			return;
-		
+
 		int valueWithDelta = value + delta * effect.getSkillLevel();
 		if (percent)
 			valueWithDelta = ((effect.getEffected().getLifeStats().getMaxHp() * value) / 100);

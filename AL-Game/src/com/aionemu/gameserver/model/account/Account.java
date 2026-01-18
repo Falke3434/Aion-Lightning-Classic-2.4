@@ -33,9 +33,10 @@ import com.aionemu.gameserver.model.items.storage.Storage;
  * <ul>
  * <li>account id</li>
  * <li>account name</li>
- * <li> {@link AccountTime account time info}</li>
- * <li>a list of {@link PlayerAccountData} objects each of which keeping information about player that must be available
- * on character selection screen.</li>
+ * <li>{@link AccountTime account time info}</li>
+ * <li>a list of {@link PlayerAccountData} objects each of which keeping
+ * information about player that must be available on character selection
+ * screen.</li>
  * </ul>
  * 
  * @author SoulKeeper
@@ -108,7 +109,7 @@ public class Account implements Iterable<PlayerAccountData> {
 
 	/**
 	 * @param accessLevel
-	 *          the accessLevel to set
+	 *            the accessLevel to set
 	 */
 	public void setAccessLevel(byte accessLevel) {
 		this.accessLevel = accessLevel;
@@ -123,25 +124,26 @@ public class Account implements Iterable<PlayerAccountData> {
 
 	/**
 	 * @param membership
-	 *          the membership to set
+	 *            the membership to set
 	 */
 	public void setMembership(byte membership) {
 		this.membership = membership;
 	}
+
 	/**
 	 * @return the locale
 	 */
 	public String getLocale() {
 		return locale;
 	}
+
 	/**
 	 * @param locale
-	 *          the locale to set
+	 *            the locale to set
 	 */
 	public void setLocale(String locale) {
 		this.locale = locale;
 	}
-	
 
 	@Override
 	public boolean equals(Object o) {
@@ -177,12 +179,12 @@ public class Account implements Iterable<PlayerAccountData> {
 	public void addPlayerAccountData(PlayerAccountData accPlData) {
 		players.put(accPlData.getPlayerCommonData().getPlayerObjId(), accPlData);
 		switch (accPlData.getPlayerCommonData().getRace()) {
-			case ASMODIANS:
-				numberOfAsmos++;
-				break;
-			case ELYOS:
-				numberOfElyos++;
-				break;
+		case ASMODIANS:
+			numberOfAsmos++;
+			break;
+		case ELYOS:
+			numberOfElyos++;
+			break;
 		default:
 			break;
 		}
@@ -197,7 +199,7 @@ public class Account implements Iterable<PlayerAccountData> {
 
 	/**
 	 * @param accountWarehouse
-	 *          the accountWarehouse to set
+	 *            the accountWarehouse to set
 	 */
 	public void setAccountWarehouse(Storage accountWarehouse) {
 		this.accountWarehouse = accountWarehouse;
@@ -249,10 +251,10 @@ public class Account implements Iterable<PlayerAccountData> {
 
 	public int getNumberOf(Race race) {
 		switch (race) {
-			case ASMODIANS:
-				return numberOfAsmos;
-			case ELYOS:
-				return numberOfElyos;
+		case ASMODIANS:
+			return numberOfAsmos;
+		case ELYOS:
+			return numberOfElyos;
 		default:
 			break;
 		}
@@ -261,16 +263,17 @@ public class Account implements Iterable<PlayerAccountData> {
 
 	public void decrementCountOf(Race race) {
 		switch (race) {
-			case ASMODIANS:
-				numberOfAsmos--;
-				break;
-			case ELYOS:
-				numberOfElyos--;
-				break;
+		case ASMODIANS:
+			numberOfAsmos--;
+			break;
+		case ELYOS:
+			numberOfElyos--;
+			break;
 		default:
 			break;
 		}
 	}
+
 	public void setToll(long toll) {
 		tollCount = toll;
 	}
@@ -278,7 +281,7 @@ public class Account implements Iterable<PlayerAccountData> {
 	public long getToll() {
 		return tollCount;
 	}
-	
+
 	public boolean isEmpty() {
 		return numberOfAsmos == 0 && numberOfElyos == 0;
 	}

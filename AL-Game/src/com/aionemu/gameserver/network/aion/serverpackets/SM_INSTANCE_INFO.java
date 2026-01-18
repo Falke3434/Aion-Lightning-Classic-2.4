@@ -20,8 +20,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PortalCooldownList;
@@ -31,6 +29,8 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.instance.InstanceService;
 import com.aionemu.gameserver.world.World;
+
+import javolution.util.FastMap;
 
 /**
  * @author xavier
@@ -77,7 +77,8 @@ public class SM_INSTANCE_INFO extends AionServerPacket {
 			writeD(DataManager.INSTANCE_COOLTIME_DATA.getInstanceCooltimeByWorldId(instanceId).getId());
 			int objId = player.getCurrentTeamId();
 			writeD(objId);
-			writeD((int) (player.getPortalCooldownList().getPortalCooldown(instanceId) - System.currentTimeMillis()) / 1000);
+			writeD((int) (player.getPortalCooldownList().getPortalCooldown(instanceId) - System.currentTimeMillis())
+					/ 1000);
 			writeS(player.getName());
 			return;
 		}
@@ -87,8 +88,7 @@ public class SM_INSTANCE_INFO extends AionServerPacket {
 		PlayerGroup playerGroup2 = player.getPlayerGroup2();
 		if (playerGroup2 != null) {
 			players = playerGroup2.getMembers();
-		}
-		else if (playerAlliance != null) {
+		} else if (playerAlliance != null) {
 			players = new ArrayList<Player>();
 			for (Player member : playerAlliance.getMembers()) {
 				if (member.isOnline() && member.getPortalCooldownList().hasCooldowns()) {
@@ -98,8 +98,7 @@ public class SM_INSTANCE_INFO extends AionServerPacket {
 					}
 				}
 			}
-		}
-		else {
+		} else {
 			if (player.getPortalCooldownList().hasCooldowns()) {
 				players = Collections.singletonList(player);
 			}
@@ -108,8 +107,7 @@ public class SM_INSTANCE_INFO extends AionServerPacket {
 		if (players == null || players.isEmpty()) {
 			writeD(0x0);
 			writeD(0x0);
-		}
-		else {
+		} else {
 			writeC(update ? 2 : 1);
 			writeC(enter ? 3 : 0);
 			writeD(0x0);
@@ -120,13 +118,12 @@ public class SM_INSTANCE_INFO extends AionServerPacket {
 					int instanceCooldownRate = InstanceService.getInstanceRate(player, instanceId);
 					writeD(member.getObjectId());
 					writeH(portalCooldownList.size());
-					for (FastMap.Entry<Integer, Long> e = portalCooldownList.getPortalCoolDowns().head(), end = portalCooldownList
-						.getPortalCoolDowns().tail(); (e = e.getNext()) != end;) {
+					for (FastMap.Entry<Integer, Long> e = portalCooldownList.getPortalCoolDowns()
+							.head(), end = portalCooldownList.getPortalCoolDowns().tail(); (e = e.getNext()) != end;) {
 						if (instanceCooldownRate > 0) {
 							writeD(DataManager.INSTANCE_COOLTIME_DATA.getInstanceCooltimeByWorldId(e.getKey()).getId()
-								/ instanceCooldownRate);
-						}
-						else {
+									/ instanceCooldownRate);
+						} else {
 							writeD(DataManager.INSTANCE_COOLTIME_DATA.getInstanceCooltimeByWorldId(e.getKey()).getId());
 						}
 						writeD(0x0);

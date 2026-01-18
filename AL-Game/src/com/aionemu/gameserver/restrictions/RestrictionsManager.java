@@ -28,12 +28,16 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.skillengine.model.Skill;
 
 /**
- * @author lord_rex This class is a Manager for restrictions. This is a very useful system, you can use that for: game
- *         restrictions, events restrictions, quests restrictions, instances restrictions, customs restrictions.
- * @Example: Open a new class like this: public class AppleRestrictions extends AbstractRestrictions {
- * @Override public boolean canEatApple(Player player) { if(player.getController().isInEvent()) { // only example, don't
- *           forget! return true; // player can eat apple in event. } return false; // player cannot eat apple in normal
- *           game. } }
+ * @author lord_rex This class is a Manager for restrictions. This is a very
+ *         useful system, you can use that for: game restrictions, events
+ *         restrictions, quests restrictions, instances restrictions, customs
+ *         restrictions.
+ * @Example: Open a new class like this: public class AppleRestrictions extends
+ *           AbstractRestrictions {
+ * @Override public boolean canEatApple(Player player) {
+ *           if(player.getController().isInEvent()) { // only example, don't
+ *           forget! return true; // player can eat apple in event. } return
+ *           false; // player cannot eat apple in normal game. } }
  */
 public final class RestrictionsManager {
 
@@ -42,17 +46,7 @@ public final class RestrictionsManager {
 	}
 
 	private static enum RestrictionMode implements Comparator<Restrictions> {
-		isRestricted,
-		canAttack,
-		canAffectBySkill,
-		canUseSkill,
-		canChat,
-		canInviteToGroup,
-		canInviteToAlliance,
-		canChangeEquip,
-		canTrade,
-		canUseWarehouse,
-		canUseItem,
+		isRestricted, canAttack, canAffectBySkill, canUseSkill, canChat, canInviteToGroup, canInviteToAlliance, canChangeEquip, canTrade, canUseWarehouse, canUseItem,
 		// TODO
 		;
 
@@ -162,9 +156,10 @@ public final class RestrictionsManager {
 	}
 
 	/**
-	 * This function can be used for activate one restriction. Example: public static boolean startAppleEatingEvent(Player
-	 * player) { if(RestrictionsManager.isRestricted(player, AppleEatingEventRestriction.class)) return false; return
-	 * true; }
+	 * This function can be used for activate one restriction. Example: public
+	 * static boolean startAppleEatingEvent(Player player) {
+	 * if(RestrictionsManager.isRestricted(player,
+	 * AppleEatingEventRestriction.class)) return false; return true; }
 	 */
 	public static boolean isRestricted(Player player, Class<? extends Restrictions> callingRestriction) {
 		if (player == null)
@@ -293,7 +288,7 @@ public final class RestrictionsManager {
 			if (!restrictions.canTrade(player))
 				return false;
 		}
-		
+
 		if (player.getLifeStats().isAlreadyDead())
 			return false;
 

@@ -23,8 +23,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.concurrent.Future;
 
-import javolution.util.FastSet;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -37,6 +35,8 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.World;
+
+import javolution.util.FastSet;
 
 /**
  * Automatic Announcement System
@@ -93,22 +93,29 @@ public class AnnouncementService {
 						Player player = iter.next();
 
 						if (announce.getFaction().equalsIgnoreCase("ALL"))
-							if (announce.getChatType() == ChatType.SHOUT || announce.getChatType() == ChatType.GROUP_LEADER)
-								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1, "Aion Phenix", announce.getAnnounce(),
-									announce.getChatType()));
+							if (announce.getChatType() == ChatType.SHOUT
+									|| announce.getChatType() == ChatType.GROUP_LEADER)
+								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1, "Aion Phenix",
+										announce.getAnnounce(), announce.getChatType()));
 							else
-								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1, "Announcement", "Info :"
-									+ announce.getAnnounce(), announce.getChatType()));
+								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1, "Announcement",
+										"Info :" + announce.getAnnounce(), announce.getChatType()));
 						else if (announce.getFactionEnum() == player.getRace())
-							if (announce.getChatType() == ChatType.SHOUT || announce.getChatType() == ChatType.GROUP_LEADER)
-								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1,
-									(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian") + " Info",
-									announce.getAnnounce(), announce.getChatType()));
+							if (announce.getChatType() == ChatType.SHOUT
+									|| announce.getChatType() == ChatType.GROUP_LEADER)
+								PacketSendUtility.sendPacket(player,
+										new SM_MESSAGE(1,
+												(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian")
+														+ " Info",
+												announce.getAnnounce(), announce.getChatType()));
 							else
-								PacketSendUtility.sendPacket(player, new SM_MESSAGE(1,
-									(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian") + " Info",
-									(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian") + " Info : "
-										+ announce.getAnnounce(), announce.getChatType()));
+								PacketSendUtility.sendPacket(player,
+										new SM_MESSAGE(1,
+												(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian")
+														+ " Info",
+												(announce.getFaction().equalsIgnoreCase("ELYOS") ? "Elyos" : "Asmodian")
+														+ " Info : " + announce.getAnnounce(),
+												announce.getChatType()));
 					}
 				}
 			}, announce.getDelay() * 1000, announce.getDelay() * 1000));

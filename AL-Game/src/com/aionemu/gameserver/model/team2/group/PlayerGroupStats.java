@@ -56,8 +56,7 @@ public class PlayerGroupStats implements Predicate<Player> {
 		if (minLevelPlayer == null || maxLevelPlayer == null) {
 			minLevelPlayer = player;
 			maxLevelPlayer = player;
-		}
-		else {
+		} else {
 			if (player.getCommonData().getExp() < minLevelPlayer.getCommonData().getExp()) {
 				minLevelPlayer = player;
 			}

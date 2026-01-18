@@ -20,8 +20,8 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 
 /**
- * This class is representing an iterator, that is used to iterate through the collection that has format
- * Iterable&lt;Iterable&lt;V&gt;&gt;.<br>
+ * This class is representing an iterator, that is used to iterate through the
+ * collection that has format Iterable&lt;Iterable&lt;V&gt;&gt;.<br>
  * 
  * <pre>
  * &lt;code&gt;
@@ -37,7 +37,8 @@ import java.util.NoSuchElementException;
  * </pre>
  * 
  * This iterator is not thread-safe. <br>
- * This iterator omits null values for first level collection, which means that if we have:
+ * This iterator omits null values for first level collection, which means that
+ * if we have:
  * 
  * <pre>
  * &lt;code&gt;
@@ -53,7 +54,7 @@ import java.util.NoSuchElementException;
  * 
  * @author Luno
  * @param <V>
- *          Type of the values over which this iterator iterates
+ *            Type of the values over which this iterator iterates
  */
 public class IteratorIterator<V> implements Iterator<V> {
 
@@ -67,7 +68,7 @@ public class IteratorIterator<V> implements Iterator<V> {
 	 * Constructor of <tt>IteratorIterator</tt>
 	 * 
 	 * @param itit
-	 *          an Iterator that iterate over Iterable<Value>
+	 *            an Iterator that iterate over Iterable<Value>
 	 */
 	public IteratorIterator(Iterable<? extends Iterable<V>> itit) {
 		this.firstLevelIterator = itit.iterator();

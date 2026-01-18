@@ -16,9 +16,23 @@
  */
 package com.aionemu.gameserver;
 
-import ch.qos.logback.classic.LoggerContext;
-import ch.qos.logback.classic.joran.JoranConfigurator;
-import ch.qos.logback.core.joran.spi.JoranException;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.FilenameFilter;
+import java.io.IOException;
+import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.concurrent.locks.ReentrantLock;
+import java.util.zip.Deflater;
+import java.util.zip.ZipEntry;
+import java.util.zip.ZipOutputStream;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.database.DB;
 import com.aionemu.commons.database.DatabaseFactory;
@@ -34,7 +48,14 @@ import com.aionemu.gameserver.command.CommandService;
 import com.aionemu.gameserver.configs.Config;
 import com.aionemu.gameserver.configs.custom.RecursiveAddConf;
 import com.aionemu.gameserver.configs.custom.WebShopConf;
-import com.aionemu.gameserver.configs.main.*;
+import com.aionemu.gameserver.configs.main.AIConfig;
+import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.configs.main.DredgionConfig;
+import com.aionemu.gameserver.configs.main.EventsConfig;
+import com.aionemu.gameserver.configs.main.GSConfig;
+import com.aionemu.gameserver.configs.main.SiegeConfig;
+import com.aionemu.gameserver.configs.main.ThreadConfig;
+import com.aionemu.gameserver.configs.main.WeddingsConfig;
 import com.aionemu.gameserver.configs.network.NetworkConfig;
 import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -48,8 +69,23 @@ import com.aionemu.gameserver.network.aion.GameConnectionFactoryImpl;
 import com.aionemu.gameserver.network.chatserver.ChatServer;
 import com.aionemu.gameserver.network.loginserver.LoginServer;
 import com.aionemu.gameserver.questEngine.QuestEngine;
-import com.aionemu.gameserver.services.*;
-import com.aionemu.gameserver.services.tvt.TvtService;
+import com.aionemu.gameserver.services.AdminService;
+import com.aionemu.gameserver.services.AnnouncementService;
+import com.aionemu.gameserver.services.BrokerService;
+import com.aionemu.gameserver.services.DebugService;
+import com.aionemu.gameserver.services.EventService;
+import com.aionemu.gameserver.services.ExchangeService;
+import com.aionemu.gameserver.services.FlyRingService;
+import com.aionemu.gameserver.services.GameTimeService;
+import com.aionemu.gameserver.services.LimitedItemTradeService;
+import com.aionemu.gameserver.services.NpcShoutsService;
+import com.aionemu.gameserver.services.PeriodicSaveService;
+import com.aionemu.gameserver.services.PetitionService;
+import com.aionemu.gameserver.services.RoadService;
+import com.aionemu.gameserver.services.ShieldService;
+import com.aionemu.gameserver.services.SiegeService;
+import com.aionemu.gameserver.services.WeatherService;
+import com.aionemu.gameserver.services.WeddingService;
 import com.aionemu.gameserver.services.abyss.AbyssRankUpdateService;
 import com.aionemu.gameserver.services.drop.DropRegistrationService;
 import com.aionemu.gameserver.services.instance.DredgionService2;
@@ -58,6 +94,7 @@ import com.aionemu.gameserver.services.player.PlayerEventService;
 import com.aionemu.gameserver.services.player.PlayerLimitService;
 import com.aionemu.gameserver.services.reward.RewardService;
 import com.aionemu.gameserver.services.transfers.PlayerTransferService;
+import com.aionemu.gameserver.services.tvt.TvtService;
 import com.aionemu.gameserver.spawnengine.DayTimeSpawnEngine;
 import com.aionemu.gameserver.spawnengine.InstanceRiftSpawnManager;
 import com.aionemu.gameserver.spawnengine.RiftSpawnManager;
@@ -79,22 +116,13 @@ import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.geo.GeoService;
 import com.aionemu.gameserver.world.zone.ZoneService;
 
-import java.io.*;
-import java.sql.SQLException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
-import java.util.concurrent.locks.ReentrantLock;
-import java.util.zip.Deflater;
-import java.util.zip.ZipEntry;
-import java.util.zip.ZipOutputStream;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import ch.qos.logback.classic.LoggerContext;
+import ch.qos.logback.classic.joran.JoranConfigurator;
+import ch.qos.logback.core.joran.spi.JoranException;
 
 /**
- * <tt>GameServer </tt> is the main class of the application and represents the whole game server.<br>
+ * <tt>GameServer </tt> is the main class of the application and represents the
+ * whole game server.<br>
  * This class is also an entry point with main() method.
  *
  * @author -Nemesiss-
@@ -105,7 +133,7 @@ public class GameServer {
 
 	private static final Logger log = LoggerFactory.getLogger(GameServer.class);
 
-	//TODO remove all this shit
+	// TODO remove all this shit
 	private static int ELYOS_COUNT = 0;
 	private static int ASMOS_COUNT = 0;
 	private static double ELYOS_RATIO = 0.0;
@@ -124,7 +152,8 @@ public class GameServer {
 		if (files != null && files.length > 0) {
 			byte[] buf = new byte[1024];
 			try {
-				String outFilename = "./log/backup/" + new SimpleDateFormat("yyyy-MM-dd HHmmss").format(new Date()) + ".zip";
+				String outFilename = "./log/backup/" + new SimpleDateFormat("yyyy-MM-dd HHmmss").format(new Date())
+						+ ".zip";
 				ZipOutputStream out = new ZipOutputStream(new FileOutputStream(outFilename));
 				out.setMethod(ZipOutputStream.DEFLATED);
 				out.setLevel(Deflater.BEST_COMPRESSION);
@@ -158,7 +187,8 @@ public class GameServer {
 	/**
 	 * Launching method for GameServer
 	 *
-	 * @param args arguments, not used
+	 * @param args
+	 *            arguments, not used
 	 */
 	public static void main(String[] args) {
 		long start = System.currentTimeMillis();
@@ -168,12 +198,12 @@ public class GameServer {
 		DataManager.getInstance();
 		Util.printSection("IDFactory");
 		IDFactory.getInstance();
-		
+
 		Util.printSection("Zone");
 		ZoneService.getInstance().load();
 		Util.printSection("World");
 		World.getInstance();
-		
+
 		Util.printSection("Drops");
 		DropRegistrationService.getInstance();
 
@@ -193,7 +223,7 @@ public class GameServer {
 
 		Util.printSection("Instances");
 		InstanceEngine.getInstance().load();
-		
+
 		Util.printSection("AI2");
 		AI2Engine.getInstance().load();
 
@@ -210,7 +240,7 @@ public class GameServer {
 		SpawnEngine.spawnAll();
 		RiftSpawnManager.spawnAll();
 		InstanceRiftSpawnManager.spawnAll();
-		//TODO: Remove DayTime based spawns
+		// TODO: Remove DayTime based spawns
 		DayTimeSpawnEngine.spawnAll();
 		TemporarySpawnEngine.spawnAll();
 
@@ -235,7 +265,7 @@ public class GameServer {
 		if (AIConfig.SHOUTS_ENABLE)
 			NpcShoutsService.getInstance();
 		InstanceService.load();
-		//ChatProcessor.getInstance();
+		// ChatProcessor.getInstance();
 		FlyRingService.getInstance();
 		RoadService.getInstance();
 		HTMLCache.getInstance();
@@ -255,19 +285,19 @@ public class GameServer {
 			EventService.getInstance().start();
 		if (WeddingsConfig.WEDDINGS_ENABLE)
 			WeddingService.getInstance();
-        Util.printSection("[Ascension] Events:");
-        TvtService.getInstance().initTvt();       
+		Util.printSection("[Ascension] Events:");
+		TvtService.getInstance().initTvt();
 		AdminService.getInstance();
 		PlayerTransferService.getInstance();
-	 
+
 		Util.printSection("System");
 		AEVersions.printFullVersionInfo();
 		System.gc();
 		AEInfos.printAllInfos();
-		
+
 		CommandService.getInstance();
 		CmdTeleService.getInstance();
-        
+
 		try {
 			DB.prepareStatement("DELETE FROM player_vars WHERE param=\"groupCancelCounter\"").execute();
 			DB.prepareStatement("DELETE FROM player_vars WHERE param=\"dp\"").execute();
@@ -275,28 +305,26 @@ public class GameServer {
 			e1.printStackTrace();
 		}
 
-		if(RecursiveAddConf.enabled) {
+		if (RecursiveAddConf.enabled) {
 			RecursiveAdd.startRecursiveAddTask();
 			log.info("RecursiveAdd started");
-		}
-		else {
+		} else {
 			log.info("RecursiveAdd disabled");
 		}
-		
-		if(WebShopConf.WEBSHOP_ENABLED) {
+
+		if (WebShopConf.WEBSHOP_ENABLED) {
 			EventWebShop.startEventWebShopTask();
 			log.info("WebShop service started");
-		}
-		else {
+		} else {
 			log.info("WebShop service disabled");
 		}
-		
+
 		Util.printSection("GameServerLog");
 		log.info("AL Game Server started in " + (System.currentTimeMillis() - start) / 1000 + " seconds.");
-              //  NetSocks.init();
-                
+		// NetSocks.init();
+
 		gs.startServers();
-                  
+
 		Runtime.getRuntime().addShutdownHook(ShutdownHook.getInstance());
 
 		if (GSConfig.FACTIONS_RATIO_LIMITED) {
@@ -317,7 +345,7 @@ public class GameServer {
 				}
 			});
 		}
-		
+
 		onStartup();
 	}
 
@@ -326,7 +354,9 @@ public class GameServer {
 	 */
 	private void startServers() {
 		Util.printSection("Starting Network");
-		NioServer nioServer = new NioServer(NetworkConfig.NIO_READ_WRITE_THREADS, new ServerCfg(NetworkConfig.GAME_BIND_ADDRESS, NetworkConfig.GAME_PORT, "Game Connections", new GameConnectionFactoryImpl()));
+		NioServer nioServer = new NioServer(NetworkConfig.NIO_READ_WRITE_THREADS,
+				new ServerCfg(NetworkConfig.GAME_BIND_ADDRESS, NetworkConfig.GAME_PORT, "Game Connections",
+						new GameConnectionFactoryImpl()));
 
 		LoginServer ls = LoginServer.getInstance();
 		ChatServer cs = ChatServer.getInstance();
@@ -343,7 +373,8 @@ public class GameServer {
 	}
 
 	/**
-	 * Initialize all helper services, that are not directly related to aion gs, which includes:
+	 * Initialize all helper services, that are not directly related to aion gs,
+	 * which includes:
 	 * <ul>
 	 * <li>Logging</li>
 	 * <li>Database factory</li>
@@ -408,14 +439,14 @@ public class GameServer {
 		lock.lock();
 		try {
 			switch (race) {
-				case ASMODIANS:
-					GameServer.ASMOS_COUNT += i;
-					break;
-				case ELYOS:
-					GameServer.ELYOS_COUNT += i;
-					break;
-				default:
-					break;
+			case ASMODIANS:
+				GameServer.ASMOS_COUNT += i;
+				break;
+			case ELYOS:
+				GameServer.ELYOS_COUNT += i;
+				break;
+			default:
+				break;
 			}
 
 			computeRatios();
@@ -438,29 +469,30 @@ public class GameServer {
 	}
 
 	private static void displayRatios(boolean updated) {
-		log.info("FACTIONS RATIO " + (updated ? "UPDATED " : "") + ": E " + String.format("%.1f", GameServer.ELYOS_RATIO)
-				+ " % / A " + String.format("%.1f", GameServer.ASMOS_RATIO) + " %");
+		log.info(
+				"FACTIONS RATIO " + (updated ? "UPDATED " : "") + ": E " + String.format("%.1f", GameServer.ELYOS_RATIO)
+						+ " % / A " + String.format("%.1f", GameServer.ASMOS_RATIO) + " %");
 	}
 
 	public static double getRatiosFor(Race race) {
 		switch (race) {
-			case ASMODIANS:
-				return GameServer.ASMOS_RATIO;
-			case ELYOS:
-				return GameServer.ELYOS_RATIO;
-			default:
-				return 0.0;
+		case ASMODIANS:
+			return GameServer.ASMOS_RATIO;
+		case ELYOS:
+			return GameServer.ELYOS_RATIO;
+		default:
+			return 0.0;
 		}
 	}
 
 	public static int getCountFor(Race race) {
 		switch (race) {
-			case ASMODIANS:
-				return GameServer.ASMOS_COUNT;
-			case ELYOS:
-				return GameServer.ELYOS_COUNT;
-			default:
-				return 0;
+		case ASMODIANS:
+			return GameServer.ASMOS_COUNT;
+		case ELYOS:
+			return GameServer.ELYOS_COUNT;
+		default:
+			return 0;
 		}
 	}
 }

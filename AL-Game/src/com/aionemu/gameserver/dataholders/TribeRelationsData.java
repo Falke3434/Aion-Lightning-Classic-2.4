@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.THashMap;
-
 import java.util.List;
 
 import javax.xml.bind.Unmarshaller;
@@ -28,6 +26,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.TribeClass;
 import com.aionemu.gameserver.model.templates.tribe.Tribe;
+
+import gnu.trove.map.hash.THashMap;
 
 /**
  * @author ATracer
@@ -89,7 +89,8 @@ public class TribeRelationsData {
 			return false;
 		if (isFriendlyRelation(tribeName1, tribeName2))
 			return false;
-		return tribe1.getAggro().contains(tribeName2) || tribe2.isBasic() && tribe1.getAggro().contains(tribe2.getBase());
+		return tribe1.getAggro().contains(tribeName2)
+				|| tribe2.isBasic() && tribe1.getAggro().contains(tribe2.getBase());
 	}
 
 	/**
@@ -102,7 +103,8 @@ public class TribeRelationsData {
 		Tribe tribe2 = tribeNameMap.get(tribeName2);
 		if (tribe1 == null || tribe2 == null)
 			return false;
-		return tribe1.getSupport().contains(tribeName2) || tribe2.isBasic() && tribe1.getAggro().contains(tribe2.getBase());
+		return tribe1.getSupport().contains(tribeName2)
+				|| tribe2.isBasic() && tribe1.getAggro().contains(tribe2.getBase());
 	}
 
 	/**
@@ -115,7 +117,8 @@ public class TribeRelationsData {
 		Tribe tribe2 = tribeNameMap.get(tribeName2);
 		if (tribe1 == null || tribe2 == null)
 			return false;
-		return tribe1.getFriend().contains(tribeName2) || tribe2.isBasic() && tribe1.getFriend().contains(tribe2.getBase());
+		return tribe1.getFriend().contains(tribeName2)
+				|| tribe2.isBasic() && tribe1.getFriend().contains(tribe2.getBase());
 	}
 
 	/**
@@ -128,9 +131,10 @@ public class TribeRelationsData {
 		Tribe tribe2 = tribeNameMap.get(tribeName2);
 		if (tribe1 == null || tribe2 == null)
 			return false;
-		return tribe1.getNeutral().contains(tribeName2) || tribe2.isBasic() && tribe1.getNeutral().contains(tribe2.getBase());
+		return tribe1.getNeutral().contains(tribeName2)
+				|| tribe2.isBasic() && tribe1.getNeutral().contains(tribe2.getBase());
 	}
-	
+
 	/**
 	 * @param tribeName1
 	 * @param tribeName2
@@ -154,6 +158,7 @@ public class TribeRelationsData {
 		Tribe tribe2 = tribeNameMap.get(tribeName2);
 		if (tribe1 == null || tribe2 == null)
 			return false;
-		return tribe1.getHostile().contains(tribeName2) || tribe2.isBasic() && tribe1.getHostile().contains(tribe2.getBase());
+		return tribe1.getHostile().contains(tribeName2)
+				|| tribe2.isBasic() && tribe1.getHostile().contains(tribe2.getBase());
 	}
 }

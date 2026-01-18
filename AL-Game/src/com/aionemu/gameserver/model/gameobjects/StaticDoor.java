@@ -23,7 +23,6 @@ import com.aionemu.gameserver.model.templates.staticdoor.StaticDoorTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_EMOTION;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 /**
  * @author MrPoke
  *
@@ -31,6 +30,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 public class StaticDoor extends StaticObject {
 
 	private boolean open = false;
+
 	/**
 	 * @param objectId
 	 * @param controller
@@ -38,11 +38,10 @@ public class StaticDoor extends StaticObject {
 	 * @param objectTemplate
 	 */
 	public StaticDoor(int objectId, StaticObjectController controller, SpawnTemplate spawnTemplate,
-		StaticDoorTemplate objectTemplate) {
+			StaticDoorTemplate objectTemplate) {
 		super(objectId, controller, spawnTemplate, objectTemplate);
 	}
 
-	
 	/**
 	 * @return the open
 	 */
@@ -50,15 +49,16 @@ public class StaticDoor extends StaticObject {
 		return open;
 	}
 
-	
 	/**
-	 * @param open the open to set
+	 * @param open
+	 *            the open to set
 	 */
 	public void setOpen(boolean open) {
 		this.open = open;
-		PacketSendUtility.broadcastPacket(this, new SM_EMOTION(this.getSpawn().getStaticId(), open ?  EmotionType.OPEN_DOOR : EmotionType.CLOSE_DOOR));
+		PacketSendUtility.broadcastPacket(this,
+				new SM_EMOTION(this.getSpawn().getStaticId(), open ? EmotionType.OPEN_DOOR : EmotionType.CLOSE_DOOR));
 	}
-	
+
 	@Override
 	public StaticDoorTemplate getObjectTemplate() {
 		return (StaticDoorTemplate) super.getObjectTemplate();

@@ -16,8 +16,19 @@ public class LegionHistory {
 		this.description = description;
 	}
 
-	public LegionHistoryType getLegionHistoryType() { return legionHistoryType; }
-	public String getName() { return name; }
-	public Timestamp getTime() { return time; }
-	public String getDescription() { return description; }
+	public LegionHistoryType getLegionHistoryType() {
+		return legionHistoryType;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public Timestamp getTime() {
+		return time;
+	}
+
+	public String getDescription() {
+		return description;
+	}
 }

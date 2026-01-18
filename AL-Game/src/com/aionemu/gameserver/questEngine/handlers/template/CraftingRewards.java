@@ -17,12 +17,12 @@
 package com.aionemu.gameserver.questEngine.handlers.template;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SKILL_LIST;
 import com.aionemu.gameserver.questEngine.handlers.QuestHandler;
 import com.aionemu.gameserver.questEngine.model.QuestDialog;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_SKILL_LIST;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 /**
@@ -45,8 +45,7 @@ public class CraftingRewards extends QuestHandler {
 		this.levelReward = levelReward;
 		if (endNpcId != 0) {
 			this.endNpcId = endNpcId;
-		}
-		else {
+		} else {
 			this.endNpcId = startNpcId;
 		}
 		this.questMovie = questMovie;
@@ -74,47 +73,44 @@ public class CraftingRewards extends QuestHandler {
 		if (qs == null || qs.getStatus() == QuestStatus.NONE) {
 			if (targetId == startNpcId) {
 				switch (dialog) {
-					case START_DIALOG: {
-						return sendQuestDialog(env, 1011);
-					}
-					default: {
-						return sendQuestStartDialog(env);
-					}
+				case START_DIALOG: {
+					return sendQuestDialog(env, 1011);
+				}
+				default: {
+					return sendQuestStartDialog(env);
+				}
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.START) {
+		} else if (qs.getStatus() == QuestStatus.START) {
 			if (targetId == endNpcId) {
 				switch (dialog) {
-					case START_DIALOG: {
-						return sendQuestDialog(env, 2375);
+				case START_DIALOG: {
+					return sendQuestDialog(env, 2375);
+				}
+				case SELECT_REWARD: {
+					qs.setQuestVar(0);
+					qs.setStatus(QuestStatus.REWARD);
+					updateQuestStatus(env);
+					if (questMovie != 0) {
+						playQuestMovie(env, questMovie);
+					} else {
+						player.getSkillList().addSkill(player, skillId, levelReward);
 					}
-					case SELECT_REWARD: {
-						qs.setQuestVar(0);
-						qs.setStatus(QuestStatus.REWARD);
-						updateQuestStatus(env);
-						if (questMovie != 0) {
-							playQuestMovie(env, questMovie);
-						}
-						else {
-							player.getSkillList().addSkill(player, skillId, levelReward);
-						}
-						return sendQuestEndDialog(env);
-					}
+					return sendQuestEndDialog(env);
+				}
 				default:
 					break;
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.REWARD) {
+		} else if (qs.getStatus() == QuestStatus.REWARD) {
 			if (targetId == endNpcId) {
 				switch (dialog) {
-					case START_DIALOG: {
-						return sendQuestEndDialog(env);
-					}
-					default: {
-						return sendQuestEndDialog(env);
-					}
+				case START_DIALOG: {
+					return sendQuestEndDialog(env);
+				}
+				default: {
+					return sendQuestEndDialog(env);
+				}
 				}
 			}
 		}
@@ -129,7 +125,8 @@ public class CraftingRewards extends QuestHandler {
 			if (movieId == questMovie) {
 				player.getSkillList().addSkill(player, skillId, levelReward);
 				player.getRecipeList().autoLearnRecipe(player, skillId, levelReward);
-				PacketSendUtility.sendPacket(player, new SM_SKILL_LIST(player.getSkillList().getSkillEntry(skillId), 1330064, false));
+				PacketSendUtility.sendPacket(player,
+						new SM_SKILL_LIST(player.getSkillList().getSkillEntry(skillId), 1330064, false));
 				return true;
 			}
 		}

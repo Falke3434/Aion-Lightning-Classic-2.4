@@ -16,9 +16,9 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import static ch.lambdaj.Lambda.*;
-
-import gnu.trove.map.hash.TIntObjectHashMap;
+import static ch.lambdaj.Lambda.extractIterator;
+import static ch.lambdaj.Lambda.flatten;
+import static ch.lambdaj.Lambda.on;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -28,16 +28,19 @@ import java.util.AbstractMap.SimpleEntry;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
 import javax.xml.XMLConstants;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.PropertyException;
 import javax.xml.bind.Unmarshaller;
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlType;
 import javax.xml.validation.Schema;
 import javax.xml.validation.SchemaFactory;
-
-import javolution.util.FastMap;
 
 import org.apache.commons.lang.StringUtils;
 import org.slf4j.Logger;
@@ -48,13 +51,21 @@ import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.state.CreatureState;
-import com.aionemu.gameserver.model.templates.spawns.*;
+import com.aionemu.gameserver.model.templates.spawns.Spawn;
+import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
+import com.aionemu.gameserver.model.templates.spawns.SpawnMap;
+import com.aionemu.gameserver.model.templates.spawns.SpawnSearchResult;
+import com.aionemu.gameserver.model.templates.spawns.SpawnSpotTemplate;
+import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawn;
 import com.aionemu.gameserver.model.templates.world.WorldMapTemplate;
 import com.aionemu.gameserver.spawnengine.SpawnHandlerType;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldMap;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
+import javolution.util.FastMap;
 
 /**
  * @author xTz
@@ -66,7 +77,7 @@ import com.aionemu.gameserver.world.WorldMap;
 public class SpawnsData2 {
 
 	private static final Logger log = LoggerFactory.getLogger(SpawnsData2.class);
-	
+
 	@XmlElement(name = "spawn_map", type = SpawnMap.class)
 	protected List<SpawnMap> templates;
 
@@ -92,10 +103,10 @@ public class SpawnsData2 {
 						if (allSpawnMaps.get(mapId).containsKey(spawn.getNpcId()))
 							allSpawnMaps.get(mapId).remove(spawn.getNpcId());
 						customs.put(spawn.getNpcId(), spawn);
-					}
-					else if (customs.containsKey(spawn.getNpcId()))
+					} else if (customs.containsKey(spawn.getNpcId()))
 						continue;
-					allSpawnMaps.get(mapId).put(spawn.getNpcId(), new SimpleEntry(new SpawnGroup2(mapId, spawn), spawn));
+					allSpawnMaps.get(mapId).put(spawn.getNpcId(),
+							new SimpleEntry(new SpawnGroup2(mapId, spawn), spawn));
 				}
 				if (!allSpawnMaps.containsKey(mapId)) {
 					allSpawnMaps.put(mapId, new FastMap<Integer, SimpleEntry<SpawnGroup2, Spawn>>());
@@ -115,11 +126,10 @@ public class SpawnsData2 {
 									if (allSpawnMaps.get(mapId).containsKey(spawn.getNpcId()))
 										allSpawnMaps.get(mapId).remove(spawn.getNpcId());
 									customs.put(spawn.getNpcId(), spawn);
-								}
-								else if (customs.containsKey(spawn.getNpcId()))
+								} else if (customs.containsKey(spawn.getNpcId()))
 									continue;
 								SpawnGroup2 spawnGroup = new SpawnGroup2(mapId, spawn, siegeId, race.getSiegeRace(),
-									mod.getSiegeModType());
+										mod.getSiegeModType());
 								allSpawnMaps.get(mapId).put(spawn.getNpcId(), new SimpleEntry(spawnGroup, spawn));
 								siegeSpawnMaps.get(siegeId).add(spawnGroup);
 							}
@@ -154,7 +164,8 @@ public class SpawnsData2 {
 		return siegeSpawnMaps.get(siegeId);
 	}
 
-	public synchronized boolean saveSpawn(Player admin, VisibleObject visibleObject, boolean delete) throws IOException {
+	public synchronized boolean saveSpawn(Player admin, VisibleObject visibleObject, boolean delete)
+			throws IOException {
 		SpawnTemplate spawn = visibleObject.getSpawn();
 		Spawn oldGroup = DataManager.SPAWNS_DATA2.getSpawnsForNpc(visibleObject.getWorldId(), spawn.getNpcId());
 
@@ -168,8 +179,7 @@ public class SpawnsData2 {
 		try {
 			schema = sf.newSchema(new File("./data/static_data/spawns/spawns.xsd"));
 			jc = JAXBContext.newInstance(SpawnsData2.class);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			// ignore, if schemas are wrong then we even could not call the command;
 		}
 
@@ -180,13 +190,11 @@ public class SpawnsData2 {
 				Unmarshaller unmarshaller = jc.createUnmarshaller();
 				unmarshaller.setSchema(schema);
 				data = (SpawnsData2) unmarshaller.unmarshal(fin);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.error(e.getMessage());
 				PacketSendUtility.sendMessage(admin, "Could not load old XML file!");
 				return false;
-			}
-			finally {
+			} finally {
 				if (fin != null)
 					fin.close();
 			}
@@ -201,8 +209,7 @@ public class SpawnsData2 {
 				oldGroup = new Spawn(spawn.getNpcId(), spawn.getRespawnTime(), spawn.getHandlerType());
 				addGroup = true;
 			}
-		}
-		else {
+		} else {
 			if (data == null)
 				data = new SpawnsData2();
 			// only remove from memory, will be added back later
@@ -211,16 +218,17 @@ public class SpawnsData2 {
 		}
 
 		SpawnSpotTemplate spot = new SpawnSpotTemplate(visibleObject.getX(), visibleObject.getY(), visibleObject.getZ(),
-			visibleObject.getHeading(), visibleObject.getSpawn().getRandomWalk(), visibleObject.getSpawn().getWalkerId(),
-			visibleObject.getSpawn().getWalkerIndex());
+				visibleObject.getHeading(), visibleObject.getSpawn().getRandomWalk(),
+				visibleObject.getSpawn().getWalkerId(), visibleObject.getSpawn().getWalkerIndex());
 		boolean changeX = visibleObject.getX() != spawn.getX();
 		boolean changeY = visibleObject.getY() != spawn.getY();
 		boolean changeZ = visibleObject.getZ() != spawn.getZ();
 		boolean changeH = visibleObject.getHeading() != spawn.getHeading();
 		if (changeH && visibleObject instanceof Npc) {
-			Npc npc = (Npc)visibleObject;
+			Npc npc = (Npc) visibleObject;
 			if (!npc.isAtSpawnLocation() || !npc.isInState(CreatureState.NPC_IDLE) || changeX || changeY || changeZ) {
-				// if H changed, XSD validation fails, because it may be negative; thus, reset it back
+				// if H changed, XSD validation fails, because it may be negative; thus, reset
+				// it back
 				visibleObject.setXYZH(null, null, null, spawn.getHeading());
 				changeH = false;
 			}
@@ -229,18 +237,19 @@ public class SpawnsData2 {
 		SpawnSpotTemplate oldSpot = null;
 		for (SpawnSpotTemplate s : oldGroup.getSpawnSpotTemplates()) {
 			if (s.getX() == spot.getX() && s.getY() == spot.getY() && s.getZ() == spot.getZ()
-				&& s.getHeading() == spot.getHeading()) {
+					&& s.getHeading() == spot.getHeading()) {
 				if (delete || !StringUtils.equals(s.getWalkerId(), spot.getWalkerId())) {
 					oldSpot = s;
 					break;
-				}
-				else
+				} else
 					return false; // nothing to change
-			}
-			else if (changeX && s.getY() == spot.getY() && s.getZ() == spot.getZ() && s.getHeading() == spot.getHeading()
-				|| changeY && s.getX() == spot.getX() && s.getZ() == spot.getZ() && s.getHeading() == spot.getHeading()
-				|| changeZ && s.getX() == spot.getX() && s.getY() == spot.getY() && s.getHeading() == spot.getHeading()
-				|| changeH && s.getX() == spot.getX() && s.getY() == spot.getY() && s.getZ() == spot.getZ()) {
+			} else if (changeX && s.getY() == spot.getY() && s.getZ() == spot.getZ()
+					&& s.getHeading() == spot.getHeading()
+					|| changeY && s.getX() == spot.getX() && s.getZ() == spot.getZ()
+							&& s.getHeading() == spot.getHeading()
+					|| changeZ && s.getX() == spot.getX() && s.getY() == spot.getY()
+							&& s.getHeading() == spot.getHeading()
+					|| changeH && s.getX() == spot.getX() && s.getY() == spot.getY() && s.getZ() == spot.getZ()) {
 				oldSpot = s;
 				break;
 			}
@@ -257,8 +266,7 @@ public class SpawnsData2 {
 			data.templates = new ArrayList<SpawnMap>();
 			map = new SpawnMap(spawn.getWorldId());
 			data.templates.add(map);
-		}
-		else {
+		} else {
 			map = data.templates.get(0);
 		}
 
@@ -279,13 +287,11 @@ public class SpawnsData2 {
 			DataManager.SPAWNS_DATA2.afterUnmarshal(null, null);
 			DataManager.SPAWNS_DATA2.clearTemplates();
 			data.clearTemplates();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 			PacketSendUtility.sendMessage(admin, "Could not save XML file!");
 			return false;
-		}
-		finally {
+		} finally {
 			if (fos != null)
 				fos.close();
 		}
@@ -312,7 +318,7 @@ public class SpawnsData2 {
 
 	/**
 	 * @param worldId
-	 *          Optional. If provided, searches in this world first
+	 *            Optional. If provided, searches in this world first
 	 * @param npcId
 	 * @return template for the spot
 	 */
@@ -339,7 +345,7 @@ public class SpawnsData2 {
 	 * Used by Event Service to add additional spawns
 	 * 
 	 * @param spawnMap
-	 *          templates to add
+	 *            templates to add
 	 */
 	public void addNewSpawnMap(SpawnMap spawnMap) {
 		if (templates == null)
@@ -351,8 +357,8 @@ public class SpawnsData2 {
 		for (VisibleObject visObj : objects) {
 			if (!allSpawnMaps.contains(visObj.getWorldId()))
 				continue;
-			SimpleEntry<SpawnGroup2, Spawn> entry = allSpawnMaps.get(visObj.getWorldId()).get(
-				visObj.getObjectTemplate().getTemplateId());
+			SimpleEntry<SpawnGroup2, Spawn> entry = allSpawnMaps.get(visObj.getWorldId())
+					.get(visObj.getObjectTemplate().getTemplateId());
 			if (!entry.getValue().isEventSpawn())
 				continue;
 			if (entry.getValue().getEventTemplate().equals(visObj.getSpawn().getEventTemplate()))

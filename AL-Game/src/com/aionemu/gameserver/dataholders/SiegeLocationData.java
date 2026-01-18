@@ -25,13 +25,13 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.siege.ArtifactLocation;
 import com.aionemu.gameserver.model.siege.FortressLocation;
 import com.aionemu.gameserver.model.siege.OutpostLocation;
 import com.aionemu.gameserver.model.siege.SiegeLocation;
 import com.aionemu.gameserver.model.templates.siegelocation.SiegeLocationTemplate;
+
+import javolution.util.FastMap;
 
 /**
  * @author Sarynth, antness
@@ -53,7 +53,6 @@ public class SiegeLocationData {
 	private FastMap<Integer, OutpostLocation> outpostLocations = new FastMap<Integer, OutpostLocation>();
 	@XmlTransient
 	private FastMap<Integer, SiegeLocation> siegeLocations = new FastMap<Integer, SiegeLocation>();
-	
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		artifactLocations.clear();
@@ -62,25 +61,25 @@ public class SiegeLocationData {
 		siegeLocations.clear();
 		for (SiegeLocationTemplate template : siegeLocationTemplates)
 			switch (template.getType()) {
-				case FORTRESS:
-					FortressLocation fortress = new FortressLocation(template);
-					fortressLocations.put(template.getId(), fortress);
-					siegeLocations.put(template.getId(), fortress);
-					artifactLocations.put(template.getId(), new ArtifactLocation(template));
-					break;
-				case ARTIFACT:
-					ArtifactLocation artifact = new ArtifactLocation(template);
-					artifactLocations.put(template.getId(), artifact);
-					siegeLocations.put(template.getId(), artifact);
-					break;
-				case BOSSRAID_LIGHT:
-				case BOSSRAID_DARK:
-					OutpostLocation protector = new OutpostLocation(template);
-					outpostLocations.put(template.getId(), protector);
-					siegeLocations.put(template.getId(), protector);
-					break;
-				default:
-					break;
+			case FORTRESS:
+				FortressLocation fortress = new FortressLocation(template);
+				fortressLocations.put(template.getId(), fortress);
+				siegeLocations.put(template.getId(), fortress);
+				artifactLocations.put(template.getId(), new ArtifactLocation(template));
+				break;
+			case ARTIFACT:
+				ArtifactLocation artifact = new ArtifactLocation(template);
+				artifactLocations.put(template.getId(), artifact);
+				siegeLocations.put(template.getId(), artifact);
+				break;
+			case BOSSRAID_LIGHT:
+			case BOSSRAID_DARK:
+				OutpostLocation protector = new OutpostLocation(template);
+				outpostLocations.put(template.getId(), protector);
+				siegeLocations.put(template.getId(), protector);
+				break;
+			default:
+				break;
 			}
 	}
 

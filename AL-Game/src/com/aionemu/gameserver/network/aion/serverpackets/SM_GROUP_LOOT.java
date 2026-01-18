@@ -36,9 +36,10 @@ public class SM_GROUP_LOOT extends AionServerPacket {
 
 	/**
 	 * @param Player
-	 *          Id must be 0 to start the Roll Options
+	 *            Id must be 0 to start the Roll Options
 	 */
-	public SM_GROUP_LOOT(int groupId, int playerId, int itemId, int lootCorpseId, int distributionId, long unk4, int index) {
+	public SM_GROUP_LOOT(int groupId, int playerId, int itemId, int lootCorpseId, int distributionId, long unk4,
+			int index) {
 		this.groupId = groupId;
 		this.index = index;
 		this.unk2 = 1;

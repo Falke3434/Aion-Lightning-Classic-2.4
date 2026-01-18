@@ -26,7 +26,7 @@ public class ArrowCheckCondition extends Condition {
 	@Override
 	public boolean validate(Skill skill) {
 		if (skill.getEffector() instanceof Player) {
-			Player player = (Player)skill.getEffector();
+			Player player = (Player) skill.getEffector();
 			if (player.getEquipment().isArrowEquipped())
 				return true;
 

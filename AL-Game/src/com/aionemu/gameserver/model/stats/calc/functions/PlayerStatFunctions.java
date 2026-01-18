@@ -216,8 +216,7 @@ class DuplicateStatFunction extends StatFunction {
 						}
 					}
 				}
-			}
-			else if (offWeapon != null) {
+			} else if (offWeapon != null) {
 				List<StatFunction> functions2 = offWeapon.getItemTemplate().getModifiers();
 				if (functions2 != null) {
 					for (StatFunction func : functions2) {
@@ -227,22 +226,19 @@ class DuplicateStatFunction extends StatFunction {
 					}
 				}
 			}
-			
+
 			if (func2 == null && func1 == null)
 				return;
 			else if (func2 != null && func1 == null) {
 				func2.apply(stat);
-			}
-			else if (func2 == null && func1 != null) {
+			} else if (func2 == null && func1 != null) {
 				func1.apply(stat);
-			}
-			else {
+			} else {
 				// pvp attack ratio should be stacked on dual wield
 				if (offWeapon != null && getName() == StatEnum.PVP_ATTACK_RATIO) {
 					func1.apply(stat);
 					func2.apply(stat);
-				}
-				else {
+				} else {
 					if (Math.abs(func1.getValue()) >= Math.abs(func2.getValue()))
 						func1.apply(stat);
 					else

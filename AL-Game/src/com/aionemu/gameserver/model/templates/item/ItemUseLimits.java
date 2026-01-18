@@ -81,8 +81,7 @@ public class ItemUseLimits {
 
 		try {
 			return ZoneName.get(this.usearea);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			return null;
 		}
 	}

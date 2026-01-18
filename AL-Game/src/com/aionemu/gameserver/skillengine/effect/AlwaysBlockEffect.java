@@ -48,10 +48,9 @@ public class AlwaysBlockEffect extends EffectTemplate {
 						effect.endEffect();
 					else
 						value--;
-					
+
 					return true;
-				}
-				else
+				} else
 					return false;
 			}
 

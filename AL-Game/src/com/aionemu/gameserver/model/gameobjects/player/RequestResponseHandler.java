@@ -36,11 +36,11 @@ public abstract class RequestResponseHandler {
 	 * Called when a response is received
 	 * 
 	 * @param requested
-	 *          Player whom requested this response
+	 *            Player whom requested this response
 	 * @param responder
-	 *          Player whom responded to this request
+	 *            Player whom responded to this request
 	 * @param responseCode
-	 *          The response the player gave, usually 0 = no 1 = yes
+	 *            The response the player gave, usually 0 = no 1 = yes
 	 */
 	public void handle(Player responder, int response) {
 		if (response == 0)
@@ -53,9 +53,9 @@ public abstract class RequestResponseHandler {
 	 * Called when the player accepts a request
 	 * 
 	 * @param requester
-	 *          Creature whom requested this response
+	 *            Creature whom requested this response
 	 * @param responder
-	 *          Player whom responded to this request
+	 *            Player whom responded to this request
 	 */
 	public abstract void acceptRequest(Creature requester, Player responder);
 
@@ -63,9 +63,9 @@ public abstract class RequestResponseHandler {
 	 * Called when the player denies a request
 	 * 
 	 * @param requester
-	 *          Creature whom requested this response
+	 *            Creature whom requested this response
 	 * @param responder
-	 *          Player whom responded to this request
+	 *            Player whom responded to this request
 	 */
 	public abstract void denyRequest(Creature requester, Player responder);
 

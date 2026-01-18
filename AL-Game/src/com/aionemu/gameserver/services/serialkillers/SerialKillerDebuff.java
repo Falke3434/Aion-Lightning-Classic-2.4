@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.services.serialkillers;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.stats.calc.StatOwner;
 import com.aionemu.gameserver.model.stats.calc.functions.IStatFunction;
@@ -24,44 +27,42 @@ import com.aionemu.gameserver.model.templates.serial_killer.RankPenaltyAttr;
 import com.aionemu.gameserver.model.templates.serial_killer.RankRestriction;
 */
 
-import java.util.ArrayList;
-import java.util.List;
-
 /**
  * @author Dtem
  */
 public class SerialKillerDebuff implements StatOwner {
 
-    private List<IStatFunction> functions = new ArrayList<IStatFunction>();
-    //private RankRestriction rankRestriction;
+	private List<IStatFunction> functions = new ArrayList<IStatFunction>();
+	// private RankRestriction rankRestriction;
 
-    public void applyEffect(Player player, int rank) {
-        if (rank == 0)
-            return;
+	public void applyEffect(Player player, int rank) {
+		if (rank == 0)
+			return;
 
-        //rankRestriction = DataManager.SERIAL_KILLER_DATA.getRankRestriction(rank);
+		// rankRestriction = DataManager.SERIAL_KILLER_DATA.getRankRestriction(rank);
 
-        if (hasDebuff()) {
-            endEffect(player);
-        }
+		if (hasDebuff()) {
+			endEffect(player);
+		}
 
-       // for (RankPenaltyAttr rankPenaltyAttr : rankRestriction.getPenaltyAttr()) {
-       //     if (rankPenaltyAttr.getFunc().equals(Func.PERCENT))
-       //         functions.add(new StatRateFunction(rankPenaltyAttr.getStat(), rankPenaltyAttr.getValue(), true));
-       //     else
-        //        functions.add(new StatAddFunction(rankPenaltyAttr.getStat(), rankPenaltyAttr.getValue(), true));
-       // }
-        player.getGameStats().addEffect(this, functions);
-    }
+		// for (RankPenaltyAttr rankPenaltyAttr : rankRestriction.getPenaltyAttr()) {
+		// if (rankPenaltyAttr.getFunc().equals(Func.PERCENT))
+		// functions.add(new StatRateFunction(rankPenaltyAttr.getStat(),
+		// rankPenaltyAttr.getValue(), true));
+		// else
+		// functions.add(new StatAddFunction(rankPenaltyAttr.getStat(),
+		// rankPenaltyAttr.getValue(), true));
+		// }
+		player.getGameStats().addEffect(this, functions);
+	}
 
+	public boolean hasDebuff() {
+		return !functions.isEmpty();
+	}
 
-    public boolean hasDebuff() {
-        return !functions.isEmpty();
-    }
-
-    public void endEffect(Player player) {
-        functions.clear();
-        player.getGameStats().endEffect(this);
-    }
+	public void endEffect(Player player) {
+		functions.clear();
+		player.getGameStats().endEffect(this);
+	}
 
 }

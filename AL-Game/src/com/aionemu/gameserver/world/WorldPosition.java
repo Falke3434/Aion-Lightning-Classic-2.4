@@ -74,7 +74,7 @@ public class WorldPosition {
 
 	/**
 	 * @param mapId
-	 *          the mapId to set
+	 *            the mapId to set
 	 */
 	public void setMapId(int mapId) {
 		this.mapId = mapId;
@@ -191,7 +191,7 @@ public class WorldPosition {
 	 * Set map region
 	 * 
 	 * @param r
-	 *          - map region
+	 *            - map region
 	 */
 	void setMapRegion(MapRegion r) {
 		mapRegion = r;
@@ -204,7 +204,7 @@ public class WorldPosition {
 	 * @param newY
 	 * @param newZ
 	 * @param newHeading
-	 *          Value from 0 to 120 (120==0 actually)
+	 *            Value from 0 to 120 (120==0 actually)
 	 */
 	public void setXYZH(Float newX, Float newY, Float newZ, Byte newHeading) {
 		if (newX != null)
@@ -216,19 +216,19 @@ public class WorldPosition {
 		if (newHeading != null)
 			heading = newHeading;
 	}
-	
+
 	public void setZ(float z) {
 		this.z = z;
 	}
-	
+
 	public void setH(byte h) {
 		this.heading = h;
 	}
 
 	@Override
 	public String toString() {
-		return "WorldPosition [heading=" + heading + ", isSpawned=" + isSpawned + ", mapRegion=" + mapRegion + ", x=" + x
-			+ ", y=" + y + ", z=" + z + "]";
+		return "WorldPosition [heading=" + heading + ", isSpawned=" + isSpawned + ", mapRegion=" + mapRegion + ", x="
+				+ x + ", y=" + y + ", z=" + z + "]";
 	}
 
 }

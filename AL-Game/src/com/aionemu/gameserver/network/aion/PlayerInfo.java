@@ -129,19 +129,18 @@ public abstract class PlayerInfo extends AionServerPacket {
 		if (accPlData.isLegionMember()) {
 			writeD(accPlData.getLegion().getLegionId());
 			writeS(accPlData.getLegion().getLegionName(), 88);
-		}
-		else {
+		} else {
 			writeB(new byte[92]);
 		}
-		//writeH(accPlData.isLegionMember() ? 0x01 : 0x00);
-		//writeD((int) pbd.getLastOnline().getTime());
-		
+		// writeH(accPlData.isLegionMember() ? 0x01 : 0x00);
+		// writeD((int) pbd.getLastOnline().getTime());
+
 		int itemsDataSize = 0;
 		// TODO figure out this part when fully equipped
 		List<Item> items = accPlData.getEquipment();
 
 		for (Item item : items) {
-			if(itemsDataSize >= 208)
+			if (itemsDataSize >= 208)
 				break;
 
 			ItemTemplate itemTemplate = item.getItemTemplate();
@@ -152,7 +151,8 @@ public abstract class PlayerInfo extends AionServerPacket {
 			long slot = item.getEquipmentSlot();
 			if (slot == 393216 || slot == 131072 || slot == 262144) {
 				continue;
-			} if (itemTemplate.isArmor() || itemTemplate.isWeapon()) {
+			}
+			if (itemTemplate.isArmor() || itemTemplate.isWeapon()) {
 				if (itemTemplate.getItemSlot() <= ItemSlot.PANTS.getSlotIdMask()) {
 					writeC(1); // this flas is needed to show equipment on selection screen
 					writeD(item.getItemSkinTemplate().getTemplateId());

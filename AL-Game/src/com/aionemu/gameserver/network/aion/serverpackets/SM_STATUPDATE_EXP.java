@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
@@ -40,12 +39,12 @@ public class SM_STATUPDATE_EXP extends AionServerPacket {
 	 * @param recoverableExp
 	 * @param maxExp
 	 */
-	public SM_STATUPDATE_EXP(long currentExp, long recoverableExp, long maxExp, long rep1, long rep2) {
+	public SM_STATUPDATE_EXP(long currentExp, long recoverableExp, long maxExp, long curBoostExp, long maxBoostExp) {
 		this.currentExp = currentExp;
 		this.recoverableExp = recoverableExp;
 		this.maxExp = maxExp;
-		curBoostExp = rep1;
-		maxBoostExp = rep2;
+		this.curBoostExp = curBoostExp;
+		this.maxBoostExp = maxBoostExp;
 	}
 
 	/**
@@ -58,6 +57,7 @@ public class SM_STATUPDATE_EXP extends AionServerPacket {
 		writeQ(maxExp);
 		writeQ(curBoostExp);
 		writeQ(maxBoostExp);
+		writeQ(0);
 	}
 
 }

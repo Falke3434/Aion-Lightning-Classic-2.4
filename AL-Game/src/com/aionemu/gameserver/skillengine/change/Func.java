@@ -25,7 +25,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "Func")
 @XmlEnum
 public enum Func {
-	ADD,
-	PERCENT,
-	REPLACE
+	ADD, PERCENT, REPLACE
 }

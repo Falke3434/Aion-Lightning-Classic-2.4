@@ -23,7 +23,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.controllers.attack.AttackUtil;
 import com.aionemu.gameserver.model.gameobjects.Creature;
-import com.aionemu.gameserver.skillengine.effect.DamageEffect;
 import com.aionemu.gameserver.skillengine.model.DispelCategoryType;
 import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.skillengine.model.SkillTargetSlot;
@@ -47,14 +46,15 @@ public class DispelBuffCounterAtkEffect extends DamageEffect {
 	public void calculate(Effect effect) {
 		if (!super.calculate(effect, null, null))
 			return;
-		
+
 		Creature effected = effect.getEffected();
 		int count = value + delta * effect.getSkillLevel();
 		int finalPower = power + dpower * effect.getSkillLevel();
-		
-		int i = effected.getEffectController().calculateNumberOfEffects(DispelCategoryType.BUFF, SkillTargetSlot.BUFF, dispelLevel);
+
+		int i = effected.getEffectController().calculateNumberOfEffects(DispelCategoryType.BUFF, SkillTargetSlot.BUFF,
+				dispelLevel);
 		i = (i < count ? i : count);
-		
+
 		int newValue = 0;
 		if (i == 1)
 			newValue = hitvalue;
@@ -68,8 +68,8 @@ public class DispelBuffCounterAtkEffect extends DamageEffect {
 		AttackUtil.calculateMagicalSkillResult(effect, valueWithDelta, bonus, getElement());
 
 		// First cancel buffs so to avoid shield effects to calculate damage as 0
-		//TOOD move to apply effect, this is not good
-		effect.getEffected().getEffectController().removeEffectByDispelCat(DispelCategoryType.BUFF, SkillTargetSlot.BUFF
-				, i, dispelLevel, finalPower, false);
+		// TOOD move to apply effect, this is not good
+		effect.getEffected().getEffectController().removeEffectByDispelCat(DispelCategoryType.BUFF,
+				SkillTargetSlot.BUFF, i, dispelLevel, finalPower, false);
 	}
 }

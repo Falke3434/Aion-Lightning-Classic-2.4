@@ -52,17 +52,16 @@ public class CM_GROUP_DISTRIBUTION extends AionClientPacket {
 			return;
 
 		switch (partyType) {
-			case 1:
-				if (player.isInAlliance2()) {
-					PlayerAllianceService.distributeKinahInGroup(player, amount);
-				}
-				else {
-					PlayerGroupService.distributeKinah(player, amount);
-				}
-				break;
-			case 2:
-				PlayerAllianceService.distributeKinah(player, amount);
-				break;
+		case 1:
+			if (player.isInAlliance2()) {
+				PlayerAllianceService.distributeKinahInGroup(player, amount);
+			} else {
+				PlayerGroupService.distributeKinah(player, amount);
+			}
+			break;
+		case 2:
+			PlayerAllianceService.distributeKinah(player, amount);
+			break;
 		}
 	}
 }

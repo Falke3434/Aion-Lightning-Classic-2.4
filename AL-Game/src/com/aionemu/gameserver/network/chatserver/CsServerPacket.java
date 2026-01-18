@@ -29,7 +29,7 @@ public abstract class CsServerPacket extends BaseServerPacket {
 	 * constructs new server packet with specified opcode.
 	 * 
 	 * @param opcode
-	 *          packet id
+	 *            packet id
 	 */
 	protected CsServerPacket(int opcode) {
 		super(opcode);
@@ -44,7 +44,7 @@ public abstract class CsServerPacket extends BaseServerPacket {
 	public final void write(ChatServerConnection con, ByteBuffer buffer) {
 		setBuf(buffer);
 		buf.putShort((short) 0);
-		buf.put((byte)getOpcode());
+		buf.put((byte) getOpcode());
 		writeImpl(con);
 		buf.flip();
 		buf.putShort((short) buf.limit());

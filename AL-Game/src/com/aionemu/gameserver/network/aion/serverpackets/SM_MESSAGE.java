@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.model.ChatType;
 import com.aionemu.gameserver.model.Race;
@@ -71,11 +70,11 @@ public class SM_MESSAGE extends AionServerPacket {
 	 * Constructs new <tt>SM_MESSAGE </tt> packet
 	 * 
 	 * @param player
-	 *          who sent message
+	 *            who sent message
 	 * @param message
-	 *          actual message
+	 *            actual message
 	 * @param chatType
-	 *          what chat type should be used
+	 *            what chat type should be used
 	 */
 	public SM_MESSAGE(Player player, String message, ChatType chatType) {
 		this.player = player;
@@ -93,13 +92,13 @@ public class SM_MESSAGE extends AionServerPacket {
 	 * Manual creation of chat message.<br>
 	 * 
 	 * @param senderObjectId
-	 *          - can be 0 if system message(like announcements)
+	 *            - can be 0 if system message(like announcements)
 	 * @param senderName
-	 *          - used for shout ATM, can be null in other cases
+	 *            - used for shout ATM, can be null in other cases
 	 * @param message
-	 *          - actual text
+	 *            - actual text
 	 * @param chatType
-	 *          type of chat, Normal, Shout, Announcements, Etc...
+	 *            type of chat, Normal, Shout, Announcements, Etc...
 	 */
 	public SM_MESSAGE(int senderObjectId, String senderName, String message, ChatType chatType) {
 		this.senderObjectId = senderObjectId;
@@ -116,8 +115,9 @@ public class SM_MESSAGE extends AionServerPacket {
 		boolean canRead = true;
 
 		if (race != null) {
-			canRead = chatType.isSysMsg() || con.getActivePlayer().getEventTeamId() != -1 || CustomConfig.SPEAKING_BETWEEN_FACTIONS || player.getAccessLevel() > 0
-				|| (con.getActivePlayer() != null && con.getActivePlayer().getAccessLevel() > 0);
+			canRead = chatType.isSysMsg() || con.getActivePlayer().getEventTeamId() != -1
+					|| CustomConfig.SPEAKING_BETWEEN_FACTIONS || player.getAccessLevel() > 0
+					|| (con.getActivePlayer() != null && con.getActivePlayer().getAccessLevel() > 0);
 		}
 
 		writeC(chatType.toInteger()); // type
@@ -129,34 +129,34 @@ public class SM_MESSAGE extends AionServerPacket {
 		writeD(senderObjectId); // sender object id
 
 		switch (chatType) {
-			case NORMAL:
-			case GOLDEN_YELLOW:
-			case WHITE:
-			case YELLOW:
-			case BRIGHT_YELLOW:
-			case WHITE_CENTER:
-			case YELLOW_CENTER:
-			case BRIGHT_YELLOW_CENTER:
-				writeH(0x00); // unknown
-				writeS(message);
-				break;
-			case SHOUT:
-				writeS(senderName);
-				writeS(message);
-				writeF(x);
-				writeF(y);
-				writeF(z);
-				break;
-			case ALLIANCE:
-			case GROUP:
-			case GROUP_LEADER:
-			case LEGION:
-			case WHISPER:
-			case LEAGUE:
-			case LEAGUE_ALERT:
-				writeS(senderName);
-				writeS(message);
-				break;
+		case NORMAL:
+		case GOLDEN_YELLOW:
+		case WHITE:
+		case YELLOW:
+		case BRIGHT_YELLOW:
+		case WHITE_CENTER:
+		case YELLOW_CENTER:
+		case BRIGHT_YELLOW_CENTER:
+			writeH(0x00); // unknown
+			writeS(message);
+			break;
+		case SHOUT:
+			writeS(senderName);
+			writeS(message);
+			writeF(x);
+			writeF(y);
+			writeF(z);
+			break;
+		case ALLIANCE:
+		case GROUP:
+		case GROUP_LEADER:
+		case LEGION:
+		case WHISPER:
+		case LEAGUE:
+		case LEAGUE_ALERT:
+			writeS(senderName);
+			writeS(message);
+			break;
 		}
 	}
 }

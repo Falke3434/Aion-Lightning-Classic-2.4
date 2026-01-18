@@ -16,18 +16,17 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.Collection;
 import java.util.List;
-
-import javolution.util.FastList;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.ingameshop.IGItem;
 import com.aionemu.gameserver.model.ingameshop.InGameShopEn;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
+import javolution.util.FastList;
 
 /**
  * @author xTz, KID
@@ -56,10 +55,10 @@ public class SM_IN_GAME_SHOP_LIST extends AionServerPacket {
 			int r = 9;
 			int f = 0;
 			for (IGItem a : items) {
-				if(category != 2)
-					if(a.getCategory() != category)
+				if (category != 2)
+					if (a.getCategory() != category)
 						continue;
-				
+
 				if (i == r) {
 					r += 9;
 					f++;
@@ -82,8 +81,7 @@ public class SM_IN_GAME_SHOP_LIST extends AionServerPacket {
 			if (inAllItems != null)
 				for (IGItem item : inAllItems)
 					writeD(item.getObjectId());
-		}
-		else {
+		} else {
 			FastList<Integer> salesRankingItems = InGameShopEn.getInstance().getTopSales(category);
 			writeD(salesRanking);
 			writeD(nrList);
@@ -91,7 +89,7 @@ public class SM_IN_GAME_SHOP_LIST extends AionServerPacket {
 			writeH(salesRankingItems.size());
 			for (int id : salesRankingItems)
 				writeD(id);
-					
+
 			FastList.recycle(salesRankingItems);
 		}
 	}

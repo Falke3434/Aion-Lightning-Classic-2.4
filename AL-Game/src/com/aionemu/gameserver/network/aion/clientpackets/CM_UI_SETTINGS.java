@@ -50,8 +50,7 @@ public class CM_UI_SETTINGS extends AionClientPacket {
 
 		if (settingsType == 0) {
 			player.getPlayerSettings().setUiSettings(data);
-		}
-		else if (settingsType == 1) {
+		} else if (settingsType == 1) {
 			player.getPlayerSettings().setShortcuts(data);
 		}
 	}

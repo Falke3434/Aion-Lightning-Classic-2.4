@@ -57,7 +57,7 @@ public class CreatureEventHandler {
 		}
 		if (!owner.canSee(creature) || !GeoService.getInstance().canSee(owner, creature))
 			return;
-		
+
 		if (!owner.getActiveRegion().isMapRegionActive()) {
 			return;
 		}
@@ -67,8 +67,8 @@ public class CreatureEventHandler {
 			}
 			if (owner.isAggressiveTo(creature)) {
 				if (GeoService.getInstance().canSee(owner, creature)) {
-				if (ai.canThink())
-					ai.onCreatureEvent(AIEventType.CREATURE_AGGRO, creature);
+					if (ai.canThink())
+						ai.onCreatureEvent(AIEventType.CREATURE_AGGRO, creature);
 				}
 			}
 		}

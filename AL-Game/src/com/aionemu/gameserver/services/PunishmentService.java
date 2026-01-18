@@ -39,7 +39,7 @@ import com.aionemu.gameserver.world.WorldMapType;
  * @author lord_rex, Cura, nrg
  */
 public class PunishmentService {
-	
+
 	/**
 	 * This method will handle unbanning a character
 	 * 
@@ -50,7 +50,7 @@ public class PunishmentService {
 	public static void unbanChar(int playerId) {
 		DAOManager.getDAO(PlayerPunishmentsDAO.class).unpunishPlayer(playerId, PunishmentType.CHARBAN);
 	}
-	
+
 	/**
 	 * This method will handle banning a character
 	 * 
@@ -59,14 +59,15 @@ public class PunishmentService {
 	 * @param delayInMinutes
 	 */
 	public static void banChar(int playerId, int dayCount, String reason) {
-		DAOManager.getDAO(PlayerPunishmentsDAO.class).punishPlayer(playerId, PunishmentType.CHARBAN, calculateDuration(dayCount), reason);
-		
-		//if player is online - kick him
+		DAOManager.getDAO(PlayerPunishmentsDAO.class).punishPlayer(playerId, PunishmentType.CHARBAN,
+				calculateDuration(dayCount), reason);
+
+		// if player is online - kick him
 		Player player = World.getInstance().findPlayer(playerId);
-		if(player != null)
-		  player.getClientConnection().close(new SM_QUIT_RESPONSE(), false);
+		if (player != null)
+			player.getClientConnection().close(new SM_QUIT_RESPONSE(), false);
 	}
-	
+
 	/**
 	 * Calculates the timestamp when a given number of days is over
 	 * 
@@ -75,19 +76,19 @@ public class PunishmentService {
 	 */
 	@SuppressWarnings("deprecation")
 	public static long calculateDuration(int dayCount) {
-		if(dayCount == 0)
-			return Integer.MAX_VALUE; //int because client handles this with seconds timestamp in int
-		
-		//since the current day counts as first day we have to cut one day off
+		if (dayCount == 0)
+			return Integer.MAX_VALUE; // int because client handles this with seconds timestamp in int
+
+		// since the current day counts as first day we have to cut one day off
 		dayCount -= 1;
-		
-		Date now = new Date(); 
-    Date ban = new Date(); 
-    ban.setDate(now.getDate()+dayCount); 
-    ban.setHours(23); 
-    ban.setMinutes(59); 
-    ban.setSeconds(59); 
-    return ban.getTime()-System.currentTimeMillis();
+
+		Date now = new Date();
+		Date ban = new Date();
+		ban.setDate(now.getDate() + dayCount);
+		ban.setHours(23);
+		ban.setMinutes(59);
+		ban.setSeconds(59);
+		return ban.getTime() - System.currentTimeMillis();
 	}
 
 	/**
@@ -104,24 +105,24 @@ public class PunishmentService {
 			if (delayInMinutes > 0) {
 				prisonTimer = delayInMinutes * 60000L;
 				schedulePrisonTask(player, prisonTimer);
-				PacketSendUtility.sendMessage(player, "You have been teleported to prison for a time of " + delayInMinutes
-					+ " minutes.\n If you disconnect the time stops and the timer of the prison'll see at your next login.");
+				PacketSendUtility.sendMessage(player, "You have been teleported to prison for a time of "
+						+ delayInMinutes
+						+ " minutes.\n If you disconnect the time stops and the timer of the prison'll see at your next login.");
 			}
-			
+
 			if (GSConfig.ENABLE_CHAT_SERVER)
 				ChatServer.getInstance().sendPlayerLogout(player);
 
 			player.setStartPrison(System.currentTimeMillis());
-            MessagerAddition.announceAll(reason, 0);
+			MessagerAddition.announceAll(reason, 0);
 			TeleportService.teleportToPrison(player);
 			DAOManager.getDAO(PlayerPunishmentsDAO.class).punishPlayer(player, PunishmentType.PRISON, reason);
-		}
-		else {
+		} else {
 			PacketSendUtility.sendMessage(player, "You come out of prison.");
-			
+
 			if (GSConfig.ENABLE_CHAT_SERVER)
 				PacketSendUtility.sendMessage(player, "To use global chats again relog!");
-				
+
 			player.setPrisonTimer(0);
 
 			TeleportService.moveToBindLocation(player, true);
@@ -164,12 +165,13 @@ public class PunishmentService {
 					timeInPrison = 1;
 
 				PacketSendUtility.sendMessage(player, "You are still in prison for " + timeInPrison + " minute"
-					+ (timeInPrison > 1 ? "s" : "") + ".");
+						+ (timeInPrison > 1 ? "s" : "") + ".");
 
 				player.setStartPrison(System.currentTimeMillis());
 			}
-			
-			if (player.getWorldId() != WorldMapType.DF_PRISON.getId() && player.getWorldId() != WorldMapType.DE_PRISON.getId()) {
+
+			if (player.getWorldId() != WorldMapType.DF_PRISON.getId()
+					&& player.getWorldId() != WorldMapType.DE_PRISON.getId()) {
 				PacketSendUtility.sendMessage(player, "You will be teleported to prison in one minute!");
 				ThreadPoolManager.getInstance().schedule(new Runnable() {
 
@@ -178,7 +180,7 @@ public class PunishmentService {
 						TeleportService.teleportToPrison(player);
 					}
 				}, 60000);
-			}				
+			}
 		}
 	}
 
@@ -214,8 +216,7 @@ public class PunishmentService {
 		if (state) {
 			if (captchaCount < 3) {
 				PacketSendUtility.sendPacket(player, new SM_CAPTCHA(captchaCount + 1, player.getCaptchaImage()));
-			}
-			else {
+			} else {
 				player.setCaptchaWord(null);
 				player.setCaptchaImage(null);
 			}
@@ -223,9 +224,9 @@ public class PunishmentService {
 			player.setGatherableTimer(delay);
 			player.setStopGatherable(System.currentTimeMillis());
 			scheduleGatherableTask(player, delay);
-			DAOManager.getDAO(PlayerPunishmentsDAO.class).punishPlayer(player, PunishmentType.GATHER, "Possible gatherbot");
-		}
-		else {
+			DAOManager.getDAO(PlayerPunishmentsDAO.class).punishPlayer(player, PunishmentType.GATHER,
+					"Possible gatherbot");
+		} else {
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1400269));
 			player.setCaptchaWord(null);
 			player.setCaptchaImage(null);
@@ -297,8 +298,6 @@ public class PunishmentService {
 	 * @author Cura
 	 */
 	public enum PunishmentType {
-		PRISON,
-		GATHER,
-		CHARBAN
+		PRISON, GATHER, CHARBAN
 	}
 }

@@ -38,7 +38,6 @@ public class TeleporterTemplate {
 	@XmlAttribute(name = "teleportId", required = true)
 	private int teleportId = 0;
 
-
 	@XmlElement(name = "locations")
 	private TeleLocIdData teleLocIdData;
 

@@ -130,7 +130,7 @@ public class PortalTemplate {
 		}
 		return false;
 	}
-	
+
 	public boolean existsEntryForRace(Race race) {
 		for (EntryPoint entry : entryPoints) {
 			if (entry.getRace() == race || entry.getRace() == Race.PC_ALL) {

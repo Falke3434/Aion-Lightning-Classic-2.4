@@ -20,11 +20,11 @@ package com.aionemu.gameserver.taskmanager.tasks;
 
 import java.util.Map;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.IExpirable;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.taskmanager.AbstractPeriodicTaskManager;
+
+import javolution.util.FastMap;
 
 /**
  * @author Mr. Poke
@@ -48,8 +48,7 @@ public class ExpireTimerTask extends AbstractPeriodicTaskManager {
 		writeLock();
 		try {
 			expirables.put(expirable, player);
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}
@@ -58,8 +57,7 @@ public class ExpireTimerTask extends AbstractPeriodicTaskManager {
 		writeLock();
 		try {
 			expirables.remove(expirable);
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}
@@ -71,8 +69,7 @@ public class ExpireTimerTask extends AbstractPeriodicTaskManager {
 				if (entry.getValue() == player)
 					expirables.remove(entry.getKey());
 			}
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}
@@ -92,17 +89,16 @@ public class ExpireTimerTask extends AbstractPeriodicTaskManager {
 					continue;
 				}
 				switch (min) {
-					case 1800:
-					case 900:
-					case 600:
-					case 300:
-					case 60:
-						expirable.expireMessage(player, min / 60);
-						break;
+				case 1800:
+				case 900:
+				case 600:
+				case 300:
+				case 60:
+					expirable.expireMessage(player, min / 60);
+					break;
 				}
 			}
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}

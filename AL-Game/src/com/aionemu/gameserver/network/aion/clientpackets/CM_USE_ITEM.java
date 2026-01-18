@@ -99,20 +99,21 @@ public class CM_USE_ITEM extends AionClientPacket {
 
 		if (!RestrictionsManager.canUseItem(player, item))
 			return;
-		
-		if(item.getItemTemplate().getRace() != Race.PC_ALL && item.getItemTemplate().getRace() != player.getRace()) {
+
+		if (item.getItemTemplate().getRace() != Race.PC_ALL && item.getItemTemplate().getRace() != player.getRace()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_INVALID_RACE);
 			return;
 		}
 
 		int requiredLevel = item.getItemTemplate().getRequiredLevel(player.getCommonData().getPlayerClass());
-		if (requiredLevel == -1){
+		if (requiredLevel == -1) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_INVALID_CLASS);
 			return;
 		}
 
-		if ( requiredLevel > player.getLevel()) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CANNOT_USE_ITEM_TOO_LOW_LEVEL_MUST_BE_THIS_LEVEL(item.getNameID(), requiredLevel));
+		if (requiredLevel > player.getLevel()) {
+			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE
+					.STR_CANNOT_USE_ITEM_TOO_LOW_LEVEL_MUST_BE_THIS_LEVEL(item.getNameID(), requiredLevel));
 			return;
 		}
 
@@ -136,7 +137,8 @@ public class CM_USE_ITEM extends AionClientPacket {
 			return;
 
 		// Store Item CD in server Player variable.
-		// Prevents potion spamming, and relogging to use kisks/aether jelly/long CD items.
+		// Prevents potion spamming, and relogging to use kisks/aether jelly/long CD
+		// items.
 		if (player.isItemUseDisabled(item.getItemTemplate().getDelayId())) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_ITEM_CANT_USE_UNTIL_DELAY_TIME);
 			return;
@@ -145,12 +147,12 @@ public class CM_USE_ITEM extends AionClientPacket {
 		int useDelay = player.getItemCooldown(item.getItemTemplate());
 		if (useDelay > 0) {
 			player.addItemCoolDown(item.getItemTemplate().getDelayId(), System.currentTimeMillis() + useDelay,
-				useDelay / 1000);
+					useDelay / 1000);
 		}
 
-		//notify item use observer
+		// notify item use observer
 		player.getObserveController().notifyItemuseObservers(item);
-		
+
 		for (AbstractItemAction itemAction : actions) {
 			itemAction.act(player, item, targetItem);
 		}

@@ -22,6 +22,7 @@ import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.TemporarySpawn;
+
 import javolution.util.FastList;
 
 /**
@@ -67,19 +68,18 @@ public class TemporarySpawnEngine {
 		for (SpawnGroup2 spawn : temporarySpawns) {
 			if (spawn.hasPool()) {
 				TemporarySpawn temporarySpawn = spawn.geTemporarySpawn();
-				if (temporarySpawn.canSpawn() || (startCheck && spawn.getRespawnTime() != 0
-						&& temporarySpawn.isInSpawnTime())) {
+				if (temporarySpawn.canSpawn()
+						|| (startCheck && spawn.getRespawnTime() != 0 && temporarySpawn.isInSpawnTime())) {
 					for (int pool = 0; pool < spawn.getPool(); pool++) {
 						SpawnTemplate template = spawn.getRndTemplate();
 						SpawnEngine.spawnObject(template, 1);
 					}
 				}
-			}
-			else {
+			} else {
 				for (SpawnTemplate template : spawn.getSpawnTemplates()) {
 					TemporarySpawn temporarySpawn = template.getTemporarySpawn();
-					if (temporarySpawn.canSpawn() || (startCheck && !template.isNoRespawn()
-							&& temporarySpawn.isInSpawnTime())) {
+					if (temporarySpawn.canSpawn()
+							|| (startCheck && !template.isNoRespawn() && temporarySpawn.isInSpawnTime())) {
 						SpawnEngine.spawnObject(template, 1);
 					}
 				}
@@ -93,4 +93,4 @@ public class TemporarySpawnEngine {
 	public static void addSpawnGroup(SpawnGroup2 spawn) {
 		temporarySpawns.add(spawn);
 	}
-} 
+}

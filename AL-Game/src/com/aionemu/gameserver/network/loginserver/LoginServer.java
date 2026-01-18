@@ -57,12 +57,12 @@ public class LoginServer {
 
 	/**
 	 * Logger for this class.
-	 */ 
+	 */
 	private static final Logger log = LoggerFactory.getLogger(LoginServer.class);
 
 	/**
-	 * Map<accountId,Connection> for waiting request. This request is send to LoginServer and GameServer is waiting for
-	 * response.
+	 * Map<accountId,Connection> for waiting request. This request is send to
+	 * LoginServer and GameServer is waiting for response.
 	 */
 	private Map<Integer, AionConnection> loginRequests = new HashMap<Integer, AionConnection>();
 
@@ -92,8 +92,8 @@ public class LoginServer {
 	}
 
 	/**
-	 * Connect to LoginServer and return object representing this connection. This method is blocking and may block till
-	 * connect successful.
+	 * Connect to LoginServer and return object representing this connection. This
+	 * method is blocking and may block till connect successful.
 	 * 
 	 * @return LoginServerConnection
 	 */
@@ -115,8 +115,7 @@ public class LoginServer {
 				loginServer.initialized();
 
 				return loginServer;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.info("Cant connect to LoginServer: " + e.getMessage());
 			}
 			try {
@@ -124,15 +123,15 @@ public class LoginServer {
 				 * 10s sleep
 				 */
 				Thread.sleep(10 * 1000);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 	}
 
 	/**
-	 * This method is called when we lost connection to LoginServer. We will disconnects all aionClients waiting for
-	 * LoginServer response and also try reconnect to LoginServer.
+	 * This method is called when we lost connection to LoginServer. We will
+	 * disconnects all aionClients waiting for LoginServer response and also try
+	 * reconnect to LoginServer.
 	 */
 	public void loginServerDown() {
 		log.warn("Connection with LoginServer lost...");
@@ -140,8 +139,8 @@ public class LoginServer {
 		loginServer = null;
 		synchronized (this) {
 			/**
-			 * We lost connection for LoginServer so client pending authentication should be disconnected [cuz authentication
-			 * will never ends]
+			 * We lost connection for LoginServer so client pending authentication should be
+			 * disconnected [cuz authentication will never ends]
 			 */
 			for (AionConnection client : loginRequests.values()) {
 				// TODO! somme error packet!
@@ -165,8 +164,9 @@ public class LoginServer {
 	}
 
 	/**
-	 * Notify that client is disconnected - we must clear waiting request to LoginServer if any to prevent leaks. Also
-	 * notify LoginServer that this account is no longer on GameServer side.
+	 * Notify that client is disconnected - we must clear waiting request to
+	 * LoginServer if any to prevent leaks. Also notify LoginServer that this
+	 * account is no longer on GameServer side.
 	 * 
 	 * @param client
 	 */
@@ -188,8 +188,8 @@ public class LoginServer {
 	}
 
 	/**
-	 * Starts authentication procedure of this client - LoginServer will sends response with information about account
-	 * name if authentication is ok.
+	 * Starts authentication procedure of this client - LoginServer will sends
+	 * response with information about account name if authentication is ok.
 	 * 
 	 * @param accountId
 	 * @param client
@@ -197,9 +197,11 @@ public class LoginServer {
 	 * @param playOk1
 	 * @param playOk2
 	 */
-	public void requestAuthenticationOfClient(int accountId, AionConnection client, int loginOk, int playOk1, int playOk2) {
+	public void requestAuthenticationOfClient(int accountId, AionConnection client, int loginOk, int playOk1,
+			int playOk2) {
 		/**
-		 * There are no connection to LoginServer. We should disconnect this client since authentication is not possible.
+		 * There are no connection to LoginServer. We should disconnect this client
+		 * since authentication is not possible.
 		 */
 		if (loginServer == null || loginServer.getState() != State.AUTHED) {
 			log.warn("LS !!! " + (loginServer == null ? "NULL" : loginServer.getState()));
@@ -217,22 +219,24 @@ public class LoginServer {
 	}
 
 	/**
-	 * This method is called by CM_ACCOUNT_AUTH_RESPONSE LoginServer packets to notify GameServer about results of client
-	 * authentication.
+	 * This method is called by CM_ACCOUNT_AUTH_RESPONSE LoginServer packets to
+	 * notify GameServer about results of client authentication.
 	 * 
 	 * @param accountId
 	 * @param accountName
 	 * @param result
 	 * @param accountTime
 	 */
-	public void accountAuthenticationResponse(int accountId, String accountName, boolean result, AccountTime accountTime,
-		byte accessLevel, byte membership, long toll, Timestamp membershipexpire) {
+	public void accountAuthenticationResponse(int accountId, String accountName, boolean result,
+			AccountTime accountTime, byte accessLevel, byte membership, long toll, Timestamp membershipexpire) {
 		AionConnection client = loginRequests.remove(accountId);
-		log.info("accountAuthenticationResponse : accountId: " + accountId + " accountname: " + accountName + " result : " + result);
+		log.info("accountAuthenticationResponse : accountId: " + accountId + " accountname: " + accountName
+				+ " result : " + result);
 		if (client == null)
 			return;
 		log.info("membership expire : " + membershipexpire);
-		Account account = AccountService.getAccount(accountId, accountName, accountTime, accessLevel, membership, toll, membershipexpire);
+		Account account = AccountService.getAccount(accountId, accountName, accountTime, accessLevel, membership, toll,
+				membershipexpire);
 		if (!validateAccount(account)) {
 			log.info("Illegal account auth detected: " + accountId);
 			client.close(new SM_L2AUTH_LOGIN_CHECK(false, accountName), true);
@@ -247,15 +251,17 @@ public class LoginServer {
 
 			client.sendPacket(new S_REPLY_NP_LOGIN_GAMESVR());
 			client.sendPacket(new S_REPLY_NP_LOGIN_GAMESVR());
-			//Map<Integer, BlackcloudLetter> letters = AccountBlackCloudDAO.loadAccountBlackcloud(account);
-			//client.sendPacket(new S_NPSHOP_GOODS_COUNT(letters.size()));
-			client.sendPacket(new S_REPLY_NP_AUTH_TOKEN("014D5546474D6A6378526A51744E7A5644515330304D3059304C554A4551554D744F4446464E6A67794D455A45526B597A4F6A45354E454D33516B4D774C5551344E7A59744E44644451533142515455324C546C474D4441794E7A59304E5468474F41413D0036374443393030452D333544422D423942302D423133442D4333344641343846394538340061696F6E6E637700FA0102"));
-			client.sendPacket(new S_REPLY_NP_AUTH_TOKEN("014D5546474D6A6378526A51744E7A5644515330304D3059304C554A4551554D744F4446464E6A67794D455A45526B597A4F6A63304D4555324D454D334C544132526A41744E4459304E5330354D6A4D344C5545354F544930524549334E6A51315241413D0032423842384643462D464438322D464444432D303039342D3339464236353030393046300061696F6E6E637700FA0103"));
+			// Map<Integer, BlackcloudLetter> letters =
+			// AccountBlackCloudDAO.loadAccountBlackcloud(account);
+			// client.sendPacket(new S_NPSHOP_GOODS_COUNT(letters.size()));
+			client.sendPacket(new S_REPLY_NP_AUTH_TOKEN(
+					"014D5546474D6A6378526A51744E7A5644515330304D3059304C554A4551554D744F4446464E6A67794D455A45526B597A4F6A45354E454D33516B4D774C5551344E7A59744E44644451533142515455324C546C474D4441794E7A59304E5468474F41413D0036374443393030452D333544422D423942302D423133442D4333344641343846394538340061696F6E6E637700FA0102"));
+			client.sendPacket(new S_REPLY_NP_AUTH_TOKEN(
+					"014D5546474D6A6378526A51744E7A5644515330304D3059304C554A4551554D744F4446464E6A67794D455A45526B597A4F6A63304D4555324D454D334C544132526A41744E4459304E5330354D6A4D344C5545354F544930524549334E6A51315241413D0032423842384643462D464438322D464444432D303039342D3339464236353030393046300061696F6E6E637700FA0103"));
 			int code = Rnd.get(300000000, 400000000);
 			client.sendPacket(new S_READY_ENTER_WORLD(0, code));
 			client.sendPacket(new SM_L2AUTH_LOGIN_CHECK(true, accountName));
-		}
-		else {
+		} else {
 			log.info("Account not authed: " + accountId);
 			client.close(new SM_L2AUTH_LOGIN_CHECK(false, accountName), true);
 		}
@@ -266,22 +272,24 @@ public class LoginServer {
 	 * @return
 	 */
 	private boolean validateAccount(Account account) {
-		for(PlayerAccountData accountData : account)
-		if (accountData.getPlayerCommonData().isOnline()) {
-			log.warn("[AUDIT] Possible dupe hack account: " + account.getId());
-			return false;
-		}
+		for (PlayerAccountData accountData : account)
+			if (accountData.getPlayerCommonData().isOnline()) {
+				log.warn("[AUDIT] Possible dupe hack account: " + account.getId());
+				return false;
+			}
 		return true;
 	}
 
 	/**
-	 * Starts reconnection to LoginServer procedure. LoginServer in response will send reconnection key.
+	 * Starts reconnection to LoginServer procedure. LoginServer in response will
+	 * send reconnection key.
 	 * 
 	 * @param client
 	 */
 	public void requestAuthReconnection(AionConnection client) {
 		/**
-		 * There are no connection to LoginServer. We should disconnect this client since authentication is not possible.
+		 * There are no connection to LoginServer. We should disconnect this client
+		 * since authentication is not possible.
 		 */
 		if (loginServer == null || loginServer.getState() != State.AUTHED) {
 			// TODO! somme error packet!
@@ -299,8 +307,8 @@ public class LoginServer {
 	}
 
 	/**
-	 * This method is called by CM_ACCOUNT_RECONNECT_KEY LoginServer packets to give GameServer reconnection key for
-	 * client that was requesting reconnection.
+	 * This method is called by CM_ACCOUNT_RECONNECT_KEY LoginServer packets to give
+	 * GameServer reconnection key for client that was requesting reconnection.
 	 * 
 	 * @param accountId
 	 * @param reconnectKey
@@ -316,8 +324,8 @@ public class LoginServer {
 	}
 
 	/**
-	 * This method is called by CM_REQUEST_KICK_ACCOUNT LoginServer packets to request GameServer to disconnect client
-	 * with given account id.
+	 * This method is called by CM_REQUEST_KICK_ACCOUNT LoginServer packets to
+	 * request GameServer to disconnect client with given account id.
 	 * 
 	 * @param accountId
 	 */
@@ -353,8 +361,8 @@ public class LoginServer {
 	}
 
 	/**
-	 * Returns unmodifiable map with accounts that are logged in to current GS Map Key: Account ID Map Value:
-	 * AionConnectionObject
+	 * Returns unmodifiable map with accounts that are logged in to current GS Map
+	 * Key: Account ID Map Value: AionConnectionObject
 	 * 
 	 * @return unmodifiable map wwith accounts
 	 */
@@ -383,7 +391,8 @@ public class LoginServer {
 		log.info("GameServer disconnected from the Login Server...");
 	}
 
-	public void sendLsControlPacket(String accountName, String playerName, String adminName, int param, int type, long vipexpire) {
+	public void sendLsControlPacket(String accountName, String playerName, String adminName, int param, int type,
+			long vipexpire) {
 		if (loginServer != null && loginServer.getState() == State.AUTHED)
 			loginServer.sendPacket(new SM_LS_CONTROL(accountName, playerName, adminName, param, type, vipexpire));
 	}
@@ -397,7 +406,7 @@ public class LoginServer {
 					account.setAccessLevel(param);
 				if (type == 2)
 					account.setMembership(param);
-					account.setMembershipExpire(new Timestamp(membershipexpire));
+				account.setMembershipExpire(new Timestamp(membershipexpire));
 			}
 		}
 	}
@@ -411,8 +420,7 @@ public class LoginServer {
 		if (loginServer != null && loginServer.getState() == State.AUTHED) {
 			loginServer.sendPacket(pk);
 			return true;
-		}
-		else
+		} else
 			return false;
 	}
 

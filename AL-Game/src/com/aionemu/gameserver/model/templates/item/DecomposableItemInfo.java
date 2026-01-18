@@ -17,6 +17,7 @@
 package com.aionemu.gameserver.model.templates.item;
 
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;

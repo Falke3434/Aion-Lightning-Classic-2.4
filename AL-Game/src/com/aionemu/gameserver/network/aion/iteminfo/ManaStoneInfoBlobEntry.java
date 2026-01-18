@@ -31,15 +31,14 @@ import com.aionemu.gameserver.network.aion.iteminfo.ItemInfoBlob.ItemBlobType;
  * @author -Nemesiss-
  *
  */
-public class ManaStoneInfoBlobEntry extends ItemBlobEntry{
+public class ManaStoneInfoBlobEntry extends ItemBlobEntry {
 
 	ManaStoneInfoBlobEntry() {
 		super(ItemBlobType.MANA_SOCKETS);
 	}
 
 	@Override
-	public
-	void writeThisBlob(ByteBuffer buf) {
+	public void writeThisBlob(ByteBuffer buf) {
 		Item item = parent.item;
 
 		writeC(buf, item.isSoulBound() ? 1 : 0);
@@ -48,12 +47,11 @@ public class ManaStoneInfoBlobEntry extends ItemBlobEntry{
 		writeC(buf, item.getOptionalSocket());
 
 		writeItemStones(buf);
-		
-		if(item.getItemTemplate().isArmor()){
+
+		if (item.getItemTemplate().isArmor()) {
 			writeC(buf, 0);
 			writeD(buf, item.getItemColor());
-		}
-		else{
+		} else {
 			ItemStone god = item.getGodStone();
 			writeD(buf, god == null ? 0 : god.getItemId());
 		}
@@ -61,8 +59,8 @@ public class ManaStoneInfoBlobEntry extends ItemBlobEntry{
 
 		writeD(buf, 0);// unk 1.5.1.9
 		writeD(buf, 0);// unk 2.7
-		if(!item.getItemTemplate().isArmor())
-			writeC(buf, 0);//unk
+		if (!item.getItemTemplate().isArmor())
+			writeC(buf, 0);// unk
 	}
 
 	/**
@@ -100,8 +98,7 @@ public class ManaStoneInfoBlobEntry extends ItemBlobEntry{
 				}
 			}
 			skip(buf, (6 - count) * 2);
-		}
-		else {
+		} else {
 			skip(buf, 24);
 		}
 		// for now max 6 stones - write some junk

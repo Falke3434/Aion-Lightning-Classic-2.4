@@ -73,11 +73,9 @@ public class FindGroup {
 					minLvl = memberLvl;
 			}
 			return minLvl;
-		}
-		else if (object instanceof PlayerGroup) {
+		} else if (object instanceof PlayerGroup) {
 			return ((PlayerGroup) object).getMinExpPlayerLevel();
-		}
-		else if (object instanceof TemporaryPlayerTeam) {
+		} else if (object instanceof TemporaryPlayerTeam) {
 			return ((TemporaryPlayerTeam<?>) object).getMinExpPlayerLevel();
 		}
 		return 1;
@@ -94,11 +92,9 @@ public class FindGroup {
 					maxLvl = memberLvl;
 			}
 			return maxLvl;
-		}
-		else if (object instanceof PlayerGroup) {
+		} else if (object instanceof PlayerGroup) {
 			return ((PlayerGroup) object).getMaxExpPlayerLevel();
-		}
-		else if (object instanceof TemporaryPlayerTeam) {
+		} else if (object instanceof TemporaryPlayerTeam) {
 			return ((TemporaryPlayerTeam<?>) object).getMaxExpPlayerLevel();
 		}
 		return 1;

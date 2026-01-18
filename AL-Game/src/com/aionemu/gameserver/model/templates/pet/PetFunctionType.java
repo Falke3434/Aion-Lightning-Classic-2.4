@@ -4,17 +4,12 @@ package com.aionemu.gameserver.model.templates.pet;
  * @author IlBuono, Rolandas
  */
 public enum PetFunctionType {
-	WAREHOUSE(0, true),
-	FOOD(1, 64),
-	DOPING(2, 256),
-	LOOT(3, 8),
+	WAREHOUSE(0, true), FOOD(1, 64), DOPING(2, 256), LOOT(3, 8),
 
-	APPEARANCE(1),
-	NONE(4, true),
+	APPEARANCE(1), NONE(4, true),
 
 	// non writable to packets
-	BAG(-1),
-	WING(-2);
+	BAG(-1), WING(-2);
 
 	private short id;
 	private boolean isPlayerFunc = false;

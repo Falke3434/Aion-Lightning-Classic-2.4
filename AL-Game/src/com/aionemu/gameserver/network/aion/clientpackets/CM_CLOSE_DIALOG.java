@@ -53,14 +53,14 @@ public class CM_CLOSE_DIALOG extends AionClientPacket {
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-		
+
 		VisibleObject obj = player.getKnownList().getObject(targetObjectId);
-		if(obj == null) {
+		if (obj == null) {
 			return;
 		}
-		
+
 		if (obj instanceof Npc) {
-			((Npc)obj).getAi2().onCreatureEvent(AIEventType.DIALOG_FINISH, player);
+			((Npc) obj).getAi2().onCreatureEvent(AIEventType.DIALOG_FINISH, player);
 		}
 	}
 }

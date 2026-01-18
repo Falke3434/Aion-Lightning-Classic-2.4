@@ -31,7 +31,8 @@ import com.aionemu.gameserver.model.templates.zone.Point2D;
 
 /**
  * Class with basic math.<br>
- * Thanks to: <li>
+ * Thanks to:
+ * <li>
  * <ul>
  * http://geom-java.sourceforge.net/
  * </ul>
@@ -48,7 +49,8 @@ import com.aionemu.gameserver.model.templates.zone.Point2D;
  * Math.sqrt(dx * dx + dy * dy); // 10 times faster then previous line
  * </pre>
  * 
- * We don't need squared distances for calculations, {@linkplain Math#sqrt(double)} is very fast.<br>
+ * We don't need squared distances for calculations,
+ * {@linkplain Math#sqrt(double)} is very fast.<br>
  * In fact the difference is very small, so it can be ignored.<br>
  * Feel free to run the following test (or to find a mistake in it ^^).<br>
  * 
@@ -97,12 +99,6 @@ import com.aionemu.gameserver.model.templates.zone.Point2D;
  * 	}
  * }
  * 
- * 
- * 
- * 
- * 
- * 
- * 
  * </pre>
  * 
  * @author Disturbing
@@ -114,9 +110,9 @@ public class MathUtil {
 	 * Returns distance between two 2D points
 	 * 
 	 * @param point1
-	 *          first point
+	 *            first point
 	 * @param point2
-	 *          second point
+	 *            second point
 	 * @return distance between points
 	 */
 	public static double getDistance(Point2D point1, Point2D point2) {
@@ -127,13 +123,13 @@ public class MathUtil {
 	 * Returns distance between two sets of coords
 	 * 
 	 * @param x1
-	 *          first x coord
+	 *            first x coord
 	 * @param y1
-	 *          first y coord
+	 *            first y coord
 	 * @param x2
-	 *          second x coord
+	 *            second x coord
 	 * @param y2
-	 *          second y coord
+	 *            second y coord
 	 * @return distance between sets of coords
 	 */
 	public static double getDistance(float x1, float y1, float x2, float y2) {
@@ -142,7 +138,8 @@ public class MathUtil {
 		float dy = y2 - y1;
 
 		// return Math.hypot(x2 - x1, y2 - y1); // Extremely slow
-		// return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)); // 20 times faster than hypot
+		// return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2)); // 20 times faster than
+		// hypot
 		return Math.sqrt(dx * dx + dy * dy); // 10 times faster then previous line
 	}
 
@@ -150,9 +147,9 @@ public class MathUtil {
 	 * Returns distance between two 3D points
 	 * 
 	 * @param point1
-	 *          first point
+	 *            first point
 	 * @param point2
-	 *          second point
+	 *            second point
 	 * @return distance between points
 	 */
 	public static double getDistance(Point3D point1, Point3D point2) {
@@ -163,17 +160,17 @@ public class MathUtil {
 	 * Returns distance between 3D set of coords
 	 * 
 	 * @param x1
-	 *          first x coord
+	 *            first x coord
 	 * @param y1
-	 *          first y coord
+	 *            first y coord
 	 * @param z1
-	 *          first z coord
+	 *            first z coord
 	 * @param x2
-	 *          second x coord
+	 *            second x coord
 	 * @param y2
-	 *          second y coord
+	 *            second y coord
 	 * @param z2
-	 *          second z coord
+	 *            second z coord
 	 * @return distance between coords
 	 */
 	public static double getDistance(float x1, float y1, float z1, float x2, float y2, float z2) {
@@ -209,11 +206,11 @@ public class MathUtil {
 	 * Returns closest point on segment to point
 	 * 
 	 * @param ss
-	 *          segment start point
+	 *            segment start point
 	 * @param se
-	 *          segment end point
+	 *            segment end point
 	 * @param p
-	 *          point to found closest point on segment
+	 *            point to found closest point on segment
 	 * @return closest point on segment to p
 	 */
 	public static Point2D getClosestPointOnSegment(Point ss, Point se, Point p) {
@@ -224,17 +221,17 @@ public class MathUtil {
 	 * Returns closest point on segment to point
 	 * 
 	 * @param sx1
-	 *          segment x coord 1
+	 *            segment x coord 1
 	 * @param sy1
-	 *          segment y coord 1
+	 *            segment y coord 1
 	 * @param sx2
-	 *          segment x coord 2
+	 *            segment x coord 2
 	 * @param sy2
-	 *          segment y coord 2
+	 *            segment y coord 2
 	 * @param px
-	 *          point x coord
+	 *            point x coord
 	 * @param py
-	 *          point y coord
+	 *            point y coord
 	 * @return closets point on segment to point
 	 */
 	public static Point2D getClosestPointOnSegment(float sx1, float sy1, float sx2, float sy2, float px, float py) {
@@ -250,11 +247,9 @@ public class MathUtil {
 		final Point2D closestPoint;
 		if (u < 0) {
 			closestPoint = new Point2D(sx1, sy1);
-		}
-		else if (u > 1) {
+		} else if (u > 1) {
 			closestPoint = new Point2D(sx2, sy2);
-		}
-		else {
+		} else {
 			closestPoint = new Point2D((float) (sx1 + u * xDelta), (float) (sy1 + u * yDelta));
 		}
 
@@ -265,11 +260,11 @@ public class MathUtil {
 	 * Returns distance to segment
 	 * 
 	 * @param ss
-	 *          segment start point
+	 *            segment start point
 	 * @param se
-	 *          segment end point
+	 *            segment end point
 	 * @param p
-	 *          point to found closest point on segment
+	 *            point to found closest point on segment
 	 * @return distance to segment
 	 */
 	public static double getDistanceToSegment(Point ss, Point se, Point p) {
@@ -280,17 +275,17 @@ public class MathUtil {
 	 * Returns distance to segment
 	 * 
 	 * @param sx1
-	 *          segment x coord 1
+	 *            segment x coord 1
 	 * @param sy1
-	 *          segment y coord 1
+	 *            segment y coord 1
 	 * @param sx2
-	 *          segment x coord 2
+	 *            segment x coord 2
 	 * @param sy2
-	 *          segment y coord 2
+	 *            segment y coord 2
 	 * @param px
-	 *          point x coord
+	 *            point x coord
 	 * @param py
-	 *          point y coord
+	 *            point y coord
 	 * @return distance to segment
 	 */
 	public static double getDistanceToSegment(int sx1, int sy1, int sx2, int sy2, int px, int py) {
@@ -314,7 +309,7 @@ public class MathUtil {
 		float dy = (object2.getY() - object1.getY());
 		return dx * dx + dy * dy < range * range;
 	}
-	
+
 	/**
 	 * Checks whether two given instances of AionObject are within given range.
 	 * 
@@ -323,8 +318,8 @@ public class MathUtil {
 	 * @param range
 	 * @return true if objects are in range, false otherwise
 	 */
-	public static boolean isInRange(final float obj1X, final float obj1Y, final float obj2X,
-			final float obj2Y, float range) {
+	public static boolean isInRange(final float obj1X, final float obj1Y, final float obj2X, final float obj2Y,
+			float range) {
 
 		float dx = (obj2X - obj1X);
 		float dy = (obj2Y - obj1Y);
@@ -332,7 +327,8 @@ public class MathUtil {
 	}
 
 	/**
-	 * Checks whether two given instances of AionObject are within given range. Includes Z-Axis check.
+	 * Checks whether two given instances of AionObject are within given range.
+	 * Includes Z-Axis check.
 	 * 
 	 * @param object1
 	 * @param object2
@@ -360,7 +356,7 @@ public class MathUtil {
 	 * @return boolean
 	 */
 	public static boolean isIn3dRange(final float obj1X, final float obj1Y, final float obj1Z, final float obj2X,
-		final float obj2Y, final float obj2Z, float range) {
+			final float obj2Y, final float obj2Z, float range) {
 		float dx = (obj2X - obj1X);
 		float dy = (obj2Y - obj1Y);
 		float dz = (obj2Z - obj1Z);
@@ -368,7 +364,8 @@ public class MathUtil {
 	}
 
 	/**
-	 * Check Coordinate with formula: " sqrt((x-x0)^2 + (y-y0)^2 + (z-z0)^2) < radius "
+	 * Check Coordinate with formula: " sqrt((x-x0)^2 + (y-y0)^2 + (z-z0)^2) <
+	 * radius "
 	 * 
 	 * @param obj
 	 * @param centerX
@@ -378,7 +375,7 @@ public class MathUtil {
 	 * @return true if the object is in the sphere
 	 */
 	public static boolean isInSphere(final VisibleObject obj, final float centerX, final float centerY,
-		final float centerZ, final float radius) {
+			final float centerZ, final float radius) {
 		float dx = (obj.getX() - centerX);
 		float dy = (obj.getY() - centerY);
 		float dz = (obj.getZ() - centerZ);
@@ -447,7 +444,7 @@ public class MathUtil {
 	 */
 	public final static boolean isNearCoordinates(VisibleObject obj, VisibleObject obj2, int offset) {
 		return getDistance(obj.getX(), obj.getY(), obj.getZ(), obj2.getX(), obj2.getY(), obj2.getZ()) < offset
-			+ NpcMoveController.MOVE_CHECK_OFFSET;
+				+ NpcMoveController.MOVE_CHECK_OFFSET;
 	}
 
 	public final static boolean isInAttackRange(Creature object1, Creature object2, float range) {
@@ -457,7 +454,7 @@ public class MathUtil {
 			return false;
 		}
 		float offset = object1.getObjectTemplate().getBoundRadius().getCollision()
-			+ object2.getObjectTemplate().getBoundRadius().getCollision();
+				+ object2.getObjectTemplate().getBoundRadius().getCollision();
 		if (object1.getMoveController().isInMove())
 			offset = +3f;
 		if (object2.getMoveController().isInMove())
@@ -466,24 +463,26 @@ public class MathUtil {
 	}
 
 	/**
-	 * Returns the correctly rounded square root of a positive BigDecimal. The algorithm for taking the square root of a
-	 * BigDecimal is most critical for the speed of your application. This method performs the fast Square Root by Coupled
-	 * Newton Iteration algorithm by Timm Ahrendt, from the book "Pi, unleashed" by Jörg Arndt in a neat loop.
+	 * Returns the correctly rounded square root of a positive BigDecimal. The
+	 * algorithm for taking the square root of a BigDecimal is most critical for the
+	 * speed of your application. This method performs the fast Square Root by
+	 * Coupled Newton Iteration algorithm by Timm Ahrendt, from the book "Pi,
+	 * unleashed" by Jörg Arndt in a neat loop.
 	 * 
 	 * @param squarD
-	 *          number to get the root from (called "d" in the book)
+	 *            number to get the root from (called "d" in the book)
 	 * @param rootMC
-	 *          precision and rounding mode (for the last root "x")
+	 *            precision and rounding mode (for the last root "x")
 	 * @return the root of the argument number
 	 * @throws ArithmeticException
-	 *           if the argument number is negative
+	 *             if the argument number is negative
 	 * @throws IllegalArgumentException
-	 *           if rootMC has precision 0
+	 *             if rootMC has precision 0
 	 */
 
 	static final BigDecimal TWO = new BigDecimal(2);
 	static final double SQRT_10 = 3.162277660168379332;
-	
+
 	public static BigDecimal bigSqrt(BigDecimal squarD, MathContext rootMC) {
 		// General number and precision checking
 		int sign = squarD.signum();

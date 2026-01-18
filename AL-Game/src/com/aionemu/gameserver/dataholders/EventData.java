@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.THashMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -35,11 +33,14 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.model.templates.event.EventTemplate;
 
+import gnu.trove.map.hash.THashMap;
+
 /**
  * <p>
  * Java class for EventData complex type.
  * <p>
- * The following schema fragment specifies the expected content contained within this class.
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="EventData">

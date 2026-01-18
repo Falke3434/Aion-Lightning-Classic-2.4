@@ -79,7 +79,7 @@ public abstract class BufEffect extends EffectTemplate {
 
 		if (modifiers.size() > 0)
 			cgs.addEffect(effect, modifiers);
-			
+
 		if (maxstat) {
 			effected.getLifeStats().increaseHp(TYPE.HP, effected.getGameStats().getMaxHp().getCurrent());
 			effected.getLifeStats().increaseMp(TYPE.HEAL_MP, effected.getGameStats().getMaxMp().getCurrent());
@@ -103,18 +103,21 @@ public abstract class BufEffect extends EffectTemplate {
 			}
 
 			int valueWithDelta = changeItem.getValue() + changeItem.getDelta() * skillLvl;
-			
+
 			Conditions conditions = changeItem.getConditions();
 			switch (changeItem.getFunc()) {
-				case ADD:
-					modifiers.add(new StatAddFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
-					break;
-				case PERCENT:
-					modifiers.add(new StatRateFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
-					break;
-				case REPLACE:
-					modifiers.add(new StatSetFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
-					break;
+			case ADD:
+				modifiers.add(
+						new StatAddFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
+				break;
+			case PERCENT:
+				modifiers.add(
+						new StatRateFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
+				break;
+			case REPLACE:
+				modifiers.add(
+						new StatSetFunction(changeItem.getStat(), valueWithDelta, true).withConditions(conditions));
+				break;
 			}
 		}
 		return modifiers;

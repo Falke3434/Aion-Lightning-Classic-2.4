@@ -16,12 +16,14 @@
  */
 package com.aionemu.gameserver.model.team2.common.legacy;
 
+import java.util.Collection;
+
 import com.aionemu.gameserver.model.drop.DropItem;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.item.ItemQuality;
 import com.aionemu.gameserver.services.drop.DropDistributionService;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
-import java.util.Collection;
+
 import javolution.util.FastList;
 
 /**
@@ -52,7 +54,7 @@ public class LootGroupRules {
 	}
 
 	public LootGroupRules(LootRuleType lootRule, LootDistribution autodistribution, int commonItemAbove,
-		int superiorItemAbove, int heroicItemAbove, int fabledItemAbove, int ethernalItemAbove, int misc) {
+			int superiorItemAbove, int heroicItemAbove, int fabledItemAbove, int ethernalItemAbove, int misc) {
 		super();
 		this.lootRule = lootRule;
 		this.autodistribution = autodistribution;
@@ -70,18 +72,18 @@ public class LootGroupRules {
 	 */
 	public boolean getQualityRule(ItemQuality quality) {
 		switch (quality) {
-			case COMMON: // White
-				return common_item_above != 0;
-			case RARE: // Green
-				return superior_item_above != 0;
-			case LEGEND: // Blue
-				return heroic_item_above != 0;
-			case UNIQUE: // Yellow
-				return fabled_item_above != 0;
-			case MYTHIC: // Orange
-				return ethernal_item_above != 0;
-			case EPIC: // Purple
-				return true;
+		case COMMON: // White
+			return common_item_above != 0;
+		case RARE: // Green
+			return superior_item_above != 0;
+		case LEGEND: // Blue
+			return heroic_item_above != 0;
+		case UNIQUE: // Yellow
+			return fabled_item_above != 0;
+		case MYTHIC: // Orange
+			return ethernal_item_above != 0;
+		case EPIC: // Purple
+			return true;
 		}
 		return false;
 	}
@@ -152,7 +154,7 @@ public class LootGroupRules {
 
 	/**
 	 * @param nrMisc
-	 *          .
+	 *            .
 	 */
 	public void setNrMisc(int nrMisc) {
 		this.nrMisc = nrMisc;
@@ -166,16 +168,18 @@ public class LootGroupRules {
 				for (Player player : players) {
 					if (player.isInRoll()) {
 						switch (player.getInRoll().getRollType()) {
-							case 2:
-								if (player.getInRoll().getIndex() == index && player.getInRoll().getNpcId() == npcId)
-									DropDistributionService.getInstance().handleRoll(player, 0, player.getInRoll().getItemId(), player.getInRoll().getNpcId(),
+						case 2:
+							if (player.getInRoll().getIndex() == index && player.getInRoll().getNpcId() == npcId)
+								DropDistributionService.getInstance().handleRoll(player, 0,
+										player.getInRoll().getItemId(), player.getInRoll().getNpcId(),
 										player.getInRoll().getIndex());
-								break;
-							case 3:
-								if (player.getInRoll().getIndex() == index && player.getInRoll().getNpcId() == npcId)
-									DropDistributionService.getInstance().handleBid(player, 0, player.getInRoll().getItemId(), player.getInRoll().getNpcId(),
+							break;
+						case 3:
+							if (player.getInRoll().getIndex() == index && player.getInRoll().getNpcId() == npcId)
+								DropDistributionService.getInstance().handleBid(player, 0,
+										player.getInRoll().getItemId(), player.getInRoll().getNpcId(),
 										player.getInRoll().getIndex());
-								break;
+							break;
 						}
 					}
 				}
@@ -192,7 +196,7 @@ public class LootGroupRules {
 
 	/**
 	 * @param nrRoundRobin
-	 *          .
+	 *            .
 	 */
 	public void setNrRoundRobin(int nrRoundRobin) {
 		this.nrRoundRobin = nrRoundRobin;

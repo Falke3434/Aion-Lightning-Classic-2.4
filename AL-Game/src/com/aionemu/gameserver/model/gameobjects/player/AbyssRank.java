@@ -55,7 +55,7 @@ public class AbyssRank {
 	 * @param lastUpdate
 	 */
 	public AbyssRank(int dailyAP, int weeklyAP, int ap, int rank, int topRanking, int dailyKill, int weeklyKill,
-		int allKill, int maxRank, int lastKill, int lastAP, long lastUpdate) {
+			int allKill, int maxRank, int lastKill, int lastAP, long lastUpdate) {
 		this.dailyAP = dailyAP;
 		this.weeklyAP = weeklyAP;
 		this.currentAp = ap;
@@ -72,21 +72,20 @@ public class AbyssRank {
 		doUpdate();
 	}
 
-	public enum AbyssRankUpdateType{
-		PLAYER_ELYOS (1),
-		PLAYER_ASMODIANS(2),
-		LEGION_ELYOS(4),
-		LEGION_ASMODIANS(8);
-		
+	public enum AbyssRankUpdateType {
+		PLAYER_ELYOS(1), PLAYER_ASMODIANS(2), LEGION_ELYOS(4), LEGION_ASMODIANS(8);
+
 		private int id;
-		AbyssRankUpdateType(int id){
+
+		AbyssRankUpdateType(int id) {
 			this.id = id;
 		}
-		
+
 		public int value() {
 			return id;
 		}
 	}
+
 	/**
 	 * Add AP to a player (current player AP + added AP)
 	 * 
@@ -103,10 +102,12 @@ public class AbyssRank {
 
 		int cappedCount = 0;
 		if (CustomConfig.ENABLE_AP_CAP)
-			cappedCount = (long)(currentAp + additionalAp) > CustomConfig.AP_CAP_VALUE ? (int)(CustomConfig.AP_CAP_VALUE - currentAp) : additionalAp;
+			cappedCount = (long) (currentAp + additionalAp) > CustomConfig.AP_CAP_VALUE
+					? (int) (CustomConfig.AP_CAP_VALUE - currentAp)
+					: additionalAp;
 		else
 			cappedCount = additionalAp;
-		
+
 		currentAp += cappedCount;
 		if (currentAp < 0)
 			currentAp = 0;
@@ -213,7 +214,7 @@ public class AbyssRank {
 
 	/**
 	 * @param rank
-	 *          the rank to set
+	 *            the rank to set
 	 */
 	public void setRank(AbyssRankEnum rank) {
 		if (rank.getId() > this.maxRank)
@@ -235,11 +236,11 @@ public class AbyssRank {
 
 	/**
 	 * @param persistentState
-	 *          the persistentState to set
+	 *            the persistentState to set
 	 */
 	public void setPersistentState(PersistentState persistentState) {
 		if (persistentState != PersistentState.UPDATE_REQUIRED || this.persistentState != PersistentState.NEW)
-		  this.persistentState = persistentState;
+			this.persistentState = persistentState;
 	}
 
 	/**
@@ -260,18 +261,20 @@ public class AbyssRank {
 		Calendar curCal = Calendar.getInstance();
 		curCal.setTimeInMillis(System.currentTimeMillis());
 
-		// Checking the day - month & year are checked to prevent if a player come back after 1 month, the same day
+		// Checking the day - month & year are checked to prevent if a player come back
+		// after 1 month, the same day
 		if (lastCal.get(Calendar.DAY_OF_MONTH) != curCal.get(Calendar.DAY_OF_MONTH)
-			|| lastCal.get(Calendar.MONTH) != curCal.get(Calendar.MONTH)
-			|| lastCal.get(Calendar.YEAR) != curCal.get(Calendar.YEAR)) {
+				|| lastCal.get(Calendar.MONTH) != curCal.get(Calendar.MONTH)
+				|| lastCal.get(Calendar.YEAR) != curCal.get(Calendar.YEAR)) {
 			this.dailyAP = 0;
 			this.dailyKill = 0;
 			needUpdate = true;
 		}
 
-		// Checking the week - year is checked to prevent if a player come back after 1 year, the same week
+		// Checking the week - year is checked to prevent if a player come back after 1
+		// year, the same week
 		if (lastCal.get(Calendar.WEEK_OF_YEAR) != curCal.get(Calendar.WEEK_OF_YEAR)
-			|| lastCal.get(Calendar.YEAR) != curCal.get(Calendar.YEAR)) {
+				|| lastCal.get(Calendar.YEAR) != curCal.get(Calendar.YEAR)) {
 			this.lastKill = this.weeklyKill;
 			this.lastAP = this.weeklyAP;
 			this.weeklyKill = 0;
@@ -285,6 +288,5 @@ public class AbyssRank {
 		if (needUpdate)
 			setPersistentState(PersistentState.UPDATE_REQUIRED);
 	}
-
 
 }

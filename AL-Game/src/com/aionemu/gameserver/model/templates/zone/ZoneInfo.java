@@ -18,12 +18,11 @@ package com.aionemu.gameserver.model.templates.zone;
 
 import com.aionemu.gameserver.model.geometry.Area;
 
-
 /**
  * @author MrPoke
  *
  */
-public class ZoneInfo{
+public class ZoneInfo {
 	private Area area;
 	private ZoneTemplate zoneTemplate;
 
@@ -35,9 +34,7 @@ public class ZoneInfo{
 		this.area = area;
 		this.zoneTemplate = zoneTemplate;
 	}
-	
 
-	
 	/**
 	 * @return the area
 	 */
@@ -45,7 +42,6 @@ public class ZoneInfo{
 		return area;
 	}
 
-	
 	/**
 	 * @return the zoneTemplate
 	 */

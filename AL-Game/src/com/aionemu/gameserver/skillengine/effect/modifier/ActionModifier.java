@@ -34,6 +34,7 @@ public abstract class ActionModifier {
 	protected int delta;
 	@XmlAttribute(required = true)
 	protected int value;
+
 	/**
 	 * Applies modifier to original value
 	 * 

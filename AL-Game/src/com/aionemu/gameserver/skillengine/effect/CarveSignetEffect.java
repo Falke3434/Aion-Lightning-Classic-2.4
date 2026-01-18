@@ -53,7 +53,7 @@ public class CarveSignetEffect extends DamageEffect {
 
 		if (Rnd.get(0, 100) > prob)
 			return;
-		
+
 		Effect placedSignet = effect.getEffected().getEffectController().getAnormalEffect(signet);
 
 		if (placedSignet != null)
@@ -62,7 +62,7 @@ public class CarveSignetEffect extends DamageEffect {
 		SkillTemplate template = DataManager.SKILL_DATA.getSkillTemplate(signetid + nextSignetLevel - 1);
 		int effectsDuration = template.getEffectsDuration();
 		Effect newEffect = new Effect(effect.getEffector(), effect.getEffected(), template, nextSignetLevel,
-			effectsDuration);
+				effectsDuration);
 		newEffect.initialize();
 		newEffect.applyEffect();
 	}

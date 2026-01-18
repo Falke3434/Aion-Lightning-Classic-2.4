@@ -58,7 +58,7 @@ public class SpawnTemplate {
 	}
 
 	public SpawnTemplate(SpawnGroup2 spawnGroup, float x, float y, float z, byte heading, int randWalk, String walkerId,
-		int staticId, int fly) {
+			int staticId, int fly) {
 		this.spawnGroup = spawnGroup;
 		this.x = x;
 		this.y = y;
@@ -186,7 +186,7 @@ public class SpawnTemplate {
 	public void setWalkerId(String walkerId) {
 		this.walkerId = walkerId;
 	}
-	
+
 	public int getWalkerIndex() {
 		return walkerIdx;
 	}

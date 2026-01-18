@@ -1,5 +1,10 @@
 package com.aionemu.gameserver.command.admin;
 
+import java.util.List;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang.math.NumberUtils;
+
 import com.aionemu.commons.utils.GenericValidator;
 import com.aionemu.gameserver.command.BaseCommand;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -14,11 +19,6 @@ import com.aionemu.gameserver.services.SiegeService;
 import com.aionemu.gameserver.services.siegeservice.Siege;
 import com.aionemu.gameserver.services.siegeservice.SiegeRaceCounter;
 import com.aionemu.gameserver.utils.PacketSendUtility;
-import java.util.List;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.math.NumberUtils;
-
-
 
 @SuppressWarnings("rawtypes")
 public class CmdSiege2 extends BaseCommand {
@@ -30,7 +30,6 @@ public class CmdSiege2 extends BaseCommand {
 	private static final String COMMAND_LIST_SIEGES = "sieges";
 	private static final String COMMAND_CAPTURE = "capture";
 
-
 	public void execute(Player admin, String... params) {
 
 		if (params.length == 0) {
@@ -40,14 +39,11 @@ public class CmdSiege2 extends BaseCommand {
 
 		if (COMMAND_STOP.equalsIgnoreCase(params[0]) || COMMAND_START.equalsIgnoreCase(params[0])) {
 			handleStartStopSiege(admin, params);
-		}
-		else if (COMMAND_LIST.equalsIgnoreCase(params[0])) {
+		} else if (COMMAND_LIST.equalsIgnoreCase(params[0])) {
 			handleList(admin, params);
-		}
-		else if (COMMAND_LIST_SIEGES.equals(params[0])) {
+		} else if (COMMAND_LIST_SIEGES.equals(params[0])) {
 			listLocations(admin);
-		}
-		else if (COMMAND_CAPTURE.equals(params[0])) {
+		} else if (COMMAND_CAPTURE.equals(params[0])) {
 			capture(admin, params);
 		}
 	}
@@ -67,17 +63,14 @@ public class CmdSiege2 extends BaseCommand {
 		if (COMMAND_START.equalsIgnoreCase(params[0])) {
 			if (SiegeService.getInstance().isSiegeInProgress(siegeLocId)) {
 				PacketSendUtility.sendMessage(admin, "Siege Location " + siegeLocId + " is already under siege");
-			}
-			else {
+			} else {
 				PacketSendUtility.sendMessage(admin, "Siege Location " + siegeLocId + " - starting siege!");
 				SiegeService.getInstance().startSiege(siegeLocId);
 			}
-		}
-		else if (COMMAND_STOP.equalsIgnoreCase(params[0])) {
+		} else if (COMMAND_STOP.equalsIgnoreCase(params[0])) {
 			if (!SiegeService.getInstance().isSiegeInProgress(siegeLocId)) {
 				PacketSendUtility.sendMessage(admin, "Siege Location " + siegeLocId + " is not under siege");
-			}
-			else {
+			} else {
 				PacketSendUtility.sendMessage(admin, "Siege Location " + siegeLocId + " - stopping siege!");
 				SiegeService.getInstance().stopSiege(siegeLocId);
 			}
@@ -102,11 +95,9 @@ public class CmdSiege2 extends BaseCommand {
 
 		if (COMMAND_LIST_LOCATIONS.equalsIgnoreCase(params[1])) {
 			listLocations(admin);
-		}
-		else if (COMMAND_LIST_SIEGES.equalsIgnoreCase(params[1])) {
+		} else if (COMMAND_LIST_SIEGES.equalsIgnoreCase(params[1])) {
 			listSieges(admin);
-		}
-		else {
+		} else {
 			showHelp(admin);
 		}
 	}
@@ -157,9 +148,8 @@ public class CmdSiege2 extends BaseCommand {
 		SiegeRace sr = null;
 		try {
 			sr = SiegeRace.valueOf(params[2].toUpperCase());
-		}
-		catch (IllegalArgumentException e) {
-			//ignore
+		} catch (IllegalArgumentException e) {
+			// ignore
 		}
 
 		// try to find legion by name
@@ -171,7 +161,7 @@ public class CmdSiege2 extends BaseCommand {
 				legion = LegionService.getInstance().getLegion(legionId);
 			} catch (NumberFormatException e) {
 				String legionName = "";
-				for(int i = 2; i < params.length; i++)
+				for (int i = 2; i < params.length; i++)
 					legionName += " " + params[i];
 				legion = LegionService.getInstance().getLegion(legionName.trim());
 			}
@@ -180,10 +170,10 @@ public class CmdSiege2 extends BaseCommand {
 				List<Player> onlinePlayers = legion.getOnlineLegionMembers();
 				if (!GenericValidator.isBlankOrNull(onlinePlayers)) {
 					sr = SiegeRace.getByRace(onlinePlayers.get(0).getRace());
-				}
-				else {
+				} else {
 					sr = null; // TODO: how it's possible to get legion race?!
-					PacketSendUtility.sendMessage(player, "Temp Hack: At least one legion member must be online. Sorry :(");
+					PacketSendUtility.sendMessage(player,
+							"Temp Hack: At least one legion member must be online. Sorry :(");
 					return;
 				}
 			}
@@ -214,7 +204,8 @@ public class CmdSiege2 extends BaseCommand {
 		PacketSendUtility.sendMessage(player, "AdminCommand //siege Help");
 		PacketSendUtility.sendMessage(player, "//siege start|stop <siegeLocationId>");
 		PacketSendUtility.sendMessage(player, "//siege list locations|sieges");
-		PacketSendUtility.sendMessage(player, "//siege capture <fortressOrArtifactId> <siegeRaceName|legionName|legionId>");
+		PacketSendUtility.sendMessage(player,
+				"//siege capture <fortressOrArtifactId> <siegeRaceName|legionName|legionId>");
 
 		java.util.Set<Integer> fortressIds = SiegeService.getInstance().getFortresses().keySet();
 		java.util.Set<Integer> artifactIds = SiegeService.getInstance().getStandaloneArtifacts().keySet();

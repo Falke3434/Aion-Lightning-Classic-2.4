@@ -9,8 +9,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 public class CmdAdmin extends BaseCommand {
 
 	public void execute(Player player, String... params) {
-		//HTMLService.showHTML(player, CommandService.getInstance().getCommandList(player));
-		//HTMLService.showHTML(player, HTMLCache.getInstance().getHTML("commands.xhtml"));
+		// HTMLService.showHTML(player,
+		// CommandService.getInstance().getCommandList(player));
+		// HTMLService.showHTML(player,
+		// HTMLCache.getInstance().getHTML("commands.xhtml"));
 		PacketSendUtility.sendMessage(player, "This command is currently disabled.");
 	}
 

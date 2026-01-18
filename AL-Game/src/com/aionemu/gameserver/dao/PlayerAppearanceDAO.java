@@ -44,17 +44,18 @@ public abstract class PlayerAppearanceDAO implements DAO {
 	 * Returns null if not found in database
 	 * 
 	 * @param playerId
-	 *          player id
+	 *            player id
 	 * @return player appearance or null
 	 */
 	public abstract PlayerAppearance load(int playerId);
 
 	/**
 	 * Saves player appearance in database.<br>
-	 * Actually calls {@link #store(int, com.aionemu.gameserver.model.gameobjects.player.PlayerAppearance)}
+	 * Actually calls
+	 * {@link #store(int, com.aionemu.gameserver.model.gameobjects.player.PlayerAppearance)}
 	 * 
 	 * @param player
-	 *          whos appearance to store
+	 *            whos appearance to store
 	 * @return true, if sql query was successful, false overwise
 	 */
 	public final boolean store(Player player) {
@@ -65,9 +66,9 @@ public abstract class PlayerAppearanceDAO implements DAO {
 	 * Stores appearance in database
 	 * 
 	 * @param id
-	 *          player id
+	 *            player id
 	 * @param playerAppearance
-	 *          player appearance
+	 *            player appearance
 	 * @return true, if sql query was successful, false overwise
 	 */
 	public abstract boolean store(int id, PlayerAppearance playerAppearance);

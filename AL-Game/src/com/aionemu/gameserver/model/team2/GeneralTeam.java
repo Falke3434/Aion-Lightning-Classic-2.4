@@ -35,8 +35,8 @@ import com.google.common.collect.Collections2;
 /**
  * @author ATracer
  */
-public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>> extends AionObject implements
-	Team<M, TM> {
+public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>> extends AionObject
+		implements Team<M, TM> {
 
 	private final static Logger log = LoggerFactory.getLogger(GeneralTeam.class);
 	protected final Map<Integer, TM> members = new ConcurrentHashMap<Integer, TM>();
@@ -55,12 +55,10 @@ public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>
 		try {
 			if (event.checkCondition()) {
 				event.handleEvent();
-			}
-			else {
+			} else {
 				log.warn("[TEAM2] skipped event: {} group: {}", event, this);
 			}
-		}
-		finally {
+		} finally {
 			unlock();
 		}
 	}
@@ -106,8 +104,7 @@ public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>
 					return;
 				}
 			}
-		}
-		finally {
+		} finally {
 			unlock();
 		}
 	}
@@ -124,8 +121,7 @@ public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>
 					return;
 				}
 			}
-		}
-		finally {
+		} finally {
 			unlock();
 		}
 	}
@@ -142,7 +138,7 @@ public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>
 
 	@Override
 	public Collection<M> getMembers() {
-		return filterMembers(Predicates.<M> alwaysTrue());
+		return filterMembers(Predicates.<M>alwaysTrue());
 	}
 
 	@Override
@@ -191,7 +187,7 @@ public abstract class GeneralTeam<M extends AionObject, TM extends TeamMember<M>
 	protected final void unlock() {
 		teamLock.unlock();
 	}
-	
+
 	private static final class MemberTransformFunction<TM extends TeamMember<M>, M> implements Function<TM, M> {
 
 		@Override

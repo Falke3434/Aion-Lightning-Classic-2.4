@@ -26,12 +26,11 @@ import com.aionemu.commons.utils.ClassUtils;
 import com.aionemu.gameserver.instance.InstanceHandlerClassListener;
 import com.aionemu.gameserver.world.zone.ZoneService;
 
-
 /**
  * @author MrPoke
  *
  */
-public class ZoneHandlerClassListener implements ClassListener{
+public class ZoneHandlerClassListener implements ClassListener {
 
 	private static final Logger log = LoggerFactory.getLogger(InstanceHandlerClassListener.class);
 
@@ -74,4 +73,3 @@ public class ZoneHandlerClassListener implements ClassListener{
 		return true;
 	}
 }
-

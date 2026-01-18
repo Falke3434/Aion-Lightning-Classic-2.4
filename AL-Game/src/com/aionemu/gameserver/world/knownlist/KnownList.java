@@ -19,8 +19,6 @@ package com.aionemu.gameserver.world.knownlist;
 import java.util.Collections;
 import java.util.Map;
 
-import javolution.util.FastMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,6 +28,8 @@ import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.utils.MathUtil;
 import com.aionemu.gameserver.world.MapRegion;
+
+import javolution.util.FastMap;
 
 /**
  * KnownList.
@@ -141,7 +141,8 @@ public class KnownList {
 			if (knownPlayers != null) {
 				knownPlayers.remove(object.getObjectId());
 			}
-		};
+		}
+		;
 	}
 
 	/**
@@ -167,7 +168,8 @@ public class KnownList {
 		for (int i = 0; i < regions.length; i++) {
 			MapRegion r = regions[i];
 			FastMap<Integer, VisibleObject> objects = r.getObjects();
-			for (FastMap.Entry<Integer, VisibleObject> e = objects.head(), mapEnd = objects.tail(); (e = e.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, VisibleObject> e = objects.head(), mapEnd = objects
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				VisibleObject newObject = e.getValue();
 				if (newObject == owner || newObject == null)
 					continue;
@@ -205,12 +207,14 @@ public class KnownList {
 		// check if Z distance is greater than maxZvisibleDistance
 		if (Math.abs(owner.getZ() - newObject.getZ()) > maxZvisibleDistance)
 			return false;
-		
+
 		return MathUtil.isInRange(owner, newObject, VisibilityDistance);
 	}
-	
+
 	/**
-	 * Check can be overriden if new object has different known range and that value should be used
+	 * Check can be overriden if new object has different known range and that value
+	 * should be used
+	 * 
 	 * @param newObject
 	 * @return
 	 */
@@ -220,30 +224,28 @@ public class KnownList {
 
 	public void doOnAllNpcs(Visitor<Npc> visitor) {
 		try {
-			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects.tail(); (e = e
-				.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				VisibleObject newObject = e.getValue();
 				if (newObject instanceof Npc) {
 					visitor.visit((Npc) newObject);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all npcs" + ex);
 		}
 	}
 
 	public void doOnAllNpcsWithOwner(VisitorWithOwner<Npc, VisibleObject> visitor) {
 		try {
-			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects.tail(); (e = e
-				.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				VisibleObject newObject = e.getValue();
 				if (newObject instanceof Npc) {
 					visitor.visit((Npc) newObject, owner);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all npcs" + ex);
 		}
 	}
@@ -253,29 +255,28 @@ public class KnownList {
 			return;
 		}
 		try {
-			for (FastMap.Entry<Integer, Player> e = knownPlayers.head(), mapEnd = knownPlayers.tail(); (e = e.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, Player> e = knownPlayers.head(), mapEnd = knownPlayers
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				Player player = e.getValue();
 				if (player != null) {
 					visitor.visit(player);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all players" + ex);
 		}
 	}
 
 	public void doOnAllObjects(Visitor<VisibleObject> visitor) {
 		try {
-			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects.tail(); (e = e
-				.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, VisibleObject> e = knownObjects.head(), mapEnd = knownObjects
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				VisibleObject newObject = e.getValue();
 				if (newObject != null) {
 					visitor.visit(newObject);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all objects" + ex);
 		}
 	}
@@ -285,7 +286,7 @@ public class KnownList {
 	}
 
 	public Map<Integer, Player> getKnownPlayers() {
-		return knownPlayers != null ? knownPlayers : Collections.<Integer, Player> emptyMap();
+		return knownPlayers != null ? knownPlayers : Collections.<Integer, Player>emptyMap();
 	}
 
 	final void checkKnownPlayersInitialized() {

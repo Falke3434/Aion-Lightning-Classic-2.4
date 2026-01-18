@@ -95,7 +95,7 @@ public class ActionObserver {
 	 */
 	public void skilluse(Skill skill) {
 	};
-	
+
 	/**
 	 * @param creature
 	 */
@@ -104,18 +104,18 @@ public class ActionObserver {
 
 	/**
 	 * @param creature
-	 * @param dotEffect 
+	 * @param dotEffect
 	 */
 	public void dotattacked(Creature creature, Effect dotEffect) {
 	};
-	
+
 	/**
 	 * 
 	 * @param item
 	 */
 	public void itemused(Item item) {
 	};
-	
+
 	/**
 	 * 
 	 * @param npc

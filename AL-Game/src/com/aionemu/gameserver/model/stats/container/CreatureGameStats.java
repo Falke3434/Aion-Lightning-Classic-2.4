@@ -21,9 +21,6 @@ import java.util.List;
 import java.util.TreeSet;
 import java.util.concurrent.locks.ReentrantReadWriteLock;
 
-import javolution.util.FastMap;
-import javolution.util.FastMap.Entry;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,6 +36,9 @@ import com.aionemu.gameserver.model.stats.calc.StatOwner;
 import com.aionemu.gameserver.model.stats.calc.functions.IStatFunction;
 import com.aionemu.gameserver.model.stats.calc.functions.StatFunction;
 import com.aionemu.gameserver.model.stats.calc.functions.StatFunctionProxy;
+
+import javolution.util.FastMap;
+import javolution.util.FastMap.Entry;
 
 /**
  * @author xavier
@@ -73,13 +73,12 @@ public abstract class CreatureGameStats<T extends Creature> {
 
 	/**
 	 * @param atcount
-	 *          the atcount to set
+	 *            the atcount to set
 	 */
 	protected void setAttackCounter(int attackCounter) {
 		if (attackCounter <= 0) {
 			this.attackCounter = 1;
-		}
-		else {
+		} else {
 			this.attackCounter = attackCounter;
 		}
 	}
@@ -87,8 +86,7 @@ public abstract class CreatureGameStats<T extends Creature> {
 	public void increaseAttackCounter() {
 		if (attackCounter == ATTACK_MAX_COUNTER) {
 			this.attackCounter = 1;
-		}
-		else {
+		} else {
 			this.attackCounter++;
 		}
 	}
@@ -109,8 +107,7 @@ public abstract class CreatureGameStats<T extends Creature> {
 				}
 				mods.add(func);
 			}
-		}
-		finally {
+		} finally {
 			lock.writeLock().unlock();
 		}
 	}
@@ -123,7 +120,8 @@ public abstract class CreatureGameStats<T extends Creature> {
 	public final void endEffect(StatOwner statOwner) {
 		lock.writeLock().lock();
 		try {
-			for (Entry<StatEnum, TreeSet<IStatFunction>> e = stats.head(), end = stats.tail(); (e = e.getNext()) != end;) {
+			for (Entry<StatEnum, TreeSet<IStatFunction>> e = stats.head(), end = stats
+					.tail(); (e = e.getNext()) != end;) {
 				TreeSet<IStatFunction> value = e.getValue();
 				for (Iterator<IStatFunction> iter = value.iterator(); iter.hasNext();) {
 					IStatFunction ownedMod = iter.next();
@@ -132,8 +130,7 @@ public abstract class CreatureGameStats<T extends Creature> {
 					}
 				}
 			}
-		}
-		finally {
+		} finally {
 			lock.writeLock().unlock();
 		}
 		onStatsChange();
@@ -183,10 +180,9 @@ public abstract class CreatureGameStats<T extends Creature> {
 					func.apply(stat);
 				}
 			}
-			StatCapUtil.calculateBaseValue(stat, ((Creature)owner).isPlayer());
+			StatCapUtil.calculateBaseValue(stat, ((Creature) owner).isPlayer());
 			return stat;
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 	}
@@ -198,11 +194,11 @@ public abstract class CreatureGameStats<T extends Creature> {
 			if (functions == null || functions.isEmpty())
 				return stat;
 			for (IStatFunction func : functions) {
-				if (func.validate(stat, func) && (func.getOwner() instanceof Item || func.getOwner() instanceof ManaStone))
+				if (func.validate(stat, func)
+						&& (func.getOwner() instanceof Item || func.getOwner() instanceof ManaStone))
 					func.apply(stat);
 			}
-		}
-		finally {
+		} finally {
 			lock.readLock().unlock();
 		}
 		return stat;
@@ -260,20 +256,20 @@ public abstract class CreatureGameStats<T extends Creature> {
 
 	public int getMagicalDefenseFor(SkillElement element) {
 		switch (element) {
-			case EARTH:
-				return getStat(StatEnum.EARTH_RESISTANCE, 0).getCurrent();
-			case FIRE:
-				return getStat(StatEnum.FIRE_RESISTANCE, 0).getCurrent();
-			case WATER:
-				return getStat(StatEnum.WATER_RESISTANCE, 0).getCurrent();
-			case WIND:
-				return getStat(StatEnum.WIND_RESISTANCE, 0).getCurrent();
-			case LIGHT:
-				return getStat(StatEnum.ELEMENTAL_RESISTANCE_LIGHT, 0).getCurrent();
-			case DARK:
-				return getStat(StatEnum.ELEMENTAL_RESISTANCE_DARK, 0).getCurrent();
-			default:
-				return 0;
+		case EARTH:
+			return getStat(StatEnum.EARTH_RESISTANCE, 0).getCurrent();
+		case FIRE:
+			return getStat(StatEnum.FIRE_RESISTANCE, 0).getCurrent();
+		case WATER:
+			return getStat(StatEnum.WATER_RESISTANCE, 0).getCurrent();
+		case WIND:
+			return getStat(StatEnum.WIND_RESISTANCE, 0).getCurrent();
+		case LIGHT:
+			return getStat(StatEnum.ELEMENTAL_RESISTANCE_LIGHT, 0).getCurrent();
+		case DARK:
+			return getStat(StatEnum.ELEMENTAL_RESISTANCE_DARK, 0).getCurrent();
+		default:
+			return 0;
 		}
 	}
 
@@ -318,29 +314,29 @@ public abstract class CreatureGameStats<T extends Creature> {
 		checkMPStats();
 	}
 
-	private void checkHPStats(){
+	private void checkHPStats() {
 		Stat2 oldHP = cachedHPStat;
 		cachedHPStat = null;
 		Stat2 newHP = this.getMaxHp();
 		cachedHPStat = newHP;
-		if(oldHP == null)
+		if (oldHP == null)
 			return;
 		if (oldHP.getCurrent() != newHP.getCurrent()) {
-			float percent = 1f*newHP.getCurrent()/oldHP.getCurrent();
-			owner.getLifeStats().setCurrentHp(Math.round(owner.getLifeStats().getCurrentHp()*percent));
+			float percent = 1f * newHP.getCurrent() / oldHP.getCurrent();
+			owner.getLifeStats().setCurrentHp(Math.round(owner.getLifeStats().getCurrentHp() * percent));
 		}
 	}
-	
-	private void checkMPStats(){
+
+	private void checkMPStats() {
 		Stat2 oldMP = cachedMPStat;
 		cachedMPStat = null;
 		Stat2 newMP = this.getMaxMp();
 		cachedMPStat = newMP;
-		if(oldMP == null)
+		if (oldMP == null)
 			return;
 		if (oldMP.getCurrent() != newMP.getCurrent()) {
-			float percent = 1f*newMP.getCurrent()/oldMP.getCurrent();
-			owner.getLifeStats().setCurrentMp(Math.round(owner.getLifeStats().getCurrentMp()*percent));
+			float percent = 1f * newMP.getCurrent() / oldMP.getCurrent();
+			owner.getLifeStats().setCurrentMp(Math.round(owner.getLifeStats().getCurrentMp() * percent));
 		}
 	}
 }

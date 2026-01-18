@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.utils;
 
-
 /**
  * @author MrPoke
  *

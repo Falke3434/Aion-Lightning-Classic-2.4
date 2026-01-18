@@ -24,8 +24,9 @@ import com.aionemu.gameserver.network.loginserver.LoginServer;
 import com.aionemu.gameserver.network.loginserver.LsClientPacket;
 
 /**
- * In this packet LoginServer is answering on GameServer request about valid authentication data and also sends account
- * name of user that is authenticating on GameServer.
+ * In this packet LoginServer is answering on GameServer request about valid
+ * authentication data and also sends account name of user that is
+ * authenticating on GameServer.
  * 
  * @author -Nemesiss-
  */
@@ -67,7 +68,7 @@ public class CM_ACOUNT_AUTH_RESPONSE extends LsClientPacket {
 	 * Toll
 	 */
 	private long toll;
-	
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -95,6 +96,7 @@ public class CM_ACOUNT_AUTH_RESPONSE extends LsClientPacket {
 	 */
 	@Override
 	public void runImpl() {
-		LoginServer.getInstance().accountAuthenticationResponse(accountId, accountName, result, accountTime, accessLevel, membership, toll, membershipExpire);
+		LoginServer.getInstance().accountAuthenticationResponse(accountId, accountName, result, accountTime,
+				accessLevel, membership, toll, membershipExpire);
 	}
 }

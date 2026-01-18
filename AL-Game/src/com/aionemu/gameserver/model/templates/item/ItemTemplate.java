@@ -216,8 +216,8 @@ public class ItemTemplate extends VisibleObjectTemplate {
 
 	@XmlElement(name = "tradein_list")
 	protected TradeinList tradeinList;
-  
-  	@XmlElement(name = "uselimits")
+
+	@XmlElement(name = "uselimits")
 	private ItemUseLimits useLimits = new ItemUseLimits();
 
 	/**
@@ -341,8 +341,7 @@ public class ItemTemplate extends VisibleObjectTemplate {
 		try {
 			int val = Integer.parseInt(description);
 			return val;
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			return 0;
 		}
 	}
@@ -351,8 +350,7 @@ public class ItemTemplate extends VisibleObjectTemplate {
 		if (isKinah()) {
 			if (CustomConfig.ENABLE_KINAH_CAP) {
 				return CustomConfig.KINAH_CAP_VALUE;
-			}
-			else {
+			} else {
 				return Long.MAX_VALUE;
 			}
 		}
@@ -489,7 +487,7 @@ public class ItemTemplate extends VisibleObjectTemplate {
 	public boolean isSoulBound() {
 		return (getMask() & ItemMask.SOUL_BOUND) == ItemMask.SOUL_BOUND;
 	}
-	
+
 	public boolean isBreakable() {
 		return (getMask() & ItemMask.BREAKABLE) == ItemMask.BREAKABLE;
 	}
@@ -503,17 +501,17 @@ public class ItemTemplate extends VisibleObjectTemplate {
 			return false;
 
 		switch (weaponType) {
-			case BOOK_2H:
-			case ORB_2H:
-			case POLEARM_2H:
-			case STAFF_2H:
-			case SWORD_2H:
-			case TOOLPICK_2H:
-			case TOOLROD_2H:
-			case BOW:
-				return true;
-			default:
-				return false;
+		case BOOK_2H:
+		case ORB_2H:
+		case POLEARM_2H:
+		case STAFF_2H:
+		case SWORD_2H:
+		case TOOLPICK_2H:
+		case TOOLROD_2H:
+		case BOW:
+			return true;
+		default:
+			return false;
 		}
 	}
 
@@ -558,8 +556,7 @@ public class ItemTemplate extends VisibleObjectTemplate {
 
 		try {
 			return ZoneName.valueOf(this.usearea);
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.warn("Item " + id + " has invalid zone dependacy " + this.usearea);
 			return null;
 		}
@@ -585,14 +582,13 @@ public class ItemTemplate extends VisibleObjectTemplate {
 		return burnDefend;
 	}
 
-	
 	/**
 	 * @return the tradeinList
 	 */
 	public TradeinList getTradeinList() {
 		return tradeinList;
 	}
-	
+
 	/**
 	 * @return the useLimits
 	 */

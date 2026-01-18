@@ -18,16 +18,15 @@ package com.aionemu.gameserver.network.aion.serverpackets;
 
 import java.util.List;
 
+import com.aionemu.gameserver.model.Gender;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerAppearance;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerCommonData;
 import com.aionemu.gameserver.model.items.GodStone;
-import com.aionemu.gameserver.model.stats.calc.Stat2;
 import com.aionemu.gameserver.model.team.legion.LegionEmblemType;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
-
 
 /**
  * This packet is displaying visible players.
@@ -46,7 +45,7 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 	 * Constructs new <tt>SM_PLAYER_INFO </tt> packet
 	 * 
 	 * @param player
-	 *          actual player.
+	 *            actual player.
 	 * @param enemy
 	 */
 	public SM_PLAYER_INFO(Player player, boolean enemy) {
@@ -67,11 +66,9 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		final int raceId;
 		if (player.getAdminNeutral() > 1 || activePlayer.getAdminNeutral() > 1) {
 			raceId = activePlayer.getRace().getRaceId();
-		}
-		else if (activePlayer.isEnemy(player)) {
+		} else if (activePlayer.isEnemy(player)) {
 			raceId = (activePlayer.getRace().getRaceId() == 0 ? 1 : 0);
-		}
-		else
+		} else
 			raceId = player.getRace().getRaceId();
 
 		final int genderId = pcd.getGender().getGenderId();
@@ -86,11 +83,13 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		 */
 		writeD(pcd.getTemplateId());
 		/**
-		 * Transformed state - send transformed model id Regular state - send player model id (from common data)
+		 * Transformed state - send transformed model id Regular state - send player
+		 * model id (from common data)
 		 */
 		writeD(player.getTransformedModelId() == 0 ? pcd.getTemplateId() : player.getTransformedModelId());
 
-		writeC(0x00); // new 2.0 Packet --- probably pet info?
+		writeD(0);
+		writeD(0);
 		writeD(player.getEffectController().checkAvatar() ? 2 : 1); // enable avatar skills
 		writeC(enemy ? 0x00 : 0x26);
 
@@ -98,19 +97,15 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeC(pcd.getPlayerClass().getClassId());
 		writeC(genderId); // sex
 		writeH(player.getState());
-
-		byte[] unk = new byte[8];
-		writeB(unk);
-
+		writeB(new byte[8]);
 		writeC(player.getHeading());
 		writeS(player.getFullName());
 		writeH(pcd.getTitleId());
-		writeH(player.getCommonData().isHaveMentorFlag()? 1:0);
-		
+		writeH(player.getCommonData().isHaveMentorFlag() ? 1 : 0);
+
 		writeH(player.getCastingSkillId());
 
-		if (player.isLegionMember())
-		{
+		if (player.isLegionMember()) {
 			writeD(player.getLegion().getLegionId());
 			writeC(player.getLegion().getLegionEmblem().getEmblemId());
 			writeC(player.getLegion().getLegionEmblem().getEmblemType().getValue());
@@ -119,11 +114,8 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 			writeC(player.getLegion().getLegionEmblem().getColor_g());
 			writeC(player.getLegion().getLegionEmblem().getColor_b());
 			writeS(player.getLegion().getLegionName());
-		}
-		else
-		{
-			writeQ(0);
-			writeD(0);
+		} else {
+			writeB(new byte[12]);
 		}
 		int maxHp = player.getLifeStats().getMaxHp();
 		int currHp = player.getLifeStats().getCurrentHp();
@@ -159,9 +151,7 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeC(playerAppearance.getTattoo());
 		writeC(playerAppearance.getFaceContour());
 		writeC(playerAppearance.getExpression());
-		
-		writeC(5);// always 5 o0
-		
+		writeC(player.getGender() == Gender.FEMALE ? 6 : 5);
 		writeC(playerAppearance.getJawLine());
 		writeC(playerAppearance.getForehead());
 
@@ -215,7 +205,7 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeC(playerAppearance.getShoulders());
 		writeC(playerAppearance.getFaceShape());
 		writeC(0x00); // always 0
-		
+
 		writeC(playerAppearance.getVoice());
 
 		writeF(playerAppearance.getHeight());
@@ -223,12 +213,9 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeF(2.0f); // gravity or slide surface o_O
 		writeF(player.getGameStats().getMovementSpeedFloat()); // move speed
 
-		Stat2 attackSpeed = player.getGameStats().getAttackSpeed();
-		writeH(attackSpeed.getBase());
-		writeH(attackSpeed.getCurrent());
-        writeC(player.getTelEffect()); // This Spawn Effect!                
-		
-
+		writeH(player.getGameStats().getAttackSpeed().getBase());
+		writeH(player.getGameStats().getAttackSpeed().getCurrent());
+		writeC(player.getTelEffect()); // This Spawn Effect!
 		writeS(player.hasStore() ? player.getStore().getStoreMessage() : "");// private store message
 
 		/**
@@ -259,9 +246,13 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeD(player.getTarget() == null ? 0 : player.getTarget().getObjectId());
 		writeC(0); // suspect id
 		writeD(0);
-		if (player.isMentor())
-			writeC(1);
-		else
-			writeC(0);
+		writeC(player.isMentor() ? 1 : 0);
+
+		//
+		writeD(player.getPlayerAccount().getMembership() == 2 ? 3 : 1);
+		writeC(0); // test
+		writeD(0);
+
+		// writeD(player.getPlayerAccount().getMembership() == 2 ? 3 : 0);
 	}
 }

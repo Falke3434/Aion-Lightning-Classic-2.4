@@ -16,6 +16,8 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -24,8 +26,6 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author alexa026 , orz
@@ -51,8 +51,7 @@ public class SM_TELEPORT_MAP extends AionServerPacket {
 		if ((teleport != null) && (teleport.getNpcId() != 0) && (teleport.getTeleportId() != 0)) {
 			writeD(targetObjectId);
 			writeH(teleport.getTeleportId());
-		}
-		else {
+		} else {
 			PacketSendUtility.sendMessage(player, "Missing info at npc_teleporter.xml with npcid: " + npc.getNpcId());
 			log.info(String.format("Missing teleport info with npcid: %d", npc.getNpcId()));
 		}

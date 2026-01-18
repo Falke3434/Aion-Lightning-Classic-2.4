@@ -25,11 +25,8 @@ import com.aionemu.gameserver.model.SkillElement;
  */
 @XmlEnum
 public enum ItemAttackType {
-	PHYSICAL(false, SkillElement.NONE),
-	MAGICAL_EARTH(true, SkillElement.EARTH),
-	MAGICAL_WATER(true, SkillElement.WATER),
-	MAGICAL_WIND(true, SkillElement.WIND),
-	MAGICAL_FIRE(true, SkillElement.FIRE);
+	PHYSICAL(false, SkillElement.NONE), MAGICAL_EARTH(true, SkillElement.EARTH), MAGICAL_WATER(true,
+			SkillElement.WATER), MAGICAL_WIND(true, SkillElement.WIND), MAGICAL_FIRE(true, SkillElement.FIRE);
 
 	private boolean magic;
 	private SkillElement elem;
@@ -42,7 +39,7 @@ public enum ItemAttackType {
 	public boolean isMagical() {
 		return magic;
 	}
-	
+
 	public SkillElement getMagicalElement() {
 		return elem;
 	}

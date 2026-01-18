@@ -38,14 +38,16 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 * Returns true if name is used, false in other case
 	 * 
 	 * @param name
-	 *          name to check
+	 *            name to check
 	 * @return true if name is used, false in other case
 	 */
 	public abstract boolean isNameUsed(String name);
 
 	/**
 	 * Returns player name by player object id
-	 * @param playerObjectIds player object ids to get name
+	 * 
+	 * @param playerObjectIds
+	 *            player object ids to get name
 	 * @return map ObjectID-To-Name
 	 */
 	public abstract Map<Integer, String> getPlayerNames(Collection<Integer> playerObjectIds);
@@ -61,7 +63,7 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 * This method is used to store only newly created characters
 	 * 
 	 * @param pcd
-	 *          player to save in database
+	 *            player to save in database
 	 * @return true if every things went ok.
 	 */
 	public abstract boolean saveNewPlayer(PlayerCommonData pcd, int accountId, String accountName);
@@ -72,7 +74,7 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 * Removes player and all related data (Done by CASCADE DELETION)
 	 * 
 	 * @param playerId
-	 *          player to delete
+	 *            player to delete
 	 */
 	public abstract void deletePlayer(int playerId);
 
@@ -81,15 +83,16 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	public abstract void storeCreationTime(int objectId, Timestamp creationDate);
 
 	/**
-	 * Loads creation and deletion time from database, for particular player and sets these values in given
-	 * <tt>PlayerAccountData</tt> object.
+	 * Loads creation and deletion time from database, for particular player and
+	 * sets these values in given <tt>PlayerAccountData</tt> object.
 	 * 
 	 * @param acData
 	 */
 	public abstract void setCreationDeletionTime(PlayerAccountData acData);
 
 	/**
-	 * Returns a list of objectId of players that are on the account with given accountId
+	 * Returns a list of objectId of players that are on the account with given
+	 * accountId
 	 * 
 	 * @param accountId
 	 * @return List<Integer>
@@ -100,9 +103,9 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 * Stores the last online time
 	 * 
 	 * @param objectId
-	 *          Object ID of player to store
+	 *            Object ID of player to store
 	 * @param lastOnline
-	 *          Last online time of player to store
+	 *            Last online time of player to store
 	 */
 	public abstract void storeLastOnlineTime(final int objectId, final Timestamp lastOnline);
 
@@ -143,12 +146,12 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 * @return PlayerDAO.class.getName()
 	 */
 	public abstract String getPlayerNameByObjId(final int playerObjId);
-	
+
 	/**
 	 * get playerId by name
 	 * 
 	 * @param playerName
-	 * @return 
+	 * @return
 	 */
 	public abstract int getPlayerIdByName(final String playerName);
 
@@ -185,9 +188,8 @@ public abstract class PlayerDAO implements IDFactoryAwareDAO {
 	 */
 	public abstract int getOnlinePlayerCountBeforeSiege(Race race);
 
-	
 	public abstract void setPlayerLastTransferTime(final int playerId, final long time);
-	
+
 	@Override
 	public final String getClassName() {
 		return PlayerDAO.class.getName();

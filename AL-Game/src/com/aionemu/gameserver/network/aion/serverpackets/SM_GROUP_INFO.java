@@ -53,6 +53,6 @@ public class SM_GROUP_INFO extends AionServerPacket {
 		writeC(0x00);
 		writeD(groupType);
 		writeD(0x00);
-		writeH(0x00);
+		// writeS(0x00);
 	}
 }

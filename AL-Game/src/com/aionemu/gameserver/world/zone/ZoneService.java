@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.world.zone;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.io.File;
 import java.util.Collection;
 import java.util.Collections;
@@ -41,6 +39,8 @@ import com.aionemu.gameserver.world.zone.handler.GeneralZoneHandler;
 import com.aionemu.gameserver.world.zone.handler.ZoneHandler;
 import com.aionemu.gameserver.world.zone.handler.ZoneHandlerClassListener;
 import com.aionemu.gameserver.world.zone.handler.ZoneNameAnnotation;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer modified by antness
@@ -73,11 +73,9 @@ public final class ZoneService implements GameEngine {
 		if (zoneClass != null) {
 			try {
 				zoneHandler = zoneClass.newInstance();
-			}
-			catch (IllegalAccessException ex){
+			} catch (IllegalAccessException ex) {
 				log.warn("Can't instantiate zone handler " + zoneName, ex);
-			}
-			catch (Exception ex) {
+			} catch (Exception ex) {
 				log.warn("Can't instantiate zone handler " + zoneName, ex);
 			}
 		}
@@ -101,8 +99,7 @@ public final class ZoneService implements GameEngine {
 						throw new RuntimeException();
 					}
 					handlers.put(zoneName, handler);
-				} 
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.warn("Missing ZoneName: " + idAnnotation.value());
 				}
 			}
@@ -127,11 +124,9 @@ public final class ZoneService implements GameEngine {
 		try {
 			scriptManager.load(ZONE_DESCRIPTOR_FILE);
 			log.info("Loaded " + handlers.size() + " zone handlers.");
-		}
-		catch (IllegalStateException e){
+		} catch (IllegalStateException e) {
 			log.warn("Can't initialize instance handlers.", e.getMessage());
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new GameServerError("Can't initialize instance handlers.", e);
 		}
 		log.info("Loaded " + handlers.size() + " zone handlers.");
@@ -155,30 +150,31 @@ public final class ZoneService implements GameEngine {
 		Collection<ZoneInfo> areas = this.zoneByMapIdMap.get(mapId);
 		if (areas == null)
 			return Collections.emptyMap();
-		for (ZoneInfo area : this.zoneByMapIdMap.get(mapId)){
+		for (ZoneInfo area : this.zoneByMapIdMap.get(mapId)) {
 			ZoneInstance instance = null;
-			switch (area.getZoneTemplate().getZoneType()){
-				case FLY:
-					instance = new FlyZoneInstance(mapId, area);
-					break;
-				case FORT:
-					instance = new SiegeZoneInstance(mapId, area);
-					SiegeLocation siege = DataManager.SIEGE_LOCATION_DATA.getSiegeLocations().get(area.getZoneTemplate().getSiegeId().get(0));
-					if (siege != null)
-						siege.addZone((SiegeZoneInstance) instance);
-					break;
-				case ARTIFACT:
-					instance = new SiegeZoneInstance(mapId, area);
-					for(int artifactId: area.getZoneTemplate().getSiegeId()){
-						SiegeLocation artifact = DataManager.SIEGE_LOCATION_DATA.getArtifacts().get(artifactId);
-						artifact.addZone((SiegeZoneInstance) instance);
-					}
-					break;
-				case PVP:
-					instance = new PvPZoneInstance(mapId, area);
-					break;
-				default:
-					instance = new ZoneInstance(mapId, area);
+			switch (area.getZoneTemplate().getZoneType()) {
+			case FLY:
+				instance = new FlyZoneInstance(mapId, area);
+				break;
+			case FORT:
+				instance = new SiegeZoneInstance(mapId, area);
+				SiegeLocation siege = DataManager.SIEGE_LOCATION_DATA.getSiegeLocations()
+						.get(area.getZoneTemplate().getSiegeId().get(0));
+				if (siege != null)
+					siege.addZone((SiegeZoneInstance) instance);
+				break;
+			case ARTIFACT:
+				instance = new SiegeZoneInstance(mapId, area);
+				for (int artifactId : area.getZoneTemplate().getSiegeId()) {
+					SiegeLocation artifact = DataManager.SIEGE_LOCATION_DATA.getArtifacts().get(artifactId);
+					artifact.addZone((SiegeZoneInstance) instance);
+				}
+				break;
+			case PVP:
+				instance = new PvPZoneInstance(mapId, area);
+				break;
+			default:
+				instance = new ZoneInstance(mapId, area);
 			}
 			instance.addHandler(getNewZoneHandler(area.getZoneTemplate().getName()));
 			zones.put(area.getZoneTemplate().getName(), instance);

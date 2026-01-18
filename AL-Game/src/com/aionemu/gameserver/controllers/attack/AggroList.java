@@ -21,8 +21,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
-import javolution.util.FastMap;
-
 import com.aionemu.commons.callbacks.Callback;
 import com.aionemu.commons.callbacks.CallbackResult;
 import com.aionemu.commons.callbacks.metadata.ObjectCallback;
@@ -36,6 +34,8 @@ import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.team2.group.PlayerGroup;
 import com.aionemu.gameserver.world.knownlist.Visitor;
+
+import javolution.util.FastMap;
 
 /**
  * @author ATracer, KKnD
@@ -52,7 +52,8 @@ public class AggroList {
 	}
 
 	/**
-	 * Only add damage from enemies. (Verify this includes summons, traps, pets, and excludes fall damage.)
+	 * Only add damage from enemies. (Verify this includes summons, traps, pets, and
+	 * excludes fall damage.)
 	 * 
 	 * @param creature
 	 * @param damage
@@ -65,7 +66,8 @@ public class AggroList {
 		AggroInfo ai = getAggroInfo(creature);
 		ai.addDamage(damage);
 		/**
-		 * For now we add hate equal to each damage received Additionally there will be broadcast of extra hate
+		 * For now we add hate equal to each damage received Additionally there will be
+		 * broadcast of extra hate
 		 */
 		ai.addHate(damage);
 
@@ -134,8 +136,7 @@ public class AggroList {
 		AionObject winner = getMostDamage();
 		if (winner instanceof PlayerGroup) {
 			return ((PlayerGroup) winner).getRace();
-		}
-		else if (winner instanceof Player)
+		} else if (winner instanceof Player)
 			return ((Player) winner).getRace();
 		return null;
 	}
@@ -196,7 +197,8 @@ public class AggroList {
 		Creature mostHated = null;
 		int maxHate = 0;
 
-		for (FastMap.Entry<Integer, AggroInfo> e = aggroList.head(), mapEnd = aggroList.tail(); (e = e.getNext()) != mapEnd;) {
+		for (FastMap.Entry<Integer, AggroInfo> e = aggroList.head(), mapEnd = aggroList
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			AggroInfo ai = e.getValue();
 			if (ai == null)
 				continue;
@@ -301,20 +303,17 @@ public class AggroList {
 		}
 		return totalDamage;
 	}
-	
-	/*public int getCountPlayer(){
-		int res = 0;
-		for (AggroInfo ai : aggroList.values()) {
-			if (ai.getAttacker() instanceof Player){
-				res++;
-			}
-		}
-		return res;
-	}*/
+
+	/*
+	 * public int getCountPlayer(){ int res = 0; for (AggroInfo ai :
+	 * aggroList.values()) { if (ai.getAttacker() instanceof Player){ res++; } }
+	 * return res; }
+	 */
 
 	/**
-	 * Used to get a list of AggroInfo with player/group/alliance damages combined. - Includes only AggroInfo with
-	 * PlayerAlliance, PlayerGroup, and Player objects.
+	 * Used to get a list of AggroInfo with player/group/alliance damages combined.
+	 * - Includes only AggroInfo with PlayerAlliance, PlayerGroup, and Player
+	 * objects.
 	 * 
 	 * @return finalDamageList including players/groups/alliances
 	 */
@@ -343,25 +342,21 @@ public class AggroList {
 
 				if (player.isInTeam()) {
 					source = player.getCurrentTeam();
-				}
-				else {
+				} else {
 					source = player;
 				}
 
 				if (list.containsKey(source.getObjectId())) {
 					list.get(source.getObjectId()).addDamage(ai.getDamage());
-				}
-				else {
+				} else {
 					AggroInfo aggro = new AggroInfo(source);
 					aggro.setDamage(ai.getDamage());
 					list.put(source.getObjectId(), aggro);
 				}
-			}
-			else if (list.containsKey(player.getObjectId())) {
+			} else if (list.containsKey(player.getObjectId())) {
 				// Summon or other assistance
 				list.get(player.getObjectId()).addDamage(ai.getDamage());
-			}
-			else {
+			} else {
 				// Create a separate object so we don't taint current list.
 				AggroInfo aggro = new AggroInfo(player);
 				aggro.addDamage(ai.getDamage());
@@ -373,8 +368,8 @@ public class AggroList {
 	}
 
 	protected boolean isAware(Creature creature) {
-		return creature != null && !creature.getObjectId().equals(owner.getObjectId()) && 
-			(creature.isEnemy(owner) || DataManager.TRIBE_RELATIONS_DATA.isHostileRelation(owner.getTribe(), creature.getTribe()));
+		return creature != null && !creature.getObjectId().equals(owner.getObjectId()) && (creature.isEnemy(owner)
+				|| DataManager.TRIBE_RELATIONS_DATA.isHostileRelation(owner.getTribe(), creature.getTribe()));
 	}
 
 	public static abstract class AddDamageValueCallback implements Callback<AggroList> {

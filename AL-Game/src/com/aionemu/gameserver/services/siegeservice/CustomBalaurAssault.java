@@ -1,28 +1,29 @@
 package com.aionemu.gameserver.services.siegeservice;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.assemblednpc.AssembledNpc;
 import com.aionemu.gameserver.model.assemblednpc.AssembledNpcPart;
 import com.aionemu.gameserver.model.gameobjects.Creature;
+import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.siege.SiegeNpc;
-import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.siege.Influence;
 import com.aionemu.gameserver.model.siege.SiegeRace;
-import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.templates.assemblednpc.AssembledNpcTemplate;
 import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_NPC_ASSEMBLER;
 import com.aionemu.gameserver.spawnengine.SpawnEngine;
-import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
+import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.world.World;
-import java.util.Iterator;
+
 import javolution.util.FastList;
 
 /**
@@ -51,13 +52,12 @@ public class CustomBalaurAssault {
 	private static SiegeRace selectTarget() {
 		float elyosInfl = Influence.getInstance().getElyos();
 		float asmosInfl = Influence.getInstance().getAsmos();
-		//float balaurInfl = Influence.getInstance().getBalaur();
+		// float balaurInfl = Influence.getInstance().getBalaur();
 		SiegeRace targetRace = SiegeRace.BALAUR;
 
 		if ((Rnd.get() < asmosInfl)) {
 			targetRace = SiegeRace.ASMODIANS;
-		}
-		else if (Rnd.get() < elyosInfl) {
+		} else if (Rnd.get() < elyosInfl) {
 			targetRace = SiegeRace.ELYOS;
 		}
 
@@ -77,7 +77,7 @@ public class CustomBalaurAssault {
 		int templateId;
 		SiegeSpawnTemplate spawn = null;
 
-		float interval = (float) (Math.PI * 2.0f / (amount/2));
+		float interval = (float) (Math.PI * 2.0f / (amount / 2));
 		float x1;
 		float y1;
 
@@ -111,26 +111,25 @@ public class CustomBalaurAssault {
 		idList.add(250182);
 		idList.add(250187);
 
-		for( int i = 0; amount > i; i++) {
+		for (int i = 0; amount > i; i++) {
 			int hateValue;
-			if(i < (amount/2)) {
-				x1 = (float)(Math.cos( interval * i ) * radius1);
-				y1 = (float)(Math.sin( interval * i ) * radius1);
+			if (i < (amount / 2)) {
+				x1 = (float) (Math.cos(interval * i) * radius1);
+				y1 = (float) (Math.sin(interval * i) * radius1);
 				hateValue = 5000;
-			}
-			else {
-				x1 = (float)(Math.cos( interval * i ) * radius2);
-				y1 = (float)(Math.sin( interval * i ) * radius2);
+			} else {
+				x1 = (float) (Math.cos(interval * i) * radius2);
+				y1 = (float) (Math.sin(interval * i) * radius2);
 				hateValue = 500;
 			}
-			templateId = idList.get((int)(Math.random() * idList.size()));
-			spawn = SpawnEngine.addNewSiegeSpawn(worldId, templateId, x + x1 , y + y1, z, heading);
+			templateId = idList.get((int) (Math.random() * idList.size()));
+			spawn = SpawnEngine.addNewSiegeSpawn(worldId, templateId, x + x1, y + y1, z, heading);
 
 			visibleObject = SpawnEngine.spawnObject(spawn, 1);
 			despawnList.add(visibleObject);
 
-			Creature attaker = (Creature)visibleObject;
-			attaker.getAggroList().addHate((Creature)target, hateValue, false);
+			Creature attaker = (Creature) visibleObject;
+			attaker.getAggroList().addHate((Creature) target, hateValue, false);
 		}
 
 		despawnAttakers(despawnList, despawnTime);
@@ -139,13 +138,14 @@ public class CustomBalaurAssault {
 	}
 
 	private static void spawnRegularBalaurs(int siegeLocationId) {
-//		List<SiegeSpawnTemplate> siegeSpawns = DataManager.SPAWNS_DATA2.getSiegeSpawnsByLocId(siegeLocationId);
-//		for (SiegeSpawnTemplate st : siegeSpawns) {
-//			if (st.getSiegeRace() != SiegeRace.BALAUR) {
-//				continue;
-//			}
-//			SpawnEngine.spawnObject(st, 1);
-//		}
+		// List<SiegeSpawnTemplate> siegeSpawns =
+		// DataManager.SPAWNS_DATA2.getSiegeSpawnsByLocId(siegeLocationId);
+		// for (SiegeSpawnTemplate st : siegeSpawns) {
+		// if (st.getSiegeRace() != SiegeRace.BALAUR) {
+		// continue;
+		// }
+		// SpawnEngine.spawnObject(st, 1);
+		// }
 	}
 
 	private static void spawnDredgion() {
@@ -155,7 +155,8 @@ public class CustomBalaurAssault {
 		for (AssembledNpcTemplate.AssembledNpcPartTemplate npcPart : template.getAssembledNpcPartTemplates()) {
 			assembledPatrs.add(new AssembledNpcPart(IDFactory.getInstance().nextId(), npcPart));
 		}
-		AssembledNpc npc = new AssembledNpc(template.getRouteId(), template.getMapId(), template.getLiveTime(), assembledPatrs);
+		AssembledNpc npc = new AssembledNpc(template.getRouteId(), template.getMapId(), template.getLiveTime(),
+				assembledPatrs);
 		Iterator<Player> iter = World.getInstance().getPlayersIterator();
 		Player findedPlayer = null;
 		while (iter.hasNext()) {
@@ -168,11 +169,11 @@ public class CustomBalaurAssault {
 		ThreadPoolManager.getInstance().schedule(new Runnable() {
 			@Override
 			public void run() {
-				//int despawnCount = 0;
-				for(VisibleObject visObj : despawnList)	{
-					if(visObj != null && visObj.isSpawned()) {
+				// int despawnCount = 0;
+				for (VisibleObject visObj : despawnList) {
+					if (visObj != null && visObj.isSpawned()) {
 						visObj.getController().delete();
-						//despawnCount++;
+						// despawnCount++;
 					}
 				}
 			}

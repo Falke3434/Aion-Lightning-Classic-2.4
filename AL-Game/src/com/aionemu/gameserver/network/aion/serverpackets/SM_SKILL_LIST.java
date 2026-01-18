@@ -37,7 +37,8 @@ public class SM_SKILL_LIST extends AionServerPacket {
 	boolean isNew = false;
 
 	/**
-	 * This constructor is used on player entering the world Constructs new <tt>SM_SKILL_LIST </tt> packet
+	 * This constructor is used on player entering the world Constructs new
+	 * <tt>SM_SKILL_LIST </tt> packet
 	 */
 	public SM_SKILL_LIST(Player player) {
 		this.skillList = player.getSkillList().getAllSkills();

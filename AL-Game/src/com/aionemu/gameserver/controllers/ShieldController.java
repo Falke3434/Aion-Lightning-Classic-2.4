@@ -23,6 +23,7 @@ import com.aionemu.gameserver.model.shield.Shield;
 import com.aionemu.gameserver.model.siege.FortressLocation;
 import com.aionemu.gameserver.model.siege.SiegeRace;
 import com.aionemu.gameserver.services.SiegeService;
+
 import javolution.util.FastMap;
 
 /**

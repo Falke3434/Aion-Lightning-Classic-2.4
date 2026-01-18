@@ -19,12 +19,11 @@ package com.aionemu.gameserver.model.gameobjects.player.emotion;
 import com.aionemu.gameserver.model.IExpirable;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 
-
 /**
  * @author MrPoke
  *
  */
-public class Emotion implements IExpirable{
+public class Emotion implements IExpirable {
 	private int id;
 	private int dispearTime;
 
@@ -44,10 +43,10 @@ public class Emotion implements IExpirable{
 		return id;
 	}
 
-	public int getRemainingTime(){
+	public int getRemainingTime() {
 		if (dispearTime == 0)
 			return 0;
-		return dispearTime-(int)(System.currentTimeMillis()/1000);
+		return dispearTime - (int) (System.currentTimeMillis() / 1000);
 	}
 
 	@Override
@@ -58,7 +57,7 @@ public class Emotion implements IExpirable{
 	@Override
 	public void expireEnd(Player player) {
 		player.getEmotions().remove(id);
-		
+
 	}
 
 	@Override

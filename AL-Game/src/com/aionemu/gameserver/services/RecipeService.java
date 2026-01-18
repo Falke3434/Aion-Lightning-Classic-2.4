@@ -33,7 +33,8 @@ public class RecipeService {
 		}
 
 		if (!player.getSkillList().isSkillPresent(template.getSkillid())) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CRAFT_RECIPE_CANT_LEARN_SKILL(DataManager.SKILL_DATA.getSkillTemplate(template.getSkillid()).getNameId()));
+			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_CRAFT_RECIPE_CANT_LEARN_SKILL(
+					DataManager.SKILL_DATA.getSkillTemplate(template.getSkillid()).getNameId()));
 			return null;
 		}
 
@@ -47,11 +48,11 @@ public class RecipeService {
 
 	public static boolean addRecipe(Player player, int recipeId, boolean useValidation) {
 		RecipeTemplate template = null;
-		if(useValidation)
+		if (useValidation)
 			template = validateNewRecipe(player, recipeId);
 		else
 			template = DataManager.RECIPE_DATA.getRecipeTemplateById(recipeId);
-		
+
 		if (template == null)
 			return false;
 

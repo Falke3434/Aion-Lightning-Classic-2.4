@@ -84,8 +84,8 @@ public class BrokerItem implements Comparable<BrokerItem> {
 	 * @param itemBrokerRace
 	 */
 	public BrokerItem(Item item, int itemId, int itemUniqueId, long itemCount, String itemCreator, long price,
-		String seller, int sellerId, BrokerRace itemBrokerRace, boolean isSold, boolean isSettled, Timestamp expireTime,
-		Timestamp settleTime) {
+			String seller, int sellerId, BrokerRace itemBrokerRace, boolean isSold, boolean isSettled,
+			Timestamp expireTime, Timestamp settleTime) {
 		this.item = item;
 		this.itemId = itemId;
 		this.itemUniqueId = itemUniqueId;
@@ -100,8 +100,7 @@ public class BrokerItem implements Comparable<BrokerItem> {
 			this.isSold = true;
 			this.isSettled = true;
 
-		}
-		else {
+		} else {
 			this.isSold = isSold;
 			this.isSettled = isSettled;
 		}
@@ -113,7 +112,8 @@ public class BrokerItem implements Comparable<BrokerItem> {
 	}
 
 	/**
-	 * @param return itemCreator
+	 * @param return
+	 *            itemCreator
 	 */
 	public String getItemCreator() {
 		if (itemCreator == null)
@@ -123,7 +123,7 @@ public class BrokerItem implements Comparable<BrokerItem> {
 
 	/**
 	 * @param itemCreator
-	 *          the itemCreator to set
+	 *            the itemCreator to set
 	 */
 	public void setItemCreator(String itemCreator) {
 		this.itemCreator = itemCreator;
@@ -135,7 +135,7 @@ public class BrokerItem implements Comparable<BrokerItem> {
 	public Item getItem() {
 		return item;
 	}
-	
+
 	public boolean isCanceled() {
 		return isCanceled;
 	}
@@ -193,17 +193,17 @@ public class BrokerItem implements Comparable<BrokerItem> {
 
 	public void setPersistentState(PersistentState persistentState) {
 		switch (persistentState) {
-			case DELETED:
-				if (this.state == PersistentState.NEW)
-					this.state = PersistentState.NOACTION;
-				else
-					this.state = PersistentState.DELETED;
+		case DELETED:
+			if (this.state == PersistentState.NEW)
+				this.state = PersistentState.NOACTION;
+			else
+				this.state = PersistentState.DELETED;
+			break;
+		case UPDATE_REQUIRED:
+			if (this.state == PersistentState.NEW)
 				break;
-			case UPDATE_REQUIRED:
-				if (this.state == PersistentState.NEW)
-					break;
-			default:
-				this.state = persistentState;
+		default:
+			this.state = persistentState;
 		}
 
 	}
@@ -370,8 +370,7 @@ public class BrokerItem implements Comparable<BrokerItem> {
 		int result = 0;
 		if (aThis == null && aThat != null) {
 			result = -1;
-		}
-		else if (aThis != null && aThat == null) {
+		} else if (aThis != null && aThat == null) {
 			result = 1;
 		}
 		return result;
@@ -388,24 +387,24 @@ public class BrokerItem implements Comparable<BrokerItem> {
 	 */
 	public static Comparator<BrokerItem> getComparatoryByType(int sortType) {
 		switch (sortType) {
-			case 0:
-				return NAME_SORT_ASC;
-			case 1:
-				return NAME_SORT_DESC;
-			case 2:
-				return LEVEL_SORT_ASC;
-			case 3:
-				return LEVEL_SORT_DESC;
-			case 4:
-				return PRICE_SORT_ASC;
-			case 5:
-				return PRICE_SORT_DESC;
-			case 6:
-				return PIECE_PRICE_SORT_ASC;
-			case 7:
-				return PIECE_PRICE_SORT_DESC;
-			default:
-				throw new IllegalArgumentException("Illegal sort type for broker items");
+		case 0:
+			return NAME_SORT_ASC;
+		case 1:
+			return NAME_SORT_DESC;
+		case 2:
+			return LEVEL_SORT_ASC;
+		case 3:
+			return LEVEL_SORT_DESC;
+		case 4:
+			return PRICE_SORT_ASC;
+		case 5:
+			return PRICE_SORT_DESC;
+		case 6:
+			return PIECE_PRICE_SORT_ASC;
+		case 7:
+			return PIECE_PRICE_SORT_DESC;
+		default:
+			throw new IllegalArgumentException("Illegal sort type for broker items");
 		}
 	}
 

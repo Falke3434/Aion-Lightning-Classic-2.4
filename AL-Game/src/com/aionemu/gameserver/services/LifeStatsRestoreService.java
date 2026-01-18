@@ -62,7 +62,7 @@ public class LifeStatsRestoreService {
 	 */
 	public Future<?> scheduleFpReduceTask(final PlayerLifeStats lifeStats) {
 		return ThreadPoolManager.getInstance().scheduleAtFixedRate(new FpReduceTask(lifeStats), 2000,
-			DEFAULT_FPREDUCE_DELAY);
+				DEFAULT_FPREDUCE_DELAY);
 	}
 
 	/**
@@ -71,7 +71,7 @@ public class LifeStatsRestoreService {
 	 */
 	public Future<?> scheduleFpRestoreTask(PlayerLifeStats lifeStats) {
 		return ThreadPoolManager.getInstance().scheduleAtFixedRate(new FpRestoreTask(lifeStats), 2000,
-			DEFAULT_FPRESTORE_DELAY);
+				DEFAULT_FPRESTORE_DELAY);
 	}
 
 	public static LifeStatsRestoreService getInstance() {
@@ -92,8 +92,7 @@ public class LifeStatsRestoreService {
 			if (!inWorld || lifeStats.isAlreadyDead() || lifeStats.isFullyRestoredHp()) {
 				lifeStats.cancelRestoreTask();
 				lifeStats = null;
-			}
-			else {
+			} else {
 				lifeStats.restoreHp();
 			}
 		}
@@ -113,8 +112,7 @@ public class LifeStatsRestoreService {
 			if (!inWorld || lifeStats.isAlreadyDead() || lifeStats.isFullyRestoredHpMp()) {
 				lifeStats.cancelRestoreTask();
 				lifeStats = null;
-			}
-			else {
+			} else {
 				lifeStats.restoreHp();
 				lifeStats.restoreMp();
 			}
@@ -132,7 +130,7 @@ public class LifeStatsRestoreService {
 		@Override
 		public void run() {
 			boolean inWorld = World.getInstance().isInWorld(lifeStats.getOwner());
-			if (!inWorld || lifeStats.isAlreadyDead()){
+			if (!inWorld || lifeStats.isAlreadyDead()) {
 				lifeStats.cancelFpReduce();
 				lifeStats = null;
 				return;
@@ -141,13 +139,12 @@ public class LifeStatsRestoreService {
 			if (lifeStats.getCurrentFp() == 0) {
 				if (lifeStats.getOwner().getFlyState() > 0) {
 					lifeStats.getOwner().getFlyController().endFly();
-				}
-				else {
+				} else {
 					lifeStats.triggerFpRestore();
 				}
-			}
-			else {
-				int reduceFp = lifeStats.getOwner().getFlyState() == 2 && lifeStats.getOwner().isInsideZoneType(ZoneType.FLY) ? 1 : 2;
+			} else {
+				int reduceFp = lifeStats.getOwner().getFlyState() == 2
+						&& lifeStats.getOwner().isInsideZoneType(ZoneType.FLY) ? 1 : 2;
 				lifeStats.reduceFp(reduceFp);
 				lifeStats.specialrestoreFp();
 			}
@@ -167,8 +164,7 @@ public class LifeStatsRestoreService {
 			if (lifeStats.isAlreadyDead() || lifeStats.isFlyTimeFullyRestored()) {
 				lifeStats.cancelFpRestore();
 				lifeStats = null;
-			}
-			else {
+			} else {
 				lifeStats.restoreFp();
 			}
 		}

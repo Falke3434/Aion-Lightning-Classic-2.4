@@ -51,13 +51,14 @@ public class CubeExpandService {
 	 * @param npc
 	 */
 	public static void expandCube(final Player player, Npc npc) {
-		final CubeExpandTemplate expandTemplate = DataManager.CUBEEXPANDER_DATA.getCubeExpandListTemplate(npc.getNpcId());
+		final CubeExpandTemplate expandTemplate = DataManager.CUBEEXPANDER_DATA
+				.getCubeExpandListTemplate(npc.getNpcId());
 
 		if (expandTemplate == null) {
 			log.error("Cube Expand Template could not be found for Npc ID: " + npc.getObjectId());
 			return;
 		}
-	
+
 		if (npcCanExpandLevel(expandTemplate, player.getNpcExpands() + 1) && canExpand(player)) {
 			/**
 			 * Check if player is allowed to expand by buying
@@ -90,13 +91,12 @@ public class CubeExpandService {
 			};
 
 			boolean result = player.getResponseRequester().putRequest(SM_QUESTION_WINDOW.STR_WAREHOUSE_EXPAND_WARNING,
-				responseHandler);
+					responseHandler);
 			if (result) {
-				PacketSendUtility.sendPacket(player, new SM_QUESTION_WINDOW(SM_QUESTION_WINDOW.STR_WAREHOUSE_EXPAND_WARNING, 0,
-					String.valueOf(price)));
+				PacketSendUtility.sendPacket(player, new SM_QUESTION_WINDOW(
+						SM_QUESTION_WINDOW.STR_WAREHOUSE_EXPAND_WARNING, 0, String.valueOf(price)));
 			}
-		}
-		else
+		} else
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300430));
 	}
 
@@ -104,13 +104,14 @@ public class CubeExpandService {
 	 * Expands the cubes
 	 * 
 	 * @param player
-	 * @param isNpcExpand TODO
+	 * @param isNpcExpand
+	 *            TODO
 	 */
 	public static void expand(Player player, boolean isNpcExpand) {
 		if (!canExpand(player))
 			return;
 		PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300431, "9")); // 9 Slots added
-		if(isNpcExpand)
+		if (isNpcExpand)
 			player.setNpcExpands(player.getNpcExpands() + 1);
 		else
 			player.setQuestExpands(player.getQuestExpands() + 1);
@@ -153,7 +154,8 @@ public class CubeExpandService {
 	}
 
 	/**
-	 * The guy who created cube template should blame himself :) One day I will rewrite them
+	 * The guy who created cube template should blame himself :) One day I will
+	 * rewrite them
 	 * 
 	 * @param clist
 	 * @param level

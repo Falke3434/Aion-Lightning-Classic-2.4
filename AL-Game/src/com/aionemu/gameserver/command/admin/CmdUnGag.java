@@ -13,8 +13,6 @@ import com.aionemu.gameserver.world.World;
  * @author Watson
  */
 public class CmdUnGag extends BaseCommand {
-	
-	
 
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 2) {
@@ -38,4 +36,3 @@ public class CmdUnGag extends BaseCommand {
 		PacketSendUtility.sendMessage(admin, "Player " + name + " ungagged");
 	}
 }
-

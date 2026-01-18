@@ -12,18 +12,18 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  * //Syntax : //useskill <skillId> <skillLevel> [true:justEffect]
  */
 public class CmdUseSkill extends BaseCommand {
-		
+
 	public void execute(Player admin, String... params) {
 		if (params.length < 2 || params.length > 3) {
 			showHelp(admin);
 			return;
 		}
-		
+
 		Creature target = getTarget(admin, false);
 		if (target == null) {
-			
+
 		}
-		
+
 		int skillId = ParseInteger(params[0]);
 		int skillLevel = ParseInteger(params[1]);
 
@@ -37,12 +37,11 @@ public class CmdUseSkill extends BaseCommand {
 			PacketSendUtility.sendMessage(admin, "No skill template id:" + skillId);
 			return;
 		}
-			
+
 		if (params.length == 3 && params[2].equalsIgnoreCase("true")) {
-			SkillEngine.getInstance().applyEffectDirectly(skillId, target, (Creature)target.getTarget(), 2000);
+			SkillEngine.getInstance().applyEffectDirectly(skillId, target, (Creature) target.getTarget(), 2000);
 			PacketSendUtility.sendMessage(admin, "applyingskillid:" + skillId);
-		}
-		else
+		} else
 			target.getController().useSkill(skillId, skillLevel);
 	}
 }

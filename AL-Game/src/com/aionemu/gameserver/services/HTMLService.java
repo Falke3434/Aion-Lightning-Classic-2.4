@@ -17,6 +17,7 @@
 
 package com.aionemu.gameserver.services;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.slf4j.Logger;
@@ -38,7 +39,6 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import java.util.ArrayList;
 
 /**
  * Use this service to send raw html to the client.
@@ -56,7 +56,7 @@ public class HTMLService {
 		sb.append("<reward_items multi_count='").append(template.getRewardCount()).append("'>\n");
 		for (SurveyTemplate survey : template.getSurveys()) {
 			sb.append("<item_id count='").append(survey.getCount()).append("'>").append(survey.getItemId())
-				.append("</item_id>\n");
+					.append("</item_id>\n");
 		}
 		sb.append("</reward_items>\n");
 		context = context.replace("%reward%", sb);
@@ -93,8 +93,7 @@ public class HTMLService {
 						to = html.length();
 					String sub = html.substring(from, to);
 					player.getClientConnection().sendPacket(new SM_QUESTIONNAIRE(messageId, i, packet_count, sub));
-				}
-				catch (Exception e) {
+				} catch (Exception e) {
 					log.error("htmlservice.sendData", e);
 				}
 			}
@@ -103,8 +102,8 @@ public class HTMLService {
 
 	public static void sendGuideHtml(Player player) {
 		if (player.getLevel() > 1) {
-			GuideTemplate[] surveyTemplate = DataManager.GUIDE_HTML_DATA.getTemplatesFor(player.getPlayerClass(), player
-				.getRace(), player.getLevel());
+			GuideTemplate[] surveyTemplate = DataManager.GUIDE_HTML_DATA.getTemplatesFor(player.getPlayerClass(),
+					player.getRace(), player.getLevel());
 
 			for (GuideTemplate template : surveyTemplate) {
 				if (!template.isActivated())
@@ -127,8 +126,7 @@ public class HTMLService {
 			if (template != null) {
 				if (template.isActivated())
 					sendData(player, guide.getGuideId(), getHTMLTemplate(template));
-			}
-			else {
+			} else {
 				log.warn("Null guide template for title: {}", guide.getTitle());
 			}
 		}
@@ -160,10 +158,9 @@ public class HTMLService {
 				return;
 			}
 			List<SurveyTemplate> templates = null;
-			if(template.getSurveys().size() != template.getRewardCount()) {
-				 templates = getSurveyTemplates(template.getSurveys(), items);
-			}
-			else {
+			if (template.getSurveys().size() != template.getRewardCount()) {
+				templates = getSurveyTemplates(template.getSurveys(), items);
+			} else {
 				templates = template.getSurveys();
 			}
 			if (templates.isEmpty()) {
@@ -172,7 +169,8 @@ public class HTMLService {
 			for (SurveyTemplate item : templates) {
 				ItemService.addItem(player, item.getItemId(), item.getCount());
 				if (LoggingConfig.LOG_ITEM) {
-					log.info(String.format("[ITEM] Item Guide ID/Count - %d/%d to player %s.", item.getItemId(), item.getCount(), player.getName()));
+					log.info(String.format("[ITEM] Item Guide ID/Count - %d/%d to player %s.", item.getItemId(),
+							item.getCount(), player.getName()));
 				}
 			}
 			DAOManager.getDAO(GuideDAO.class).deleteGuide(guide.getGuideId());
@@ -183,7 +181,7 @@ public class HTMLService {
 	private static List<SurveyTemplate> getSurveyTemplates(List<SurveyTemplate> surveys, List<Integer> items) {
 		List<SurveyTemplate> templates = new ArrayList<SurveyTemplate>();
 		for (SurveyTemplate survey : surveys) {
-			if(items.contains(survey.getItemId())) {
+			if (items.contains(survey.getItemId())) {
 				templates.add(survey);
 			}
 		}

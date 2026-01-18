@@ -16,14 +16,17 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import com.aionemu.gameserver.model.templates.assemblednpc.AssembledNpcTemplate;
 import java.util.List;
 import java.util.Map;
+
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
+import com.aionemu.gameserver.model.templates.assemblednpc.AssembledNpcTemplate;
+
 import javolution.util.FastMap;
 
 /**
@@ -36,7 +39,8 @@ public class AssembledNpcsData {
 
 	@XmlElement(name = "assembled_npc", type = AssembledNpcTemplate.class)
 	private List<AssembledNpcTemplate> templates;
-	private final Map<Integer, AssembledNpcTemplate> assembledNpcsTemplates = new FastMap<Integer, AssembledNpcTemplate>().shared();
+	private final Map<Integer, AssembledNpcTemplate> assembledNpcsTemplates = new FastMap<Integer, AssembledNpcTemplate>()
+			.shared();
 
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (AssembledNpcTemplate template : templates) {
@@ -53,5 +57,5 @@ public class AssembledNpcsData {
 	public AssembledNpcTemplate getAssembledNpcTemplate(Integer i) {
 		return assembledNpcsTemplates.get(i);
 	}
-	
+
 }

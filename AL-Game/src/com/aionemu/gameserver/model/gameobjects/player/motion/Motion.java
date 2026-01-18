@@ -22,15 +22,14 @@ import java.util.Map;
 import com.aionemu.gameserver.model.IExpirable;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 
-
 /**
  * @author MrPoke
  *
  */
-public class Motion implements IExpirable{
-	
+public class Motion implements IExpirable {
+
 	static final Map<Integer, Integer> motionType = new HashMap<Integer, Integer>();
-	static{
+	static {
 		motionType.put(1, 1);
 		motionType.put(2, 2);
 		motionType.put(3, 3);
@@ -61,10 +60,10 @@ public class Motion implements IExpirable{
 		return id;
 	}
 
-	public int getRemainingTime(){
+	public int getRemainingTime() {
 		if (deletionTime == 0)
 			return 0;
-		return deletionTime-(int)(System.currentTimeMillis()/1000);
+		return deletionTime - (int) (System.currentTimeMillis() / 1000);
 	}
 
 	/**
@@ -75,7 +74,8 @@ public class Motion implements IExpirable{
 	}
 
 	/**
-	 * @param active the active to set
+	 * @param active
+	 *            the active to set
 	 */
 	public void setActive(boolean active) {
 		this.active = active;

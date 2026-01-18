@@ -37,9 +37,9 @@ public class OneTimeBoostSkillCriticalEffect extends BufEffect {
 	@XmlAttribute
 	private int count;
 	@XmlAttribute
-	private int value;//TODO handle this
+	private int value;// TODO handle this
 	@XmlAttribute
-	private boolean percent;//TODO handle this
+	private boolean percent;// TODO handle this
 
 	@Override
 	public void startEffect(final Effect effect) {

@@ -48,10 +48,9 @@ public class AlwaysDodgeEffect extends EffectTemplate {
 						effect.endEffect();
 					else
 						value--;
-					
+
 					return true;
-				}
-				else
+				} else
 					return false;
 			}
 

@@ -16,13 +16,14 @@
  */
 package com.aionemu.gameserver.services.instance;
 
+import org.joda.time.DateTime;
+
 import com.aionemu.gameserver.configs.network.NetworkConfig;
 import com.aionemu.gameserver.model.autogroup.AutoGroupsType;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.items.storage.Storage;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
-import org.joda.time.DateTime;
 
 /**
  *
@@ -46,21 +47,21 @@ public class PvPArenaService {
 	}
 
 	public static boolean checkItem(Player player, AutoGroupsType agt) {
-		if(NetworkConfig.GAMESERVER_ID == 100){
+		if (NetworkConfig.GAMESERVER_ID == 100) {
 			return true;
 		}
 		Storage inventory = player.getInventory();
 		if (agt.isPvPFFAArena()) {
 			return inventory.getItemCountByItemId(186000135) > 0;
 		}
-		if ( agt.isPvPSoloArena()) {
+		if (agt.isPvPSoloArena()) {
 			return inventory.getItemCountByItemId(186000136) > 0;
 		}
 		return true;
 	}
 
 	private static boolean checkTime(AutoGroupsType agt) {
-		if(NetworkConfig.GAMESERVER_ID == 100){
+		if (NetworkConfig.GAMESERVER_ID == 100) {
 			return true;
 		}
 		if (agt.isPvPSoloArena()) {
@@ -75,20 +76,22 @@ public class PvPArenaService {
 	private static boolean isPvPArenaAvailableSolo() {
 		DateTime now = DateTime.now();
 		int hour = now.getHourOfDay();
-		//int day = now.getDayOfWeek();
-		/*if (day == 6 || day == 7 || day == 3) {
-			return hour == 18 || hour == 13 || hour == 14 || hour == 22;
-		}*/
+		// int day = now.getDayOfWeek();
+		/*
+		 * if (day == 6 || day == 7 || day == 3) { return hour == 18 || hour == 13 ||
+		 * hour == 14 || hour == 22; }
+		 */
 		return hour == 12 || hour == 13 || hour == 18 || hour == 19 || hour == 22 || hour == 23;
 	}
 
 	private static boolean isPvPArenaAvailableGroupe() {
 		DateTime now = DateTime.now();
 		int hour = now.getHourOfDay();
-		//int day = now.getDayOfWeek();
-		/*if (day == 6 || day == 7 || day == 3) {
-			return hour == 18 || hour == 13 || hour == 14 || hour == 22;
-		}*/
+		// int day = now.getDayOfWeek();
+		/*
+		 * if (day == 6 || day == 7 || day == 3) { return hour == 18 || hour == 13 ||
+		 * hour == 14 || hour == 22; }
+		 */
 		return hour == 18 || hour == 19 || hour == 22 || hour == 23;
 	}
 }

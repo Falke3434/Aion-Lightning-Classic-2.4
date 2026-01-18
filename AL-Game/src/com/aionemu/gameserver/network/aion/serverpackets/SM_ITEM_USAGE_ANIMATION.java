@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -65,7 +64,8 @@ public class SM_ITEM_USAGE_ANIMATION extends AionServerPacket {
 		this.unk = unk;
 	}
 
-	public SM_ITEM_USAGE_ANIMATION(int playerObjId, int targetObjId, int itemObjId, int itemId, int time, int end, int unk) {
+	public SM_ITEM_USAGE_ANIMATION(int playerObjId, int targetObjId, int itemObjId, int itemId, int time, int end,
+			int unk) {
 		this.playerObjId = playerObjId;
 		this.targetObjId = targetObjId;
 		this.itemObjId = itemObjId;
@@ -94,6 +94,6 @@ public class SM_ITEM_USAGE_ANIMATION extends AionServerPacket {
 		writeC(0); // unk
 		writeC(1);
 		writeD(unk);
-		writeC(0);//unk
+		writeC(0);// unk
 	}
 }

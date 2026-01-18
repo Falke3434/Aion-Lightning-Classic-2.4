@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +28,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.aionemu.gameserver.model.PlayerClass;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.skillengine.model.SkillLearnTemplate;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer
@@ -82,8 +82,8 @@ public class SkillTreeData {
 	}
 
 	/**
-	 * Perform search for: - class specific skills (race = ALL) - class and race specific skills - non-specific skills
-	 * (race = ALL, class = ALL)
+	 * Perform search for: - class specific skills (race = ALL) - class and race
+	 * specific skills - non-specific skills (race = ALL, class = ALL)
 	 * 
 	 * @param playerClass
 	 * @param level
@@ -93,12 +93,12 @@ public class SkillTreeData {
 	public SkillLearnTemplate[] getTemplatesFor(PlayerClass playerClass, int level, Race race) {
 		List<SkillLearnTemplate> newSkills = new ArrayList<SkillLearnTemplate>();
 
-		List<SkillLearnTemplate> classRaceSpecificTemplates = templates.get(makeHash(playerClass.ordinal(), race.ordinal(),
-			level));
-		List<SkillLearnTemplate> classSpecificTemplates = templates.get(makeHash(playerClass.ordinal(),
-			Race.PC_ALL.ordinal(), level));
-		List<SkillLearnTemplate> generalTemplates = templates.get(makeHash(PlayerClass.ALL.ordinal(),
-			Race.PC_ALL.ordinal(), level));
+		List<SkillLearnTemplate> classRaceSpecificTemplates = templates
+				.get(makeHash(playerClass.ordinal(), race.ordinal(), level));
+		List<SkillLearnTemplate> classSpecificTemplates = templates
+				.get(makeHash(playerClass.ordinal(), Race.PC_ALL.ordinal(), level));
+		List<SkillLearnTemplate> generalTemplates = templates
+				.get(makeHash(PlayerClass.ALL.ordinal(), Race.PC_ALL.ordinal(), level));
 
 		if (classRaceSpecificTemplates != null)
 			newSkills.addAll(classRaceSpecificTemplates);

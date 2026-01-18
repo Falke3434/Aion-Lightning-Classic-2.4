@@ -32,7 +32,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  */
 public class ClassChangeService {
 
-	//TODO dialog enum
+	// TODO dialog enum
 	/**
 	 * @param player
 	 */
@@ -43,34 +43,33 @@ public class ClassChangeService {
 			if (player.getLevel() >= 9 && playerClass.isStartingClass()) {
 				if (playerRace == Race.ELYOS) {
 					switch (playerClass) {
-						case WARRIOR:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 2375, 1006));
-							break;
-						case SCOUT:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 2716, 1006));
-							break;
-						case MAGE:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3057, 1006));
-							break;
-						case PRIEST:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3398, 1006));
-							break;
+					case WARRIOR:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 2375, 1006));
+						break;
+					case SCOUT:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 2716, 1006));
+						break;
+					case MAGE:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3057, 1006));
+						break;
+					case PRIEST:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3398, 1006));
+						break;
 					}
-				}
-				else if (playerRace == Race.ASMODIANS) {
+				} else if (playerRace == Race.ASMODIANS) {
 					switch (playerClass) {
-						case WARRIOR:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3057, 2008));
-							break;
-						case SCOUT:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3398, 2008));
-							break;
-						case MAGE:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3739, 2008));
-							break;
-						case PRIEST:
-							PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 4080, 2008));
-							break;
+					case WARRIOR:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3057, 2008));
+						break;
+					case SCOUT:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3398, 2008));
+						break;
+					case MAGE:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3739, 2008));
+						break;
+					case PRIEST:
+						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 4080, 2008));
+						break;
 					}
 				}
 			}
@@ -86,30 +85,30 @@ public class ClassChangeService {
 		if (CustomConfig.ENABLE_SIMPLE_2NDCLASS) {
 			if (playerRace == Race.ELYOS) {
 				switch (dialogId) {
-					case 2376:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("1")));
-						break;
-					case 2461:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("2")));
-						break;
-					case 2717:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("4")));
-						break;
-					case 2802:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("5")));
-						break;
-					case 3058:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("7")));
-						break;
-					case 3143:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("8")));
-						break;
-					case 3399:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("10")));
-						break;
-					case 3484:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("11")));
-						break;
+				case 2376:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("1")));
+					break;
+				case 2461:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("2")));
+					break;
+				case 2717:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("4")));
+					break;
+				case 2802:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("5")));
+					break;
+				case 3058:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("7")));
+					break;
+				case 3143:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("8")));
+					break;
+				case 3399:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("10")));
+					break;
+				case 3484:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("11")));
+					break;
 				}
 				completeQuest(player, 1006);
 				completeQuest(player, 1007);
@@ -118,33 +117,32 @@ public class ClassChangeService {
 				if (player.havePermission(MembershipConfig.STIGMA_SLOT_QUEST)) {
 					completeQuest(player, 1929);
 				}
-			}
-			else if (playerRace == Race.ASMODIANS) {
+			} else if (playerRace == Race.ASMODIANS) {
 				switch (dialogId) {
-					case 3058:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("1")));
-						break;
-					case 3143:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("2")));
-						break;
-					case 3399:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("4")));
-						break;
-					case 3484:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("5")));
-						break;
-					case 3740:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("7")));
-						break;
-					case 3825:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("8")));
-						break;
-					case 4081:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("10")));
-						break;
-					case 4166:
-						setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("11")));
-						break;
+				case 3058:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("1")));
+					break;
+				case 3143:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("2")));
+					break;
+				case 3399:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("4")));
+					break;
+				case 3484:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("5")));
+					break;
+				case 3740:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("7")));
+					break;
+				case 3825:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("8")));
+					break;
+				case 4081:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("10")));
+					break;
+				case 4166:
+					setClass(player, PlayerClass.getPlayerClassById(Byte.parseByte("11")));
+					break;
 				}
 				completeQuest(player, 2008);
 				completeQuest(player, 2009);
@@ -157,13 +155,13 @@ public class ClassChangeService {
 			player.getController().upgradePlayer();
 		}
 	}
-	
+
 	private static void completeQuest(Player player, int questId) {
 		QuestState qs = player.getQuestStateList().getQuestState(questId);
 		if (qs == null) {
-			player.getQuestStateList().addQuest(questId, new QuestState(questId, QuestStatus.COMPLETE, 0, 0, 0, null, 0, null));
-		}
-		else {
+			player.getQuestStateList().addQuest(questId,
+					new QuestState(questId, QuestStatus.COMPLETE, 0, 0, 0, null, 0, null));
+		} else {
 			qs.setStatus(QuestStatus.COMPLETE);
 		}
 		PacketSendUtility.sendPacket(player, new SM_QUEST_ACTION(questId, QuestStatus.COMPLETE, 0));
@@ -189,21 +187,21 @@ public class ClassChangeService {
 			return false;
 		}
 		switch (oldClass) {
-			case WARRIOR:
-				if (playerClass == PlayerClass.GLADIATOR || playerClass == PlayerClass.TEMPLAR)
-					break;
-			case SCOUT:
-				if (playerClass == PlayerClass.ASSASSIN || playerClass == PlayerClass.RANGER)
-					break;
-			case MAGE:
-				if (playerClass == PlayerClass.SORCERER || playerClass == PlayerClass.SPIRIT_MASTER)
-					break;
-			case PRIEST:
-				if (playerClass == PlayerClass.CLERIC || playerClass == PlayerClass.CHANTER)
-					break;
-			default:
-				PacketSendUtility.sendMessage(player, "Invalid class switch chosen");
-				return false;
+		case WARRIOR:
+			if (playerClass == PlayerClass.GLADIATOR || playerClass == PlayerClass.TEMPLAR)
+				break;
+		case SCOUT:
+			if (playerClass == PlayerClass.ASSASSIN || playerClass == PlayerClass.RANGER)
+				break;
+		case MAGE:
+			if (playerClass == PlayerClass.SORCERER || playerClass == PlayerClass.SPIRIT_MASTER)
+				break;
+		case PRIEST:
+			if (playerClass == PlayerClass.CLERIC || playerClass == PlayerClass.CHANTER)
+				break;
+		default:
+			PacketSendUtility.sendMessage(player, "Invalid class switch chosen");
+			return false;
 		}
 		return true;
 	}

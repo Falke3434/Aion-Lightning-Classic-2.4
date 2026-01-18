@@ -16,11 +16,9 @@
  */
 package com.aionemu.gameserver.model.team2.group;
 
-
 import com.aionemu.gameserver.model.team2.TemporaryPlayerTeam;
 import com.aionemu.gameserver.model.team2.common.legacy.LootGroupRules;
 import com.aionemu.gameserver.utils.idfactory.IDFactory;
-
 
 /**
  * @author ATracer
@@ -31,7 +29,7 @@ public class PlayerGroup extends TemporaryPlayerTeam<PlayerGroupMember> {
 	private final PlayerGroupStats playerGroupStats;
 	private int groupType = 0x3F;
 	private int instancePoints = 0;
-	
+
 	public PlayerGroup(PlayerGroupMember leader) {
 		super(IDFactory.getInstance().nextId());
 		this.playerGroupStats = new PlayerGroupStats(this);
@@ -70,8 +68,7 @@ public class PlayerGroup extends TemporaryPlayerTeam<PlayerGroupMember> {
 	public final LootGroupRules getLootGroupRules() {
 		return lootGroupRules;
 	}
-        
-        
+
 	public void setLootGroupRules(LootGroupRules lootGroupRules) {
 		this.lootGroupRules = lootGroupRules;
 	}
@@ -83,15 +80,13 @@ public class PlayerGroup extends TemporaryPlayerTeam<PlayerGroupMember> {
 	public void setGroupType(int groupType) {
 		this.groupType = groupType;
 	}
-	
-	public void setGroupInstancePoints(int points)
-	{
-	    this.instancePoints = points;
+
+	public void setGroupInstancePoints(int points) {
+		this.instancePoints = points;
 	}
-	
-	public int getGroupInstancePoints()
-	{
-	    return instancePoints;
+
+	public int getGroupInstancePoints() {
+		return instancePoints;
 	}
 
 }

@@ -16,8 +16,12 @@
  */
 package com.aionemu.gameserver.model.autogroup;
 
-import static org.hamcrest.Matchers.*;
-import static ch.lambdaj.Lambda.*;
+import static ch.lambdaj.Lambda.having;
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.select;
+import static org.hamcrest.Matchers.equalTo;
+
+import java.util.List;
 
 import com.aionemu.gameserver.configs.main.PvPConfig;
 import com.aionemu.gameserver.model.PlayerClass;
@@ -27,7 +31,7 @@ import com.aionemu.gameserver.model.instance.instancereward.InstanceReward;
 import com.aionemu.gameserver.model.team2.group.PlayerGroup;
 import com.aionemu.gameserver.model.team2.group.PlayerGroupService;
 import com.aionemu.gameserver.world.WorldMapInstance;
-import java.util.List;
+
 import javolution.util.FastList;
 
 /**
@@ -41,7 +45,7 @@ public class AutoInstance {
 	private Race race;
 	private byte instanceMaskId;
 	public WorldMapInstance worldMapInstance;
-	private long startInstanceTime; 
+	private long startInstanceTime;
 	private AutoGroupsType agt;
 
 	public AutoInstance(Race race, byte instanceMaskId, WorldMapInstance worldMapInstance) {
@@ -69,7 +73,7 @@ public class AutoInstance {
 	}
 
 	public synchronized void enterToGroup(Player player) {
-		
+
 		List<Player> playersByRace = getPlayersInsideByRace(player.getRace());
 		if (playersByRace.size() == 1 && !playersByRace.get(0).isInGroup2()) {
 			PlayerGroup newGroup = PlayerGroupService.createGroup(playersByRace.get(0), player);
@@ -78,8 +82,7 @@ public class AutoInstance {
 			if (worldMapInstance.isRegistered(groupId)) {
 				worldMapInstance.register(groupId);
 			}
-		}
-		else if (!playersByRace.isEmpty() && playersByRace.get(0).isInGroup2()) {
+		} else if (!playersByRace.isEmpty() && playersByRace.get(0).isInGroup2()) {
 			PlayerGroupService.addPlayer(playersByRace.get(0).getPlayerGroup2(), player);
 			Integer object = player.getObjectId();
 			if (worldMapInstance.isRegistered(object)) {
@@ -108,14 +111,14 @@ public class AutoInstance {
 				continue;
 			}
 			switch (playerInside.getPlayerClass()) {
-				case GLADIATOR:
-				case ASSASSIN:
-				case RANGER:
-				case SORCERER:
-				case SPIRIT_MASTER:
-				case CHANTER:
-					dmgPlayers++;
-					break;
+			case GLADIATOR:
+			case ASSASSIN:
+			case RANGER:
+			case SORCERER:
+			case SPIRIT_MASTER:
+			case CHANTER:
+				dmgPlayers++;
+				break;
 			}
 		}
 		if (dmgPlayers < 4) {
@@ -130,16 +133,16 @@ public class AutoInstance {
 				continue;
 			}
 			switch (playerInside.getPlayerClass()) {
-				case CLERIC:
-					if (player.getPlayerClass() == PlayerClass.CLERIC) {
-						return false;
-					}
-					break;
-				case TEMPLAR:
-					if (player.getPlayerClass() == PlayerClass.TEMPLAR) {
-						return false;
-					}
-					break;
+			case CLERIC:
+				if (player.getPlayerClass() == PlayerClass.CLERIC) {
+					return false;
+				}
+				break;
+			case TEMPLAR:
+				if (player.getPlayerClass() == PlayerClass.TEMPLAR) {
+					return false;
+				}
+				break;
 			}
 		}
 		players.add(player);
@@ -151,15 +154,13 @@ public class AutoInstance {
 			if (getPlayersByRace(player.getRace()).size() >= 6) {
 				return false;
 			}
-		}
-		else if (agt.isPvPSoloArena() || agt.isTrainigPvPSoloArena()) {
+		} else if (agt.isPvPSoloArena() || agt.isTrainigPvPSoloArena()) {
 			if (getPlayerSize() >= 2) {
 				return false;
 			}
 			addPlayer(player);
 			return true;
-		}
-		else if (agt.isPvPFFAArena() || agt.isTrainigPvPFFAArena()) {
+		} else if (agt.isPvPFFAArena() || agt.isTrainigPvPFFAArena()) {
 			if (getPlayerSize() >= PvPConfig.CHOAS_NB_PLAYER) {
 				return false;
 			}
@@ -168,16 +169,16 @@ public class AutoInstance {
 		}
 
 		switch (player.getPlayerClass()) {
-			case GLADIATOR:
-			case ASSASSIN:
-			case RANGER:
-			case SORCERER:
-			case SPIRIT_MASTER:
-			case CHANTER:
-				return getDmgPlayerCount(player) < 4;
-			case CLERIC:
-			case TEMPLAR:
-				return canEnterSpecialPlayer(player);
+		case GLADIATOR:
+		case ASSASSIN:
+		case RANGER:
+		case SORCERER:
+		case SPIRIT_MASTER:
+		case CHANTER:
+			return getDmgPlayerCount(player) < 4;
+		case CLERIC:
+		case TEMPLAR:
+			return canEnterSpecialPlayer(player);
 		}
 		return false;
 	}
@@ -208,8 +209,8 @@ public class AutoInstance {
 
 	public boolean satisfyTime() {
 		InstanceReward<?> instanceReward = worldMapInstance.getInstanceHandler().getInstanceReward();
-		if (System.currentTimeMillis() - startInstanceTime < 240000 || 
-				(instanceReward != null && instanceReward.getInstanceScoreType().isEndProgress())) {
+		if (System.currentTimeMillis() - startInstanceTime < 240000
+				|| (instanceReward != null && instanceReward.getInstanceScoreType().isEndProgress())) {
 			return false;
 		}
 		int time = agt.getTime();
@@ -219,7 +220,7 @@ public class AutoInstance {
 		return System.currentTimeMillis() - startInstanceTime < time;
 	}
 
-	public void unregisterPlayer(Player player){
+	public void unregisterPlayer(Player player) {
 		players.remove(player);
 		playersInside.remove(player);
 	}
@@ -242,7 +243,7 @@ public class AutoInstance {
 	public boolean hasInstanceMask(byte instanceMaskId) {
 		return this.instanceMaskId == instanceMaskId;
 	}
-	
+
 	public void clear() {
 		players.clear();
 	}

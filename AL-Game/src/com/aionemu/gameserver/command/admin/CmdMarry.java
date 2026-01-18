@@ -14,8 +14,7 @@ import com.aionemu.gameserver.world.World;
  * @author synchro2
  */
 public class CmdMarry extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (!WeddingsConfig.WEDDINGS_ENABLE) {
 			PacketSendUtility.sendMessage(admin, "Weddings disabled.");
@@ -37,7 +36,8 @@ public class CmdMarry extends BaseCommand {
 			PacketSendUtility.sendMessage(admin, "You can't marry player on himself.");
 			return;
 		}
-		if (partner1.getWorldId() == 510010000 || partner1.getWorldId() == 520010000 || partner2.getWorldId() == 510010000 || partner2.getWorldId() == 520010000) {
+		if (partner1.getWorldId() == 510010000 || partner1.getWorldId() == 520010000
+				|| partner2.getWorldId() == 510010000 || partner2.getWorldId() == 520010000) {
 			PacketSendUtility.sendMessage(admin, "One of the players is in prison.");
 			return;
 		}

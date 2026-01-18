@@ -16,7 +16,11 @@
  */
 package com.aionemu.gameserver.model.templates.rewards;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlSeeAlso;
+import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.Race;
@@ -30,7 +34,8 @@ import com.aionemu.gameserver.model.templates.item.ItemTemplate;
  * <p>
  * Java class for IdReward complex type.
  * <p>
- * The following schema fragment specifies the expected content contained within this class.
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="IdReward">
@@ -71,17 +76,18 @@ public class IdReward {
 	}
 
 	/**
-	 * Method is used to check item race; Some items having PC_ALL really are not for both races, like some foods and
-	 * weapons
+	 * Method is used to check item race; Some items having PC_ALL really are not
+	 * for both races, like some foods and weapons
 	 * 
 	 * @param playerRace
-	 *          player's race
-	 * @return true if race is correct for player when overridden or not from templates
+	 *            player's race
+	 * @return true if race is correct for player when overridden or not from
+	 *         templates
 	 */
 	public boolean checkRace(Race playerRace) {
 		ItemTemplate template = DataManager.ITEM_DATA.getItemTemplate(id);
-		return template.getRace() == Race.PC_ALL && (race == null || race == playerRace) || template.getRace() != Race.PC_ALL
-			&& template.getRace() == playerRace;
+		return template.getRace() == Race.PC_ALL && (race == null || race == playerRace)
+				|| template.getRace() != Race.PC_ALL && template.getRace() == playerRace;
 	}
 
 }

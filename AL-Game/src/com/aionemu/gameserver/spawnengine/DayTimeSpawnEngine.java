@@ -28,9 +28,9 @@ import org.slf4j.LoggerFactory;
 
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
-import com.aionemu.gameserver.model.templates.spawns.SpawnTime;
 import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
+import com.aionemu.gameserver.model.templates.spawns.SpawnTime;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.gametime.DayTime;
 import com.aionemu.gameserver.utils.gametime.GameTimeManager;
@@ -64,7 +64,7 @@ public class DayTimeSpawnEngine {
 
 	private static void onDayTimeChange(final DayTime dayTime, boolean switchThread) {
 		log.info("DayTimeSpawnEngine: new day time is " + dayTime);
-		
+
 		Runnable dayChangeSpawnTask = new Runnable() {
 			@Override
 			public void run() {
@@ -96,9 +96,10 @@ public class DayTimeSpawnEngine {
 					SpawnTime spawnTime = spawn.getSpawnTime();
 
 					Collection<Integer> instances = World.getInstance().getWorldMap(spawn.getWorldId())
-						.getAvailableInstanceIds();
+							.getAvailableInstanceIds();
 
-					if (spawnTime.isAllowedDuring(dayTime) && (spawnTime.isNeedUpdate(dayTime) || spawnedObjectIds.isEmpty())) {
+					if (spawnTime.isAllowedDuring(dayTime)
+							&& (spawnTime.isNeedUpdate(dayTime) || spawnedObjectIds.isEmpty())) {
 						for (Integer instanceId : instances) {
 							if (spawn.hasPool()) {
 								for (int pool = 0; pool < spawn.getPool(); pool++) {
@@ -107,12 +108,11 @@ public class DayTimeSpawnEngine {
 									spawnedObjectIds.add(spawnObject.getObjectId());
 									spawnedCounter++;
 								}
-							}
-							else {
-								for(SpawnTemplate template : spawn.getSpawnTemplates()) {
+							} else {
+								for (SpawnTemplate template : spawn.getSpawnTemplates()) {
 									VisibleObject spawnObject = SpawnEngine.spawnObject(template, instanceId);
-								spawnedObjectIds.add(spawnObject.getObjectId());
-								spawnedCounter++;
+									spawnedObjectIds.add(spawnObject.getObjectId());
+									spawnedCounter++;
 								}
 							}
 						}
@@ -123,7 +123,7 @@ public class DayTimeSpawnEngine {
 			}
 		};
 
-		if(switchThread)
+		if (switchThread)
 			ThreadPoolManager.getInstance().execute(dayChangeSpawnTask);
 		else
 			dayChangeSpawnTask.run();

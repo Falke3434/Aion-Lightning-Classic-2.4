@@ -9,105 +9,103 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "pvp_zone_data")
 public class PvpZoneTemplate {
 
-    @XmlElement(name = "pvp_stage_world")
-    protected List<PvpZoneTemplate.PvpWorld> pvpWorld;
+	@XmlElement(name = "pvp_stage_world")
+	protected List<PvpZoneTemplate.PvpWorld> pvpWorld;
 
-    public List<PvpZoneTemplate.PvpWorld> getPvpWorld() {
-        if (pvpWorld == null) {
-            pvpWorld = new ArrayList<PvpZoneTemplate.PvpWorld>();
-        }
-        return pvpWorld;
-    }
+	public List<PvpZoneTemplate.PvpWorld> getPvpWorld() {
+		if (pvpWorld == null) {
+			pvpWorld = new ArrayList<PvpZoneTemplate.PvpWorld>();
+		}
+		return pvpWorld;
+	}
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "pvp_stage_world")
-    public static class PvpWorld {
+	@XmlAccessorType(XmlAccessType.FIELD)
+	@XmlType(name = "pvp_stage_world")
+	public static class PvpWorld {
 
-        @XmlElement(name = "pvp_stage")
-        protected List<PvpZoneTemplate.PvpStage> pvpStage;
-        @XmlAttribute(name = "mapId")
-        private int mapId;
+		@XmlElement(name = "pvp_stage")
+		protected List<PvpZoneTemplate.PvpStage> pvpStage;
+		@XmlAttribute(name = "mapId")
+		private int mapId;
 
-        public List<PvpZoneTemplate.PvpStage> getStage() {
-            if (pvpStage == null) {
-                pvpStage = new ArrayList<PvpZoneTemplate.PvpStage>();
-            }
-            return pvpStage;
-        }
+		public List<PvpZoneTemplate.PvpStage> getStage() {
+			if (pvpStage == null) {
+				pvpStage = new ArrayList<PvpZoneTemplate.PvpStage>();
+			}
+			return pvpStage;
+		}
 
-        public int getMapId() {
-            return mapId;
-        }
-        
-        public int getSize() {
-            return pvpStage.size();
-        }
-        
-        public PvpZoneTemplate.PvpStage getPositionForStage(int value){
-            return pvpStage.get(value);
-        }
-    }
+		public int getMapId() {
+			return mapId;
+		}
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "pvp_stage")
-    public static class PvpStage {
+		public int getSize() {
+			return pvpStage.size();
+		}
 
-        @XmlElement(name = "pvp_position")
-        protected List<PvpZoneTemplate.PvpPosition> pvpPosition;
-        @XmlAttribute(name = "id")
-        private int id;
-        @XmlAttribute(name = "time")
-        private int time;
+		public PvpZoneTemplate.PvpStage getPositionForStage(int value) {
+			return pvpStage.get(value);
+		}
+	}
 
-        public List<PvpZoneTemplate.PvpPosition> getPosition() {
-            if (pvpPosition == null) {
-                pvpPosition = new ArrayList<PvpZoneTemplate.PvpPosition>();
-            }
-            return pvpPosition;
-        }
+	@XmlAccessorType(XmlAccessType.FIELD)
+	@XmlType(name = "pvp_stage")
+	public static class PvpStage {
 
-        public int getId() {
-            return id;
-        }
+		@XmlElement(name = "pvp_position")
+		protected List<PvpZoneTemplate.PvpPosition> pvpPosition;
+		@XmlAttribute(name = "id")
+		private int id;
+		@XmlAttribute(name = "time")
+		private int time;
 
-        public int getTime() {
-            return time;
-        }
-    }
+		public List<PvpZoneTemplate.PvpPosition> getPosition() {
+			if (pvpPosition == null) {
+				pvpPosition = new ArrayList<PvpZoneTemplate.PvpPosition>();
+			}
+			return pvpPosition;
+		}
 
-    @XmlAccessorType(XmlAccessType.FIELD)
-    @XmlType(name = "pvp_position")
-    public static class PvpPosition {
+		public int getId() {
+			return id;
+		}
 
-        @XmlAttribute(name = "x")
-        private float x;
-        @XmlAttribute(name = "y")
-        private float y;
-        @XmlAttribute(name = "z")
-        private float z;
-        @XmlAttribute(name = "h")
-        private byte h;
+		public int getTime() {
+			return time;
+		}
+	}
 
-        public float getX() {
-            return x;
-        }
+	@XmlAccessorType(XmlAccessType.FIELD)
+	@XmlType(name = "pvp_position")
+	public static class PvpPosition {
 
-        public float getY() {
-            return y;
-        }
+		@XmlAttribute(name = "x")
+		private float x;
+		@XmlAttribute(name = "y")
+		private float y;
+		@XmlAttribute(name = "z")
+		private float z;
+		@XmlAttribute(name = "h")
+		private byte h;
 
-        public float getZ() {
-            return z;
-        }
+		public float getX() {
+			return x;
+		}
 
-        public byte getH() {
-            return h;
-        }
-    }
+		public float getY() {
+			return y;
+		}
+
+		public float getZ() {
+			return z;
+		}
+
+		public byte getH() {
+			return h;
+		}
+	}
 }

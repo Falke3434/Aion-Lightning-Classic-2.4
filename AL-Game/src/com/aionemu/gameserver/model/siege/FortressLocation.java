@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.model.siege;
 
+import java.util.Date;
+import java.util.List;
+
 import com.aionemu.gameserver.configs.main.SiegeConfig;
 import com.aionemu.gameserver.model.DescriptionId;
 import com.aionemu.gameserver.model.account.PlayerAccountData;
@@ -28,9 +31,6 @@ import com.aionemu.gameserver.model.templates.siegelocation.SiegeReward;
 import com.aionemu.gameserver.model.templates.zone.ZoneType;
 import com.aionemu.gameserver.services.teleport.TeleportService;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
-
-import java.util.Date;
-import java.util.List;
 
 /**
  * @author Source
@@ -84,7 +84,8 @@ public class FortressLocation extends SiegeLocation {
 	}
 
 	/**
-	 * @param value new undershield value
+	 * @param value
+	 *            new undershield value
 	 */
 	@Override
 	public void setUnderShield(boolean value) {
@@ -100,7 +101,8 @@ public class FortressLocation extends SiegeLocation {
 	}
 
 	/**
-	 * @param status Teleportation status
+	 * @param status
+	 *            Teleportation status
 	 */
 	@Override
 	public void setCanTeleport(boolean status) {
@@ -128,32 +130,31 @@ public class FortressLocation extends SiegeLocation {
 		if (!this.isVulnerable()) {
 			return;
 		}
-		
+
 		// On login move to bind
 		creature.setInsideZoneType(ZoneType.SIEGE);
 		if (!(creature instanceof Player)) {
 			return;
 		}
-		
+
 		Player player = (Player) creature;
-		if (player.getOnlineTime() >= 5){
+		if (player.getOnlineTime() >= 5) {
 			return;
 		}
-		
-		PlayerAccountData playerAccData = player.getClientConnection().getAccount().getPlayerAccountData(player.getObjectId());
-        long lastOnline = playerAccData.getPlayerCommonData().getLastOnline().getTime();
-        
-        Date lastCo = new Date(lastOnline);
-        Date now = new Date(System.currentTimeMillis());
-        
-        if(lastCo.getHours() == now.getHours()){
-               return;
-        }
 
-		
+		PlayerAccountData playerAccData = player.getClientConnection().getAccount()
+				.getPlayerAccountData(player.getObjectId());
+		long lastOnline = playerAccData.getPlayerCommonData().getLastOnline().getTime();
+
+		Date lastCo = new Date(lastOnline);
+		Date now = new Date(System.currentTimeMillis());
+
+		if (lastCo.getHours() == now.getHours()) {
+			return;
+		}
+
 		isEnemy(player); // move to bind point enemys (on login) from fortress
 	}
-
 
 	@Override
 	public void clearLocation() {
@@ -164,7 +165,7 @@ public class FortressLocation extends SiegeLocation {
 			}
 		}
 
-		for (Player player : getPlayers().values()){
+		for (Player player : getPlayers().values()) {
 			isEnemy(player);
 		}
 	}

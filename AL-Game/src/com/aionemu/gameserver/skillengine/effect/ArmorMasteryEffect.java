@@ -47,8 +47,8 @@ public class ArmorMasteryEffect extends BufEffect {
 		List<IStatFunction> modifiers = getModifiers(effect);
 		List<IStatFunction> masteryModifiers = new ArrayList<IStatFunction>(modifiers.size());
 		for (IStatFunction modifier : modifiers) {
-			masteryModifiers.add(new StatArmorMasteryFunction(armorType, modifier.getName(), modifier.getValue(), modifier
-				.isBonus()));
+			masteryModifiers.add(new StatArmorMasteryFunction(armorType, modifier.getName(), modifier.getValue(),
+					modifier.isBonus()));
 		}
 		if (masteryModifiers.size() > 0) {
 			effect.getEffected().getGameStats().addEffect(effect, masteryModifiers);

@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.model.gameobjects;
 
-import javolution.util.FastMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -50,8 +48,11 @@ import com.aionemu.gameserver.world.MapRegion;
 import com.aionemu.gameserver.world.WorldPosition;
 import com.aionemu.gameserver.world.zone.ZoneName;
 
+import javolution.util.FastMap;
+
 /**
- * This class is representing movable objects, its base class for all in game objects that may move
+ * This class is representing movable objects, its base class for all in game
+ * objects that may move
  * 
  * @author -Nemesiss-
  */
@@ -99,7 +100,7 @@ public abstract class Creature extends VisibleObject {
 	 * @param position
 	 */
 	public Creature(int objId, CreatureController<? extends Creature> controller, SpawnTemplate spawnTemplate,
-		VisibleObjectTemplate objectTemplate, WorldPosition position) {
+			VisibleObjectTemplate objectTemplate, WorldPosition position) {
 		super(objId, controller, spawnTemplate, objectTemplate, position);
 		this.observeController = new ObserveController();
 		this.aggroList = createAggroList();
@@ -133,7 +134,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param lifeStats
-	 *          the lifeStats to set
+	 *            the lifeStats to set
 	 */
 	public void setLifeStats(CreatureLifeStats<? extends Creature> lifeStats) {
 		this.lifeStats = lifeStats;
@@ -148,7 +149,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param gameStats
-	 *          the gameStats to set
+	 *            the gameStats to set
 	 */
 	public void setGameStats(CreatureGameStats<? extends Creature> gameStats) {
 		this.gameStats = gameStats;
@@ -165,7 +166,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param effectController
-	 *          the effectController to set
+	 *            the effectController to set
 	 */
 	public void setEffectController(EffectController effectController) {
 		this.effectController = effectController;
@@ -224,15 +225,15 @@ public abstract class Creature extends VisibleObject {
 	public void setSkillNumber(int skillNumber) {
 		this.skillNumber = skillNumber;
 	}
-	
+
 	public int getAttackedCount() {
 		return this.attackedCount;
 	}
-	
+
 	public void incrementAttackedCount() {
 		this.attackedCount++;
 	}
-	
+
 	public void clearAttackedCount() {
 		attackedCount = 0;
 	}
@@ -289,7 +290,7 @@ public abstract class Creature extends VisibleObject {
 	 */
 	public boolean canAttack() {
 		return !(getEffectController().isAbnormalState(AbnormalState.CANT_ATTACK_STATE) || isCasting()
-			|| isInState(CreatureState.RESTING) || isInState(CreatureState.PRIVATE_SHOP));
+				|| isInState(CreatureState.RESTING) || isInState(CreatureState.PRIVATE_SHOP));
 	}
 
 	/**
@@ -301,7 +302,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param state
-	 *          the state to set
+	 *            the state to set
 	 */
 	public void setState(CreatureState state) {
 		this.state |= state.getId();
@@ -309,7 +310,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param state
-	 *          taken usually from templates
+	 *            taken usually from templates
 	 */
 	public void setState(int state) {
 		this.state = state;
@@ -327,7 +328,7 @@ public abstract class Creature extends VisibleObject {
 
 		return false;
 	}
-	
+
 	public boolean isInDeadState() {
 		return isInState(CreatureState.DEAD) || isInState(CreatureState.FLOATING_CORPSE);
 	}
@@ -341,7 +342,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param visualState
-	 *          the visualState to set
+	 *            the visualState to set
 	 */
 	public void setVisualState(CreatureVisualState visualState) {
 		this.visualState |= visualState.getId();
@@ -369,7 +370,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param seeState
-	 *          the seeState to set
+	 *            the seeState to set
 	 */
 	public void setSeeState(CreatureSeeState seeState) {
 		this.seeState |= seeState.getId();
@@ -397,7 +398,7 @@ public abstract class Creature extends VisibleObject {
 
 	/**
 	 * @param transformedModelId
-	 *          the transformedModelId to set
+	 *            the transformedModelId to set
 	 */
 	public void setTransformedModelId(int transformedModelId) {
 		this.transformedModelId = transformedModelId;
@@ -437,7 +438,7 @@ public abstract class Creature extends VisibleObject {
 		// Debug
 		if (log.isDebugEnabled())
 			log.debug("PacketBroadcaster: Packet " + mode.name() + " removed from player " + this.getName()); // fix
-																																																				// ClassCastException
+																												// ClassCastException
 	}
 
 	/**
@@ -601,11 +602,12 @@ public abstract class Creature extends VisibleObject {
 		}
 
 		/*
-		 * Some shared cooldown skills have indipendent and different cooldown they must not be blocked
+		 * Some shared cooldown skills have indipendent and different cooldown they must
+		 * not be blocked
 		 */
 		if (skillCoolDownsBase != null && skillCoolDownsBase.get(cooldownId) != null) {
 			if ((template.getDuration() + template.getCooldown() * 100 + skillCoolDownsBase.get(cooldownId)) < System
-				.currentTimeMillis())
+					.currentTimeMillis())
 				return false;
 		}
 
@@ -657,7 +659,8 @@ public abstract class Creature extends VisibleObject {
 	}
 
 	/**
-	 * This function saves the currentMillis of skill that generated the cooldown of an entire cooldownGroup
+	 * This function saves the currentMillis of skill that generated the cooldown of
+	 * an entire cooldownGroup
 	 * 
 	 * @param cooldownId
 	 * @param baseTime
@@ -734,7 +737,8 @@ public abstract class Creature extends VisibleObject {
 	 * Creature is flying (FLY or GLIDE states)
 	 */
 	public boolean isFlying() {
-		return (isInState(CreatureState.FLYING) && !isInState(CreatureState.RESTING)) || isInState(CreatureState.GLIDING);
+		return (isInState(CreatureState.FLYING) && !isInState(CreatureState.RESTING))
+				|| isInState(CreatureState.GLIDING);
 	}
 
 	public boolean isInFlyingState() {

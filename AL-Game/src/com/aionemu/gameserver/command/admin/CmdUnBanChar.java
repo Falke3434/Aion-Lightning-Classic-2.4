@@ -12,8 +12,6 @@ import com.aionemu.gameserver.utils.Util;
  * @author nrg
  */
 public class CmdUnBanChar extends BaseCommand {
-	
-	
 
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 2) {
@@ -31,8 +29,7 @@ public class CmdUnBanChar extends BaseCommand {
 		}
 
 		PacketSendUtility.sendMessage(admin, "Character " + name + " is not longer banned!");
-		
+
 		PunishmentService.unbanChar(playerId);
 	}
 }
-

@@ -56,6 +56,7 @@ public class SiegeLocationTemplate {
 	@XmlList
 	@XmlAttribute(name = "fortress_dependency")
 	protected List<Integer> fortressDependency;
+
 	/**
 	 * @return the location id
 	 */
@@ -95,7 +96,6 @@ public class SiegeLocationTemplate {
 		return this.siegeLegionRewards;
 	}
 
-	
 	/**
 	 * @return the nameId
 	 */
@@ -103,7 +103,6 @@ public class SiegeLocationTemplate {
 		return nameId;
 	}
 
-	
 	/**
 	 * @return the repeatCount
 	 */
@@ -111,7 +110,6 @@ public class SiegeLocationTemplate {
 		return repeatCount;
 	}
 
-	
 	/**
 	 * @return the repeatInterval
 	 */
@@ -119,7 +117,6 @@ public class SiegeLocationTemplate {
 		return repeatInterval;
 	}
 
-	
 	/**
 	 * @return the fortressDependency
 	 */
@@ -129,5 +126,4 @@ public class SiegeLocationTemplate {
 		return fortressDependency;
 	}
 
-	
 }

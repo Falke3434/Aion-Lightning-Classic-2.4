@@ -30,7 +30,7 @@ import com.aionemu.gameserver.world.World;
  * @author -Nemesiss-, Sweetkr, KID
  */
 public class CM_MOVE_IN_AIR extends AionClientPacket {
-	
+
 	float x, y, z;
 	int distance;
 	@SuppressWarnings("unused")
@@ -56,7 +56,7 @@ public class CM_MOVE_IN_AIR extends AionClientPacket {
 		x = readF();
 		y = readF();
 		z = readF();
-		locationId = (byte)readC();
+		locationId = (byte) readC();
 		distance = readD();
 	}
 
@@ -66,13 +66,12 @@ public class CM_MOVE_IN_AIR extends AionClientPacket {
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-		
-		if(player.getEnterWindstream() > 0)
-		{
+
+		if (player.getEnterWindstream() > 0) {
 			PacketSendUtility.sendPacket(player, new SM_WINDSTREAM(player.getEnterWindstream(), 1));
 			player.setEnterWindstream(0);
 		}
-		
+
 		if (player.isInState(CreatureState.FLIGHT_TELEPORT)) {
 			player.setFlightDistance(distance);
 			World.getInstance().updatePosition(player, x, y, z, (byte) 0);

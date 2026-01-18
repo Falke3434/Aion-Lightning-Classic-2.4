@@ -44,7 +44,7 @@ public class ReturningEventHandler {
 			}
 			EmoteManager.emoteStartReturning(npcAI.getOwner());
 			Npc npc = (Npc) npcAI.getOwner();
-			SpawnTemplate spawn =npc.getSpawn();
+			SpawnTemplate spawn = npc.getSpawn();
 			Point2D dest = null;
 			Point2D origin = new Point2D(spawn.getX(), spawn.getY());
 			if (npc.hasWalkRoutes()) {
@@ -53,8 +53,7 @@ public class ReturningEventHandler {
 			if (npc.getWalkerGroup() != null) {
 				npc.getWalkerGroup().setStep(npc, 1);
 				dest = WalkerGroup.getLinePoint(new Point2D(npc.getX(), npc.getY()), origin, npc.getWalkerGroupShift());
-			}
-			else {
+			} else {
 				dest = origin;
 			}
 			npcAI.getOwner().getMoveController().moveToPoint(dest.getX(), dest.getY(), spawn.getZ());

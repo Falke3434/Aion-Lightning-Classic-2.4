@@ -31,7 +31,7 @@ import com.aionemu.gameserver.network.factories.LsPacketHandlerFactory;
 import com.aionemu.gameserver.network.loginserver.serverpackets.SM_GS_AUTH;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 
-/** 
+/**
  * Object representing connection between LoginServer and GameServer.
  * 
  * @author -Nemesiss-
@@ -77,7 +77,7 @@ public class LoginServerConnection extends AConnection {
 	 */
 
 	public LoginServerConnection(SocketChannel sc, Dispatcher d) throws IOException {
-		super(sc, d, 8192*8, 8192*8);
+		super(sc, d, 8192 * 8, 8192 * 8);
 		LsPacketHandlerFactory lsPacketHandlerFactory = LsPacketHandlerFactory.getInstance();
 		this.lsPacketHandler = lsPacketHandlerFactory.getPacketHandler();
 
@@ -93,12 +93,13 @@ public class LoginServerConnection extends AConnection {
 		this.sendPacket(new SM_GS_AUTH());
 	}
 
-
 	/**
-	 * Called by Dispatcher. ByteBuffer data contains one packet that should be processed.
+	 * Called by Dispatcher. ByteBuffer data contains one packet that should be
+	 * processed.
 	 * 
 	 * @param data
-	 * @return True if data was processed correctly, False if some error occurred and connection should be closed NOW.
+	 * @return True if data was processed correctly, False if some error occurred
+	 *         and connection should be closed NOW.
 	 */
 	@Override
 	public boolean processData(ByteBuffer data) {
@@ -115,10 +116,12 @@ public class LoginServerConnection extends AConnection {
 	}
 
 	/**
-	 * This method will be called by Dispatcher, and will be repeated till return false.
+	 * This method will be called by Dispatcher, and will be repeated till return
+	 * false.
 	 * 
 	 * @param data
-	 * @return True if data was written to buffer, False indicating that there are not any more data to write.
+	 * @return True if data was written to buffer, False indicating that there are
+	 *         not any more data to write.
 	 */
 	@Override
 	protected final boolean writeData(ByteBuffer data) {
@@ -135,7 +138,8 @@ public class LoginServerConnection extends AConnection {
 	/**
 	 * This method is called by Dispatcher when connection is ready to be closed.
 	 * 
-	 * @return time in ms after witch onDisconnect() method will be called. Always return 0.
+	 * @return time in ms after witch onDisconnect() method will be called. Always
+	 *         return 0.
 	 */
 	@Override
 	protected final long getDisconnectionDelay() {
@@ -163,7 +167,7 @@ public class LoginServerConnection extends AConnection {
 	 * Sends GsServerPacket to this client.
 	 * 
 	 * @param bp
-	 *          GsServerPacket to be sent.
+	 *            GsServerPacket to be sent.
 	 */
 	public final void sendPacket(LsServerPacket bp) {
 		synchronized (guard) {
@@ -181,14 +185,15 @@ public class LoginServerConnection extends AConnection {
 	}
 
 	/**
-	 * Its guaranted that closePacket will be sent before closing connection, but all past and future packets wont.
-	 * Connection will be closed [by Dispatcher Thread], and onDisconnect() method will be called to clear all other
-	 * things. forced means that server shouldn't wait with removing this connection.
+	 * Its guaranted that closePacket will be sent before closing connection, but
+	 * all past and future packets wont. Connection will be closed [by Dispatcher
+	 * Thread], and onDisconnect() method will be called to clear all other things.
+	 * forced means that server shouldn't wait with removing this connection.
 	 * 
 	 * @param closePacket
-	 *          Packet that will be send before closing.
+	 *            Packet that will be send before closing.
 	 * @param forced
-	 *          have no effect in this implementation.
+	 *            have no effect in this implementation.
 	 */
 	public final void close(LsServerPacket closePacket, boolean forced) {
 		synchronized (guard) {
@@ -214,7 +219,7 @@ public class LoginServerConnection extends AConnection {
 
 	/**
 	 * @param state
-	 *          Set current state of this connection.
+	 *            Set current state of this connection.
 	 */
 	public void setState(State state) {
 		this.state = state;

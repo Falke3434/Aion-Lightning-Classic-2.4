@@ -41,9 +41,9 @@ public class QuestStatusCondition extends QuestCondition {
 
 	/*
 	 * (non-Javadoc)
-	 * @see
-	 * com.aionemu.gameserver.questEngine.handlers.template.xmlQuest.condition.QuestCondition#doCheck(com.aionemu.gameserver
-	 * .questEngine.model.QuestEnv)
+	 * 
+	 * @see com.aionemu.gameserver.questEngine.handlers.template.xmlQuest.condition.
+	 * QuestCondition#doCheck(com.aionemu.gameserver .questEngine.model.QuestEnv)
 	 */
 	@Override
 	public boolean doCheck(QuestEnv env) {
@@ -57,20 +57,20 @@ public class QuestStatusCondition extends QuestCondition {
 			qstatus = qs.getStatus().value();
 
 		switch (getOp()) {
-			case EQUAL:
-				return qstatus == value.value();
-			case GREATER:
-				return qstatus > value.value();
-			case GREATER_EQUAL:
-				return qstatus >= value.value();
-			case LESSER:
-				return qstatus < value.value();
-			case LESSER_EQUAL:
-				return qstatus <= value.value();
-			case NOT_EQUAL:
-				return qstatus != value.value();
-			default:
-				return false;
+		case EQUAL:
+			return qstatus == value.value();
+		case GREATER:
+			return qstatus > value.value();
+		case GREATER_EQUAL:
+			return qstatus >= value.value();
+		case LESSER:
+			return qstatus < value.value();
+		case LESSER_EQUAL:
+			return qstatus <= value.value();
+		case NOT_EQUAL:
+			return qstatus != value.value();
+		default:
+			return false;
 		}
 	}
 }

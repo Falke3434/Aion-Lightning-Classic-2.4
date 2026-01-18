@@ -45,6 +45,7 @@ public class SM_INVENTORY_INFO extends AionServerPacket {
 	private Player player;
 
 	public int packetType = FULL;
+	private boolean isFirstPacket;
 
 	/**
 	 * @param items
@@ -52,6 +53,7 @@ public class SM_INVENTORY_INFO extends AionServerPacket {
 	public SM_INVENTORY_INFO(List<Item> items, int npcExpandsSize, int questExpandsSize, Player player) {
 		// this should prevent client crashes but need to discover when item is null
 		items.removeAll(Collections.singletonList(null));
+		this.isFirstPacket = isFirstPacket;
 		this.items = items;
 		this.npcExpandsSize = npcExpandsSize;
 		this.questExpandsSize = questExpandsSize;
@@ -77,7 +79,7 @@ public class SM_INVENTORY_INFO extends AionServerPacket {
 		}
 
 		// something wrong with cube part.
-		writeC(1); // TRUE/FALSE (1/0) update cube size
+		writeC(isFirstPacket ? 1 : 0);
 		writeC(npcExpandsSize); // cube size from npc (so max 5 for now)
 		writeC(questExpandsSize); // cube size from quest (so max 2 for now)
 		writeC(0); // unk?
@@ -87,8 +89,7 @@ public class SM_INVENTORY_INFO extends AionServerPacket {
 			writeItemInfo(item);
 	}
 
-	private void writeItemInfo(Item item)
-	{
+	private void writeItemInfo(Item item) {
 		ItemTemplate itemTemplate = item.getItemTemplate();
 
 		writeD(item.getObjectId());
@@ -98,7 +99,7 @@ public class SM_INVENTORY_INFO extends AionServerPacket {
 		ItemInfoBlob itemInfoBlob = ItemInfoBlob.getFullBlob(player, item);
 		itemInfoBlob.writeMe(getBuf());
 
-		writeH(item.isEquipped() ? 255 : item.getEquipmentSlot()); // FF FF equipment
-		writeC(0x00);//isEquiped?
+		writeH(item.isEquipped() ? -1 : item.getEquipmentSlot()); // FF FF equipment
+		writeC(0x00);// isEquiped?
 	}
 }

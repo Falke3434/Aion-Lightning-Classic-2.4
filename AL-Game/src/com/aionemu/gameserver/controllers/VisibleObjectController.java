@@ -20,7 +20,8 @@ import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.world.World;
 
 /**
- * This class is for controlling VisibleObjects [players, npc's etc]. Its controlling movement, visibility etc.
+ * This class is for controlling VisibleObjects [players, npc's etc]. Its
+ * controlling movement, visibility etc.
  * 
  * @author -Nemesiss-
  */
@@ -103,7 +104,8 @@ public abstract class VisibleObjectController<T extends VisibleObject> {
 	}
 
 	/**
-	 * This method should be called to make despawn of VisibleObject and delete it from the world
+	 * This method should be called to make despawn of VisibleObject and delete it
+	 * from the world
 	 */
 	public void onDelete() {
 		if (getOwner().isInWorld()) {

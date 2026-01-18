@@ -97,7 +97,7 @@ public class PlayerStorage extends Storage {
 	public Item add(Item item) {
 		return add(item, actor);
 	}
-	
+
 	@Override
 	public Item put(Item item) {
 		return put(item, actor);

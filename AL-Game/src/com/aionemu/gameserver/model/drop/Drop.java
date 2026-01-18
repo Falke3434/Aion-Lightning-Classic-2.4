@@ -118,19 +118,20 @@ public class Drop implements DropCalculator {
 	public float modifRatio(int itemId, int npcId) {
 		ItemTemplate itemT = DataManager.ITEM_DATA.getItemTemplate(itemId);
 		NpcTemplate npcT = DataManager.NPC_DATA.getNpcTemplate(npcId);
-		
+
 		float dropChance = chance;
 
 		if (npcT != null && itemT != null) {
-			if(npcT.getRating() == NpcRating.NORMAL || npcT.getRating() == NpcRating.JUNK){
+			if (npcT.getRating() == NpcRating.NORMAL || npcT.getRating() == NpcRating.JUNK) {
 				dropChance /= (RateConfig.NERF_NORMAL_DROP_MOB == 0 ? 1 : RateConfig.NERF_NORMAL_DROP_MOB);
 			}
 			if ((itemT.isArmor() || itemT.isWeapon()) && itemT.getItemQuality() != ItemQuality.EPIC) {
-				if(npcT.getRating() == NpcRating.NORMAL || npcT.getRating() == NpcRating.ELITE || npcT.getRating() == NpcRating.JUNK){
+				if (npcT.getRating() == NpcRating.NORMAL || npcT.getRating() == NpcRating.ELITE
+						|| npcT.getRating() == NpcRating.JUNK) {
 					dropChance /= (RateConfig.NERF_STUFF_DROP_MOB == 0 ? 1 : RateConfig.NERF_STUFF_DROP_MOB);
 				}
 			}
-		}else{ // Case of invalid ITEM
+		} else { // Case of invalid ITEM
 			dropChance = -1;
 		}
 		return dropChance;

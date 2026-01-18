@@ -16,19 +16,18 @@ import com.aionemu.gameserver.world.World;
  * 
  */
 public class CmdBan extends BaseCommand {
-	
-	public CmdBan () {
+
+	public CmdBan() {
 		subCmds.put("char", new SubCmdBanChar());
 		subCmds.put("ip", new SubCmdBanIP());
 		subCmds.put("full", new SubCmdBanFull());
 		subCmds.put("mac", new SubCmdBanMac());
 	}
-	
-	
+
 	public void execute(Player admin, String... params) {
 		showHelp(admin);
 	}
-	
+
 	public class SubCmdBanChar extends BaseCommand {
 		public void execute(Player admin, String... params) {
 			int playerId = 0;
@@ -49,28 +48,30 @@ public class CmdBan extends BaseCommand {
 
 			int dayCount = -1;
 			dayCount = ParseInteger(params[1]);
-			
-			if(dayCount < 0) {
-				PacketSendUtility.sendMessage(admin, "Second parameter has to be a positive daycount or 0 for infinity");
+
+			if (dayCount < 0) {
+				PacketSendUtility.sendMessage(admin,
+						"Second parameter has to be a positive daycount or 0 for infinity");
 				showHelp(admin);
 				return;
 			}
 
 			String reason = params[2];
-			for(int i = 3; i < params.length; i++)
-				reason += " "+params[i];
+			for (int i = 3; i < params.length; i++)
+				reason += " " + params[i];
 
-			PacketSendUtility.sendMessage(admin, "Char " + playerName + " is now banned for the next "+dayCount+" days!");
-			
+			PacketSendUtility.sendMessage(admin,
+					"Char " + playerName + " is now banned for the next " + dayCount + " days!");
+
 			PunishmentService.banChar(playerId, dayCount, reason);
 		}
-		
+
 	}
-	
+
 	public class SubCmdBanAccount extends BaseCommand {
-		//TODO Ajout d'une raison de ban
-		//TODO faire un ban account avec le nom du compte
-		//TODO faire un ban account avec le target de l'admin
+		// TODO Ajout d'une raison de ban
+		// TODO faire un ban account avec le nom du compte
+		// TODO faire un ban account avec le target de l'admin
 		public void execute(Player admin, String... params) {
 			if (params.length < 2) {
 				showHelp(admin);
@@ -97,17 +98,17 @@ public class CmdBan extends BaseCommand {
 
 			int time = ParseInteger(params[1]); // Default: infinity
 
-			LoginServer.getInstance().sendBanPacket((byte)1, accountId, accountIp, time, admin.getObjectId());
-			
+			LoginServer.getInstance().sendBanPacket((byte) 1, accountId, accountIp, time, admin.getObjectId());
+
 		}
-		
+
 	}
 
 	public class SubCmdBanIP extends BaseCommand {
-		//TODO Ajout d'une raison de ban
-		//TODO faire un ban ip avec l'ip
-		//TODO faire un ban ip avec le nom de compte
-		//TODO faire un ban ip avec le target de l'admin
+		// TODO Ajout d'une raison de ban
+		// TODO faire un ban ip avec l'ip
+		// TODO faire un ban ip avec le nom de compte
+		// TODO faire un ban ip avec le target de l'admin
 		public void execute(Player admin, String... params) {
 			if (params.length < 2) {
 				showHelp(admin);
@@ -134,16 +135,16 @@ public class CmdBan extends BaseCommand {
 
 			int time = ParseInteger(params[1]); // Default: infinity
 
-			LoginServer.getInstance().sendBanPacket((byte)2, accountId, accountIp, time, admin.getObjectId());
-			
+			LoginServer.getInstance().sendBanPacket((byte) 2, accountId, accountIp, time, admin.getObjectId());
+
 		}
-		
+
 	}
-	
+
 	public class SubCmdBanFull extends BaseCommand {
-		//TODO Ajout d'une raison de ban
-		//TODO faire un ban full avec le nom de compte
-		//TODO faire un ban full avec le target de l'admin
+		// TODO Ajout d'une raison de ban
+		// TODO faire un ban full avec le nom de compte
+		// TODO faire un ban full avec le target de l'admin
 		public void execute(Player admin, String... params) {
 			if (params.length < 2) {
 				showHelp(admin);
@@ -170,15 +171,15 @@ public class CmdBan extends BaseCommand {
 
 			int time = ParseInteger(params[1]); // Default: infinity
 
-			LoginServer.getInstance().sendBanPacket((byte)3, accountId, accountIp, time, admin.getObjectId());
+			LoginServer.getInstance().sendBanPacket((byte) 3, accountId, accountIp, time, admin.getObjectId());
 		}
 	}
-	
+
 	public class SubCmdBanMac extends BaseCommand {
-		//TODO Ajout d'une raison de ban
-		//TODO faire un ban mac avec l'adresse
-		//TODO faire un ban mac avec le nom de compte
-		//TODO faire un ban mac avec une ip
+		// TODO Ajout d'une raison de ban
+		// TODO faire un ban mac avec l'adresse
+		// TODO faire un ban mac avec le nom de compte
+		// TODO faire un ban mac avec une ip
 		public void execute(Player admin, String... params) {
 			if (params.length < 2) {
 				showHelp(admin);
@@ -189,14 +190,15 @@ public class CmdBan extends BaseCommand {
 			if (player == null) {
 				PacketSendUtility.sendMessage(admin, "Player " + params[0] + " was not found!");
 				return;
-				
+
 			}
 
 			int time = ParseInteger(params[1]); // Default: infinity
-			
-			BannedMacManager.getInstance().banAddress(player.getClientConnection().getMacAddress(), System.currentTimeMillis() + time * 60 * 1000,
+
+			BannedMacManager.getInstance().banAddress(player.getClientConnection().getMacAddress(),
+					System.currentTimeMillis() + time * 60 * 1000,
 					"author=" + admin.getName() + ", " + admin.getObjectId() + "; target=direct_type");
 		}
 	}
-	
+
 }

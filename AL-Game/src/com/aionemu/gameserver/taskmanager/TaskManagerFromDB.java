@@ -21,7 +21,8 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
 
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.TaskFromDBDAO;
@@ -86,11 +87,9 @@ public class TaskManagerFromDB {
 				try {
 					// Create new instance of the task
 					currentTask = tmpClass.newInstance();
-				}
-				catch (InstantiationException e) {
+				} catch (InstantiationException e) {
 					log.error(e.getMessage(), e);
-				}
-				catch (IllegalAccessException e) {
+				} catch (IllegalAccessException e) {
 					log.error(e.getMessage(), e);
 				}
 
@@ -105,11 +104,9 @@ public class TaskManagerFromDB {
 
 				if (task.getType().equals("FIXED_IN_TIME")) {
 					runFixedInTimeTask(currentTask, task);
-				}
-				else
+				} else
 					log.error("Unknow task's type for " + task.getType());
-			}
-			else
+			} else
 				log.error("Unknow task's name with ID : " + task.getName());
 		}
 	}

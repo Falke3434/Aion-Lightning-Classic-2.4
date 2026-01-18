@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.model.account.PlayerAccountData;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.PlayerInfo;
@@ -46,6 +45,7 @@ public class SM_CREATE_CHARACTER extends PlayerInfo {
 	public static final int RESPONSE_NAME_RESERVED = 11;
 	/** You cannot create characters of other races in the same server */
 	public static final int RESPONSE_OTHER_RACE = 12;
+	public static final int RESPONSE_CREATE_NEW = 22;
 
 	/**
 	 * response code
@@ -61,9 +61,9 @@ public class SM_CREATE_CHARACTER extends PlayerInfo {
 	 * Constructs new <tt>SM_CREATE_CHARACTER </tt> packet
 	 * 
 	 * @param accPlData
-	 *          playerAccountData of player that was created
+	 *            playerAccountData of player that was created
 	 * @param responseCode
-	 *          response code (invalid nickname, nickname is already taken, ok)
+	 *            response code (invalid nickname, nickname is already taken, ok)
 	 */
 
 	public SM_CREATE_CHARACTER(PlayerAccountData accPlData, int responseCode) {
@@ -80,10 +80,11 @@ public class SM_CREATE_CHARACTER extends PlayerInfo {
 
 		if (responseCode == RESPONSE_OK) {
 			writePlayerInfo(player); // if everything is fine, all the character's data should be sent
-			writeB(new byte[40]);
-		}
-		else {
-			writeB(new byte[448]); // if something is wrong, only return code should be sent in the packet
+			writeB(new byte[32]);
+			writeB(new byte[88]); // unk 4.5.0.19
+		} else {
+			writeB(new byte[448 + /* 4.5.0.19 unk */88]); // if something is wrong, only return code should be sent in
+															// the packet
 		}
 	}
 }

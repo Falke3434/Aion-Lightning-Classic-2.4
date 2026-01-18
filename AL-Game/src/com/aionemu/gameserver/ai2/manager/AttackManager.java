@@ -51,8 +51,7 @@ public class AttackManager {
 		AISubState subState = npcAI.getSubState();
 		if (subState == AISubState.NONE) {
 			chooseAttack(npcAI, npcAI.getOwner().getGameStats().getNextAttackInterval());
-		}
-		else {
+		} else {
 			if (npcAI.isLogging()) {
 				AI2Logger.info(npcAI, "Will not choose attack in substate" + subState);
 			}
@@ -71,15 +70,15 @@ public class AttackManager {
 			return;
 		}
 		switch (attackIntention) {
-			case SIMPLE_ATTACK:
-				SimpleAttackManager.performAttack(npcAI, delay);
-				break;
-			case SKILL_ATTACK:
-				SkillAttackManager.performAttack(npcAI, delay);
-				break;
-			case FINISH_ATTACK:
-				npcAI.think();
-				break;
+		case SIMPLE_ATTACK:
+			SimpleAttackManager.performAttack(npcAI, delay);
+			break;
+		case SKILL_ATTACK:
+			SkillAttackManager.performAttack(npcAI, delay);
+			break;
+		case FINISH_ATTACK:
+			npcAI.think();
+			break;
 		}
 	}
 
@@ -91,11 +90,12 @@ public class AttackManager {
 		if (npcAI.isLogging()) {
 			AI2Logger.info(npcAI, "AttackManager: attackTimeDelta " + npc.getGameStats().getLastAttackTimeDelta());
 		}
-		
+
 		// switch target if there is more hated creature
 		if (npc.getGameStats().getLastChangeTargetTimeDelta() > 5) {
 			Creature mostHated = npc.getAggroList().getMostHated();
-			if (mostHated != null && !mostHated.getLifeStats().isAlreadyDead() && !npc.isTargeting(mostHated.getObjectId())) {
+			if (mostHated != null && !mostHated.getLifeStats().isAlreadyDead()
+					&& !npc.isTargeting(mostHated.getObjectId())) {
 				if (npcAI.isLogging()) {
 					AI2Logger.info(npcAI, "AttackManager: switching target during chase");
 				}
@@ -103,12 +103,13 @@ public class AttackManager {
 				return;
 			}
 		}
-		
-		if(checkGiveupDistance(npcAI)){
+
+		if (checkGiveupDistance(npcAI)) {
 			npcAI.onGeneralEvent(AIEventType.TARGET_GIVEUP);
 			return;
 		}
-		// try to move to target if npc was attacked or attacked target less than 20 secs ago
+		// try to move to target if npc was attacked or attacked target less than 20
+		// secs ago
 		if (npc.getGameStats().getLastAttackTimeDelta() < 20 || npc.getGameStats().getLastAttackedTimeDelta() < 20) {
 			if (npcAI.isMoveSupported()) {
 				npc.getMoveController().moveToTargetObject();
@@ -125,16 +126,16 @@ public class AttackManager {
 		if (npcAI.isLogging()) {
 			AI2Logger.info(npcAI, "AttackManager: distanceToTarget " + distanceToTarget);
 		}
-		//TODO may be ask AI too
-		int chaseTarget = npc.isBoss() ? 50 : npc.getPosition().getWorldMapInstance().getTemplate().getAiInfo()
-			.getChaseTarget();
+		// TODO may be ask AI too
+		int chaseTarget = npc.isBoss() ? 50
+				: npc.getPosition().getWorldMapInstance().getTemplate().getAiInfo().getChaseTarget();
 		if (distanceToTarget > chaseTarget) {
 			return true;
 		}
 		double distanceToHome = npc.getDistanceToSpawnLocation();
 		// if npc is far away from home
-		int chaseHome = npc.isBoss() ? 150 : npc.getPosition().getWorldMapInstance().getTemplate().getAiInfo()
-			.getChaseHome();
+		int chaseHome = npc.isBoss() ? 150
+				: npc.getPosition().getWorldMapInstance().getTemplate().getAiInfo().getChaseHome();
 		if (distanceToHome > chaseHome) {
 			return true;
 		}

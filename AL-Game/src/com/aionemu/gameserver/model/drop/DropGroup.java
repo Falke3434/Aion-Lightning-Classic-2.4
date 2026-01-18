@@ -28,6 +28,7 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.model.Race;
+
 /**
  * @author MrPoke
  *
@@ -74,7 +75,7 @@ public class DropGroup implements DropCalculator {
 	public int dropCalculator(Set<DropItem> result, int index, float dropModifier, Race race, int npcId) {
 		// Change rate in fonction of the drop groupe
 		dropModifier *= getDropModifier();
-		
+
 		if (useCategory) {
 			// log oldIndex
 			int oldIndex = index;
@@ -92,7 +93,7 @@ public class DropGroup implements DropCalculator {
 					index = d.dropCalculator(result, index, dropModifier, race, npcId);
 				} while (index < oldIndex + maxDrop && !newArrayList.isEmpty());
 			} while (mustDrop && index == oldIndex);
-			
+
 			return index;
 		} else {
 			for (int i = 0; i < drop.size(); i++) {

@@ -16,15 +16,22 @@
  */
 package com.aionemu.gameserver.utils;
 
-import com.aionemu.commons.utils.concurrent.AionRejectedExecutionHandler;
-import com.aionemu.commons.utils.concurrent.RunnableWrapper;
-import com.aionemu.gameserver.configs.main.ThreadConfig;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ArrayBlockingQueue;
+import java.util.concurrent.Future;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.ScheduledThreadPoolExecutor;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.TimeUnit;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.concurrent.*;
+import com.aionemu.commons.utils.concurrent.AionRejectedExecutionHandler;
+import com.aionemu.commons.utils.concurrent.RunnableWrapper;
+import com.aionemu.gameserver.configs.main.ThreadConfig;
 
 /**
  * @author -Nemesiss-, NB4L1, MrPoke, lord_rex
@@ -48,12 +55,12 @@ public final class ThreadPoolManager {
 		scheduledPool.prestartAllCoreThreads();
 
 		instantPool = new ThreadPoolExecutor(instantPoolSize, instantPoolSize, 0, TimeUnit.SECONDS,
-			new ArrayBlockingQueue<Runnable>(100000));
+				new ArrayBlockingQueue<Runnable>(100000));
 		instantPool.setRejectedExecutionHandler(new AionRejectedExecutionHandler());
 		instantPool.prestartAllCoreThreads();
 
 		longRunningPool = new ThreadPoolExecutor(0, Integer.MAX_VALUE, 60L, TimeUnit.SECONDS,
-			new SynchronousQueue<Runnable>());
+				new SynchronousQueue<Runnable>());
 		longRunningPool.setRejectedExecutionHandler(new AionRejectedExecutionHandler());
 		longRunningPool.prestartAllCoreThreads();
 
@@ -66,7 +73,8 @@ public final class ThreadPoolManager {
 		}, 150000, 150000);
 
 		log.info("ThreadPoolManager: Initialized with " + scheduledPool.getPoolSize() + " scheduler, "
-			+ instantPool.getPoolSize() + " instant, " + longRunningPool.getPoolSize() + " long running thread(s).");
+				+ instantPool.getPoolSize() + " instant, " + longRunningPool.getPoolSize()
+				+ " long running thread(s).");
 	}
 
 	private long validate(long delay) {
@@ -120,7 +128,7 @@ public final class ThreadPoolManager {
 	 * Executes a loginServer packet task
 	 * 
 	 * @param pkt
-	 *          runnable packet for Login Server
+	 *            runnable packet for Login Server
 	 */
 	public void executeLsPacket(Runnable pkt) {
 		execute(pkt);
@@ -155,8 +163,7 @@ public final class ThreadPoolManager {
 			scheduledPool.setContinueExistingPeriodicTasksAfterShutdownPolicy(false);
 
 			success |= awaitTermination(10000);
-		}
-		catch (InterruptedException e) {
+		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 

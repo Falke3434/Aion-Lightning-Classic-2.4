@@ -16,25 +16,23 @@ public class CmdEnchant extends BaseCommand {
 
 	public void execute(Player player, String... params) {
 		int enchant = -1;
-		
+
 		if (params.length == 0) {
 			enchant = 15;
-		}
-		else if (params.length == 1) {
+		} else if (params.length == 1) {
 			if ("cancel".startsWith(params[0])) {
 				enchant = 0;
 			}
 		}
-		
+
 		if (enchant < 0 || params.length > 1) {
 			showHelp(player);
 			return;
 		}
-		
+
 		enchant(player, enchant);
 	}
-	
-	
+
 	private void enchant(Player player, int enchant) {
 		for (Item targetItem : player.getEquipment().getEquippedItemsWithoutStigma()) {
 			if (isUpgradeble(targetItem)) {
@@ -55,7 +53,7 @@ public class CmdEnchant extends BaseCommand {
 		PacketSendUtility.sendMessage(player, "All equipped items were enchanted to level " + enchant);
 
 	}
-	
+
 	/**
 	 * Verify if the item is enchantable
 	 * 
@@ -69,18 +67,18 @@ public class CmdEnchant extends BaseCommand {
 		if (item.getItemTemplate().isArmor()) {
 			int at = item.getItemTemplate().getItemSlot();
 			if (at == 1 || /* Main Hand */
-			at == 2 || /* Sub Hand */
-			at == 8 || /* Jacket */
-			at == 16 || /* Gloves */
-			at == 32 || /* Boots */
-			at == 2048 || /* Shoulder */
-			at == 4096 || /* Pants */
-			at == 131072 || /* Main Off Hand */
-			at == 262144) /* Sub Off Hand */
+					at == 2 || /* Sub Hand */
+					at == 8 || /* Jacket */
+					at == 16 || /* Gloves */
+					at == 32 || /* Boots */
+					at == 2048 || /* Shoulder */
+					at == 4096 || /* Pants */
+					at == 131072 || /* Main Off Hand */
+					at == 262144) /* Sub Off Hand */
 				return true;
 		}
 		return false;
 
 	}
-	
+
 }

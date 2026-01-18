@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.model.team.legion;
 
-
 /**
  * @author Simple
  */
@@ -52,7 +51,7 @@ public class LegionMember {
 
 	/**
 	 * @param legion
-	 *          the legion to set
+	 *            the legion to set
 	 */
 	public void setLegion(Legion legion) {
 		this.legion = legion;
@@ -67,7 +66,7 @@ public class LegionMember {
 
 	/**
 	 * @param rank
-	 *          the rank to set
+	 *            the rank to set
 	 */
 	public void setRank(LegionRank rank) {
 		this.rank = rank;
@@ -86,7 +85,7 @@ public class LegionMember {
 
 	/**
 	 * @param nickname
-	 *          the nickname to set
+	 *            the nickname to set
 	 */
 	public void setNickname(String nickname) {
 		this.nickname = nickname;
@@ -101,7 +100,7 @@ public class LegionMember {
 
 	/**
 	 * @param selfIntro
-	 *          the selfIntro to set
+	 *            the selfIntro to set
 	 */
 	public void setSelfIntro(String selfIntro) {
 		this.selfIntro = selfIntro;
@@ -116,7 +115,7 @@ public class LegionMember {
 
 	/**
 	 * @param objectId
-	 *          the objectId to set
+	 *            the objectId to set
 	 */
 	public void setObjectId(int objectId) {
 		this.objectId = objectId;
@@ -131,22 +130,21 @@ public class LegionMember {
 
 	public boolean hasRights(LegionPermissionsMask permissions) {
 		int legionarPermission = 0;
-		switch (this.getRank())
-		{
-			case BRIGADE_GENERAL:
-				return true;
-			case DEPUTY:
-				legionarPermission = legion.getDeputyPermission();
-				break;
-			case CENTURION:
-				legionarPermission = legion.getCenturionPermission();
-				break;
-			case LEGIONARY:
-				legionarPermission = legion.getLegionaryPermission();
-				break;
-			case VOLUNTEER:
-				legionarPermission = legion.getVolunteerPermission();
-				break;
+		switch (this.getRank()) {
+		case BRIGADE_GENERAL:
+			return true;
+		case DEPUTY:
+			legionarPermission = legion.getDeputyPermission();
+			break;
+		case CENTURION:
+			legionarPermission = legion.getCenturionPermission();
+			break;
+		case LEGIONARY:
+			legionarPermission = legion.getLegionaryPermission();
+			break;
+		case VOLUNTEER:
+			legionarPermission = legion.getVolunteerPermission();
+			break;
 		}
 		return permissions.can(legionarPermission);
 	}

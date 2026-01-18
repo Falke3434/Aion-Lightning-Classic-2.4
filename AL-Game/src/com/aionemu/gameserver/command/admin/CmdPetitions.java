@@ -16,10 +16,7 @@ import com.aionemu.gameserver.services.PetitionService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-
 public class CmdPetitions extends BaseCommand {
-	
-	
 
 	public void execute(Player admin, String... params) {
 		// Send ticket general info
@@ -30,15 +27,14 @@ public class CmdPetitions extends BaseCommand {
 			if (petitionsArray.length < 5) {
 				PacketSendUtility.sendMessage(admin, "== " + petitionsArray.length + " first petitions to reply ==");
 				for (int i = 0; i < petitionsArray.length; i++) {
-					PacketSendUtility.sendMessage(admin, petitionsArray[i].getPetitionId() + " | "
-						+ petitionsArray[i].getTitle());
+					PacketSendUtility.sendMessage(admin,
+							petitionsArray[i].getPetitionId() + " | " + petitionsArray[i].getTitle());
 				}
-			}
-			else {
+			} else {
 				PacketSendUtility.sendMessage(admin, "== 5 first petitions to reply ==");
 				for (int i = 0; i < 5; i++) {
-					PacketSendUtility.sendMessage(admin, petitionsArray[i].getPetitionId() + " | "
-						+ petitionsArray[i].getTitle());
+					PacketSendUtility.sendMessage(admin,
+							petitionsArray[i].getPetitionId() + " | " + petitionsArray[i].getTitle());
 				}
 			}
 			return;
@@ -48,8 +44,7 @@ public class CmdPetitions extends BaseCommand {
 
 		try {
 			petitionId = Integer.parseInt(params[0]);
-		}
-		catch (NumberFormatException nfe) {
+		} catch (NumberFormatException nfe) {
 			PacketSendUtility.sendMessage(admin, "Invalid petition id.");
 			return;
 		}
@@ -67,8 +62,7 @@ public class CmdPetitions extends BaseCommand {
 		if (World.getInstance().findPlayer(petition.getPlayerObjId()) != null) {
 			petitionPlayer = World.getInstance().findPlayer(petition.getPlayerObjId()).getName();
 			isOnline = true;
-		}
-		else {
+		} else {
 			petitionPlayer = DAOManager.getDAO(PlayerDAO.class).getPlayerNameByObjId(petition.getPlayerObjId());
 			isOnline = false;
 		}
@@ -106,39 +100,39 @@ public class CmdPetitions extends BaseCommand {
 				return;
 			}
 
-			MailService.getInstance().sendMail(admin, petitionPlayer, "GM-Re:" + petition.getTitle(), replyMessage, 0, 0, 0,
-				false);
+			MailService.getInstance().sendMail(admin, petitionPlayer, "GM-Re:" + petition.getTitle(), replyMessage, 0,
+					0, 0, false);
 			PetitionService.getInstance().setPetitionReplied(petitionId);
 
-			PacketSendUtility.sendMessage(admin, "Your reply has been sent to " + petitionPlayer
-				+ ". Petition is now closed.");
+			PacketSendUtility.sendMessage(admin,
+					"Your reply has been sent to " + petitionPlayer + ". Petition is now closed.");
 		}
 	}
 
 	private String getHumanizedValue(PetitionType type) {
 		String result = "";
 		switch (type) {
-			case CHARACTER_STUCK:
-				result = "Character Stuck";
-				break;
-			case CHARACTER_RESTORATION:
-				result = "Character Restoration";
-				break;
-			case BUG:
-				result = "Bug";
-				break;
-			case QUEST:
-				result = "Quest";
-				break;
-			case UNACCEPTABLE_BEHAVIOR:
-				result = "Unacceptable Behavior";
-				break;
-			case SUGGESTION:
-				result = "Suggestion";
-			case INQUIRY:
-				result = "Inquiry about the game";
-			default:
-				result = "Unknown";
+		case CHARACTER_STUCK:
+			result = "Character Stuck";
+			break;
+		case CHARACTER_RESTORATION:
+			result = "Character Restoration";
+			break;
+		case BUG:
+			result = "Bug";
+			break;
+		case QUEST:
+			result = "Quest";
+			break;
+		case UNACCEPTABLE_BEHAVIOR:
+			result = "Unacceptable Behavior";
+			break;
+		case SUGGESTION:
+			result = "Suggestion";
+		case INQUIRY:
+			result = "Inquiry about the game";
+		default:
+			result = "Unknown";
 		}
 		return result;
 	}
@@ -146,38 +140,38 @@ public class CmdPetitions extends BaseCommand {
 	private String getFormattedAdditionalData(PetitionType type, String additionalData) {
 		String result = "";
 		switch (type) {
-			case CHARACTER_STUCK:
-				result = "Character Location: " + additionalData;
-				break;
-			case CHARACTER_RESTORATION:
-				result = "Category: " + additionalData;
-				break;
-			case BUG:
-				String[] bugData = additionalData.split("/");
-				result = "Time Occured: " + bugData[0] + "\n";
-				result += "Zone and Coords: " + bugData[1];
-				if (bugData.length > 2)
-					result += "\nHow to Replicate: " + bugData[2];
-				break;
-			case QUEST:
-				result = "Quest Title: " + additionalData;
-				break;
-			case UNACCEPTABLE_BEHAVIOR:
-				String[] bData = additionalData.split("/");
-				result = "Time Occured: " + bData[0] + "\n";
-				result += "Character Name: " + bData[1] + "\n";
-				result += "Category: " + bData[2];
-				break;
-			case SUGGESTION:
-				//
-				result = "Category: " + additionalData;
-				break;
-			case INQUIRY:
-				//
-				result = "Petition Category: " + additionalData;
-				break;
-			default:
-				result = additionalData;
+		case CHARACTER_STUCK:
+			result = "Character Location: " + additionalData;
+			break;
+		case CHARACTER_RESTORATION:
+			result = "Category: " + additionalData;
+			break;
+		case BUG:
+			String[] bugData = additionalData.split("/");
+			result = "Time Occured: " + bugData[0] + "\n";
+			result += "Zone and Coords: " + bugData[1];
+			if (bugData.length > 2)
+				result += "\nHow to Replicate: " + bugData[2];
+			break;
+		case QUEST:
+			result = "Quest Title: " + additionalData;
+			break;
+		case UNACCEPTABLE_BEHAVIOR:
+			String[] bData = additionalData.split("/");
+			result = "Time Occured: " + bData[0] + "\n";
+			result += "Character Name: " + bData[1] + "\n";
+			result += "Category: " + bData[2];
+			break;
+		case SUGGESTION:
+			//
+			result = "Category: " + additionalData;
+			break;
+		case INQUIRY:
+			//
+			result = "Petition Category: " + additionalData;
+			break;
+		default:
+			result = additionalData;
 		}
 		return result;
 	}

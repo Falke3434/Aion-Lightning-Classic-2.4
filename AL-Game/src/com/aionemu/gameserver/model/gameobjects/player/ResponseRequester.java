@@ -18,9 +18,8 @@ package com.aionemu.gameserver.model.gameobjects.player;
 
 import java.util.HashMap;
 
-import org.slf4j.LoggerFactory;
-
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Manages the asking of and responding to <tt>SM_QUESTION_WINDOW</tt>
@@ -38,10 +37,11 @@ public class ResponseRequester {
 	}
 
 	/**
-	 * Adds this handler to this messageID, returns false if there already exists one
+	 * Adds this handler to this messageID, returns false if there already exists
+	 * one
 	 * 
 	 * @param messageId
-	 *          ID of the request message
+	 *            ID of the request message
 	 * @return true or false
 	 */
 	public synchronized boolean putRequest(int messageId, RequestResponseHandler handler) {
@@ -71,7 +71,8 @@ public class ResponseRequester {
 	}
 
 	/**
-	 * Automatically responds 0 to all requests, passing the given player as the responder
+	 * Automatically responds 0 to all requests, passing the given player as the
+	 * responder
 	 */
 	public synchronized void denyAll() {
 		for (RequestResponseHandler handler : map.values()) {

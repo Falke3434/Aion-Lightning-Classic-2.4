@@ -25,23 +25,19 @@ import com.aionemu.gameserver.world.World;
 
 /*"Syntax : //movetoobj <object id> */
 
-
 public class CmdMoveToObject extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length != 1) {
 			showHelp(admin);
-			return;	
+			return;
 		}
-
 
 		int objectId = 0;
 
 		try {
 			objectId = Integer.valueOf(params[1]);
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			PacketSendUtility.sendMessage(admin, "Only numbers please!!!");
 		}
 
@@ -53,8 +49,8 @@ public class CmdMoveToObject extends BaseCommand {
 
 		VisibleObject spawn = (VisibleObject) object;
 
-		TeleportService.teleportTo(admin, spawn.getWorldId(), spawn.getSpawn().getX(), spawn.getSpawn().getY(), spawn
-			.getSpawn().getZ(), 0);
+		TeleportService.teleportTo(admin, spawn.getWorldId(), spawn.getSpawn().getX(), spawn.getSpawn().getY(),
+				spawn.getSpawn().getZ(), 0);
 		admin.getController().stopProtectionActiveTask();
 	}
 }

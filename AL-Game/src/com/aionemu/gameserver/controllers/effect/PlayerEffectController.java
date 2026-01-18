@@ -72,12 +72,12 @@ public class PlayerEffectController extends EffectController {
 			}
 		}
 	}
-	
+
 	@Override
 	public void updatePlayerEffectIcons() {
 		getOwner().addPacketBroadcastMask(BroadcastMode.UPDATE_PLAYER_EFFECT_ICONS);
 	}
-	
+
 	@Override
 	public void updatePlayerEffectIconsImpl() {
 		Collection<Effect> effects = getAbnormalEffectsToShow();
@@ -116,22 +116,22 @@ public class PlayerEffectController extends EffectController {
 		if (remainingTime <= 0)
 			return;
 		if (CustomConfig.ABYSSXFORM_LOGOUT
-			&& ((skillId >= 11885 && skillId <= 11894)
-			|| (skillId >= 11907 && skillId <= 11916))) {
-			
+				&& ((skillId >= 11885 && skillId <= 11894) || (skillId >= 11907 && skillId <= 11916))) {
+
 			if (System.currentTimeMillis() >= endTime)
 				return;
 			else
-				remainingTime = (int)(endTime - System.currentTimeMillis());
-		} 
-		
+				remainingTime = (int) (endTime - System.currentTimeMillis());
+		}
+
 		Effect effect = new Effect(getOwner(), getOwner(), template, skillLvl, remainingTime);
 		abnormalEffectMap.put(effect.getStack(), effect);
 		effect.addAllEffectToSucess();
 		effect.startEffect(true);
 
 		if (effect.getSkillTemplate().getTargetSlot() != SkillTargetSlot.NOSHOW)
-			PacketSendUtility.sendPacket(getOwner(), new SM_ABNORMAL_STATE(Collections.singletonList(effect), abnormals));
+			PacketSendUtility.sendPacket(getOwner(),
+					new SM_ABNORMAL_STATE(Collections.singletonList(effect), abnormals));
 
 	}
 

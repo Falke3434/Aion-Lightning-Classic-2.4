@@ -49,6 +49,7 @@ public class RiftController extends NpcController {
 	private RiftEnum riftTemplate;
 
 	private int deSpawnedTime;
+
 	/**
 	 * Used to create master rifts or slave rifts (slave == null)
 	 * 
@@ -56,7 +57,7 @@ public class RiftController extends NpcController {
 	 */
 
 	public RiftController(Npc slave, RiftEnum riftTemplate) {
-		this.deSpawnedTime = ((int)(System.currentTimeMillis()/1000))+60*60;
+		this.deSpawnedTime = ((int) (System.currentTimeMillis() / 1000)) + 60 * 60;
 		this.riftTemplate = riftTemplate;
 		this.maxEntries = riftTemplate.getEntries();
 		if (slave != null)// master rift should be created
@@ -82,7 +83,7 @@ public class RiftController extends NpcController {
 				if (!isAccepting)
 					return;
 
-				if(!getOwner().isSpawned())
+				if (!getOwner().isSpawned())
 					return;
 
 				int worldId = slaveSpawnTemplate.getWorldId();
@@ -135,20 +136,20 @@ public class RiftController extends NpcController {
 				}
 			}
 		});
-	
+
 		super.onDelete();
 	}
+
 	/**
 	 * @param activePlayer
 	 */
 	public void sendMessage(Player activePlayer) {
 		if (!getOwner().isSpawned())
 			return;
-		if (isMaster){
+		if (isMaster) {
 			PacketSendUtility.sendPacket(activePlayer, new SM_RIFT_ANNOUNCE(this, isMaster));
 			PacketSendUtility.sendPacket(activePlayer, new SM_RIFT_ANNOUNCE(riftTemplate.getDestination()));
-		}
-		else{
+		} else {
 			PacketSendUtility.sendPacket(activePlayer, new SM_RIFT_ANNOUNCE(this, isMaster));
 		}
 	}
@@ -166,11 +167,10 @@ public class RiftController extends NpcController {
 				@Override
 				public void visit(Player player) {
 					if (player.isSpawned()) {
-						if (isMaster){
+						if (isMaster) {
 							PacketSendUtility.sendPacket(player, masterPacket);
 							PacketSendUtility.sendPacket(player, announcePacket);
-						}
-						else{
+						} else {
 							PacketSendUtility.sendPacket(player, slavePacket);
 						}
 					}
@@ -179,7 +179,6 @@ public class RiftController extends NpcController {
 		}
 	}
 
-	
 	/**
 	 * @return the maxEntries
 	 */
@@ -187,7 +186,6 @@ public class RiftController extends NpcController {
 		return maxEntries;
 	}
 
-	
 	/**
 	 * @return the minLevel
 	 */
@@ -195,7 +193,6 @@ public class RiftController extends NpcController {
 		return minLevel;
 	}
 
-	
 	/**
 	 * @return the maxLevel
 	 */
@@ -203,7 +200,6 @@ public class RiftController extends NpcController {
 		return maxLevel;
 	}
 
-	
 	/**
 	 * @return the riftTemplate
 	 */
@@ -211,18 +207,18 @@ public class RiftController extends NpcController {
 		return riftTemplate;
 	}
 
-	
 	/**
 	 * @return the usedEntries
 	 */
 	public int getUsedEntries() {
 		return usedEntries;
 	}
-	
-	private RiftController getThis(){
+
+	private RiftController getThis() {
 		return this;
 	}
-	public int getRemainTime(){
-		return deSpawnedTime -(int)(System.currentTimeMillis()/1000);
+
+	public int getRemainTime() {
+		return deSpawnedTime - (int) (System.currentTimeMillis() / 1000);
 	}
 }

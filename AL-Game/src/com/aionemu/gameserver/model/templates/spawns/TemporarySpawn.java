@@ -16,12 +16,13 @@
  */
 package com.aionemu.gameserver.model.templates.spawns;
 
-import com.aionemu.gameserver.utils.gametime.GameTime;
-import com.aionemu.gameserver.utils.gametime.GameTimeManager;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
+import com.aionemu.gameserver.utils.gametime.GameTime;
+import com.aionemu.gameserver.utils.gametime.GameTimeManager;
 
 /**
  *
@@ -31,10 +32,10 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "TemporarySpawn")
 public class TemporarySpawn {
 
-	@XmlAttribute(name = "spawn_time") // *.*.*  hour.day.month (* == all)
+	@XmlAttribute(name = "spawn_time") // *.*.* hour.day.month (* == all)
 	private String spawnTime;
 
-	@XmlAttribute(name = "despawn_time") // *.*.*  hour.day.month (* == all)
+	@XmlAttribute(name = "despawn_time") // *.*.* hour.day.month (* == all)
 	private String despawnTime;
 
 	public String getSpawnTime() {
@@ -119,7 +120,7 @@ public class TemporarySpawn {
 			if (!checkTime(curentDay, spawnDay, despawnDay)) {
 				return false;
 			}
-		} 
+		}
 		if (spawnMonth == null && spawnDay == null && !checkHour(curentHour, spawnHour, despawnHour)) {
 			return false;
 		}
@@ -131,8 +132,7 @@ public class TemporarySpawn {
 			if (!(curentTime >= spawnTime && curentTime <= despawnTime)) {
 				return false;
 			}
-		}
-		else if (spawnTime > despawnTime) {
+		} else if (spawnTime > despawnTime) {
 			if (!(curentTime >= spawnTime || curentTime <= despawnTime)) {
 				return false;
 			}
@@ -145,8 +145,7 @@ public class TemporarySpawn {
 			if (!(curentTime >= spawnTime && curentTime < despawnTime)) {
 				return false;
 			}
-		}
-		else if (spawnTime > despawnTime) {
+		} else if (spawnTime > despawnTime) {
 			if (!(curentTime >= spawnTime || curentTime < despawnTime)) {
 				return false;
 			}

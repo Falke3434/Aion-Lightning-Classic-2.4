@@ -20,9 +20,6 @@ public class CmdQuestauto extends BaseCommand {
 	 */
 	private final int[] questIds = new int[] {};
 
-	
-
-
 	public void execute(Player player, String... params) {
 		if (params.length != 1) {
 			showHelp(player);
@@ -31,8 +28,7 @@ public class CmdQuestauto extends BaseCommand {
 		int questId = 0;
 		try {
 			questId = Integer.parseInt(params[0]);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			PacketSendUtility.sendMessage(player, "wrong quest id");
 			return;
 		}
@@ -48,8 +44,8 @@ public class CmdQuestauto extends BaseCommand {
 		}
 
 		qs.setStatus(QuestStatus.REWARD);
-		PacketSendUtility
-			.sendPacket(player, new SM_QUEST_ACTION(questId, qs.getStatus(), qs.getQuestVars().getQuestVars()));
+		PacketSendUtility.sendPacket(player,
+				new SM_QUEST_ACTION(questId, qs.getStatus(), qs.getQuestVars().getQuestVars()));
 	}
 
 }

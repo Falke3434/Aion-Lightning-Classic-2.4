@@ -17,9 +17,6 @@
 
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.THashMap;
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +27,9 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.chest.ChestTemplate;
+
+import gnu.trove.map.hash.THashMap;
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author Wakizashi
@@ -47,7 +47,8 @@ public class ChestData {
 	private THashMap<String, ChestTemplate> namedChests = new THashMap<String, ChestTemplate>();
 
 	/**
-	 * - Inititialize all maps for subsequent use - Don't nullify initial chest list as it will be used during reload
+	 * - Inititialize all maps for subsequent use - Don't nullify initial chest list
+	 * as it will be used during reload
 	 * 
 	 * @param u
 	 * @param parent
@@ -85,7 +86,7 @@ public class ChestData {
 
 	/**
 	 * @param chests
-	 *          the chests to set
+	 *            the chests to set
 	 */
 	public void setChests(List<ChestTemplate> chests) {
 		this.chests = chests;

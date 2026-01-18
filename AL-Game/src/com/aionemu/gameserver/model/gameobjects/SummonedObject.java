@@ -45,12 +45,11 @@ public class SummonedObject extends Npc {
 	 * @param level
 	 */
 	public SummonedObject(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate objectTemplate,
-		byte level) {
+			byte level) {
 		super(objId, controller, spawnTemplate, objectTemplate, level);
 		this.level = level;
 	}
 
-	@Override
 	protected void setupStatContainers(byte level) {
 		setGameStats(new SummonedObjectGameStats(this));
 		setLifeStats(new NpcLifeStats(this));

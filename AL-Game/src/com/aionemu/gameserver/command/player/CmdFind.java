@@ -44,10 +44,11 @@ public class CmdFind extends BaseCommand {
 					if (drop.getItemId() != itemId) {
 						continue;
 					}
-					
-					float chance = drop.modifRatio(drop.getItemId(), npcDrop.getNpcId()) * npcDropGroup.getDropModifier() * player.getRates().getDropRate();
+
+					float chance = drop.modifRatio(drop.getItemId(), npcDrop.getNpcId())
+							* npcDropGroup.getDropModifier() * player.getRates().getDropRate();
 					chance = Math.min(100, chance);
-					
+
 					if (chance < rateMin || chance > rateMax) {
 						continue;
 					}

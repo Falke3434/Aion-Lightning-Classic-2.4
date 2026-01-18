@@ -16,6 +16,12 @@
  */
 package com.aionemu.gameserver.services.item;
 
+import java.util.Collections;
+import java.util.Set;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.ItemStoneListDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -30,10 +36,6 @@ import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.trade.PricesService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
-import java.util.Collections;
-import java.util.Set;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author ATracer
@@ -69,7 +71,7 @@ public class ItemSocketService {
 
 		return stone;
 	}
-	
+
 	public static ManaStone addManaStone(Item item, int itemId, int slotId) {
 		if (item == null)
 			return null;
@@ -87,8 +89,8 @@ public class ItemSocketService {
 	public static void copyFusionStones(Item source, Item target) {
 		if (source.hasManaStones()) {
 			for (ManaStone manaStone : source.getItemStones()) {
-				target.getFusionStones().add(
-					new ManaStone(target.getObjectId(), manaStone.getItemId(), manaStone.getSlot(), PersistentState.NEW));
+				target.getFusionStones().add(new ManaStone(target.getObjectId(), manaStone.getItemId(),
+						manaStone.getSlot(), PersistentState.NEW));
 			}
 		}
 	}
@@ -118,7 +120,7 @@ public class ItemSocketService {
 		fusionStones.add(stone);
 		return stone;
 	}
-	
+
 	public static ManaStone addFusionStone(Item item, int itemId, int slotId) {
 		if (item == null)
 			return null;
@@ -241,7 +243,8 @@ public class ItemSocketService {
 
 		Item weaponItem = player.getInventory().getItemByObjId(weaponId);
 		if (weaponItem == null) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_GIVE_ITEM_PROC_CANNOT_GIVE_PROC_TO_EQUIPPED_ITEM);
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_GIVE_ITEM_PROC_CANNOT_GIVE_PROC_TO_EQUIPPED_ITEM);
 			return;
 		}
 		int weaponItemId = weaponItem.getItemTemplate().getTemplateId();
@@ -261,9 +264,9 @@ public class ItemSocketService {
 			log.warn("Godstone info missing for itemid " + godStoneItemId);
 			return;
 		}
-		
+
 		int godsstoneItemIdmask = Math.round(godStoneItemId / 1000000);
-		if (godsstoneItemIdmask != 168){
+		if (godsstoneItemIdmask != 168) {
 			return;
 		}
 
@@ -272,7 +275,7 @@ public class ItemSocketService {
 
 		weaponItem.addGodStone(godStoneItemId);
 		PacketSendUtility.sendPacket(player,
-			SM_SYSTEM_MESSAGE.STR_GIVE_ITEM_PROC_ENCHANTED_TARGET_ITEM(new DescriptionId(weaponItem.getNameID())));
+				SM_SYSTEM_MESSAGE.STR_GIVE_ITEM_PROC_ENCHANTED_TARGET_ITEM(new DescriptionId(weaponItem.getNameID())));
 
 		player.getInventory().decreaseKinah(socketPrice);
 		ItemPacketService.updateItemAfterInfoChange(player, weaponItem);

@@ -16,6 +16,16 @@
  */
 package com.aionemu.gameserver.services.abyss;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.configs.main.RankingConfig;
@@ -27,11 +37,6 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.utils.stats.AbyssRankEnum;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * @author ATracer
@@ -50,7 +55,7 @@ public class AbyssRankUpdateService {
 	public void scheduleUpdate() {
 		ServerVariablesDAO dao = DAOManager.getDAO(ServerVariablesDAO.class);
 		int nextTime = dao.load("abyssRankUpdate");
-		if (nextTime < System.currentTimeMillis()/1000){
+		if (nextTime < System.currentTimeMillis() / 1000) {
 			performUpdate();
 		}
 
@@ -68,8 +73,8 @@ public class AbyssRankUpdateService {
 	 */
 	public void performUpdate() {
 		log.info("AbyssRankUpdateService: executing rank update");
-		long startTime = System.currentTimeMillis();		
-		
+		long startTime = System.currentTimeMillis();
+
 		World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 
 			@Override
@@ -149,8 +154,7 @@ public class AbyssRankUpdateService {
 				abyssRank.setRank(newRank);
 				AbyssPointsService.checkRankChanged(onlinePlayer, currentRank, newRank);
 			}
-		}
-		else {
+		} else {
 			DAOManager.getDAO(AbyssRankDAO.class).updateAbyssRank(playerId, newRank);
 		}
 	}

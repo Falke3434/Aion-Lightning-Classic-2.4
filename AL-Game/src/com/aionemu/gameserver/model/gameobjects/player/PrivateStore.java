@@ -85,7 +85,7 @@ public class PrivateStore {
 
 	/**
 	 * @param itemId
-	 *          return tradeItem
+	 *            return tradeItem
 	 */
 	public TradePSItem getTradeItemByObjId(int itemObjId) {
 		return items.get(itemObjId);
@@ -93,7 +93,7 @@ public class PrivateStore {
 
 	/**
 	 * @param storeMessage
-	 *          the storeMessage to set
+	 *            the storeMessage to set
 	 */
 	public void setStoreMessage(String storeMessage) {
 		this.storeMessage = storeMessage;

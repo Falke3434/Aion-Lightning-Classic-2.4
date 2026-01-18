@@ -12,22 +12,20 @@ import com.aionemu.gameserver.world.WorldMapType;
 
 /*Syntax : //goto <location> */
 
-
 public class CmdGoTo extends BaseCommand {
 
-	
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 1) {
 			showHelp(admin);
 			return;
 		}
-		
+
 		StringBuilder sbDestination = new StringBuilder();
-		for(String p : params)
+		for (String p : params)
 			sbDestination.append(p + " ");
-		
+
 		String destination = sbDestination.toString().trim();
-		
+
 		/**
 		 * Elysea
 		 */
@@ -94,12 +92,12 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, WorldMapType.HEIRON.getId(), 1999, 1391, 118);
 		else if (destination.equalsIgnoreCase("Arbolu"))
 			goTo(admin, WorldMapType.HEIRON.getId(), 170, 1662, 120);
-		
+
 		/**
 		 * Asmodae
 		 */
 		// Pandaemonium
-		else if  (destination.equalsIgnoreCase("Pandaemonium") || destination.equalsIgnoreCase("Pandae"))
+		else if (destination.equalsIgnoreCase("Pandaemonium") || destination.equalsIgnoreCase("Pandae"))
 			goTo(admin, WorldMapType.PANDAEMONIUM.getId(), 1679, 1400, 195);
 		// Marchutran
 		else if (destination.equalsIgnoreCase("Marchutan"))
@@ -161,7 +159,7 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, WorldMapType.BELUSLAN.getId(), 1942, 513, 412);
 		else if (destination.equalsIgnoreCase("Hoarfrost"))
 			goTo(admin, WorldMapType.BELUSLAN.getId(), 2431, 2063, 579);
-		
+
 		/**
 		 * Balaurea
 		 */
@@ -194,7 +192,7 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 600010000, 583, 767, 300);
 		else if (destination.equalsIgnoreCase("Besh Entry") || destination.equalsIgnoreCase("Beshentry"))
 			goTo(admin, 600010000, 1411, 767, 314);
-		
+
 		/**
 		 * Abyss
 		 */
@@ -226,7 +224,7 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 300030000, 513, 668, 331);
 		else if (destination.equalsIgnoreCase("Arcanis") || destination.equalsIgnoreCase("Sky Temple of Arcanis"))
 			goTo(admin, 320050000, 177, 229, 536);
-		else if (destination.equalsIgnoreCase("Fire Temple") ||destination.equalsIgnoreCase("FT"))
+		else if (destination.equalsIgnoreCase("Fire Temple") || destination.equalsIgnoreCase("FT"))
 			goTo(admin, 320100000, 144, 312, 123);
 		else if (destination.equalsIgnoreCase("Kromede") || destination.equalsIgnoreCase("Kromede Trial"))
 			goTo(admin, 300230000, 248, 244, 189);
@@ -249,7 +247,8 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 320110000, 603, 527, 200);
 		else if (destination.equalsIgnoreCase("Draupnir") || destination.equalsIgnoreCase("Draupnir Cave"))
 			goTo(admin, 320080000, 491, 373, 622);
-		else if (destination.equalsIgnoreCase("Theobomos Lab") || destination.equalsIgnoreCase("Theobomos Research Lab"))
+		else if (destination.equalsIgnoreCase("Theobomos Lab")
+				|| destination.equalsIgnoreCase("Theobomos Research Lab"))
 			goTo(admin, 310110000, 477, 201, 170);
 		else if (destination.equalsIgnoreCase("Dark Poeta") || destination.equalsIgnoreCase("DP"))
 			goTo(admin, 300040000, 1214, 412, 140);
@@ -285,12 +284,14 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 300150000, 637, 657, 134);
 		else if (destination.equalsIgnoreCase("Udas Lower") || destination.equalsIgnoreCase("Udas Lower Temple"))
 			goTo(admin, 300160000, 1146, 277, 116);
-		else if (destination.equalsIgnoreCase("Beshmundir") || destination.equalsIgnoreCase("BT") || destination.equalsIgnoreCase("Beshmundir Temple") || destination.equalsIgnoreCase("Besh"))
+		else if (destination.equalsIgnoreCase("Beshmundir") || destination.equalsIgnoreCase("BT")
+				|| destination.equalsIgnoreCase("Beshmundir Temple") || destination.equalsIgnoreCase("Besh"))
 			goTo(admin, 300170000, 1477, 237, 243);
 		// Padmarashka Cave
-		else if (destination.equalsIgnoreCase("Padmarashka Cave") || destination.equalsIgnoreCase("Padmarashka") || destination.equalsIgnoreCase("Padma"))
+		else if (destination.equalsIgnoreCase("Padmarashka Cave") || destination.equalsIgnoreCase("Padmarashka")
+				|| destination.equalsIgnoreCase("Padma"))
 			goTo(admin, 320150000, 385, 506, 66);
-		
+
 		/**
 		 * Quest Instance Maps
 		 */
@@ -318,7 +319,7 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 320030000, 275, 168, 205);
 		else if (destination.equalsIgnoreCase("Nidalber"))
 			goTo(admin, 320040000, 275, 168, 205);
-		
+
 		/**
 		 * Arenas
 		 */
@@ -379,9 +380,9 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 520010000, 256, 256, 49);
 		// Test
 		/*
-		else if (destination.equalsIgnoreCase("Test Dungeon"))
-			goTo(admin, 300020000, 104, 66, 25);
-		*/
+		 * else if (destination.equalsIgnoreCase("Test Dungeon")) goTo(admin, 300020000,
+		 * 104, 66, 25);
+		 */
 		else if (destination.equalsIgnoreCase("Test Basic"))
 			goTo(admin, 900020000, 144, 136, 20);
 		else if (destination.equalsIgnoreCase("Test Server"))
@@ -394,7 +395,7 @@ public class CmdGoTo extends BaseCommand {
 		// GamezNetwork GM zone
 		else if (destination.equalsIgnoreCase("gm"))
 			goTo(admin, 120020000, 1442, 1133, 302);
-		
+
 		/**
 		 * 2.5 Maps
 		 */
@@ -402,23 +403,24 @@ public class CmdGoTo extends BaseCommand {
 			goTo(admin, 110070000, 459, 251, 128);
 		else if (destination.equalsIgnoreCase("Marchutan Priory"))
 			goTo(admin, 120080000, 577, 250, 94);
-		else if (destination.equalsIgnoreCase("Esoterrace") || destination.equalsIgnoreCase("Esoterrasse") || destination.equalsIgnoreCase("Eso"))
+		else if (destination.equalsIgnoreCase("Esoterrace") || destination.equalsIgnoreCase("Esoterrasse")
+				|| destination.equalsIgnoreCase("Eso"))
 			goTo(admin, 300250000, 333, 437, 326);
-              		
+
 		else
 			PacketSendUtility.sendMessage(admin, "Could not find the specified destination !");
 	}
-	
+
 	private static void goTo(final Player admin, int worldId, float x, float y, float z) {
 		WorldMap destinationMap = World.getInstance().getWorldMap(worldId);
 		if (destinationMap.isInstanceType())
-			TeleportService.teleportTo(admin, worldId, getInstanceId(worldId, admin), x, y, z, 0 ,true);
+			TeleportService.teleportTo(admin, worldId, getInstanceId(worldId, admin), x, y, z, 0, true);
 		else
 			TeleportService.teleportTo(admin, worldId, x, y, z, 0, true);
 	}
-	
+
 	private static int getInstanceId(int worldId, Player admin) {
-		if (admin.getWorldId() == worldId)	{
+		if (admin.getWorldId() == worldId) {
 			WorldMapInstance registeredInstance = InstanceService.getRegisteredInstance(worldId, admin.getObjectId());
 			if (registeredInstance != null)
 				return registeredInstance.getInstanceId();
@@ -427,5 +429,5 @@ public class CmdGoTo extends BaseCommand {
 		InstanceService.registerPlayerWithInstance(newInstance, admin);
 		return newInstance.getInstanceId();
 	}
-	
+
 }

@@ -34,8 +34,8 @@ import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.model.limiteditems.LimitedItem;
 import com.aionemu.gameserver.model.items.storage.Storage;
+import com.aionemu.gameserver.model.limiteditems.LimitedItem;
 import com.aionemu.gameserver.model.templates.goods.GoodsList;
 import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.model.templates.item.TradeinItem;
@@ -102,21 +102,18 @@ public class TradeService {
 					if (item.getSellLimit() - tradeItem.getCount() < 0)
 						return false;
 					item.setSellLimit(item.getSellLimit() - (int) tradeItem.getCount());
-				}
-				else if (item.getBuyLimit() != 0 && item.getDefaultSellLimit() == 0) { // type B
+				} else if (item.getBuyLimit() != 0 && item.getDefaultSellLimit() == 0) { // type B
 					item.getBuyCount().putIfAbsent(player.getObjectId(), 0);
 					if (item.getBuyLimit() - tradeItem.getCount() < 0)
 						return false;
 					if (item.getBuyCount().containsKey(player.getObjectId())) {
 						if (item.getBuyCount().get(player.getObjectId()) < item.getBuyLimit()) {
 							item.getBuyCount().put(player.getObjectId(),
-								item.getBuyCount().get(player.getObjectId()) + (int) tradeItem.getCount());
-						}
-						else
+									item.getBuyCount().get(player.getObjectId()) + (int) tradeItem.getCount());
+						} else
 							return false;
 					}
-				}
-				else if (item.getBuyLimit() != 0 && item.getDefaultSellLimit() != 0) { // type C
+				} else if (item.getBuyLimit() != 0 && item.getDefaultSellLimit() != 0) { // type C
 					item.getBuyCount().putIfAbsent(player.getObjectId(), 0);
 					if (item.getBuyLimit() - tradeItem.getCount() < 0 || item.getSellLimit() - tradeItem.getCount() < 0)
 						return false;
@@ -124,9 +121,8 @@ public class TradeService {
 					if (item.getBuyCount().containsKey(player.getObjectId())) {
 						if (item.getBuyCount().get(player.getObjectId()) < item.getBuyLimit()) {
 							item.getBuyCount().put(player.getObjectId(),
-								item.getBuyCount().get(player.getObjectId()) + (int) tradeItem.getCount());
-						}
-						else
+									item.getBuyCount().get(player.getObjectId()) + (int) tradeItem.getCount());
+						} else
 							return false;
 					}
 					item.setSellLimit(item.getSellLimit() - (int) tradeItem.getCount());
@@ -136,7 +132,8 @@ public class TradeService {
 			long count = ItemService.addItem(player, tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount());
 			if (count != 0) {
 				log.warn(String.format("CHECKPOINT: itemservice couldnt add all items on buy: %d %d %d %d",
-					player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(), count));
+						player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(),
+						count));
 				inventory.decreaseKinah(tradeListPrice);
 				return false;
 			}
@@ -192,17 +189,18 @@ public class TradeService {
 			long count = ItemService.addItem(player, tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount());
 			if (count != 0) {
 				log.warn(String.format("CHECKPOINT: itemservice couldnt add all items on buy: %d %d %d %d",
-					player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(), count));
+						player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(),
+						count));
 				return false;
 			}
 
 			if (tradeItem.getCount() > 1) // You have purchased %1 %0s.
-				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300785, new DescriptionId(tradeItem
-					.getItemTemplate().getNameId()), tradeItem.getCount()));
+				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300785,
+						new DescriptionId(tradeItem.getItemTemplate().getNameId()), tradeItem.getCount()));
 			else
 				// You have purchased %0.
-				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300784, new DescriptionId(tradeItem
-					.getItemTemplate().getNameId())));
+				PacketSendUtility.sendPacket(player,
+						new SM_SYSTEM_MESSAGE(1300784, new DescriptionId(tradeItem.getItemTemplate().getNameId())));
 		}
 
 		return true;
@@ -244,7 +242,8 @@ public class TradeService {
 			long count = ItemService.addItem(player, tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount());
 			if (count != 0) {
 				log.warn(String.format("CHECKPOINT: itemservice couldnt add all items on buy: %d %d %d %d",
-					player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(), count));
+						player.getObjectId(), tradeItem.getItemTemplate().getTemplateId(), tradeItem.getCount(),
+						count));
 				return false;
 			}
 		}
@@ -257,7 +256,8 @@ public class TradeService {
 	 */
 	private static boolean validateBuyItems(TradeList tradeList, Player player) {
 		Npc npc = (Npc) World.getInstance().findVisibleObject(tradeList.getSellerObjId());
-		TradeListTemplate tradeListTemplate = tradeListData.getTradeListTemplate(npc.getObjectTemplate().getTemplateId());
+		TradeListTemplate tradeListTemplate = tradeListData
+				.getTradeListTemplate(npc.getObjectTemplate().getTemplateId());
 
 		Set<Integer> allowedItems = new HashSet<Integer>();
 		for (TradeTab tradeTab : tradeListTemplate.getTradeTablist()) {
@@ -295,7 +295,8 @@ public class TradeService {
 				return false;
 
 			if (!item.isSellable()) { // %0 is not an item that can be sold.
-				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300344, new DescriptionId(item.getNameID())));
+				PacketSendUtility.sendPacket(player,
+						new SM_SYSTEM_MESSAGE(1300344, new DescriptionId(item.getNameID())));
 				return false;
 			}
 
@@ -309,17 +310,14 @@ public class TradeService {
 			if (item.getItemCount() - tradeItem.getCount() < 0) {
 				AuditLogger.info(player, "Trade exploit, sell item count big");
 				return false;
-			}
-			else if (item.getItemCount() - tradeItem.getCount() == 0) {
+			} else if (item.getItemCount() - tradeItem.getCount() == 0) {
 				inventory.delete(item); // need to be here to avoid exploit by sending packet with many
 				// items with same unique ids
 				repurchaseItem = item;
-			}
-			else if (item.getItemCount() - tradeItem.getCount() > 0) {
- 				repurchaseItem = ItemFactory.newItem(item.getItemId(), tradeItem.getCount());
+			} else if (item.getItemCount() - tradeItem.getCount() > 0) {
+				repurchaseItem = ItemFactory.newItem(item.getItemId(), tradeItem.getCount());
 				inventory.decreaseItemCount(item, tradeItem.getCount());
-			}
- 			else
+			} else
 				return false;
 
 			kinahReward += realReward;
@@ -333,12 +331,13 @@ public class TradeService {
 	}
 
 	public static boolean performBuyFromTradeInTrade(Player player, int npcObjectId, int itemId, int count) {
-		if (player.getInventory().isFull()){
+		if (player.getInventory().isFull()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_FULL_INVENTORY);
 			return false;
 		}
 		VisibleObject visibleObject = player.getKnownList().getObject(npcObjectId);
-		if (visibleObject == null || !(visibleObject instanceof Npc) || MathUtil.getDistance(visibleObject, player) > 10)
+		if (visibleObject == null || !(visibleObject instanceof Npc)
+				|| MathUtil.getDistance(visibleObject, player) > 10)
 			return false;
 		int npcId = ((Npc) visibleObject).getNpcId();
 		TradeListTemplate tradeInList = tradeListData.getTradeInListTemplate(npcId);
@@ -352,29 +351,30 @@ public class TradeService {
 				break;
 			}
 		}
-			if (!valid)
-				return false;
-			System.out.println("Start");
-			ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(itemId);
-			if (itemTemplate.getMaxStackCount() < count)
-				return false;
-			try {
-				for (TradeinItem treadInList : itemTemplate.getTradeinList().getTradeinItem()) {
-					if (player.getInventory().getItemCountByItemId(treadInList.getId()) < SafeMath.multSafe(treadInList.getPrice() , count))
-						return false;
-				}
-				
-				for (TradeinItem treadInList : itemTemplate.getTradeinList().getTradeinItem()) {
-					if (!player.getInventory().decreaseByItemId(treadInList.getId(), SafeMath.multSafe(treadInList.getPrice(), count)))
-						return false;
-				}
+		if (!valid)
+			return false;
+		System.out.println("Start");
+		ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(itemId);
+		if (itemTemplate.getMaxStackCount() < count)
+			return false;
+		try {
+			for (TradeinItem treadInList : itemTemplate.getTradeinList().getTradeinItem()) {
+				if (player.getInventory().getItemCountByItemId(treadInList.getId()) < SafeMath
+						.multSafe(treadInList.getPrice(), count))
+					return false;
 			}
-			catch (OverfowException e) {
-				AuditLogger.info(player, "OverfowException using tradeInTrade " + e.getMessage());
-				return false;
+
+			for (TradeinItem treadInList : itemTemplate.getTradeinList().getTradeinItem()) {
+				if (!player.getInventory().decreaseByItemId(treadInList.getId(),
+						SafeMath.multSafe(treadInList.getPrice(), count)))
+					return false;
 			}
-			
-			ItemService.addItem(player, itemId, count);
+		} catch (OverfowException e) {
+			AuditLogger.info(player, "OverfowException using tradeInTrade " + e.getMessage());
+			return false;
+		}
+
+		ItemService.addItem(player, itemId, count);
 		return false;
 	}
 

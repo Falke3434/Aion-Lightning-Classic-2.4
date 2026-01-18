@@ -16,6 +16,7 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
+import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerCommonData;
 import com.aionemu.gameserver.model.stats.calc.Stat2;
@@ -117,6 +118,10 @@ public class SM_STATS_INFO extends AionServerPacket {
 		writeD(flyTime.getCurrent());// [max fly time]
 		writeD(pls.getCurrentFp());// [current fly time]
 
+		if (GSConfig.SERVER_COUNTRY_CODE == 0) {
+			writeB(new byte[8]); // 2.7
+		}
+
 		writeC(player.getFlyState());// [fly state]
 		writeC(0);// [unk]
 
@@ -168,8 +173,8 @@ public class SM_STATS_INFO extends AionServerPacket {
 		Stat2 concentration = pgs.getStat(StatEnum.CONCENTRATION, 0);
 		Stat2 mBoost = pgs.getMBoost();
 		int totalBoostMagicalSkill = mBoost.getCurrent();
-		if (totalBoostMagicalSkill > 2700)
-			totalBoostMagicalSkill = 2700;
+		if (totalBoostMagicalSkill > 3200)
+			totalBoostMagicalSkill = 3200;
 		Stat2 healBoost = pgs.getStat(StatEnum.HEAL_BOOST, 0);
 		writeH(concentration.getCurrent());// [current concetration]
 		// Was mBoost.getCurrent() before optimizing
@@ -184,23 +189,29 @@ public class SM_STATS_INFO extends AionServerPacket {
 		writeH(mCritResist.getCurrent());// [current spell resist]
 		writeH(pCritDamReduce.getCurrent());// [current strike fortitude]
 		writeH(mCritDamReduce.getCurrent());// [current spell fortitude]
-		writeH(20511);// [unk] 1.9 version
+		writeH(0);// [unk] 1.9 version
 
 		writeD(player.getInventory().getLimit());// [unk]
 
-		writeD(player.getInventory().size());// [unk]
+		writeD((27 + (player.getInventory().size() * 9)));
 		writeD(0);// [unk]
 		writeD(0);// [unk]
+
 		writeD(pcd.getPlayerClass().getClassId());// [Player Class id]
 
-		writeQ(0);// [unk] 1.9 version
+		writeD(0);// [unk] 1.9 version
+		writeD(0);// [unk] 1.9 version
 		writeQ(pcd.getCurrentReposteEnergy());
 		writeQ(pcd.getMaxReposteEnergy());
-
 		writeC(pcd.getCurrentSalvationPercent());
 
-		//unk
-		writeB(new byte[7]);
+		// unk
+		if (GSConfig.SERVER_COUNTRY_CODE == 0) {
+			writeB(new byte[3]);
+			writeD(666); // daeva poten
+		} else {
+			writeB(new byte[7]);
+		}
 
 		writeH(power.getBase());// [base power]
 		writeH(health.getBase());// [base health]
@@ -219,7 +230,9 @@ public class SM_STATS_INFO extends AionServerPacket {
 		writeD(maxMp.getBase());// [base mana]
 		writeD(maxDp.getBase());// [base dp]
 		writeD(flyTime.getBase());// [fly time]
-
+		if (GSConfig.SERVER_COUNTRY_CODE == 0) {
+			writeB(new byte[4]); // unk
+		}
 		writeH(mainHandPAtk.getBase());// [base main hand attack]
 		writeH(offHandPAtk.getBase());// [base off hand attack]
 		writeH(mAtk.getBase()); // [base magic attack ?]

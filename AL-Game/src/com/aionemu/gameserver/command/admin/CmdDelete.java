@@ -12,7 +12,7 @@ import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTempl
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 public class CmdDelete extends BaseCommand {
-	
+
 	public void execute(Player admin, String... params) {
 		Npc npc = null;
 		Gatherable gather = null;
@@ -47,11 +47,10 @@ public class CmdDelete extends BaseCommand {
 			npc.getController().onDelete();
 		else
 			gather.getController().onDelete();
-		
+
 		try {
 			DataManager.SPAWNS_DATA2.saveSpawn(admin, (npc != null ? npc : gather), true);
-		}
-		catch (IOException e) {
+		} catch (IOException e) {
 			e.printStackTrace();
 			PacketSendUtility.sendMessage(admin, "Could not remove spawn");
 			return;

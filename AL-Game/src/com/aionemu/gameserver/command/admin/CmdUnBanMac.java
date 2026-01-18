@@ -9,8 +9,6 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  * @author KID
  */
 public class CmdUnBanMac extends BaseCommand {
-	
-	
 
 	public void execute(Player player, String... params) {
 		if (params == null || params.length < 2) {
@@ -20,11 +18,10 @@ public class CmdUnBanMac extends BaseCommand {
 
 		String address = params[1];
 		boolean result = BannedMacManager.getInstance().unbanAddress(address,
-			"uban;mac=" + address + ", " + player.getObjectId() + "; admin=" + player.getName());
+				"uban;mac=" + address + ", " + player.getObjectId() + "; admin=" + player.getName());
 		if (result)
 			PacketSendUtility.sendMessage(player, "mac " + address + " has unbanned");
 		else
 			PacketSendUtility.sendMessage(player, "mac " + address + " is not banned");
 	}
 }
-

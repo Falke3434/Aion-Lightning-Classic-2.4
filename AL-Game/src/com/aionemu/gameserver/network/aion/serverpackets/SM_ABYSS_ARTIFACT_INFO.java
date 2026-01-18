@@ -18,12 +18,12 @@ package com.aionemu.gameserver.network.aion.serverpackets;
 
 import java.util.Collection;
 
-import javolution.util.FastList;
-
 import com.aionemu.gameserver.model.siege.SiegeLocation;
 import com.aionemu.gameserver.model.siege.SiegeType;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
+
+import javolution.util.FastList;
 
 public class SM_ABYSS_ARTIFACT_INFO extends AionServerPacket {
 
@@ -38,7 +38,7 @@ public class SM_ABYSS_ARTIFACT_INFO extends AionServerPacket {
 		FastList<SiegeLocation> validLocations = new FastList<SiegeLocation>();
 		for (SiegeLocation loc : locations) {
 			if (((loc.getType() == SiegeType.ARTIFACT) || (loc.getType() == SiegeType.FORTRESS))
-				&& (loc.getLocationId() >= 1011) && (loc.getLocationId() < 2000))
+					&& (loc.getLocationId() >= 1011) && (loc.getLocationId() < 2000))
 				validLocations.add(loc);
 		}
 		writeH(validLocations.size());

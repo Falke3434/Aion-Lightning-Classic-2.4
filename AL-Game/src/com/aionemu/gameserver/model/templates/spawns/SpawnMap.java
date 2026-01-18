@@ -16,16 +16,16 @@
  */
 package com.aionemu.gameserver.model.templates.spawns;
 
-
-import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawn;
-
 import java.util.ArrayList;
 import java.util.List;
+
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
+
+import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawn;
 
 /**
  *
@@ -37,16 +37,16 @@ public class SpawnMap {
 
 	@XmlElement(name = "spawn")
 	private List<Spawn> spawns;
-	
+
 	@XmlElement(name = "siege_spawn")
 	private List<SiegeSpawn> siegeSpawns;
-	
+
 	@XmlAttribute(name = "map_id")
 	private int mapId;
-	
+
 	public SpawnMap() {
 	}
-	
+
 	public SpawnMap(int mapId) {
 		this.mapId = mapId;
 	}
@@ -60,11 +60,11 @@ public class SpawnMap {
 			spawns = new ArrayList<Spawn>();
 		return spawns;
 	}
-	
+
 	public void addSpawns(Spawn spawns) {
 		getSpawns().add(spawns);
 	}
-	
+
 	public void removeSpawns(Spawn spawns) {
 		getSpawns().remove(spawns);
 	}
@@ -74,8 +74,8 @@ public class SpawnMap {
 			siegeSpawns = new ArrayList<SiegeSpawn>();
 		return siegeSpawns;
 	}
-	
+
 	public void addSiegeSpawns(SiegeSpawn spawns) {
 		getSiegeSpawns().add(spawns);
-	}	
+	}
 }

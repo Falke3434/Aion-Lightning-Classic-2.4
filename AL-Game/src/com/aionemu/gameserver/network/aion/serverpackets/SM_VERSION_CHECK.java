@@ -16,18 +16,16 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
+import java.util.Calendar;
 
-import com.aionemu.gameserver.GameServer;
 import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.configs.main.MembershipConfig;
 import com.aionemu.gameserver.configs.network.IPConfig;
 import com.aionemu.gameserver.configs.network.NetworkConfig;
-import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.network.NetworkController;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.ChatService;
-import com.aionemu.gameserver.services.EventService;
 
 /**
  * @author -Nemesiss- CC fix
@@ -35,9 +33,7 @@ import com.aionemu.gameserver.services.EventService;
  */
 public class SM_VERSION_CHECK extends AionServerPacket {
 
-	/**
-	 * Number of characters can be created
-	 */
+	private int version;
 	private int characterLimitCount;
 
 	/**
@@ -49,14 +45,15 @@ public class SM_VERSION_CHECK extends AionServerPacket {
 	/**
 	 * @param chatService
 	 */
-	public SM_VERSION_CHECK() {
-		if (MembershipConfig.CHARACTER_ADDITIONAL_ENABLE != 10 && MembershipConfig.CHARACTER_ADDITIONAL_COUNT > GSConfig.CHARACTER_LIMIT_COUNT) {
+	public SM_VERSION_CHECK(int version) {
+		this.version = version;
+		if (MembershipConfig.CHARACTER_ADDITIONAL_ENABLE != 10
+				&& MembershipConfig.CHARACTER_ADDITIONAL_COUNT > GSConfig.CHARACTER_LIMIT_COUNT) {
 			characterLimitCount = MembershipConfig.CHARACTER_ADDITIONAL_COUNT;
-		}
-		else {
+		} else {
 			characterLimitCount = GSConfig.CHARACTER_LIMIT_COUNT;
 		}
-		
+
 		characterLimitCount *= NetworkController.getInstance().getServerCount();
 
 		if (GSConfig.CHARACTER_FACTIONS_MODE < 0 || GSConfig.CHARACTER_FACTIONS_MODE > 2)
@@ -75,48 +72,34 @@ public class SM_VERSION_CHECK extends AionServerPacket {
 	 */
 	@Override
 	protected void writeImpl(AionConnection con) {
+		// Aion classic = 192
+		if (version < 192) {
+			// Send wrong client version
+			writeC(0x02);
+			return;
+		}
 		writeC(0x00);
 		writeC(NetworkConfig.GAMESERVER_ID);
-		writeD(0x01B1A3);// unk
-		writeD(0x01B1A3);// unk
-		writeD(0x00000000);// spacing
-		writeD(0x01B1A3);// unk
-		writeD(0x4E9E4A);// Some kind of time in mili
-		writeC(0x00);// unk
+		writeD(220922);
+		writeD(220922);
+		writeD(0);
+		writeD(220922);
+		writeD((int) (Calendar.getInstance().getTimeInMillis() / 1000));
+		writeC(0);
 		writeC(GSConfig.SERVER_COUNTRY_CODE);// country code;
-		writeC(0x00);// unk
-
-		int serverMode = (characterLimitCount * 0x10) | characterFactionsMode;
-
-		if (GSConfig.FACTIONS_RATIO_LIMITED) {
-			if (GameServer.getCountFor(Race.ELYOS) + GameServer.getCountFor(Race.ASMODIANS) > GSConfig.FACTIONS_CHARACTER_CREATE_MAX_LIMIT_COUNT)
-				writeC(serverMode | 0x0C);
-			else if (GameServer.getRatiosFor(Race.ELYOS) > GSConfig.FACTIONS_RATIO_VALUE)
-				writeC(serverMode | 0x04);
-			else if (GameServer.getRatiosFor(Race.ASMODIANS) > GSConfig.FACTIONS_RATIO_VALUE)
-				writeC(serverMode | 0x08);
-			else
-				writeC(serverMode);
-		}
-		else {
-			writeC(serverMode | characterCreateMode);
-		}
-
-		writeD((int) (System.currentTimeMillis() / 1000));
-		writeH(0x015E);
-		writeH(0x0A01);
-		writeH(0x0A01);
-		writeH(0x0370A);
-		writeC(0x02);
-		writeC(0x00);
-		writeC(GSConfig.CHARACTER_REENTRY_TIME);
-		writeC(GSConfig.XMAS_ENABLE || EventService.getInstance().isChristmasTime() ? 0x01 : 0x00);
-		writeD(0x00); //2.5
+		writeC(0);
+		int serverMode = (characterLimitCount * 16) | characterFactionsMode;
+		writeC(128);
+		writeD((int) (Calendar.getInstance().getTimeInMillis() / 1000));
 
 		writeH(1);// its loop size
-		//for... chat servers?
+		// for... chat servers?
 		{
-			writeC(0x00);//spacer
+			writeC(0x00);// spacer
+			writeD(921345);// unk
+			writeH(511);// unk
+			writeC(0);// unk
+			writeC(0);// unk
 			// if the correct ip is not sent it will not work
 			writeB(IPConfig.getDefaultAddress());
 			writeH(ChatService.getPort());

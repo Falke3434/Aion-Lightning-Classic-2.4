@@ -22,9 +22,9 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.model.gameobjects.Npc;
-import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.Servant;
 import com.aionemu.gameserver.model.gameobjects.Summon;
+import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.skillengine.model.Skill;
 
 /**
@@ -53,14 +53,14 @@ public class TargetCondition extends Condition {
 		}
 		skill.setTargetCondition(value);
 		switch (value) {
-			case NPC:
-				return ((skill.getFirstTarget() instanceof Npc) || (skill.checkNonTargetAOE()));
-			case PC:
-				return ( (skill.getFirstTarget() instanceof Player)
-						|| ((skill.getEffector() instanceof Summon) && (skill.isFirstTargetSelf()))
-						|| ((skill.getEffector() instanceof Servant) && (skill.isFirstTargetSelf())) );
-			default:
-				return false;
+		case NPC:
+			return ((skill.getFirstTarget() instanceof Npc) || (skill.checkNonTargetAOE()));
+		case PC:
+			return ((skill.getFirstTarget() instanceof Player)
+					|| ((skill.getEffector() instanceof Summon) && (skill.isFirstTargetSelf()))
+					|| ((skill.getEffector() instanceof Servant) && (skill.isFirstTargetSelf())));
+		default:
+			return false;
 		}
 	}
 }

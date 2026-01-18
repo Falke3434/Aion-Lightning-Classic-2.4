@@ -16,6 +16,21 @@
  */
 package com.aionemu.gameserver.services;
 
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
+
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.configs.main.SiegeConfig;
@@ -25,12 +40,26 @@ import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.siege.SiegeNpc;
-import com.aionemu.gameserver.model.siege.*;
+import com.aionemu.gameserver.model.siege.ArtifactLocation;
+import com.aionemu.gameserver.model.siege.FortressLocation;
+import com.aionemu.gameserver.model.siege.OutpostLocation;
+import com.aionemu.gameserver.model.siege.SiegeLocation;
+import com.aionemu.gameserver.model.siege.SiegeRace;
 import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
-import com.aionemu.gameserver.network.aion.serverpackets.*;
-import com.aionemu.gameserver.services.siegeservice.*;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO2;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO3;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_INFLUENCE_RATIO;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SHIELD_EFFECT;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SIEGE_LOCATION_INFO;
+import com.aionemu.gameserver.services.siegeservice.ArtifactSiege;
+import com.aionemu.gameserver.services.siegeservice.FortressSiege;
+import com.aionemu.gameserver.services.siegeservice.FortressSiegeStartRunnable;
+import com.aionemu.gameserver.services.siegeservice.OutpostSiege;
+import com.aionemu.gameserver.services.siegeservice.Siege;
+import com.aionemu.gameserver.services.siegeservice.SiegeException;
 import com.aionemu.gameserver.spawnengine.SpawnEngine;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
@@ -39,13 +68,8 @@ import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.google.common.base.Predicate;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import java.util.*;
-import javax.annotation.Nullable;
+
 import javolution.util.FastMap;
-import org.quartz.JobDetail;
-import org.quartz.Trigger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author SoulKeeper
@@ -62,13 +86,13 @@ public class SiegeService {
 	@Deprecated
 	private static final String BALAUR_PROTECTOR_SPAWN_SCHEDULE = "0 0 21 ? * *";
 	/**
-	 * We should broadcast fortress status every hour Actually only influence
-	 * packet must be sent, but that doesn't matter
+	 * We should broadcast fortress status every hour Actually only influence packet
+	 * must be sent, but that doesn't matter
 	 */
 	private static final String SIEGE_LOCATION_STATUS_BROADCAST_SCHEDULE = "0 0 * ? * *";
 	/**
-	 * Singleton that is loaded on the class initialization. Guys, we really do
-	 * not SingletonHolder classes
+	 * Singleton that is loaded on the class initialization. Guys, we really do not
+	 * SingletonHolder classes
 	 */
 	private static final SiegeService instance = new SiegeService();
 	/**
@@ -77,8 +101,8 @@ public class SiegeService {
 	 */
 	private final Map<Integer, Siege<?>> activeSieges = new FastMap<Integer, Siege<?>>().shared();
 	/**
-	 * Object that holds siege schedule.<br> And maybe other useful information
-	 * (in future).
+	 * Object that holds siege schedule.<br>
+	 * And maybe other useful information (in future).
 	 */
 	private SiegeSchedule siegeSchedule;
 
@@ -114,8 +138,7 @@ public class SiegeService {
 			outposts = DataManager.SIEGE_LOCATION_DATA.getOutpost();
 			locations = DataManager.SIEGE_LOCATION_DATA.getSiegeLocations();
 			DAOManager.getDAO(SiegeDAO.class).loadSiegeLocations(locations);
-		}
-		else {
+		} else {
 			artifacts = Collections.emptyMap();
 			fortresses = Collections.emptyMap();
 			outposts = Collections.emptyMap();
@@ -184,8 +207,7 @@ public class SiegeService {
 			if (artifact.isStandAlone()) {
 				log.info("Starting siege of artifact #" + artifact.getLocationId());
 				startSiege(artifact.getLocationId());
-			}
-			else {
+			} else {
 				log.info("Artifact #" + artifact.getLocationId() + " siege was not started, it belongs to fortress");
 			}
 		}
@@ -252,10 +274,12 @@ public class SiegeService {
 		}
 
 		// We need synchronization here for that 1% of cases :)
-		// It may happen that fortresses siege is stopping in the same time by 2 different threads
+		// It may happen that fortresses siege is stopping in the same time by 2
+		// different threads
 		// 1 is for killing the boss
 		// 2 is for the schedule
-		// it might happen that siege will be stopping by other thread, but in such case siege object will be null
+		// it might happen that siege will be stopping by other thread, but in such case
+		// siege object will be null
 		Siege<?> siege;
 		synchronized (this) {
 			siege = activeSieges.remove(siegeLocationId);
@@ -324,8 +348,7 @@ public class SiegeService {
 			FortressLocation fortress = getFortressById(entry.getKey());
 			if (currentHourPlus1.getTimeInMillis() == siegeStartHour.getTimeInMillis()) {
 				fortress.setNextState(SiegeLocation.STATE_VULNERABLE);
-			}
-			else {
+			} else {
 				fortress.setNextState(SiegeLocation.STATE_INVULNERABLE);
 			}
 		}
@@ -348,7 +371,8 @@ public class SiegeService {
 	 * <p/>
 	 * If siege duration is endless - will return -1
 	 *
-	 * @param siegeLocationId Scheduled siege end time
+	 * @param siegeLocationId
+	 *            Scheduled siege end time
 	 * @return remaining seconds in current hour
 	 */
 	public int getRemainingSiegeTimeInSeconds(int siegeLocationId) {
@@ -386,10 +410,10 @@ public class SiegeService {
 	public boolean isSiegeInProgress(int fortressId) {
 		return activeSieges.containsKey(fortressId);
 	}
-	
-	private List<Integer> getForteresseId(){
+
+	private List<Integer> getForteresseId() {
 		List<Integer> res = new ArrayList<Integer>();
-		
+
 		res.add(1131);
 		res.add(1132);
 		res.add(1141);
@@ -403,13 +427,13 @@ public class SiegeService {
 		res.add(2021);
 		res.add(3011);
 		res.add(3021);
-		
+
 		return res;
 	}
 
 	public boolean isAtLeastOneSiegeInProgress() {
 		for (int id : getForteresseId()) {
-			if(isSiegeInProgress(id)){
+			if (isSiegeInProgress(id)) {
 				return true;
 			}
 		}
@@ -477,14 +501,11 @@ public class SiegeService {
 	protected Siege<?> newSiege(int siegeLocationId) {
 		if (fortresses.containsKey(siegeLocationId)) {
 			return new FortressSiege(fortresses.get(siegeLocationId));
-		}
-		else if (outposts.containsKey(siegeLocationId)) {
+		} else if (outposts.containsKey(siegeLocationId)) {
 			return new OutpostSiege(outposts.get(siegeLocationId));
-		}
-		else if (artifacts.containsKey(siegeLocationId)) {
+		} else if (artifacts.containsKey(siegeLocationId)) {
 			return new ArtifactSiege(artifacts.get(siegeLocationId));
-		}
-		else {
+		} else {
 			throw new SiegeException("Unknown siege handler for siege location: " + siegeLocationId);
 		}
 	}
@@ -584,13 +605,15 @@ public class SiegeService {
 		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO(getSiegeLocations().values()));
 		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO2(getSiegeLocations().values()));
 		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO3(getSiegeLocations().values()));
-		//PacketSendUtility.sendPacket(player, new SM_FORTRESS_STATUS()); // TODO when send on retail?
+		// PacketSendUtility.sendPacket(player, new SM_FORTRESS_STATUS()); // TODO when
+		// send on retail?
 		PacketSendUtility.sendPacket(player, new SM_SHIELD_EFFECT());
 
 		for (FortressLocation loc : getFortresses().values()) {
 			// remove teleportation to dead teleporters
-			//if (!loc.isCanTeleport(player))
-				//PacketSendUtility.sendPacket(player, new SM_FORTRESS_INFO(loc.getLocationId(), loc.isCanTeleport(player)));
+			// if (!loc.isCanTeleport(player))
+			// PacketSendUtility.sendPacket(player, new
+			// SM_FORTRESS_INFO(loc.getLocationId(), loc.isCanTeleport(player)));
 		}
 	}
 

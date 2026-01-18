@@ -129,7 +129,7 @@ public class LegionWarehouse extends Storage {
 	public void setOwner(Player player) {
 		throw new UnsupportedOperationException("LWH doesnt have owner");
 	}
-	
+
 	public void setWhUser(int curentWhUser) {
 		this.curentWhUser = curentWhUser;
 	}

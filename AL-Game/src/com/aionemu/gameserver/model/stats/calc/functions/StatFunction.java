@@ -97,7 +97,7 @@ public class StatFunction implements IStatFunction {
 	@Override
 	public String toString() {
 		return this.getClass().getName() + " [stat=" + stat + ", bonus=" + bonus + ", value=" + value + ", priority="
-			+ getPriority() + "]";
+				+ getPriority() + "]";
 	}
 
 	public StatFunction withConditions(Conditions conditions) {

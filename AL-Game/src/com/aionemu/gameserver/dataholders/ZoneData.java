@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,14 +34,16 @@ import com.aionemu.gameserver.model.geometry.SphereArea;
 import com.aionemu.gameserver.model.templates.zone.ZoneInfo;
 import com.aionemu.gameserver.model.templates.zone.ZoneTemplate;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 /**
  * @author ATracer
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "")
 @XmlRootElement(name = "zones")
-public class ZoneData{
-	
+public class ZoneData {
+
 	@XmlElement(name = "zone")
 	protected List<ZoneTemplate> zoneList;
 
@@ -53,19 +53,23 @@ public class ZoneData{
 	void afterUnmarshal(Unmarshaller u, Object parent) {
 		for (ZoneTemplate zone : zoneList) {
 			Area area = null;
-			switch (zone.getAreaType()){
-				case POLYGON:
-					area = new PolyArea(zone.getName(), zone.getMapid(), zone.getPoints().getPoint(), zone.getPoints().getBottom(),zone.getPoints().getTop());
-					break;
-				case CYLINDER:
-					area = new CylinderArea(zone.getName(), zone.getMapid(), zone.getCylinder().getX(), zone.getCylinder().getY(), zone.getCylinder().getR(), zone.getCylinder().getBottom(), zone.getCylinder().getTop());
-					break;
-				case SPHERE:
-					area = new SphereArea(zone.getName(), zone.getMapid(), zone.getSphare().getX(), zone.getSphare().getY(), zone.getSphare().getZ(), zone.getSphare().getR());
+			switch (zone.getAreaType()) {
+			case POLYGON:
+				area = new PolyArea(zone.getName(), zone.getMapid(), zone.getPoints().getPoint(),
+						zone.getPoints().getBottom(), zone.getPoints().getTop());
+				break;
+			case CYLINDER:
+				area = new CylinderArea(zone.getName(), zone.getMapid(), zone.getCylinder().getX(),
+						zone.getCylinder().getY(), zone.getCylinder().getR(), zone.getCylinder().getBottom(),
+						zone.getCylinder().getTop());
+				break;
+			case SPHERE:
+				area = new SphereArea(zone.getName(), zone.getMapid(), zone.getSphare().getX(), zone.getSphare().getY(),
+						zone.getSphare().getZ(), zone.getSphare().getR());
 			}
-			if(area != null){
+			if (area != null) {
 				List<ZoneInfo> zones = zoneNameMap.get(zone.getMapid());
-				if (zones == null){
+				if (zones == null) {
 					zones = new ArrayList<ZoneInfo>();
 					zoneNameMap.put(zone.getMapid(), zones);
 				}
@@ -73,7 +77,6 @@ public class ZoneData{
 			}
 		}
 	}
-
 
 	public TIntObjectHashMap<List<ZoneInfo>> getZones() {
 		return zoneNameMap;

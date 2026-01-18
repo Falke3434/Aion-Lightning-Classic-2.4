@@ -8,8 +8,7 @@ import com.aionemu.gameserver.network.loginserver.LoginServer;
  * @author Watson
  */
 public class CmdUnBanIp extends BaseCommand {
-	
-	
+
 	public void execute(Player player, String... params) {
 		if (params == null || params.length < 2) {
 			showHelp(player);

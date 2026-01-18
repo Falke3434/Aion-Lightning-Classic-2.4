@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.model.gameobjects.AionObject;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -52,19 +51,17 @@ public class SM_DIALOG_WINDOW extends AionServerPacket {
 		writeD(targetObjectId);
 		writeH(dialogID);
 		writeD(questId);
-		writeH(0);
+		writeD(0);
 		if (this.dialogID == 18) {
 			AionObject object = World.getInstance().findVisibleObject(targetObjectId);
 			if (object != null && object instanceof Npc) {
 				Npc znpc = (Npc) object;
 				if (znpc.getNpcId() == 798100 || znpc.getNpcId() == 798101)
 					writeH(2);
-			}
-			else {
+			} else {
 				writeH(0);
 			}
-		}
-		else {
+		} else {
 			writeH(0);
 		}
 	}

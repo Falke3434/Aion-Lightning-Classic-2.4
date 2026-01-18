@@ -76,17 +76,18 @@ public class AionPacketHandler {
 		 */
 		Player player = con.getActivePlayer();
 
-		if (con.getState().equals(State.IN_GAME) && player != null && player.getAccessLevel() >= DeveloperConfig.SHOW_PACKETS_INCHAT_ACCESSLEVEL) {
+		if (con.getState().equals(State.IN_GAME) && player != null
+				&& player.getAccessLevel() >= DeveloperConfig.SHOW_PACKETS_INCHAT_ACCESSLEVEL) {
 			if (isPacketFilterd(DeveloperConfig.FILTERED_PACKETS_INCHAT, prototype.getPacketName())) {
 				if (DeveloperConfig.SHOW_PACKET_BYTES_INCHAT) {
 					String PckName = String.format("0x%04X : %s", id, prototype.getPacketName());
 					PacketSendUtility.sendMessage(player, "********************************************");
 					PacketSendUtility.sendMessage(player, PckName);
-					PacketSendUtility.sendMessage(player, Util.toHexStream(getByteBuffer(buf, DeveloperConfig.TOTAL_PACKET_BYTES_INCHAT)));
+					PacketSendUtility.sendMessage(player,
+							Util.toHexStream(getByteBuffer(buf, DeveloperConfig.TOTAL_PACKET_BYTES_INCHAT)));
 					buf.position(5);
 
-				}
-				else if (DeveloperConfig.SHOW_PACKET_NAMES_INCHAT) {
+				} else if (DeveloperConfig.SHOW_PACKET_NAMES_INCHAT) {
 					String PckName = String.format("0x%04X : %s", id, prototype.getPacketName());
 					PacketSendUtility.sendMessage(player, PckName);
 				}
@@ -97,11 +98,12 @@ public class AionPacketHandler {
 		res.setConnection(con);
 
 		if (con.getState().equals(State.IN_GAME) && con.getActivePlayer().getPlayerAccount().getMembership() == 10) {
-			PacketSendUtility.sendMessage(con.getActivePlayer(), "0x" + Integer.toHexString(res.getOpcode()).toUpperCase() + " : " + res.getPacketName());
+			PacketSendUtility.sendMessage(con.getActivePlayer(),
+					"0x" + Integer.toHexString(res.getOpcode()).toUpperCase() + " : " + res.getPacketName());
 		}
 		return res;
 	}
-	
+
 	private boolean isPacketFilterd(String filterlist, String PacketName) {
 
 		// If FilterList was empty, all packets will be shown.
@@ -131,10 +133,8 @@ public class AionPacketHandler {
 		try {
 			do {
 				PckBuffer.put(tmpBuffer.get());
-			}
-			while (tmpBuffer.remaining() > 0);
-		}
-		catch (Exception e) {
+			} while (tmpBuffer.remaining() > 0);
+		} catch (Exception e) {
 			// e.printStackTrace();
 		}
 		PckBuffer.position(0);
@@ -150,8 +150,8 @@ public class AionPacketHandler {
 	 */
 	private void unknownPacket(State state, int id, ByteBuffer data) {
 		if (NetworkConfig.DISPLAY_UNKNOWNPACKETS) {
-			log.warn(String.format("Unknown packet received from Aion client: 0x%04X, state=%s %n%s", id, state.toString(),
-				Util.toHex(data)));
+			log.warn(String.format("Unknown packet received from Aion client: 0x%04X, state=%s %n%s", id,
+					state.toString(), Util.toHex(data)));
 		}
 	}
 }

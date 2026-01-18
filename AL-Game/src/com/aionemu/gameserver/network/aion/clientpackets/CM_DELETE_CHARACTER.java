@@ -76,20 +76,18 @@ public class CM_DELETE_CHARACTER extends AionClientPacket {
 			if (GSConfig.PASSKEY_ENABLE && !client.getAccount().getCharacterPasskey().isPass()) {
 				client.getAccount().getCharacterPasskey().setConnectType(ConnectType.DELETE);
 				client.getAccount().getCharacterPasskey().setObjectId(chaOid);
-				boolean isExistPasskey = DAOManager.getDAO(PlayerPasskeyDAO.class).existCheckPlayerPasskey(
-					client.getAccount().getId());
+				boolean isExistPasskey = DAOManager.getDAO(PlayerPasskeyDAO.class)
+						.existCheckPlayerPasskey(client.getAccount().getId());
 
 				if (!isExistPasskey)
 					client.sendPacket(new SM_CHARACTER_SELECT(0));
 				else
 					client.sendPacket(new SM_CHARACTER_SELECT(1));
-			}
-			else {
+			} else {
 				PlayerService.deletePlayer(playerAccData);
 				client.sendPacket(new SM_DELETE_CHARACTER(chaOid, playerAccData.getDeletionTimeInSeconds()));
 			}
-		}
-		else {
+		} else {
 			client.sendPacket(SM_SYSTEM_MESSAGE.STR_GUILD_DISPERSE_STAYMODE_CANCEL_1);
 		}
 	}

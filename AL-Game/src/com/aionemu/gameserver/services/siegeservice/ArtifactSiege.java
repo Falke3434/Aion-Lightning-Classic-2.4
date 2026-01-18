@@ -1,5 +1,10 @@
 package com.aionemu.gameserver.services.siegeservice;
 
+import java.util.Arrays;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.SiegeDAO;
 import com.aionemu.gameserver.model.Race;
@@ -16,10 +21,6 @@ import com.aionemu.gameserver.services.player.PlayerService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Arrays;
 
 /**
  * @author SoulKeeper
@@ -64,7 +65,8 @@ public class ArtifactSiege extends Siege<ArtifactLocation> {
 			// misc stuff to send player system message
 			if (getSiegeLocation().getRace() == SiegeRace.BALAUR) {
 				// TODO: Fix message for Balaur Description id
-				final AionServerPacket lRacePacket = new SM_SYSTEM_MESSAGE(1320004, getSiegeLocation().getNameAsDescriptionId(), "Balaur");
+				final AionServerPacket lRacePacket = new SM_SYSTEM_MESSAGE(1320004,
+						getSiegeLocation().getNameAsDescriptionId(), "Balaur");
 				World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 					@Override
 					public void visit(Player object) {
@@ -80,14 +82,15 @@ public class ArtifactSiege extends Siege<ArtifactLocation> {
 				final String winnerName = wLegion != null ? wLegion.getLegionName() : wPlayerName;
 
 				// prepare packets, we can use single packet instance
-				final AionServerPacket wRacePacket = new SM_SYSTEM_MESSAGE(1320002, wRace.getRaceDescriptionId(), winnerName, getSiegeLocation().getNameAsDescriptionId());
-				final AionServerPacket lRacePacket = new SM_SYSTEM_MESSAGE(1320004, getSiegeLocation().getNameAsDescriptionId(), wRace.getRaceDescriptionId());
+				final AionServerPacket wRacePacket = new SM_SYSTEM_MESSAGE(1320002, wRace.getRaceDescriptionId(),
+						winnerName, getSiegeLocation().getNameAsDescriptionId());
+				final AionServerPacket lRacePacket = new SM_SYSTEM_MESSAGE(1320004,
+						getSiegeLocation().getNameAsDescriptionId(), wRace.getRaceDescriptionId());
 
 				// send update to players
 				World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 					@Override
 					public void visit(Player object) {
-
 
 						if (object.getRace() == wRace) {
 							// send message to winner race

@@ -17,13 +17,10 @@ import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.QuestService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 /*syntax //quest <start|set|show|delete> */
-
 
 public class CmdQuest extends BaseCommand {
 
-	
 	public void execute(Player admin, String... params) {
 		if (params.length < 1) {
 			showHelp(admin);
@@ -57,7 +54,8 @@ public class CmdQuest extends BaseCommand {
 							for (FinishedQuestCond fcondition : finisheds) {
 								QuestState qs1 = admin.getQuestStateList().getQuestState(fcondition.getQuestId());
 								if (qs1 == null || qs1.getStatus() != QuestStatus.COMPLETE) {
-									PacketSendUtility.sendMessage(admin, "You have to finish " + fcondition.getQuestId() + " first!");
+									PacketSendUtility.sendMessage(admin,
+											"You have to finish " + fcondition.getQuestId() + " first!");
 								}
 							}
 						}
@@ -65,10 +63,10 @@ public class CmdQuest extends BaseCommand {
 				}
 				PacketSendUtility.sendMessage(admin, "Quest not started. Some preconditions failed");
 			}
-		}
-		else if (params[0].equalsIgnoreCase("set")) {
+		} else if (params[0].equalsIgnoreCase("set")) {
 			if (params.length < 4) {
-				PacketSendUtility.sendMessage(admin, "syntax //quest set <questId> <START|NONE|COMPLETE|REWARD> <var> [varNum]");
+				PacketSendUtility.sendMessage(admin,
+						"syntax //quest set <questId> <START|NONE|COMPLETE|REWARD> <var> [varNum]");
 				return;
 			}
 			int questId = ParseInteger(params[1]);
@@ -89,26 +87,26 @@ public class CmdQuest extends BaseCommand {
 			int varNum = 0;
 			if (params.length == 5)
 				varNum = ParseInteger(params[4]);
-			
+
 			QuestState qs = target.getQuestStateList().getQuestState(questId);
 			if (qs == null) {
 				PacketSendUtility.sendMessage(admin, "<QuestState wasn't initialized for this quest>");
 				return;
 			}
 			qs.setStatus(questStatus);
-			
+
 			if (varNum != 0)
 				qs.setQuestVarById(varNum, var);
 			else
 				qs.setQuestVar(var);
-			
-			PacketSendUtility.sendPacket(target, new SM_QUEST_ACTION(questId, qs.getStatus(), qs.getQuestVars().getQuestVars()));
+
+			PacketSendUtility.sendPacket(target,
+					new SM_QUEST_ACTION(questId, qs.getStatus(), qs.getQuestVars().getQuestVars()));
 			if (questStatus == QuestStatus.COMPLETE) {
 				qs.setCompleteCount(qs.getCompleteCount() + 1);
 				target.getController().updateNearbyQuests();
 			}
-		}
-		else if (params[0].equalsIgnoreCase("delete")) {
+		} else if (params[0].equalsIgnoreCase("delete")) {
 			if (params.length != 2) {
 				PacketSendUtility.sendMessage(admin, "syntax //quest delete <quest id>");
 				return;
@@ -127,8 +125,7 @@ public class CmdQuest extends BaseCommand {
 					qs.setPersistentState(PersistentState.DELETED);
 				PacketSendUtility.sendMessage(admin, "Quest deleted. Please logout.");
 			}
-		}
-		else if (params[0].equalsIgnoreCase("show")) {
+		} else if (params[0].equalsIgnoreCase("show")) {
 			if (params.length != 2) {
 				PacketSendUtility.sendMessage(admin, "syntax //quest show <quest id>");
 				return;
@@ -140,13 +137,12 @@ public class CmdQuest extends BaseCommand {
 				StringBuilder sb = new StringBuilder();
 				for (int i = 0; i < 5; i++)
 					sb.append(Integer.toString(qs.getQuestVarById(i)) + " ");
-				PacketSendUtility.sendMessage(admin, "Quest state: " + qs.getStatus().toString() + "; vars: " + sb.toString()
-					+ qs.getQuestVarById(5));
+				PacketSendUtility.sendMessage(admin, "Quest state: " + qs.getStatus().toString() + "; vars: "
+						+ sb.toString() + qs.getQuestVarById(5));
 				sb.setLength(0);
 				sb = null;
 			}
-		}
-		else
+		} else
 			showHelp(admin);
 	}
 }

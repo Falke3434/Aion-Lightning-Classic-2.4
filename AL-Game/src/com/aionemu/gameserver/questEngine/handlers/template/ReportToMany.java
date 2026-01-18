@@ -1,7 +1,5 @@
 package com.aionemu.gameserver.questEngine.handlers.template;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.questEngine.handlers.HandlerResult;
@@ -12,6 +10,8 @@ import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.QuestService;
+
+import javolution.util.FastMap;
 
 /**
  * @author Hilgert
@@ -38,22 +38,20 @@ public class ReportToMany extends QuestHandler {
 	 * @param endDialog
 	 * @param maxVar
 	 */
-	public ReportToMany(int questId, int startItem, int startNpc, int startNpc2, int endNpc, int endNpc2, FastMap<Integer, NpcInfos> NpcInfo,
-		int startDialog, int endDialog, int maxVar) {
+	public ReportToMany(int questId, int startItem, int startNpc, int startNpc2, int endNpc, int endNpc2,
+			FastMap<Integer, NpcInfos> NpcInfo, int startDialog, int endDialog, int maxVar) {
 		super(questId);
 		this.startItem = startItem;
 		this.startNpc = startNpc;
 		if (startNpc2 != 0) {
 			this.startNpc2 = startNpc2;
-		}
-		else {
+		} else {
 			this.startNpc2 = this.startNpc;
 		}
 		this.endNpc = endNpc;
 		if (endNpc2 != 0) {
 			this.endNpc2 = endNpc2;
-		}
-		else {
+		} else {
 			this.endNpc2 = this.endNpc;
 		}
 		this.questId = questId;
@@ -103,13 +101,11 @@ public class ReportToMany extends QuestHandler {
 			if (startNpc == 0 || targetId == startNpc || targetId == startNpc2) {
 				if (dialog == QuestDialog.START_DIALOG) {
 					return sendQuestDialog(env, startDialog);
-				}
-				else {
+				} else {
 					return sendQuestStartDialog(env);
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.START) {
+		} else if (qs.getStatus() == QuestStatus.START) {
 			int var = qs.getQuestVarById(0);
 			NpcInfos targetNpcInfo = NpcInfo.get(targetId);
 			if (var <= maxVar) {
@@ -117,35 +113,30 @@ public class ReportToMany extends QuestHandler {
 					int closeDialog;
 					if (targetNpcInfo.getCloseDialog() == 0) {
 						closeDialog = 10000 + targetNpcInfo.getVar();
-					}
-					else {
+					} else {
 						closeDialog = targetNpcInfo.getCloseDialog();
 					}
 
 					if (dialog == QuestDialog.START_DIALOG) {
 						return sendQuestDialog(env, targetNpcInfo.getQuestDialog());
-					}
-					else if (env.getDialogId() == closeDialog) {
+					} else if (env.getDialogId() == closeDialog) {
 						if (var == maxVar) {
 							qs.setStatus(QuestStatus.REWARD);
 							if (closeDialog == 1009) {
 								return sendQuestDialog(env, 5);
 							}
-						}
-						else {
+						} else {
 							qs.setQuestVarById(0, var + 1);
 						}
 						updateQuestStatus(env);
 						return sendQuestSelectionDialog(env);
 					}
 				}
-			}
-			else if (var > maxVar) {
+			} else if (var > maxVar) {
 				if (targetId == endNpc || targetId == endNpc2) {
 					if (dialog == QuestDialog.START_DIALOG) {
 						return sendQuestDialog(env, endDialog);
-					}
-					else if (env.getDialog() == QuestDialog.SELECT_REWARD) {
+					} else if (env.getDialog() == QuestDialog.SELECT_REWARD) {
 						if (startItem != 0) {
 							if (!removeQuestItem(env, startItem, 1)) {
 								return false;
@@ -157,8 +148,7 @@ public class ReportToMany extends QuestHandler {
 					}
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.REWARD && (targetId == endNpc || targetId == endNpc2)) {
+		} else if (qs.getStatus() == QuestStatus.REWARD && (targetId == endNpc || targetId == endNpc2)) {
 			return sendQuestEndDialog(env);
 		}
 		return false;

@@ -11,7 +11,7 @@ public class CmdHelp extends BaseCommand {
 			showHelp(player);
 			return;
 		}
-		
+
 		PacketSendUtility.sendMessage(player, CommandService.getInstance().getHelpFromCommand(player, params));
 	}
 }

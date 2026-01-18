@@ -73,11 +73,11 @@ public class PlayerAllianceService {
 			if (invited.getResponseRequester().putRequest(SM_QUESTION_WINDOW.STR_REQUEST_ALLIANCE_INVITE, invite)) {
 				if (invited.isInGroup2())
 					PacketSendUtility.sendPacket(inviter,
-						SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_INVITED_HIS_PARTY(invited.getName()));
+							SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_INVITED_HIS_PARTY(invited.getName()));
 				else
 					PacketSendUtility.sendPacket(inviter, SM_SYSTEM_MESSAGE.STR_FORCE_INVITED_HIM(invited.getName()));
-				PacketSendUtility.sendPacket(invited, new SM_QUESTION_WINDOW(SM_QUESTION_WINDOW.STR_REQUEST_ALLIANCE_INVITE, 0,
-					inviter.getName()));
+				PacketSendUtility.sendPacket(invited,
+						new SM_QUESTION_WINDOW(SM_QUESTION_WINDOW.STR_REQUEST_ALLIANCE_INVITE, 0, inviter.getName()));
 			}
 		}
 	}
@@ -103,7 +103,7 @@ public class PlayerAllianceService {
 
 	@GlobalCallback(AddPlayerToAllianceCallback.class)
 	public static final void addPlayerToAlliance(PlayerAlliance alliance, Player invited) {
-		//TODO leader member is already set
+		// TODO leader member is already set
 		alliance.addMember(new PlayerAllianceMember(invited));
 	}
 
@@ -155,7 +155,7 @@ public class PlayerAllianceService {
 		Preconditions.checkNotNull(alliance, "Alliance should not be null");
 		alliance.onEvent(new PlayerEnteredEvent(alliance, player));
 	}
-	
+
 	/**
 	 * Remove player from alliance (normal leave, or kick offline player)
 	 */
@@ -176,10 +176,9 @@ public class PlayerAllianceService {
 		if (alliance != null) {
 			PlayerAllianceMember bannedMember = alliance.getMember(bannedPlayer.getObjectId());
 			if (bannedMember != null) {
-				alliance.onEvent(new PlayerAllianceLeavedEvent(alliance, bannedMember.getObject(), LeaveReson.BAN, banGiver
-					.getName()));
-			}
-			else {
+				alliance.onEvent(new PlayerAllianceLeavedEvent(alliance, bannedMember.getObject(), LeaveReson.BAN,
+						banGiver.getName()));
+			} else {
 				log.warn("TEAM2: banning player not in alliance {}", alliance.onlineMembers());
 			}
 		}
@@ -190,7 +189,8 @@ public class PlayerAllianceService {
 	 */
 	@GlobalCallback(PlayerAllianceDisbandCallback.class)
 	public static void disband(PlayerAlliance alliance) {
-		Preconditions.checkState(alliance.onlineMembers() <= 1, "Can't disband alliance with more than one online member");
+		Preconditions.checkState(alliance.onlineMembers() <= 1,
+				"Can't disband alliance with more than one online member");
 		alliances.remove(alliance.getTeamId());
 		alliance.onEvent(new AllianceDisbandEvent(alliance));
 	}
@@ -229,8 +229,7 @@ public class PlayerAllianceService {
 		Preconditions.checkNotNull(alliance, "Alliance should not be null for group change");
 		if (alliance.isLeader(player) || alliance.isViceCaptain(player)) {
 			alliance.onEvent(new ChangeMemberGroupEvent(alliance, firstPlayer, secondPlayer, allianceGroupId));
-		}
-		else {
+		} else {
 			PacketSendUtility.sendMessage(player, "You do not have the authority for that.");
 		}
 	}
@@ -271,7 +270,7 @@ public class PlayerAllianceService {
 			alliance.onEvent(new ShowBrandEvent<PlayerAlliance>(alliance, targetObjId, brandId));
 		}
 	}
-	
+
 	public static final String getServiceStatus() {
 		return "Number of alliances: " + alliances.size();
 	}
@@ -292,9 +291,9 @@ public class PlayerAllianceService {
 		@Override
 		public boolean apply(PlayerAllianceMember member) {
 			if (!member.isOnline()
-				&& TimeUtil.isExpired(member.getLastOnlineTime() + GroupConfig.ALLIANCE_REMOVE_TIME * 1000)) {
-				currentAlliance.onEvent(new PlayerAllianceLeavedEvent(currentAlliance, member.getObject(),
-					LeaveReson.LEAVE_TIMEOUT));
+					&& TimeUtil.isExpired(member.getLastOnlineTime() + GroupConfig.ALLIANCE_REMOVE_TIME * 1000)) {
+				currentAlliance.onEvent(
+						new PlayerAllianceLeavedEvent(currentAlliance, member.getObject(), LeaveReson.LEAVE_TIMEOUT));
 			}
 			return true;
 		}

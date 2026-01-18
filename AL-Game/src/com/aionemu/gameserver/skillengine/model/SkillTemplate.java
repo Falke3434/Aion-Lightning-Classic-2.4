@@ -38,8 +38,8 @@ import com.aionemu.gameserver.skillengine.properties.Properties;
  * @author ATracer modified by Wakizashi
  */
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlType(name = "skillTemplate", propOrder = { "properties", "startconditions", "useconditions", "useequipmentconditions", "effects", "actions",
-	"periodicActions", "motion" })
+@XmlType(name = "skillTemplate", propOrder = { "properties", "startconditions", "useconditions",
+		"useequipmentconditions", "effects", "actions", "periodicActions", "motion" })
 public class SkillTemplate {
 
 	protected Properties properties;
@@ -101,7 +101,7 @@ public class SkillTemplate {
 	@XmlAttribute(name = "avatar")
 	protected boolean isAvatar;
 	@XmlAttribute(name = "ground")
-	protected boolean isGroundSkill;//TODO remove!
+	protected boolean isGroundSkill;// TODO remove!
 	@XmlAttribute(name = "unpottable")
 	protected boolean isUndispellableByPotions;
 	@XmlAttribute(name = "ammospeed")
@@ -112,9 +112,10 @@ public class SkillTemplate {
 	protected AttackStatus counterSkill = null;
 	@XmlAttribute(name = "noremoveatdie")
 	protected boolean noRemoveAtDie = false;
-	
+
 	@XmlTransient
 	protected HashMap<Integer, Integer> effectIds = null;
+
 	/**
 	 * @return the Properties
 	 */
@@ -175,6 +176,7 @@ public class SkillTemplate {
 	public PeriodicActions getPeriodicActions() {
 		return periodicActions;
 	}
+
 	/**
 	 * Gets the value of the motion property.
 	 * 
@@ -183,6 +185,7 @@ public class SkillTemplate {
 	public Motion getMotion() {
 		return motion;
 	}
+
 	/**
 	 * Gets the value of the skillId property.
 	 */
@@ -289,7 +292,7 @@ public class SkillTemplate {
 	public boolean isProvoked() {
 		return activationAttribute == ActivationAttribute.PROVOKED;
 	}
-	
+
 	public boolean isMaintain() {
 		return activationAttribute == ActivationAttribute.MAINTAIN;
 	}
@@ -303,7 +306,8 @@ public class SkillTemplate {
 	 * @return EffectTemplate
 	 */
 	public EffectTemplate getEffectTemplate(int position) {
-		return effects != null && effects.getEffects().size() >= position ? effects.getEffects().get(position - 1) : null;
+		return effects != null && effects.getEffects().size() >= position ? effects.getEffects().get(position - 1)
+				: null;
 
 	}
 
@@ -384,23 +388,23 @@ public class SkillTemplate {
 	public boolean hasItemHealFpEffect() {
 		return getEffects() != null && getEffects().isItemHealFp();
 	}
-	
+
 	public int getCooldownId() {
 		return (cooldownId > 0) ? cooldownId : skillId;
 	}
-	
+
 	public boolean isAvatar() {
 		return isAvatar;
 	}
-	
+
 	public boolean isGroundSkill() {
 		return isGroundSkill;
 	}
-	
+
 	public AttackStatus getCounterSkill() {
 		return counterSkill;
 	}
-	
+
 	public boolean isUndispellableByPotions() {
 		return isUndispellableByPotions;
 	}
@@ -412,7 +416,7 @@ public class SkillTemplate {
 	public int getConflictId() {
 		return conflictId;
 	}
-	
+
 	public boolean isNoRemoveAtDie() {
 		return noRemoveAtDie;
 	}

@@ -35,11 +35,10 @@ import com.aionemu.gameserver.model.drop.NpcDrop;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "npcDropData", propOrder = { "npcDrop" })
 public class NpcDropData {
-	
+
 	@XmlElement(name = "npc_drop")
 	protected List<NpcDrop> npcDrop;
 
-	
 	/**
 	 * @return the npcDrop
 	 */
@@ -47,9 +46,9 @@ public class NpcDropData {
 		return npcDrop;
 	}
 
-	
 	/**
-	 * @param npcDrop the npcDrop to set
+	 * @param npcDrop
+	 *            the npcDrop to set
 	 */
 	public void setNpcDrop(List<NpcDrop> npcDrop) {
 		this.npcDrop = npcDrop;

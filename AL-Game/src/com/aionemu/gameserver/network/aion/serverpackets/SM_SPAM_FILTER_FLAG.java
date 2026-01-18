@@ -6,15 +6,15 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
 
 public class SM_SPAM_FILTER_FLAG extends AionServerPacket {
 
-    private final Player player;
+	private final Player player;
 
-    public SM_SPAM_FILTER_FLAG(Player player) {
-        this.player = player;
-    }
+	public SM_SPAM_FILTER_FLAG(Player player) {
+		this.player = player;
+	}
 
-    @Override
-    protected void writeImpl(AionConnection con) {
-        writeD(this.player.getObjectId());
-        writeD(0);
-    }
+	@Override
+	protected void writeImpl(AionConnection con) {
+		writeD(this.player.getObjectId());
+		writeD(0);
+	}
 }

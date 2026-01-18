@@ -41,7 +41,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param brokerListCache
-	 *          the brokerListCache to set
+	 *            the brokerListCache to set
 	 */
 	public void setBrokerListCache(BrokerItem[] brokerListCache) {
 		this.brokerListCache = brokerListCache;
@@ -56,7 +56,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param brokerMaskCache
-	 *          the brokerMaskCache to set
+	 *            the brokerMaskCache to set
 	 */
 	public void setBrokerMaskCache(int brokerMaskCache) {
 		this.brokerMaskCache = brokerMaskCache;
@@ -71,7 +71,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param brokerSoftTypeCache
-	 *          the brokerSoftTypeCache to set
+	 *            the brokerSoftTypeCache to set
 	 */
 	public void setBrokerSortTypeCache(int brokerSoftTypeCache) {
 		this.brokerSoftTypeCache = brokerSoftTypeCache;
@@ -86,7 +86,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param the
-	 *          getSearchItemList
+	 *            getSearchItemList
 	 */
 	public List<Integer> getSearchItemList() {
 		if (this.itemList == null)
@@ -96,7 +96,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param brokerStartPageCache
-	 *          the brokerStartPageCache to set
+	 *            the brokerStartPageCache to set
 	 */
 	public void setBrokerStartPageCache(int brokerStartPageCache) {
 		this.brokerStartPageCache = brokerStartPageCache;
@@ -104,7 +104,7 @@ public class BrokerPlayerCache {
 
 	/**
 	 * @param setSearchItemsList
-	 *          the searched item list to set
+	 *            the searched item list to set
 	 */
 	public void setSearchItemsList(List<Integer> itemList) {
 		this.itemList = itemList;

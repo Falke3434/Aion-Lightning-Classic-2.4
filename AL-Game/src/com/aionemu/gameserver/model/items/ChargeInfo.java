@@ -27,8 +27,8 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_INVENTORY_UPDATE_ITE
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 /**
- * @author ATracer modified by Ferosia
- * TODO On attack event, apply attackBurn to fusionned item charge if item does not have charge level
+ * @author ATracer modified by Ferosia TODO On attack event, apply attackBurn to
+ *         fusionned item charge if item does not have charge level
  */
 public class ChargeInfo extends ActionObserver {
 
@@ -64,8 +64,7 @@ public class ChargeInfo extends ActionObserver {
 		int newChargePoints = chargePoints + addPoints;
 		if (newChargePoints > LEVEL2) {
 			newChargePoints = LEVEL2;
-		}
-		else if (newChargePoints < 0) {
+		} else if (newChargePoints < 0) {
 			newChargePoints = 0;
 		}
 		if (item.isEquipped() && player != null)

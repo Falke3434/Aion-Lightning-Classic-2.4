@@ -57,8 +57,7 @@ public class PetSpawnService {
 
 			lastPetCommonData = player.getPet().getCommonData();
 			dismissPet(player, isManualSpawn);
-		}
-		else {
+		} else {
 			lastPetCommonData = player.getPetList().getLastUsedPet();
 		}
 
@@ -68,10 +67,9 @@ public class PetSpawnService {
 				lastPetCommonData.clearMoodStatistics();
 		}
 
-		player.getController().addTask(
-			TaskId.PET_UPDATE,
-			ThreadPoolManager.getInstance().scheduleAtFixedRate(new PetController.PetUpdateTask(player),
-				PeriodicSaveConfig.PLAYER_PETS * 1000, PeriodicSaveConfig.PLAYER_PETS * 1000));
+		player.getController().addTask(TaskId.PET_UPDATE,
+				ThreadPoolManager.getInstance().scheduleAtFixedRate(new PetController.PetUpdateTask(player),
+						PeriodicSaveConfig.PLAYER_PETS * 1000, PeriodicSaveConfig.PLAYER_PETS * 1000));
 
 		Pet pet = VisibleObjectSpawner.spawnPet(player, petId);
 		// It means serious error or cheater - why its just nothing say "null"?
@@ -98,8 +96,8 @@ public class PetSpawnService {
 		if (pf != null && pf.getSlots() != 0) {
 			int itemLocation = StorageType.getStorageId(pf.getSlots(), 6);
 			if (itemLocation != -1) {
-				PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(player.getStorage(itemLocation).getItemsWithKinah(),
-					itemLocation, 0, true, player));
+				PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(
+						player.getStorage(itemLocation).getItemsWithKinah(), itemLocation, 0, true, player));
 				PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(null, itemLocation, 0, false, player));
 			}
 		}
@@ -116,8 +114,8 @@ public class PetSpawnService {
 			if (progress != null) {
 				toyPet.getCommonData().setCancelFeed(true);
 				DAOManager.getDAO(PlayerPetsDAO.class).saveFeedStatus(player, toyPet.getPetId(),
-					progress.getHungryLevel().getValue(), progress.getDataForPacket(),
-					toyPet.getCommonData().getCurentTime());
+						progress.getHungryLevel().getValue(), progress.getDataForPacket(),
+						toyPet.getCommonData().getCurentTime());
 			}
 			PetDopingBag bag = toyPet.getCommonData().getDopingBag();
 			if (bag != null && bag.isDirty())

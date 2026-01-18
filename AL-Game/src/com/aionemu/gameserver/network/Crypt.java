@@ -37,7 +37,7 @@ public class Crypt {
 	/**
 	 * Second byte of server packet must be equal to this
 	 */
-	public final static byte staticServerPacketCode = 0x40; //Aion Classic
+	public final static byte staticServerPacketCode = 0x40; // Aion Classic
 
 	/**
 	 * Crypt is enabled after first server packet was send.
@@ -47,10 +47,13 @@ public class Crypt {
 	private EncryptionKeyPair packetKey = null;
 
 	/**
-	 * Enable crypt key - generate random key that will be used to encrypt second server packet [first one is unencrypted]
-	 * and decrypt client packets. This method is called from SM_KEY server packet, that packet sends key to aion client.
+	 * Enable crypt key - generate random key that will be used to encrypt second
+	 * server packet [first one is unencrypted] and decrypt client packets. This
+	 * method is called from SM_KEY server packet, that packet sends key to aion
+	 * client.
 	 * 
-	 * @return "false key" that should by used by aion client to encrypt/decrypt packets.
+	 * @return "false key" that should by used by aion client to encrypt/decrypt
+	 *         packets.
 	 */
 	public final int enableKey() {
 		if (packetKey != null)
@@ -105,6 +108,6 @@ public class Crypt {
 	 * @return obfuscated opcodec
 	 */
 	public static final int encodeOpcodec(int op) {
-		return (op + 0xC0) ^ 0xCF; //Aion Classic 1.8 NA = 2.0 kr
+		return (op + 0xC0) ^ 0xCF; // Aion Classic 1.8 NA = 2.0 kr
 	}
 }

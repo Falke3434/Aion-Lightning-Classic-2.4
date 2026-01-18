@@ -69,8 +69,7 @@ public class FlyRingObserver extends ActionObserver {
 				if (distance < ring.getTemplate().getRadius()) {
 					passedThrough = true;
 				}
-			}
-			else {
+			} else {
 				if (MathUtil.isIn3dRange(ring, player, ring.getTemplate().getRadius())) {
 					passedThrough = true;
 				}

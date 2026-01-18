@@ -15,14 +15,14 @@ import com.aionemu.gameserver.ai2.NpcAI2;
 import com.aionemu.gameserver.ai2.handler.ShoutEventHandler;
 import com.aionemu.gameserver.ai2.poll.AIQuestion;
 import com.aionemu.gameserver.configs.main.CustomConfig;
-import com.aionemu.gameserver.controllers.attack.AttackStatus;
 import com.aionemu.gameserver.configs.main.SecurityConfig;
+import com.aionemu.gameserver.controllers.attack.AttackStatus;
 import com.aionemu.gameserver.controllers.observer.StartMovingListener;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.DescriptionId;
 import com.aionemu.gameserver.model.gameobjects.Creature;
-import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.Item;
+import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.stats.calc.Stat2;
 import com.aionemu.gameserver.model.stats.container.StatEnum;
@@ -97,28 +97,27 @@ public class Skill {
 	 */
 	private int duration;
 	private int hitTime;// from CM_CASTSPELL
-	private int serverTime;//time when effect is applied
+	private int serverTime;// time when effect is applied
 
 	private String chainCategory = null;
 
 	public enum SkillMethod {
-		CAST,
-		ITEM,
-		PASSIVE,
-		PROVOKED;
+		CAST, ITEM, PASSIVE, PROVOKED;
 	}
 
 	private Logger log = LoggerFactory.getLogger(Skill.class);
 
 	/**
-	 * Each skill is a separate object upon invocation Skill level will be populated from player SkillList
+	 * Each skill is a separate object upon invocation Skill level will be populated
+	 * from player SkillList
 	 * 
 	 * @param skillTemplate
 	 * @param effector
 	 * @param world
 	 */
 	public Skill(SkillTemplate skillTemplate, Player effector, Creature firstTarget) {
-		this(skillTemplate, effector, effector.getSkillList().getSkillLevel(skillTemplate.getSkillId()), firstTarget, null);
+		this(skillTemplate, effector, effector.getSkillList().getSkillLevel(skillTemplate.getSkillId()), firstTarget,
+				null);
 	}
 
 	public Skill(SkillTemplate skillTemplate, Player effector, Creature firstTarget, int skillLevel) {
@@ -132,7 +131,7 @@ public class Skill {
 	 * @param firstTarget
 	 */
 	public Skill(SkillTemplate skillTemplate, Creature effector, int skillLvl, Creature firstTarget,
-		ItemTemplate itemTemplate) {
+			ItemTemplate itemTemplate) {
 		this.effectedList = new ArrayList<Creature>();
 		this.conditionChangeListener = new StartMovingListener();
 		this.firstTarget = firstTarget;
@@ -162,7 +161,7 @@ public class Skill {
 			return false;
 		}
 
-		if (!preCastCheck()){
+		if (!preCastCheck()) {
 			return false;
 		}
 
@@ -187,8 +186,7 @@ public class Skill {
 			if (effector instanceof Player) {
 				if (!RestrictionsManager.canAffectBySkill((Player) effector, effected))
 					effectedIter.remove();
-			}
-			else {
+			} else {
 				if (effector.getEffectController().isAbnormalState(AbnormalState.CANT_ATTACK_STATE))
 					effectedIter.remove();
 			}
@@ -197,7 +195,7 @@ public class Skill {
 
 		// TODO: Enable non-targeted, non-point AOE skills to trigger.
 		if (targetType == 0 && effectedList.size() == 0 && firstTargetAttribute != FirstTargetAttribute.ME
-			&& targetRangeAttribute != TargetRangeAttribute.AREA) {
+				&& targetRangeAttribute != TargetRangeAttribute.AREA) {
 			log.debug("targettype failed");
 			return false;
 		}
@@ -248,12 +246,12 @@ public class Skill {
 		// TODO config
 		if (effector instanceof Player)
 			MotionLoggingService.getInstance().logTime((Player) effector, this.getSkillTemplate(), this.getHitTime(),
-				MathUtil.getDistance(effector, firstTarget));
+					MathUtil.getDistance(effector, firstTarget));
 
 		int cooldown = effector.getSkillCooldown(skillTemplate);
 		if (cooldown != 0) {
 			effector.setSkillCoolDown(skillTemplate.getCooldownId(),
-				cooldown * 100 + this.duration + System.currentTimeMillis());
+					cooldown * 100 + this.duration + System.currentTimeMillis());
 			effector.setSkillCoolDownBase(skillTemplate.getCooldownId(), System.currentTimeMillis());
 		}
 
@@ -265,8 +263,7 @@ public class Skill {
 
 		if (this.duration > 0) {
 			schedule(this.duration);
-		}
-		else {
+		} else {
 			endCast();
 		}
 		return true;
@@ -278,25 +275,27 @@ public class Skill {
 			duration = skillTemplate.getDuration();
 			return;
 		}
-		duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME, skillTemplate.getDuration());
+		duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME,
+				skillTemplate.getDuration());
 		switch (skillTemplate.getSubType()) {
-			case SUMMON:
-				duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_SUMMON, duration);
-				break;
-			case SUMMONHOMING:
-				duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_SUMMONHOMING, duration);
-				break;
-			case SUMMONTRAP:
-				duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_TRAP, duration);
-				break;
-			case HEAL:
-				duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_HEAL, duration);
-				break;
-			case ATTACK:
-				if (skillTemplate.getType() == com.aionemu.gameserver.skillengine.model.SkillType.MAGICAL) {
-					duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_ATTACK, duration);
-				}
-				break;
+		case SUMMON:
+			duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_SUMMON, duration);
+			break;
+		case SUMMONHOMING:
+			duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_SUMMONHOMING,
+					duration);
+			break;
+		case SUMMONTRAP:
+			duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_TRAP, duration);
+			break;
+		case HEAL:
+			duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_HEAL, duration);
+			break;
+		case ATTACK:
+			if (skillTemplate.getType() == com.aionemu.gameserver.skillengine.model.SkillType.MAGICAL) {
+				duration = effector.getGameStats().getPositiveReverseStat(StatEnum.BOOST_CASTING_TIME_ATTACK, duration);
+			}
+			break;
 		}
 
 		// 70% of base skill duration cap
@@ -317,98 +316,97 @@ public class Skill {
 		if (!(effector instanceof Player) || skillMethod != SkillMethod.CAST)// TODO item skills?
 			return true;
 		Player player = (Player) effector;
-		
-		//if player is without weapon, dont check animation time
+
+		// if player is without weapon, dont check animation time
 		if (player.getEquipment().getMainHandWeaponType() == null)
 			return true;
-		
+
 		/**
-		 * exceptions for certain skills
-		 * -herb and mana treatment
-		 * -traps
+		 * exceptions for certain skills -herb and mana treatment -traps
 		 */
-		//dont check herb and mana treatment
+		// dont check herb and mana treatment
 		switch (this.getSkillId()) {
-			case 1803:// herb treatment
-			case 1804:
-			case 1805:
-			case 1825:
-			case 1827:
-			case 1823:// mana treatment
-			case 1824:
-			case 1826:
-			case 1828:
-				return true;
+		case 1803:// herb treatment
+		case 1804:
+		case 1805:
+		case 1825:
+		case 1827:
+		case 1823:// mana treatment
+		case 1824:
+		case 1826:
+		case 1828:
+			return true;
 		}
 		if (this.getSkillTemplate().getSubType() == SkillSubType.SUMMONTRAP)
 			return true;
-		
+
 		Motion motion = this.getSkillTemplate().getMotion();
-		
+
 		if (motion == null || motion.getName() == null) {
-			log.debug("missing motion for skillId: "+this.getSkillId());
+			log.debug("missing motion for skillId: " + this.getSkillId());
 			return true;
 		}
 
 		if (motion.getInstantSkill() && hitTime != 0) {
-			log.debug("Instant and hitTime not 0! modified client_skills? player objectid: "+player.getObjectId());
+			log.debug("Instant and hitTime not 0! modified client_skills? player objectid: " + player.getObjectId());
 			return false;
 		} else if (!motion.getInstantSkill() && hitTime == 0) {
-			log.debug("modified client_skills! player objectid: "+player.getObjectId());
+			log.debug("modified client_skills! player objectid: " + player.getObjectId());
 			return false;
 		}
-		
+
 		MotionTime motionTime = DataManager.MOTION_DATA.getMotionTime(motion.getName());
 
 		if (motionTime == null) {
-			log.warn("missing motiontime for motionName: "+motion.getName());
+			log.warn("missing motiontime for motionName: " + motion.getName());
 			return true;
 		}
-		
-		WeaponTypeWrapper weapons = new WeaponTypeWrapper(player.getEquipment().getMainHandWeaponType(), player.getEquipment().getOffHandWeaponType());
+
+		WeaponTypeWrapper weapons = new WeaponTypeWrapper(player.getEquipment().getMainHandWeaponType(),
+				player.getEquipment().getOffHandWeaponType());
 		float serverTime = motionTime.getTimeForWeapon(weapons);
 		int clientTime = hitTime;
-		
+
 		if (serverTime == 0) {
-			log.warn("missing weapon time for motionName: "+motion.getName()+" weapons: "+weapons.toString());
+			log.warn("missing weapon time for motionName: " + motion.getName() + " weapons: " + weapons.toString());
 			return true;
 		}
-		
-		//adjust client time with ammotime
+
+		// adjust client time with ammotime
 		long ammoTime = 0;
 		double distance = MathUtil.getDistance(effector, firstTarget);
 		if (getSkillTemplate().getAmmoSpeed() != 0)
-			ammoTime = Math.round(distance / getSkillTemplate().getAmmoSpeed() * 1000);//checked with client
+			ammoTime = Math.round(distance / getSkillTemplate().getAmmoSpeed() * 1000);// checked with client
 		clientTime -= ammoTime;
-		
-		//adjust servertime with motion play speed
+
+		// adjust servertime with motion play speed
 		if (motion.getSpeed() != 100) {
 			serverTime /= 100f;
-			serverTime *= (float)motion.getSpeed();
+			serverTime *= (float) motion.getSpeed();
 		}
 
 		Stat2 attackSpeed = player.getGameStats().getAttackSpeed();
-		
-		//adjust serverTime with attackSpeed
+
+		// adjust serverTime with attackSpeed
 		if (attackSpeed.getBase() != attackSpeed.getCurrent())
-			serverTime *= ((float)attackSpeed.getCurrent() / (float)attackSpeed.getBase()); 
-		
-		//10% tolerance
+			serverTime *= ((float) attackSpeed.getCurrent() / (float) attackSpeed.getBase());
+
+		// 10% tolerance
 		serverTime *= 0.8f;
-	
+
 		int finalTime = Math.round(serverTime);
 		if (motion.getInstantSkill() && hitTime == 0) {
 			this.serverTime = Math.round(ammoTime);
-		} 
-		else {
+		} else {
 			if (clientTime < finalTime) {
 				// temp log to console for debugging
-				log.warn("Possible bad motion, name: " + motion.getName() + " client time:" + clientTime + " < finalTime(serverTime): " + finalTime);
-				
+				log.warn("Possible bad motion, name: " + motion.getName() + " client time:" + clientTime
+						+ " < finalTime(serverTime): " + finalTime);
+
 				log.debug("modified client_skills! (clientTime<finalTime) player objectid: " + player.getObjectId());
 				return false;
 			}
-			
+
 			this.serverTime = hitTime;
 		}
 		player.setNextSkillUse(System.currentTimeMillis() + duration + finalTime);
@@ -434,34 +432,31 @@ public class Skill {
 
 		if (skillMethod == SkillMethod.CAST) {
 			switch (targetType) {
-				case 0: // PlayerObjectId as Target
-					PacketSendUtility.broadcastPacketAndReceive(effector,
-						new SM_CASTSPELL(effector.getObjectId(), skillTemplate.getSkillId(), skillLevel, targetType, targetObjId,
-							this.duration));
-					if (effector instanceof Npc && firstTarget instanceof Player) {
-						NpcAI2 ai = (NpcAI2) effector.getAi2();
-						if (ai.poll(AIQuestion.CAN_SHOUT))
-							ShoutEventHandler.onCast(ai, firstTarget);
-					}
-					break;
+			case 0: // PlayerObjectId as Target
+				PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL(effector.getObjectId(),
+						skillTemplate.getSkillId(), skillLevel, targetType, targetObjId, this.duration));
+				if (effector instanceof Npc && firstTarget instanceof Player) {
+					NpcAI2 ai = (NpcAI2) effector.getAi2();
+					if (ai.poll(AIQuestion.CAN_SHOUT))
+						ShoutEventHandler.onCast(ai, firstTarget);
+				}
+				break;
 
-				case 3: // Target not in sight?
-					PacketSendUtility.broadcastPacketAndReceive(effector,
-						new SM_CASTSPELL(effector.getObjectId(), skillTemplate.getSkillId(), skillLevel, targetType, 0,
-							this.duration));
-					break;
+			case 3: // Target not in sight?
+				PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL(effector.getObjectId(),
+						skillTemplate.getSkillId(), skillLevel, targetType, 0, this.duration));
+				break;
 
-				case 1: // XYZ as Target
-					PacketSendUtility.broadcastPacketAndReceive(effector,
-						new SM_CASTSPELL(effector.getObjectId(), skillTemplate.getSkillId(), skillLevel, targetType, x, y, z,
-							this.duration));
-					break;
+			case 1: // XYZ as Target
+				PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL(effector.getObjectId(),
+						skillTemplate.getSkillId(), skillLevel, targetType, x, y, z, this.duration));
+				break;
 			}
-		}
-		else if (skillMethod == SkillMethod.ITEM && duration > 0) {
-			PacketSendUtility.broadcastPacketAndReceive(effector, new SM_ITEM_USAGE_ANIMATION(effector.getObjectId(),
-				firstTarget.getObjectId(), (this.itemObjectId == 0 ? 0 : this.itemObjectId), itemTemplate.getTemplateId(),
-				this.duration, 0, 0));
+		} else if (skillMethod == SkillMethod.ITEM && duration > 0) {
+			PacketSendUtility.broadcastPacketAndReceive(effector,
+					new SM_ITEM_USAGE_ANIMATION(effector.getObjectId(), firstTarget.getObjectId(),
+							(this.itemObjectId == 0 ? 0 : this.itemObjectId), itemTemplate.getTemplateId(),
+							this.duration, 0, 0));
 		}
 	}
 
@@ -471,6 +466,7 @@ public class Skill {
 	public void cancelCast() {
 		isCancelled = true;
 	}
+
 	public boolean isCancelled() {
 		return isCancelled;
 	}
@@ -512,9 +508,9 @@ public class Skill {
 				return;
 			if (item.getActivationCount() > 1) {
 				item.setActivationCount(item.getActivationCount() - 1);
-			}
-			else {
-				if (!((Player) effector).getInventory().decreaseByObjectId(item.getObjectId(), 1, ItemUpdateType.DEC_USE))
+			} else {
+				if (!((Player) effector).getInventory().decreaseByObjectId(item.getObjectId(), 1,
+						ItemUpdateType.DEC_USE))
 					return;
 			}
 		}
@@ -543,10 +539,10 @@ public class Skill {
 				dashStatus = effect.getDashStatus().getId();
 
 				// Block AOE propagation if firstTarget resists the spell
-				if ((!blockAOESpread) && (effect.getAttackStatus() == AttackStatus.RESIST) && (isTargetAOE())){
+				if ((!blockAOESpread) && (effect.getAttackStatus() == AttackStatus.RESIST) && (isTargetAOE())) {
 					blockAOESpread = true;
 				}
-				
+
 				if (effect.getAttackStatus() == AttackStatus.RESIST || effect.getAttackStatus() == AttackStatus.DODGE) {
 					resistCount++;
 				}
@@ -555,7 +551,7 @@ public class Skill {
 				blockedChain = true;
 				blockedPenaltySkill = true;
 			}
-			
+
 			// exception for point point skills(example Ice Sheet)
 			if (effectedList.isEmpty() && this.isPointPointSkill()) {
 				Effect effect = new Effect(this, null, 0, itemTemplate);
@@ -583,11 +579,10 @@ public class Skill {
 			int chainProb = skillTemplate.getChainSkillProb();
 			if (chainProb != 0 && !blockedChain) {
 				this.chainSuccess = Rnd.get(100) < chainProb;
-			}else{
+			} else {
 				this.chainSuccess = false;
 			}
-		}
-		else {
+		} else {
 			this.chainSuccess = true;
 		}
 
@@ -633,7 +628,7 @@ public class Skill {
 		/**
 		 * Use penalty skill
 		 */
-		if (!blockedPenaltySkill){
+		if (!blockedPenaltySkill) {
 			startPenaltySkill();
 		}
 	}
@@ -645,29 +640,28 @@ public class Skill {
 	private void sendCastspellEnd(int spellStatus, int dashStatus, List<Effect> effects) {
 		if (skillMethod == SkillMethod.CAST) {
 			switch (targetType) {
-				case 0: // PlayerObjectId as Target
-					PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL_RESULT(this, effects, serverTime,
-						chainSuccess, spellStatus, dashStatus));
-					break;
+			case 0: // PlayerObjectId as Target
+				PacketSendUtility.broadcastPacketAndReceive(effector,
+						new SM_CASTSPELL_RESULT(this, effects, serverTime, chainSuccess, spellStatus, dashStatus));
+				break;
 
-				case 3: // Target not in sight?
-					PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL_RESULT(this, effects, serverTime,
-						chainSuccess, spellStatus, dashStatus));
-					break;
+			case 3: // Target not in sight?
+				PacketSendUtility.broadcastPacketAndReceive(effector,
+						new SM_CASTSPELL_RESULT(this, effects, serverTime, chainSuccess, spellStatus, dashStatus));
+				break;
 
-				case 1: // XYZ as Target
-					PacketSendUtility.broadcastPacketAndReceive(effector, new SM_CASTSPELL_RESULT(this, effects, serverTime,
-						chainSuccess, spellStatus, dashStatus, 1));
-					break;
+			case 1: // XYZ as Target
+				PacketSendUtility.broadcastPacketAndReceive(effector,
+						new SM_CASTSPELL_RESULT(this, effects, serverTime, chainSuccess, spellStatus, dashStatus, 1));
+				break;
 			}
-		}
-		else if (skillMethod == SkillMethod.ITEM) {
-			PacketSendUtility.broadcastPacketAndReceive(effector, new SM_ITEM_USAGE_ANIMATION(effector.getObjectId(),
-				firstTarget.getObjectId(), (this.itemObjectId == 0 ? 0 : this.itemObjectId), itemTemplate.getTemplateId(), 0,
-				1, 0));
+		} else if (skillMethod == SkillMethod.ITEM) {
+			PacketSendUtility.broadcastPacketAndReceive(effector,
+					new SM_ITEM_USAGE_ANIMATION(effector.getObjectId(), firstTarget.getObjectId(),
+							(this.itemObjectId == 0 ? 0 : this.itemObjectId), itemTemplate.getTemplateId(), 0, 1, 0));
 			if (effector instanceof Player)
 				PacketSendUtility.sendPacket((Player) effector,
-					SM_SYSTEM_MESSAGE.STR_USE_ITEM(new DescriptionId(getItemTemplate().getNameId())));
+						SM_SYSTEM_MESSAGE.STR_USE_ITEM(new DescriptionId(getItemTemplate().getNameId())));
 		}
 	}
 
@@ -708,15 +702,14 @@ public class Skill {
 				effected.getEffectController().removeEffectBySetNumber(setNumber, maxOccur, skillTemplate.getSkillId());
 			else
 				effected.getEffectController().removeEffectBySetNumber(setNumber, 1);
-		}
-		else {
+		} else {
 			effected.getEffectController().removeEffectWithSetNumberReserved();
 		}
 	}
 
 	/**
 	 * @param value
-	 *          is the changeMpConsumptionValue to set
+	 *            is the changeMpConsumptionValue to set
 	 */
 	public void setBoostSkillCost(int value) {
 		boostSkillCost = value;
@@ -787,7 +780,7 @@ public class Skill {
 
 	/**
 	 * @param firstTarget
-	 *          the firstTarget to set
+	 *            the firstTarget to set
 	 */
 	public void setFirstTarget(Creature firstTarget) {
 		this.firstTarget = firstTarget;
@@ -809,7 +802,7 @@ public class Skill {
 
 	/**
 	 * @param FirstTargetAttribute
-	 *          the firstTargetAttribute to set
+	 *            the firstTargetAttribute to set
 	 */
 	public void setFirstTargetAttribute(FirstTargetAttribute firstTargetAttribute) {
 		this.firstTargetAttribute = firstTargetAttribute;
@@ -826,14 +819,17 @@ public class Skill {
 	 * @return true if the present skill is a targeted AOE skill
 	 */
 	public boolean isTargetAOE() {
-		return (firstTargetAttribute == FirstTargetAttribute.TARGET && targetRangeAttribute == TargetRangeAttribute.AREA);
+		return (firstTargetAttribute == FirstTargetAttribute.TARGET
+				&& targetRangeAttribute == TargetRangeAttribute.AREA);
 	}
 
 	/**
-	 * @return true if the present skill is a self buff includes items (such as scroll buffs)
+	 * @return true if the present skill is a self buff includes items (such as
+	 *         scroll buffs)
 	 */
 	public boolean isSelfBuff() {
-		return (firstTargetAttribute == FirstTargetAttribute.ME && targetRangeAttribute == TargetRangeAttribute.ONLYONE);
+		return (firstTargetAttribute == FirstTargetAttribute.ME
+				&& targetRangeAttribute == TargetRangeAttribute.ONLYONE);
 	}
 
 	/**
@@ -866,7 +862,7 @@ public class Skill {
 
 	/**
 	 * @param TargetCondition
-	 *          the targetCondition to set
+	 *            the targetCondition to set
 	 */
 	public void setTargetCondition(TargetAttribute cond) {
 		this.targetCondition = cond;
@@ -874,7 +870,7 @@ public class Skill {
 
 	/**
 	 * @param firstTargetRangeCheck
-	 *          the firstTargetRangeCheck to set
+	 *            the firstTargetRangeCheck to set
 	 */
 	public void setFirstTargetRangeCheck(boolean firstTargetRangeCheck) {
 		this.firstTargetRangeCheck = firstTargetRangeCheck;
@@ -882,7 +878,7 @@ public class Skill {
 
 	/**
 	 * @param itemTemplate
-	 *          the itemTemplate to set
+	 *            the itemTemplate to set
 	 */
 	public void setItemTemplate(ItemTemplate itemTemplate) {
 		this.itemTemplate = itemTemplate;
@@ -902,7 +898,7 @@ public class Skill {
 
 	/**
 	 * @param targetRangeAttribute
-	 *          the targetRangeAttribute to set
+	 *            the targetRangeAttribute to set
 	 */
 	public void setTargetRangeAttribute(TargetRangeAttribute targetRangeAttribute) {
 		this.targetRangeAttribute = targetRangeAttribute;
@@ -969,56 +965,57 @@ public class Skill {
 
 	/**
 	 * @param time
-	 *          The time to set.
+	 *            The time to set.
 	 */
 	public void setHitTime(int time) {
 		this.hitTime = time;
 	}
 
 	/**
-	 * @return true if skill must not be affected by boost casting time this comes from old 1.5.0.5 patch notes and still
-	 *         applies on 2.5 (confirmed) TODO: maybe another implementation? At the moment this doesnt seem to be handled
-	 *         on client infos, so it's hard coded
+	 * @return true if skill must not be affected by boost casting time this comes
+	 *         from old 1.5.0.5 patch notes and still applies on 2.5 (confirmed)
+	 *         TODO: maybe another implementation? At the moment this doesnt seem to
+	 *         be handled on client infos, so it's hard coded
 	 */
 	private boolean isCastTimeFixed() {
 		if (skillMethod != SkillMethod.CAST) // only casted skills are affected
 			return true;
 
 		switch (this.getSkillId()) {
-			case 1636:// Fear I
-			case 2318:
-			case 2319:
-			case 1685:// Fear Shriek I
-			case 2006:// Hand of Torpor
-			case 2011:// Spirit Hypnosis
-			case 1495:// Sleep I
-			case 2316:
-			case 2317:
-			case 1443:// Sleeping Storm
-			case 1454:// Curse of Roots
-			case 1430:// Curse of Old Roots
-			case 1497:// Tranquilizing Cloud I
-			case 11885:// abyss transformation elyos
-			case 11886:
-			case 11887:
-			case 11888:
-			case 11889:
-			case 11890:// abyss transformation asmo
-			case 11891:
-			case 11892:
-			case 11893:
-			case 11894:
-			case 1801:// return skill
-			case 1803:// herb treatment
-			case 1804:
-			case 1805:
-			case 1825:
-			case 1827:
-			case 1823:// mana treatment
-			case 1824:
-			case 1826:
-			case 1828:
-				return true;
+		case 1636:// Fear I
+		case 2318:
+		case 2319:
+		case 1685:// Fear Shriek I
+		case 2006:// Hand of Torpor
+		case 2011:// Spirit Hypnosis
+		case 1495:// Sleep I
+		case 2316:
+		case 2317:
+		case 1443:// Sleeping Storm
+		case 1454:// Curse of Roots
+		case 1430:// Curse of Old Roots
+		case 1497:// Tranquilizing Cloud I
+		case 11885:// abyss transformation elyos
+		case 11886:
+		case 11887:
+		case 11888:
+		case 11889:
+		case 11890:// abyss transformation asmo
+		case 11891:
+		case 11892:
+		case 11893:
+		case 11894:
+		case 1801:// return skill
+		case 1803:// herb treatment
+		case 1804:
+		case 1805:
+		case 1825:
+		case 1827:
+		case 1823:// mana treatment
+		case 1824:
+		case 1826:
+		case 1828:
+			return true;
 		}
 
 		return false;
@@ -1035,10 +1032,10 @@ public class Skill {
 	public SkillMethod getSkillMethod() {
 		return this.skillMethod;
 	}
-	
+
 	public boolean isPointPointSkill() {
 		if (this.getSkillTemplate().getProperties().getFirstTarget() == FirstTargetAttribute.POINT
-			&& this.getSkillTemplate().getProperties().getTargetType() == TargetRangeAttribute.POINT)
+				&& this.getSkillTemplate().getProperties().getTargetType() == TargetRangeAttribute.POINT)
 			return true;
 
 		return false;

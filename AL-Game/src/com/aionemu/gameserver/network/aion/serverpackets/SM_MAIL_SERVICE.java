@@ -118,24 +118,24 @@ public class SM_MAIL_SERVICE extends MailServicePacket {
 	protected void writeImpl(AionConnection con) {
 		writeC(serviceId);
 		switch (serviceId) {
-			case 0:
-				writeMailboxState(totalCount, unreadCount, unreadExpressCount);
-				break;
-			case 1:
-				writeMailMessage(mailMessage);
-				break;
-			case 2:
-				writeLettersList(letters, player);
-				break;
-			case 3:
-				writeLetterRead(letter, time);
-				break;
-			case 5:
-				writeLetterState(letterId, attachmentType);
-				break;
-			case 6:
-				writeLetterDelete(totalCount, unreadCount, unreadExpressCount, letterId);
-				break;
+		case 0:
+			writeMailboxState(totalCount, unreadCount, unreadExpressCount);
+			break;
+		case 1:
+			writeMailMessage(mailMessage);
+			break;
+		case 2:
+			writeLettersList(letters, player);
+			break;
+		case 3:
+			writeLetterRead(letter, time);
+			break;
+		case 5:
+			writeLetterState(letterId, attachmentType);
+			break;
+		case 6:
+			writeLetterDelete(totalCount, unreadCount, unreadExpressCount, letterId);
+			break;
 		}
 	}
 }

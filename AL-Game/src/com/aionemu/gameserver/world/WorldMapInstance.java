@@ -16,20 +16,17 @@
  */
 package com.aionemu.gameserver.world;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.Future;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import javolution.util.FastList;
-import javolution.util.FastMap;
 
 import com.aionemu.gameserver.configs.custom.CustomFun;
 import com.aionemu.gameserver.configs.main.WorldConfig;
@@ -52,8 +49,9 @@ import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneName;
 import com.aionemu.gameserver.world.zone.ZoneService;
 
-import java.util.ArrayList;
-import java.util.List;
+import gnu.trove.map.hash.TIntObjectHashMap;
+import javolution.util.FastList;
+import javolution.util.FastMap;
 
 /**
  * World map instance object.
@@ -103,12 +101,12 @@ public abstract class WorldMapInstance {
 	private final FastList<Integer> questIds = new FastList<Integer>();
 
 	private InstanceHandler instanceHandler;
-	
+
 	private Map<ZoneName, ZoneInstance> zones = new HashMap<ZoneName, ZoneInstance>();
 
 	private Integer soloPlayer;
 	private Player soloPlayerp;
-	
+
 	private PlayerAlliance registredAlliance;
 
 	/**
@@ -140,13 +138,14 @@ public abstract class WorldMapInstance {
 	public WorldMap getParent() {
 		return parent;
 	}
-	
+
 	public WorldMapTemplate getTemplate() {
 		return parent.getTemplate();
 	}
 
 	/**
-	 * Returns MapRegion that contains coordinates of VisibleObject. If the region doesn't exist, it's created.
+	 * Returns MapRegion that contains coordinates of VisibleObject. If the region
+	 * doesn't exist, it's created.
 	 * 
 	 * @param object
 	 * @return a MapRegion
@@ -156,7 +155,8 @@ public abstract class WorldMapInstance {
 	}
 
 	/**
-	 * Returns MapRegion that contains given x,y coordinates. If the region doesn't exist, it's created.
+	 * Returns MapRegion that contains given x,y coordinates. If the region doesn't
+	 * exist, it's created.
 	 * 
 	 * @param x
 	 * @param y
@@ -171,7 +171,7 @@ public abstract class WorldMapInstance {
 	 * @return newly created map region
 	 */
 	protected abstract MapRegion createMapRegion(int regionId);
-	
+
 	protected abstract void initMapRegions();
 
 	/**
@@ -189,8 +189,8 @@ public abstract class WorldMapInstance {
 	public void addObject(VisibleObject object) {
 		if (worldMapObjects.put(object.getObjectId(), object) != null) {
 			throw new DuplicateAionObjectException("Object with templateId "
-				+ String.valueOf(object.getObjectTemplate().getTemplateId()) + " already spawned in the instance "
-				+ String.valueOf(this.getMapId()) + " " + String.valueOf(this.getInstanceId()));
+					+ String.valueOf(object.getObjectTemplate().getTemplateId()) + " already spawned in the instance "
+					+ String.valueOf(this.getMapId()) + " " + String.valueOf(this.getInstanceId()));
 		}
 		if (object instanceof Npc) {
 			QuestNpc data = QuestEngine.getInstance().getQuestNpc(((Npc) object).getNpcId());
@@ -200,15 +200,15 @@ public abstract class WorldMapInstance {
 						questIds.add(id);
 			}
 		}
-		if (object instanceof Player){
-			Player pl = ((Player)object);
+		if (object instanceof Player) {
+			Player pl = ((Player) object);
 			if (this.getParent().isPossibleFly())
 				pl.setInsideZoneType(ZoneType.FLY);
 			worldMapPlayers.put(object.getObjectId(), pl);
-			
-			//CustomRank
-			if(CustomFun.CUSTOM_RANK_ENABLED){
-				if(!worldMapHistoryPlayers.contains(pl.getObjectId())){
+
+			// CustomRank
+			if (CustomFun.CUSTOM_RANK_ENABLED) {
+				if (!worldMapHistoryPlayers.contains(pl.getObjectId())) {
 					pl.getCustomPlayerRank().checkLvUp();
 					worldMapHistoryPlayers.add(pl.getObjectId());
 				}
@@ -221,9 +221,9 @@ public abstract class WorldMapInstance {
 	 */
 	public void removeObject(AionObject object) {
 		worldMapObjects.remove(object.getObjectId());
-		if (object instanceof Player){
+		if (object instanceof Player) {
 			if (this.getParent().isPossibleFly())
-				((Player)object).unsetInsideZoneType(ZoneType.FLY);
+				((Player) object).unsetInsideZoneType(ZoneType.FLY);
 			worldMapPlayers.remove(object.getObjectId());
 		}
 	}
@@ -294,8 +294,8 @@ public abstract class WorldMapInstance {
 	 * 
 	 * @return List<npc>
 	 */
-	public Map<Integer,StaticDoor> getDoors() {
-		Map<Integer,StaticDoor> doors = new HashMap<Integer,StaticDoor>();
+	public Map<Integer, StaticDoor> getDoors() {
+		Map<Integer, StaticDoor> doors = new HashMap<Integer, StaticDoor>();
 		for (Iterator<VisibleObject> iter = objectIterator(); iter.hasNext();) {
 			VisibleObject obj = iter.next();
 			if (obj instanceof StaticDoor) {
@@ -375,7 +375,7 @@ public abstract class WorldMapInstance {
 
 	/**
 	 * @param emptyInstanceTask
-	 *          the emptyInstanceTask to set
+	 *            the emptyInstanceTask to set
 	 */
 	public void setEmptyInstanceTask(Future<?> emptyInstanceTask) {
 		this.emptyInstanceTask = emptyInstanceTask;
@@ -406,7 +406,7 @@ public abstract class WorldMapInstance {
 	public final void setInstanceHandler(InstanceHandler instanceHandler) {
 		this.instanceHandler = instanceHandler;
 	}
-	
+
 	public Player getPlayer(Integer object) {
 		for (Player player : worldMapPlayers.values()) {
 			if (object == player.getObjectId()) {
@@ -425,12 +425,11 @@ public abstract class WorldMapInstance {
 				if (player != null) {
 					visitor.visit(player);
 				}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all players" + ex);
 		}
 	}
-	
+
 	protected ZoneInstance[] filterZones(int mapId, int regionId, float startX, float startY, float minZ, float maxZ) {
 		if (zones.isEmpty()) {
 			log.debug("No zones for map " + mapId);
@@ -446,7 +445,7 @@ public abstract class WorldMapInstance {
 		}
 		return regionZones.toArray(new ZoneInstance[regionZones.size()]);
 	}
-	
+
 	/**
 	 * @param player
 	 * @param zoneName
@@ -469,7 +468,7 @@ public abstract class WorldMapInstance {
 		return mapRegion.isInsideZone(zoneName, pos.getX(), pos.getY(), pos.getZ());
 	}
 
-	public void  setSoloPlayerObj(Player player) {
+	public void setSoloPlayerObj(Player player) {
 		soloPlayer = player.getObjectId();
 		soloPlayerp = player;
 	}
@@ -477,6 +476,7 @@ public abstract class WorldMapInstance {
 	public Integer getSoloPlayerObj() {
 		return soloPlayer;
 	}
+
 	public Player getSoloPlayer() {
 		return soloPlayerp;
 	}

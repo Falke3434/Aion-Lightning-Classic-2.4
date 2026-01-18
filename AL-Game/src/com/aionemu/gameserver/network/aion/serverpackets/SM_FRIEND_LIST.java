@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.model.gameobjects.player.Friend;
 import com.aionemu.gameserver.model.gameobjects.player.FriendList;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -40,7 +39,7 @@ public class SM_FRIEND_LIST extends AionServerPacket {
 			writeS(friend.getName());
 			writeD(friend.getLevel());
 			writeD(friend.getPlayerClass().getClassId());
-			writeC(friend.isOnline() ? 1 : 0); 
+			writeC(friend.isOnline() ? 1 : 0);
 			writeD(friend.getMapId());
 			writeD(friend.getLastOnlineTime()); // Date friend was last online as a Unix timestamp.
 			writeS(friend.getNote()); // Friend note

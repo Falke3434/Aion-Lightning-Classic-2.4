@@ -44,7 +44,7 @@ public class TradeList {
 	private Map<Integer, Long> requiredItems = new HashMap<Integer, Long>();
 
 	public TradeList() {
-		
+
 	}
 
 	public TradeList(int sellerObjId) {
@@ -92,7 +92,7 @@ public class TradeList {
 
 		for (TradeItem tradeItem : tradeItems) {
 			requiredKinah += PricesService.getKinahForBuy(tradeItem.getItemTemplate().getPrice(), player.getRace())
-				* tradeItem.getCount()*modifier/100;
+					* tradeItem.getCount() * modifier / 100;
 		}
 
 		return availableKinah >= requiredKinah;
@@ -110,20 +110,21 @@ public class TradeList {
 		for (TradeItem tradeItem : tradeItems) {
 			requiredAp += tradeItem.getItemTemplate().getAbyssPoints() * tradeItem.getCount();
 			int abysItemId = tradeItem.getItemTemplate().getAbyssItem();
-			
-			if(abysItemId == 0) //no abyss required item (medals, etc)
+
+			if (abysItemId == 0) // no abyss required item (medals, etc)
 				continue;
 			long alreadyAddedCount = 0;
 			if (requiredItems.containsKey(abysItemId))
 				alreadyAddedCount = requiredItems.get(abysItemId);
 			if (alreadyAddedCount == 0)
-				requiredItems.put(abysItemId,(long) tradeItem.getItemTemplate().getAbyssItemCount());
+				requiredItems.put(abysItemId, (long) tradeItem.getItemTemplate().getAbyssItemCount());
 			else
-				requiredItems.put(abysItemId, alreadyAddedCount + tradeItem.getItemTemplate().getAbyssItemCount() * tradeItem.getCount());
+				requiredItems.put(abysItemId,
+						alreadyAddedCount + tradeItem.getItemTemplate().getAbyssItemCount() * tradeItem.getCount());
 		}
 
 		if (ap < requiredAp) {
-			//You do not have enough Abyss Points.
+			// You do not have enough Abyss Points.
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300927));
 			return false;
 		}
@@ -152,8 +153,8 @@ public class TradeList {
 			if (alreadyAddedCount == 0)
 				requiredItems.put(itemId, tradeItem.getItemTemplate().getRewardItemCount() * tradeItem.getCount());
 			else
-				requiredItems.put(itemId, alreadyAddedCount
-					+ tradeItem.getItemTemplate().getRewardItemCount() * tradeItem.getCount());
+				requiredItems.put(itemId,
+						alreadyAddedCount + tradeItem.getItemTemplate().getRewardItemCount() * tradeItem.getCount());
 		}
 
 		for (Integer itemId : requiredItems.keySet()) {

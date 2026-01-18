@@ -59,16 +59,14 @@ public class SkillLearnService {
 		PlayerClass playerClass = player.getCommonData().getPlayerClass();
 		Race playerRace = player.getRace();
 
-		for (int i = 0; i <= level; i++) 
+		for (int i = 0; i <= level; i++)
 			addSkills(player, i, playerClass, playerRace);
-	
 
 		if (!playerClass.isStartingClass()) {
 			PlayerClass startinClass = PlayerClass.getStartingClassFor(playerClass);
 
-			for (int i = 1; i < 10; i++) 
+			for (int i = 1; i < 10; i++)
 				addSkills(player, i, startinClass, playerRace);
-			
 
 			if (player.getSkillList().getSkillEntry(30001) != null) {
 				int skillLevel = player.getSkillList().getSkillLevel(30001);
@@ -88,7 +86,8 @@ public class SkillLearnService {
 	 * @param playerRace
 	 */
 	private static void addSkills(Player player, int level, PlayerClass playerClass, Race playerRace) {
-		SkillLearnTemplate[] skillTemplates = DataManager.SKILL_TREE_DATA.getTemplatesFor(playerClass, level, playerRace);
+		SkillLearnTemplate[] skillTemplates = DataManager.SKILL_TREE_DATA.getTemplatesFor(playerClass, level,
+				playerRace);
 		PlayerSkillList playerSkillList = player.getSkillList();
 
 		for (SkillLearnTemplate template : skillTemplates) {
@@ -100,19 +99,20 @@ public class SkillLearnService {
 	}
 
 	/**
-	 * Check SKILL_AUTOLEARN property Check skill already learned Check skill template auto-learn attribute
+	 * Check SKILL_AUTOLEARN property Check skill already learned Check skill
+	 * template auto-learn attribute
 	 * 
 	 * @param playerSkillList
 	 * @param template
 	 * @return
 	 */
 	private static boolean checkLearnIsPossible(Player player, PlayerSkillList playerSkillList,
-		SkillLearnTemplate template) {
+			SkillLearnTemplate template) {
 		if (playerSkillList.isSkillPresent(template.getSkillId()))
 			return true;
 
 		if ((player.havePermission(MembershipConfig.SKILL_AUTOLEARN) && !template.isStigma())
-			|| (player.havePermission(MembershipConfig.STIGMA_AUTOLEARN) && template.isStigma()))
+				|| (player.havePermission(MembershipConfig.STIGMA_AUTOLEARN) && template.isStigma()))
 			return true;
 
 		if (template.isAutolearn())
@@ -142,11 +142,10 @@ public class SkillLearnService {
 		if (player.getSkillList().isSkillPresent(skillId)) {
 			Integer skillLevel = player.getSkillList().getSkillLevel(skillId);
 			/*
-			if(skillLevel == null)
-				skillLevel = 1;
-			*/
-			PacketSendUtility.sendPacket(player, new SM_SKILL_REMOVE(skillId, skillLevel,
-				player.getSkillList().getSkillEntry(skillId).isStigma()));
+			 * if(skillLevel == null) skillLevel = 1;
+			 */
+			PacketSendUtility.sendPacket(player,
+					new SM_SKILL_REMOVE(skillId, skillLevel, player.getSkillList().getSkillEntry(skillId).isStigma()));
 			player.getSkillList().removeSkill(skillId);
 		}
 	}

@@ -17,12 +17,12 @@
 
 package com.aionemu.gameserver.skillengine.effect;
 
-import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.skillengine.model.Effect;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+
+import com.aionemu.gameserver.model.gameobjects.player.Player;
+import com.aionemu.gameserver.skillengine.model.Effect;
 
 /**
  * @author Sippolo
@@ -46,7 +46,7 @@ public class NoFlyEffect extends EffectTemplate {
 	@Override
 	public void startEffect(Effect effect) {
 		((Player) effect.getEffected()).getFlyController().endFly();
-		
+
 		effect.setAbnormal(AbnormalState.NOFLY.getId());
 		effect.getEffected().getEffectController().setAbnormal(AbnormalState.NOFLY.getId());
 	}

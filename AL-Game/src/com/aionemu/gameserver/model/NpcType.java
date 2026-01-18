@@ -20,10 +20,12 @@ package com.aionemu.gameserver.model;
  * @author Luno modified by Wakizashi (CHEST)
  */
 public enum NpcType {
+
+	NULL(-1),
 	/** These are regular monsters */
-	ATTACKABLE(0),
+	ATTACKABLE(0), PEACE(2),
 	/** These are monsters that are pre-aggressive */
-	AGGRESSIVE(8),
+	AGGRESSIVE(8), INVULNERABLE(10),
 	/** These are non attackable NPCs */
 	NON_ATTACKABLE(38),
 	/** Binding obelisks **/
@@ -39,7 +41,7 @@ public enum NpcType {
 	/** Artifact **/
 	ARTIFACT(38),
 	/** High Protector **/
-	ARTIFACT_PROTECTOR(0);
+	ARTIFACT_PROTECTOR(0), SUPPORT(54);
 
 	private int someClientSideId;
 

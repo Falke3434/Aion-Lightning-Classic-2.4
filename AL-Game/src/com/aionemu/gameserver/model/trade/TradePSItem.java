@@ -36,7 +36,7 @@ public class TradePSItem extends TradeItem {
 
 	/**
 	 * @param price
-	 *          the price to set
+	 *            the price to set
 	 */
 	public void setPrice(long price) {
 		this.price = price;
@@ -51,7 +51,7 @@ public class TradePSItem extends TradeItem {
 
 	/**
 	 * @param itemObjId
-	 *          the itemObjId to set
+	 *            the itemObjId to set
 	 */
 	public void setItemObjId(int itemObjId) {
 		this.itemObjId = itemObjId;

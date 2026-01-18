@@ -51,10 +51,10 @@ public class DashEffect extends DamageEffect {
 			return;
 		if (!(effect.getEffector() instanceof Player))
 			return;
-		
+
 		if (!super.calculate(effect, DamageType.PHYSICAL))
 			return;
-		
+
 		Creature effected = effect.getEffected();
 		effect.setDashStatus(DashStatus.DASH);
 		effect.getSkill().setTargetPosition(effected.getX(), effected.getY(), effected.getZ(), effected.getHeading());

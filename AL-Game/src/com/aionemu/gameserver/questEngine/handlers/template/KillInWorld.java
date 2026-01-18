@@ -16,14 +16,14 @@
  */
 package com.aionemu.gameserver.questEngine.handlers.template;
 
-import gnu.trove.list.array.TIntArrayList;
-
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.questEngine.handlers.QuestHandler;
 import com.aionemu.gameserver.questEngine.model.QuestDialog;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
+
+import gnu.trove.list.array.TIntArrayList;
 
 /**
  * Standard xml-based handling for the DAILY quests with onKillInZone events
@@ -40,25 +40,23 @@ public class KillInWorld extends QuestHandler {
 	private final TIntArrayList worldIds;
 	private final int killAmount;
 
-	public KillInWorld(int questId, int endNpc, int endNpc2, int startNpc, int startNpc2, TIntArrayList worldIds, int killAmount) {
+	public KillInWorld(int questId, int endNpc, int endNpc2, int startNpc, int startNpc2, TIntArrayList worldIds,
+			int killAmount) {
 		super(questId);
 		this.endNpc = endNpc;
 		if (endNpc2 != 0) {
 			this.endNpc2 = endNpc2;
-		}
-		else {
+		} else {
 			if (startNpc2 != 0) {
 				this.endNpc2 = startNpc2;
-			}
-			else {
+			} else {
 				this.endNpc2 = endNpc;
 			}
 		}
 		this.startNpc = startNpc;
 		if (startNpc2 != 0) {
 			this.startNpc2 = startNpc2;
-		}
-		else {
+		} else {
 			this.startNpc2 = this.startNpc;
 		}
 		this.questId = questId;
@@ -94,19 +92,18 @@ public class KillInWorld extends QuestHandler {
 		if (qs == null || qs.getStatus() == QuestStatus.NONE || qs.canRepeat()) {
 			if (startNpc == 0 || targetId == startNpc || targetId == startNpc2) {
 				switch (dialog) {
-					case START_DIALOG: {
-						return sendQuestDialog(env, 4762);
-					}
-					case ACCEPT_QUEST: {
-						return sendQuestStartDialog(env);
-					}
-					default: {
-						return sendQuestStartDialog(env);
-					}
+				case START_DIALOG: {
+					return sendQuestDialog(env, 4762);
+				}
+				case ACCEPT_QUEST: {
+					return sendQuestStartDialog(env);
+				}
+				default: {
+					return sendQuestStartDialog(env);
+				}
 				}
 			}
-		}
-		else if (qs != null && qs.getStatus() == QuestStatus.REWARD) {
+		} else if (qs != null && qs.getStatus() == QuestStatus.REWARD) {
 			if (targetId == endNpc || targetId == endNpc2) {
 				return sendQuestEndDialog(env);
 			}

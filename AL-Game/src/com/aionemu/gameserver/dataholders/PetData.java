@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.List;
 
 import javax.xml.bind.Unmarshaller;
@@ -28,8 +26,11 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.pet.PetTemplate;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 /**
- * This is a container holding and serving all {@link PetTemplate} instances.<br>
+ * This is a container holding and serving all {@link PetTemplate}
+ * instances.<br>
  * 
  * @author IlBuono
  */
@@ -59,7 +60,7 @@ public class PetData {
 	 * /** Returns an {@link PetTemplate} object with given id.
 	 * 
 	 * @param id
-	 *          id of Pet
+	 *            id of Pet
 	 * @return PetTemplate object containing data about Pet with that id.
 	 */
 	public PetTemplate getPetTemplate(int id) {

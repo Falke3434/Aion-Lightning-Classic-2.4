@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
@@ -30,14 +29,14 @@ public class SM_TELEPORT_LOC extends AionServerPacket {
 	private int mapId;
 	private float x, y, z;
 	private byte heading;
-        private int type;
+	private int type;
 
-	public SM_TELEPORT_LOC(int mapId, float x, float y, float z,byte heading, int type) {
+	public SM_TELEPORT_LOC(int mapId, float x, float y, float z, byte heading, int type) {
 		this.mapId = mapId;
 		this.x = x;
 		this.y = y;
 		this.z = z;
-                this.type = type;
+		this.type = type;
 		this.heading = heading;
 	}
 

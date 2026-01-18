@@ -28,14 +28,11 @@ import com.aionemu.gameserver.model.gameobjects.state.CreatureState;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_INFO;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 /**
  * @author Rolandas
  */
 public class CmdState extends BaseCommand {
-	
-	
-	
+
 	static final Map<Integer, CreatureState> creatureStateLookup = new HashMap<Integer, CreatureState>();
 	static final Map<Integer, TestState> testStateLookup = new HashMap<Integer, TestState>();
 
@@ -46,7 +43,6 @@ public class CmdState extends BaseCommand {
 			testStateLookup.put(t.id, t);
 	}
 
-	
 	public void execute(Player admin, String... params) {
 		VisibleObject target = admin.getTarget();
 
@@ -75,12 +71,11 @@ public class CmdState extends BaseCommand {
 
 			if (creature.equals(admin))
 				PacketSendUtility.sendMessage(admin, "Your state is : " + creature.getState() + "\n"
-					+ getStateDescription((short) admin.getState()));
+						+ getStateDescription((short) admin.getState()));
 			else
 				PacketSendUtility.sendMessage(admin, "Creature state is : " + creature.getState() + "\n"
-					+ getStateDescription((short) creature.getState()));
-		}
-		else if (params[0].equals("set") || params[0].equals("unset")) {
+						+ getStateDescription((short) creature.getState()));
+		} else if (params[0].equals("set") || params[0].equals("unset")) {
 			if (params.length != 2) {
 				PacketSendUtility.sendMessage(admin, "syntax //state set <bit number>");
 				return;
@@ -88,8 +83,7 @@ public class CmdState extends BaseCommand {
 			int number;
 			try {
 				number = Integer.valueOf(params[1]);
-			}
-			catch (NumberFormatException e) {
+			} catch (NumberFormatException e) {
 				PacketSendUtility.sendMessage(admin, "syntax //state set <bit number>");
 				return;
 			}
@@ -103,8 +97,7 @@ public class CmdState extends BaseCommand {
 
 			if (params[0].equals("set")) {
 				newState = (short) ((creature.getState() & 0xFFFF) | 1 << (number - 1));
-			}
-			else {
+			} else {
 				newState = (short) ((creature.getState() & 0xFFFF) & ~(1 << (number - 1)));
 			}
 
@@ -118,14 +111,10 @@ public class CmdState extends BaseCommand {
 			admin.updateKnownlist();
 
 			PacketSendUtility.sendMessage(admin, "State changed to : " + creature.getState() + "\n"
-				+ getStateDescription((short) creature.getState()));
-		}
-		else
+					+ getStateDescription((short) creature.getState()));
+		} else
 			PacketSendUtility.sendMessage(admin, "syntax //state <show | set | unset>");
 	}
-
-
-	
 
 	String getStateDescription(short state) {
 		StringBuilder binsb = new StringBuilder(Integer.toBinaryString(state));
@@ -158,22 +147,11 @@ public class CmdState extends BaseCommand {
 	}
 
 	public enum TestState {
-		BIT01(1 << 0, "bit 1"),
-		BIT02(1 << 1, "bit 2"),
-		BIT03(1 << 2, "bit 3"),
-		BIT04(1 << 3, "bit 4"),
-		BIT05(1 << 4, "bit 5"),
-		BIT06(1 << 5, "bit 6"),
-		BIT07(1 << 6, "bit 7"),
-		BIT08(1 << 7, "bit 8"),
-		BIT09(1 << 8, "bit 9"),
-		BIT10(1 << 9, "bit 10"),
-		BIT11(1 << 10, "bit 11"),
-		BIT12(1 << 11, "bit 12"),
-		BIT13(1 << 12, "bit 13"),
-		BIT14(1 << 13, "bit 14"),
-		BIT15(1 << 14, "bit 15"),
-		BIT16(1 << 15, "bit 16");
+		BIT01(1 << 0, "bit 1"), BIT02(1 << 1, "bit 2"), BIT03(1 << 2, "bit 3"), BIT04(1 << 3, "bit 4"), BIT05(1 << 4,
+				"bit 5"), BIT06(1 << 5, "bit 6"), BIT07(1 << 6, "bit 7"), BIT08(1 << 7, "bit 8"), BIT09(1 << 8,
+						"bit 9"), BIT10(1 << 9, "bit 10"), BIT11(1 << 10, "bit 11"), BIT12(1 << 11, "bit 12"), BIT13(
+								1 << 12,
+								"bit 13"), BIT14(1 << 13, "bit 14"), BIT15(1 << 14, "bit 15"), BIT16(1 << 15, "bit 16");
 
 		int id;
 		String display;

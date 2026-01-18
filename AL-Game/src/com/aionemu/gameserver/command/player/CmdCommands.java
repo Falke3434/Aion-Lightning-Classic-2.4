@@ -10,8 +10,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 
 public class CmdCommands extends BaseCommand {
 	public void execute(Player player, String... params) {
-		// HTMLService.showHTML(player, CommandService.getInstance().getCommandList(player));
-		//PacketSendUtility.sendMessage(player, CommandService.getInstance().getCommandListMsg(player));
+		// HTMLService.showHTML(player,
+		// CommandService.getInstance().getCommandList(player));
+		// PacketSendUtility.sendMessage(player,
+		// CommandService.getInstance().getCommandListMsg(player));
 		PacketSendUtility.sendMessage(player, "This command is currently disabled.");
 	}
 }

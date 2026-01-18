@@ -16,14 +16,13 @@
  */
 package com.aionemu.gameserver.services.instance;
 
-import com.aionemu.gameserver.configs.main.CustomConfig;
-import com.aionemu.gameserver.configs.main.MembershipConfig;
-
 import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.configs.main.MembershipConfig;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.instance.InstanceEngine;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
@@ -45,6 +44,7 @@ import com.aionemu.gameserver.world.WorldMap;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.WorldMapInstanceFactory;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
+
 import javolution.util.FastList;
 
 /**
@@ -93,7 +93,8 @@ public class InstanceService {
 	}
 
 	/**
-	 * Instance will be destroyed All players moved to bind location All objects - deleted
+	 * Instance will be destroyed All players moved to bind location All objects -
+	 * deleted
 	 */
 	public static void destroyInstance(WorldMapInstance instance) {
 		if (instance.getEmptyInstanceTask() != null) {
@@ -105,7 +106,6 @@ public class InstanceService {
 		if (!map.isInstanceType())
 			return;
 		int instanceId = instance.getInstanceId();
-
 
 		map.removeWorldMapInstance(instanceId);
 
@@ -120,12 +120,10 @@ public class InstanceService {
 				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(SystemMessageId.LEAVE_INSTANCE_NOT_PARTY));
 				if (portal == null) {
 					TeleportService.moveToBindLocation(player, false);
-				}
-				else {
+				} else {
 					moveToEntryPoint((Player) obj, portal, true);
 				}
-			}
-			else {
+			} else {
 				obj.getController().delete();
 			}
 		}
@@ -149,7 +147,7 @@ public class InstanceService {
 	public static void registerGroupWithInstance(WorldMapInstance instance, PlayerGroup group) {
 		instance.registerGroup(group);
 	}
-	
+
 	/**
 	 * @param instance
 	 * @param group
@@ -180,21 +178,22 @@ public class InstanceService {
 		int worldId = player.getWorldId();
 		WorldMapTemplate worldTemplate = DataManager.WORLD_MAPS_DATA.getTemplate(worldId);
 		if (worldTemplate.isInstance()) {
-			PortalTemplate portalTemplate = DataManager.PORTAL_DATA.getInstancePortalTemplate(worldId, player.getRace());
+			PortalTemplate portalTemplate = DataManager.PORTAL_DATA.getInstancePortalTemplate(worldId,
+					player.getRace());
 
 			int lookupId = player.getObjectId();
 			if (portalTemplate != null) {
 				switch (portalTemplate.getPlayerSize()) {
-					case 12:
-						if (player.isInAlliance2()) {
-							lookupId = player.getPlayerAlliance2().getTeamId();
-						}
-						break;
-					case 6:
-						if (player.isInGroup2()) {
-							lookupId = player.getPlayerGroup2().getTeamId();
-						}
-						break;
+				case 12:
+					if (player.isInAlliance2()) {
+						lookupId = player.getPlayerAlliance2().getTeamId();
+					}
+					break;
+				case 6:
+					if (player.isInGroup2()) {
+						lookupId = player.getPlayerGroup2().getTeamId();
+					}
+					break;
 				}
 			}
 
@@ -220,22 +219,21 @@ public class InstanceService {
 	 * @param portalTemplates
 	 */
 	public static void moveToEntryPoint(Player player, PortalTemplate portalTemplate, boolean useTeleport) {
-		
+
 		if (!portalTemplate.existsEntryForRace(player.getRace())) {
 			log.warn("Entry point not found for " + player.getRace() + " " + player.getWorldId());
 			return;
 		}
-		
+
 		EntryPoint entryPoint = TeleportService.getEntryPointByRace(portalTemplate, player.getRace());
 
 		if (useTeleport) {
 			TeleportService.teleportTo(player, entryPoint.getMapId(), 1, entryPoint.getX(), entryPoint.getY(),
-				entryPoint.getZ(), 3000, true);
-		}
-		else {
+					entryPoint.getZ(), 3000, true);
+		} else {
 			if (isInstanceExist(entryPoint.getMapId(), 1))
 				World.getInstance().setPosition(player, entryPoint.getMapId(), 1, entryPoint.getX(), entryPoint.getY(),
-					entryPoint.getZ(), player.getHeading());
+						entryPoint.getZ(), player.getHeading());
 			else
 				TeleportService.moveToBindLocation(player, true);
 		}
@@ -257,8 +255,8 @@ public class InstanceService {
 	public static void startInstanceChecker(WorldMapInstance worldMapInstance) {
 		int delay = 150000; // 2.5 minutes
 		int period = 60000; // 1 minute
-		worldMapInstance.setEmptyInstanceTask(ThreadPoolManager.getInstance().scheduleAtFixedRate(
-			new EmptyInstanceCheckerTask(worldMapInstance), delay, period));
+		worldMapInstance.setEmptyInstanceTask(ThreadPoolManager.getInstance()
+				.scheduleAtFixedRate(new EmptyInstanceCheckerTask(worldMapInstance), delay, period));
 	}
 
 	private static class EmptyInstanceCheckerTask implements Runnable {
@@ -270,11 +268,11 @@ public class InstanceService {
 			this.worldMapInstance = worldMapInstance;
 			this.soloInstanceDestroyTime = System.currentTimeMillis() + SOLO_INSTANCES_DESTROY_DELAY;
 		}
-		
+
 		private boolean canDestroySoloInstance() {
 			return System.currentTimeMillis() > this.soloInstanceDestroyTime;
 		}
-		
+
 		private void updateSoloInstanceDestroyTime() {
 			this.soloInstanceDestroyTime = System.currentTimeMillis() + SOLO_INSTANCES_DESTROY_DELAY;
 		}
@@ -295,8 +293,7 @@ public class InstanceService {
 						map.removeWorldMapInstance(instanceId);
 						destroyInstance(worldMapInstance);
 						return;
-					}
-					else {
+					} else {
 						return;
 					}
 				}
@@ -310,8 +307,7 @@ public class InstanceService {
 				}
 				map.removeWorldMapInstance(instanceId);
 				destroyInstance(worldMapInstance);
-			}
-			else if (registeredGroup.size() == 0) {
+			} else if (registeredGroup.size() == 0) {
 				map.removeWorldMapInstance(instanceId);
 				destroyInstance(worldMapInstance);
 			}
@@ -344,8 +340,8 @@ public class InstanceService {
 	}
 
 	public static int getInstanceRate(Player player, int mapId) {
-		int instanceCooldownRate = player.havePermission(MembershipConfig.INSTANCES_COOLDOWN) && !instanceCoolDownFilter.contains(mapId) ? CustomConfig.INSTANCES_RATE
-				: 1;
+		int instanceCooldownRate = player.havePermission(MembershipConfig.INSTANCES_COOLDOWN)
+				&& !instanceCoolDownFilter.contains(mapId) ? CustomConfig.INSTANCES_RATE : 1;
 		if (instanceCoolDownFilter.contains(mapId)) {
 			instanceCooldownRate = 1;
 		}

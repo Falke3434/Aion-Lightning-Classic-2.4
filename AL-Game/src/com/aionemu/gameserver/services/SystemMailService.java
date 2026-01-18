@@ -27,14 +27,14 @@ import com.aionemu.gameserver.configs.main.LoggingConfig;
 import com.aionemu.gameserver.dao.InventoryDAO;
 import com.aionemu.gameserver.dao.MailDAO;
 import com.aionemu.gameserver.dao.PlayerDAO;
+import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.Letter;
 import com.aionemu.gameserver.model.gameobjects.player.Mailbox;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerCommonData;
-import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.model.items.storage.StorageType;
-import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_MAIL_SERVICE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.item.ItemFactory;
@@ -68,13 +68,13 @@ public class SystemMailService {
 	 * @param express
 	 */
 	public void sendMail(String sender, String recipientName, String title, String message, int attachedItemObjId,
-		int attachedItemCount, int attachedKinahCount, boolean express) {
+			int attachedItemCount, int attachedKinahCount, boolean express) {
 		if (attachedItemObjId != 0) {
 			ItemTemplate itemTemplate = DataManager.ITEM_DATA.getItemTemplate(attachedItemObjId);
 			if (itemTemplate == null) {
 				log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName
-					+ "] RETURN ITEM ID:" + itemTemplate + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
-					+ attachedKinahCount + " ITEM TEMPLATE IS MISSING ");
+						+ "] RETURN ITEM ID:" + itemTemplate + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+						+ attachedKinahCount + " ITEM TEMPLATE IS MISSING ");
 				return;
 			}
 		}
@@ -83,16 +83,16 @@ public class SystemMailService {
 			return;
 
 		if (recipientName.length() > 16) {
-			log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName + "] ITEM RETURN"
-				+ attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT " + attachedKinahCount
-				+ " RECIPIENT NAME LENGTH > 16 ");
+			log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName
+					+ "] ITEM RETURN" + attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+					+ attachedKinahCount + " RECIPIENT NAME LENGTH > 16 ");
 			return;
 		}
 
 		if (sender.length() > 16) {
-			log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName + "] ITEM RETURN"
-				+ attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT " + attachedKinahCount
-				+ " SENDER NAME LENGTH > 16 ");
+			log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName
+					+ "] ITEM RETURN" + attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+					+ attachedKinahCount + " SENDER NAME LENGTH > 16 ");
 			return;
 		}
 
@@ -102,7 +102,8 @@ public class SystemMailService {
 		if (message.length() > 1000)
 			message = message.substring(0, 1000);
 
-		PlayerCommonData recipientCommonData = DAOManager.getDAO(PlayerDAO.class).loadPlayerCommonDataByName(recipientName);
+		PlayerCommonData recipientCommonData = DAOManager.getDAO(PlayerDAO.class)
+				.loadPlayerCommonDataByName(recipientName);
 		Player onlineRecipient;
 
 		if (recipientCommonData == null) {
@@ -114,16 +115,15 @@ public class SystemMailService {
 			onlineRecipient = World.getInstance().findPlayer(recipientCommonData.getPlayerObjId());
 			if (!onlineRecipient.getMailbox().haveFreeSlots()) {
 				log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + onlineRecipient.getName()
-					+ "] ITEM RETURN" + attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
-					+ attachedKinahCount + " MAILBOX FULL ");
+						+ "] ITEM RETURN" + attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+						+ attachedKinahCount + " MAILBOX FULL ");
 				return;
 			}
-		}
-		else {
+		} else {
 			if (recipientCommonData.getMailboxLetters() >= 100) {
-				log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName + "] ITEM RETURN "
-					+ attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT " + attachedKinahCount
-					+ " MAILBOX FULL ");
+				log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName
+						+ "] ITEM RETURN " + attachedItemObjId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+						+ attachedKinahCount + " MAILBOX FULL ");
 				return;
 			}
 			onlineRecipient = null;
@@ -149,8 +149,8 @@ public class SystemMailService {
 
 		String finalSender = sender;
 		Timestamp time = new Timestamp(Calendar.getInstance().getTimeInMillis());
-		Letter newLetter = new Letter(IDFactory.getInstance().nextId(), recipientCommonData.getPlayerObjId(), attachedItem,
-			finalAttachedKinahCount, title, message, finalSender, time, true, express);
+		Letter newLetter = new Letter(IDFactory.getInstance().nextId(), recipientCommonData.getPlayerObjId(),
+				attachedItem, finalAttachedKinahCount, title, message, finalSender, time, true, express);
 
 		if (!DAOManager.getDAO(MailDAO.class).storeLetter(time, newLetter))
 			return;
@@ -166,8 +166,8 @@ public class SystemMailService {
 			Mailbox recipientMailbox = onlineRecipient.getMailbox();
 			recipientMailbox.putLetterToMailbox(newLetter);
 
-			PacketSendUtility.sendPacket(onlineRecipient, new SM_MAIL_SERVICE(onlineRecipient, onlineRecipient.getMailbox()
-				.getLetters()));
+			PacketSendUtility.sendPacket(onlineRecipient,
+					new SM_MAIL_SERVICE(onlineRecipient, onlineRecipient.getMailbox().getLetters()));
 			PacketSendUtility.sendPacket(onlineRecipient, new SM_MAIL_SERVICE(onlineRecipient.getMailbox()));
 			boolean haveExpress = onlineRecipient.getMailbox().haveUnreadExpress();
 			if (express && haveExpress)
@@ -183,8 +183,8 @@ public class SystemMailService {
 		}
 		if (LoggingConfig.LOG_SYSMAIL)
 			log.info("[SYSMAILSERVICE] > [SenderName: " + sender + "] [RecipientName: " + recipientName
-			+ "] RETURN ITEM ID:" + itemId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
-			+ attachedKinahCount + " MESSAGE SUCCESSFULLY SENDED ");
+					+ "] RETURN ITEM ID:" + itemId + " ITEM COUNT " + attachedItemCount + " KINAH COUNT "
+					+ attachedKinahCount + " MESSAGE SUCCESSFULLY SENDED ");
 	}
 
 	@SuppressWarnings("synthetic-access")

@@ -17,8 +17,6 @@
 
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +31,8 @@ import com.aionemu.gameserver.model.templates.QuestTemplate;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.services.QuestService;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author MrPoke
@@ -58,8 +58,7 @@ public class QuestsData {
 				List<QuestTemplate> factionQuests = new ArrayList<QuestTemplate>();
 				factionQuests.add(quest);
 				sortedByFactionId.put(npcFactionId, factionQuests);
-			}
-			else {
+			} else {
 				sortedByFactionId.get(npcFactionId).add(quest);
 			}
 		}
@@ -73,7 +72,7 @@ public class QuestsData {
 		List<QuestTemplate> factionQuests = sortedByFactionId.get(npcFactionId);
 		List<QuestTemplate> quests = new ArrayList<QuestTemplate>();
 		QuestEnv questEnv = new QuestEnv(null, player, 0, 0);
-		for (QuestTemplate questTemplate : factionQuests){
+		for (QuestTemplate questTemplate : factionQuests) {
 			if (!QuestEngine.getInstance().isHaveHandler(questTemplate.getId()))
 				continue;
 			if (questTemplate.getMinlevelPermitted() != 0 && player.getLevel() < questTemplate.getMinlevelPermitted())
@@ -98,7 +97,7 @@ public class QuestsData {
 
 	/**
 	 * @param questsData
-	 *          the questsData to set
+	 *            the questsData to set
 	 */
 	public void setQuestsData(List<QuestTemplate> questsData) {
 		this.questsData = questsData;

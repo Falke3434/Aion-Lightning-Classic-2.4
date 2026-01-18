@@ -67,15 +67,16 @@ public class CM_TARGET_SELECT extends AionClientPacket {
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
 
-		VisibleObject obj = null;;
+		VisibleObject obj = null;
+		;
 		if (targetObjectId == player.getObjectId())
 			obj = player;
 		else {
 			obj = player.getKnownList().getObject(targetObjectId);
 
-			if(obj == null && player.isInTeam()){
+			if (obj == null && player.isInTeam()) {
 				TeamMember<Player> member = player.getCurrentTeam().getMember(targetObjectId);
-				if(member != null){
+				if (member != null) {
 					obj = member.getObject();
 				}
 			}
@@ -86,12 +87,10 @@ public class CM_TARGET_SELECT extends AionClientPacket {
 				if (obj.getTarget() == null)
 					return;
 				player.setTarget(obj.getTarget());
-			}
-			else {
+			} else {
 				player.setTarget(obj);
 			}
-		}
-		else {
+		} else {
 			player.setTarget(null);
 		}
 		sendPacket(new SM_TARGET_SELECTED(player));

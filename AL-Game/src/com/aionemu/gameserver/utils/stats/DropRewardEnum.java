@@ -19,10 +19,7 @@ package com.aionemu.gameserver.utils.stats;
 import java.util.NoSuchElementException;
 
 public enum DropRewardEnum {
-	MINUS_10(-10, 0),
-	MINUS_9(-9, 39),
-	MINUS_8(-8, 79),
-	MINUS_7(-7, 100);
+	MINUS_10(-10, 0), MINUS_9(-9, 39), MINUS_8(-8, 79), MINUS_7(-7, 100);
 
 	private int dropRewardPercent;
 
@@ -39,7 +36,7 @@ public enum DropRewardEnum {
 
 	/**
 	 * @param levelDifference
-	 *          between two objects
+	 *            between two objects
 	 * @return Drop reward percentage
 	 */
 	public static int dropRewardFrom(int levelDifference) {

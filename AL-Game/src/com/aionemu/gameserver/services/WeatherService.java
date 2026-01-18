@@ -24,8 +24,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javolution.util.FastMap;
-
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_WEATHER;
@@ -35,9 +33,11 @@ import com.aionemu.gameserver.world.MapRegion;
 import com.aionemu.gameserver.world.World;
 import com.aionemu.gameserver.world.WorldMap;
 
+import javolution.util.FastMap;
+
 /**
- * This service in future should schedule job that is changing weather sometimes in region and probably sends to all
- * players
+ * This service in future should schedule job that is changing weather sometimes
+ * in region and probably sends to all players
  * 
  * @author ATracer
  * @author Kwazar
@@ -60,6 +60,7 @@ public class WeatherService {
 
 			/*
 			 * (non-Javadoc)
+			 * 
 			 * @see java.lang.Runnable#run()
 			 */
 			@Override
@@ -89,9 +90,9 @@ public class WeatherService {
 		 * Parametered Constructor
 		 * 
 		 * @param date
-		 *          creation date
+		 *            creation date
 		 * @param worldMap
-		 *          map to link
+		 *            map to link
 		 */
 		public WeatherKey(Date date, WorldMap worldMap) {
 			this.created = date;
@@ -106,8 +107,8 @@ public class WeatherService {
 		}
 
 		/**
-		 * Returns <code>true</code> if the key is out of date relating to constant WEATHER_DURATION, <code>false</code>
-		 * either
+		 * Returns <code>true</code> if the key is out of date relating to constant
+		 * WEATHER_DURATION, <code>false</code> either
 		 * 
 		 * @return true or false
 		 */
@@ -195,9 +196,9 @@ public class WeatherService {
 	 * Allows server to change a specific {@link MapRegion}'s WeatherType
 	 * 
 	 * @param regionId
-	 *          the regionId to be changed of WeatherType
+	 *            the regionId to be changed of WeatherType
 	 * @param weatherType
-	 *          the new WeatherType
+	 *            the new WeatherType
 	 */
 	public void changeRegionWeather(int regionId, Integer weatherType) {
 		WorldMap worldMap = World.getInstance().getWorldMap(regionId);
@@ -212,11 +213,12 @@ public class WeatherService {
 	 * @param world
 	 * @param worldMap
 	 * @param player
-	 *          if null -> weather is broadcasted to all players in world
+	 *            if null -> weather is broadcasted to all players in world
 	 */
 	private void onWeatherChange(WorldMap worldMap, Player player) {
 		if (player == null) {
-			for (Iterator<Player> playerIterator = World.getInstance().getPlayersIterator(); playerIterator.hasNext();) {
+			for (Iterator<Player> playerIterator = World.getInstance().getPlayersIterator(); playerIterator
+					.hasNext();) {
 				Player currentPlayer = playerIterator.next();
 
 				if (!currentPlayer.isSpawned())
@@ -224,11 +226,11 @@ public class WeatherService {
 
 				WorldMap currentPlayerWorldMap = currentPlayer.getActiveRegion().getParent().getParent();
 				if (currentPlayerWorldMap.equals(worldMap)) {
-					PacketSendUtility.sendPacket(currentPlayer, new SM_WEATHER(getWeatherTypeByRegion(currentPlayerWorldMap)));
+					PacketSendUtility.sendPacket(currentPlayer,
+							new SM_WEATHER(getWeatherTypeByRegion(currentPlayerWorldMap)));
 				}
 			}
-		}
-		else {
+		} else {
 			PacketSendUtility.sendPacket(player, new SM_WEATHER(getWeatherTypeByRegion(worldMap)));
 		}
 	}

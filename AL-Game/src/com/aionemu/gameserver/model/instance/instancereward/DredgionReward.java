@@ -34,7 +34,7 @@ public class DredgionReward extends InstanceReward<DredgionPlayerReward> {
 
 	private int winnerPoints;
 	private int looserPoints;
-	//private int drawPoins;
+	// private int drawPoins;
 	private MutableInt asmodiansPoints = new MutableInt(0);
 	private MutableInt elyosPoins = new MutableInt(0);
 	private Race race;
@@ -46,7 +46,7 @@ public class DredgionReward extends InstanceReward<DredgionPlayerReward> {
 		super(mapId, instanceId);
 		winnerPoints = mapId == 300110000 ? 35000 : 50000;
 		looserPoints = mapId == 300110000 ? 15000 : 30000;
-		//drawPoins = mapId == 300110000 ? 2250 : 3750;
+		// drawPoins = mapId == 300110000 ? 2250 : 3750;
 		setStartPositions();
 		for (int i = 1; i < 15; i++) {
 			dredgionRooms.add(new DredgionRooms(i));
@@ -60,8 +60,7 @@ public class DredgionReward extends InstanceReward<DredgionPlayerReward> {
 		if (Rnd.get(2) == 0) {
 			asmodiansStartPosition = a;
 			elyosStartPosition = b;
-		}
-		else {
+		} else {
 			asmodiansStartPosition = b;
 			elyosStartPosition = a;
 		}
@@ -69,28 +68,19 @@ public class DredgionReward extends InstanceReward<DredgionPlayerReward> {
 
 	public void portToPosition(Player player) {
 		if (player.getRace() == Race.ASMODIANS) {
-			TeleportService.teleportTo(player, mapId, instanceId, asmodiansStartPosition.getX(), asmodiansStartPosition.getY(), asmodiansStartPosition.getZ(), 3000, true);
-		}
-		else {
-			TeleportService.teleportTo(player, mapId, instanceId, elyosStartPosition.getX(), elyosStartPosition.getY(), elyosStartPosition.getZ(), 3000, true);
+			TeleportService.teleportTo(player, mapId, instanceId, asmodiansStartPosition.getX(),
+					asmodiansStartPosition.getY(), asmodiansStartPosition.getZ(), 3000, true);
+		} else {
+			TeleportService.teleportTo(player, mapId, instanceId, elyosStartPosition.getX(), elyosStartPosition.getY(),
+					elyosStartPosition.getZ(), 3000, true);
 		}
 	}
 
 	/**
-	 * 1 Primary Armory
-	 * 2 Backup Armory
-	 * 3 Gravity Control
-	 * 4 Engine Room
-	 * 5 Auxiliary Power
-	 * 6 Weapons Deck
-	 * 7 Lower Weapons Deck
-	 * 8 Ready Room 1
-	 * 9 Ready Room 2
-	 * 10 Barracks
-	 * 11 Logistics Managment
-	 * 12 Logistics Storage
-	 * 13 The Bridge
-	 * 14 Captain's Room
+	 * 1 Primary Armory 2 Backup Armory 3 Gravity Control 4 Engine Room 5 Auxiliary
+	 * Power 6 Weapons Deck 7 Lower Weapons Deck 8 Ready Room 1 9 Ready Room 2 10
+	 * Barracks 11 Logistics Managment 12 Logistics Storage 13 The Bridge 14
+	 * Captain's Room
 	 */
 	public class DredgionRooms {
 
@@ -129,10 +119,10 @@ public class DredgionReward extends InstanceReward<DredgionPlayerReward> {
 
 	public MutableInt getPointsByRace(Race race) {
 		switch (race) {
-			case ELYOS:
-				return elyosPoins;
-			case ASMODIANS:
-				return asmodiansPoints;
+		case ELYOS:
+			return elyosPoins;
+		case ASMODIANS:
+			return asmodiansPoints;
 		}
 		return null;
 	}

@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
@@ -41,9 +40,11 @@ public class SM_UI_SETTINGS extends AionServerPacket {
 	 */
 	@Override
 	protected void writeImpl(AionConnection con) {
-		writeH(type);
-		writeC(0x1C);
+		writeC(type);
+		writeH(0x1C00);
 		writeB(data);
+		if (0x1C00 > data.length)
+			writeB(new byte[0x1C00 - data.length]);
 	}
 
 }

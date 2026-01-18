@@ -4,8 +4,6 @@ import java.util.List;
 import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import javolution.util.FastList;
-
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -16,6 +14,8 @@ import com.aionemu.gameserver.services.item.ItemFactory;
 import com.aionemu.gameserver.services.item.ItemPacketService;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemDeleteType;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
+
+import javolution.util.FastList;
 
 /**
  * @author KID, ATracer
@@ -65,8 +65,7 @@ public abstract class Storage implements IStorage {
 		if (amount > 0) {
 			if (kinahItem == null) {
 				add(ItemFactory.newItem(ItemId.KINAH.value(), amount), actor);
-			}
-			else {
+			} else {
 				increaseItemCount(kinahItem, amount, updateType, actor);
 			}
 		}
@@ -123,8 +122,7 @@ public abstract class Storage implements IStorage {
 		long leftCount = item.decreaseItemCount(count);
 		if (item.getItemCount() <= 0 && !item.getItemTemplate().isKinah()) {
 			delete(item, ItemDeleteType.fromUpdateType(updateType), actor);
-		}
-		else {
+		} else {
 			ItemPacketService.sendItemPacket(actor, storageType, item, updateType);
 		}
 		setPersistentState(PersistentState.UPDATE_REQUIRED);
@@ -132,8 +130,9 @@ public abstract class Storage implements IStorage {
 	}
 
 	/**
-	 * This method should be called only for new items added to inventory (loading from DB) If item is equiped - will be
-	 * put to equipment if item is unequiped - will be put to default bag for now Kinah is stored separately as it will be
+	 * This method should be called only for new items added to inventory (loading
+	 * from DB) If item is equiped - will be put to equipment if item is unequiped -
+	 * will be put to default bag for now Kinah is stored separately as it will be
 	 * used frequently
 	 * 
 	 * @param item
@@ -149,8 +148,7 @@ public abstract class Storage implements IStorage {
 	Item add(Item item, Player actor) {
 		if (item.getItemTemplate().isKinah()) {
 			this.kinahItem = item;
-		}
-		else if (!itemStorage.putItem(item)) {
+		} else if (!itemStorage.putItem(item)) {
 			return null;
 		}
 		item.setItemLocation(storageType.getId());
@@ -161,7 +159,7 @@ public abstract class Storage implements IStorage {
 		return item;
 	}
 
-	//a bit misleading name - but looks like its used only for equipment
+	// a bit misleading name - but looks like its used only for equipment
 	Item put(Item item, Player actor) {
 		if (!itemStorage.putItem(item)) {
 			return null;
@@ -196,7 +194,7 @@ public abstract class Storage implements IStorage {
 			deletedItems.add(item);
 			setPersistentState(PersistentState.UPDATE_REQUIRED);
 			ItemPacketService.sendItemDeletePacket(actor, StorageType.getStorageTypeById(item.getItemLocation()), item,
-				deleteType);
+					deleteType);
 			return item;
 		}
 		return null;
@@ -234,7 +232,7 @@ public abstract class Storage implements IStorage {
 	public Item getFirstItemByItemId(int itemId) {
 		return this.itemStorage.getFirstItemById(itemId);
 	}
-	
+
 	public int countItemsById(int itemId) {
 		return this.itemStorage.countItemsById(itemId);
 	}

@@ -7,9 +7,8 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.utils.MathUtil;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 public class CmdKill extends BaseCommand {
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length > 1) {
 			showHelp(admin);
@@ -26,16 +25,14 @@ public class CmdKill extends BaseCommand {
 				Creature creature = (Creature) target;
 				creature.getController().onAttack(admin, creature.getLifeStats().getMaxHp() + 1, true);
 			}
-		}
-		else {
+		} else {
 			int range = 0;
 			if (params[0].equals("all"))
 				range = -1;
 			else {
 				try {
 					range = Integer.parseInt(params[0]);
-				}
-				catch (NumberFormatException ex) {
+				} catch (NumberFormatException ex) {
 					PacketSendUtility.sendMessage(admin, "<range> must be a number.");
 					return;
 				}
@@ -49,4 +46,4 @@ public class CmdKill extends BaseCommand {
 			}
 		}
 	}
-}	
+}

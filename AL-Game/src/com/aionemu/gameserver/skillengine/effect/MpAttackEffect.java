@@ -16,11 +16,11 @@
  */
 package com.aionemu.gameserver.skillengine.effect;
 
-import com.aionemu.gameserver.skillengine.model.Effect;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlType;
+
+import com.aionemu.gameserver.skillengine.model.Effect;
 
 /**
  * @author Sippolo
@@ -29,8 +29,8 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "MpAttackEffect")
 public class MpAttackEffect extends AbstractOverTimeEffect {
 
-	//TODO bosses are resistent to this?
-	
+	// TODO bosses are resistent to this?
+
 	@Override
 	public void onPeriodicAction(Effect effect) {
 		int maxMP = effect.getEffected().getLifeStats().getMaxMp();

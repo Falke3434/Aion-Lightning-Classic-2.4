@@ -9,9 +9,8 @@ package com.aionemu.gameserver.services.item;
  * @author Stan
  */
 public class ItemGlobalSealingService {
-    
-    public static void Seal()
-    {
-        
-    }
+
+	public static void Seal() {
+
+	}
 }

@@ -16,7 +16,8 @@
  */
 package com.aionemu.gameserver.model.templates.npcshout;
 
-import javax.xml.bind.annotation.*;
+import javax.xml.bind.annotation.XmlEnum;
+import javax.xml.bind.annotation.XmlType;
 
 /**
  * @author Rolandas
@@ -26,9 +27,7 @@ import javax.xml.bind.annotation.*;
 @XmlEnum
 public enum ShoutType {
 
-	BROADCAST,
-	SAY,
-	HEAR;
+	BROADCAST, SAY, HEAR;
 
 	public String value() {
 		return name();

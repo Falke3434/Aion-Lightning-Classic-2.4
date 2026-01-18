@@ -59,7 +59,7 @@ import com.aionemu.gameserver.world.knownlist.Visitor;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "EventTemplate", propOrder = { "quests", "spawns", "inventoryDrop", "surveys" })
 public class EventTemplate {
-	
+
 	private static Logger log = LoggerFactory.getLogger(EventTemplate.class);
 
 	@XmlElement(name = "quests", required = false)
@@ -70,7 +70,7 @@ public class EventTemplate {
 
 	@XmlElement(name = "inventory_drop", required = false)
 	protected InventoryDrop inventoryDrop;
-	
+
 	@XmlList
 	@XmlElement(name = "surveys", required = false)
 	protected List<String> surveys;
@@ -85,8 +85,8 @@ public class EventTemplate {
 	@XmlAttribute(name = "end", required = true)
 	@XmlSchemaType(name = "dateTime")
 	protected XMLGregorianCalendar endDate;
-	
-	@XmlAttribute(name="theme", required = false)
+
+	@XmlAttribute(name = "theme", required = false)
 	private String theme;
 
 	@XmlTransient
@@ -147,7 +147,8 @@ public class EventTemplate {
 				spawnedObjects = new ArrayList<VisibleObject>();
 			for (SpawnMap map : spawns.getTemplates()) {
 				DataManager.SPAWNS_DATA2.addNewSpawnMap(map);
-				Collection<Integer> instanceIds = World.getInstance().getWorldMap(map.getMapId()).getAvailableInstanceIds();
+				Collection<Integer> instanceIds = World.getInstance().getWorldMap(map.getMapId())
+						.getAvailableInstanceIds();
 				for (Integer instanceId : instanceIds) {
 					int spawnCount = 0;
 					for (Spawn spawn : map.getSpawns()) {
@@ -158,14 +159,15 @@ public class EventTemplate {
 						for (SpawnSpotTemplate spot : spawn.getSpawnSpotTemplates()) {
 							if ((++pool) > spawn.getPool())
 								break;
-							SpawnTemplate t = SpawnEngine.addNewSpawn(map.getMapId(), spawn.getNpcId(), spot.getX(), spot.getY(),
-								spot.getZ(), spot.getHeading(), spawn.getRespawnTime());
+							SpawnTemplate t = SpawnEngine.addNewSpawn(map.getMapId(), spawn.getNpcId(), spot.getX(),
+									spot.getY(), spot.getZ(), spot.getHeading(), spawn.getRespawnTime());
 							t.setEventTemplate(this);
 							SpawnEngine.spawnObject(t, instanceId);
 							spawnCount++;
 						}
 					}
-					log.info("Spawned event objects in " + map.getMapId() + " [" + instanceId + "] : " + spawnCount + " (" + this.getName() + ")");
+					log.info("Spawned event objects in " + map.getMapId() + " [" + instanceId + "] : " + spawnCount
+							+ " (" + this.getName() + ")");
 				}
 			}
 			DataManager.SPAWNS_DATA2.afterUnmarshal(null, null);
@@ -188,7 +190,7 @@ public class EventTemplate {
 				}
 			}, inventoryDrop.getInterval() * 60000, inventoryDrop.getInterval() * 60000);
 		}
-		
+
 		if (surveys != null) {
 			for (String survey : surveys) {
 				GuideTemplate template = DataManager.GUIDE_HTML_DATA.getTemplateByTitle(survey);
@@ -219,7 +221,7 @@ public class EventTemplate {
 			invDropTask.cancel(false);
 			invDropTask = null;
 		}
-		
+
 		if (surveys != null) {
 			for (String survey : surveys) {
 				GuideTemplate template = DataManager.GUIDE_HTML_DATA.getTemplateByTitle(survey);

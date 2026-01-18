@@ -8,8 +8,6 @@ import java.util.ArrayList;
 
 import org.slf4j.LoggerFactory;
 
-import ch.qos.logback.classic.Logger;
-
 import com.aionemu.commons.database.DB;
 import com.aionemu.commons.database.DatabaseFactory;
 import com.aionemu.commons.database.IUStH;
@@ -21,6 +19,7 @@ import com.aionemu.gameserver.utils.ChatUtil;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.WorldMapType;
 
+import ch.qos.logback.classic.Logger;
 
 /*syntax //bk <add|del|tele|list>*/
 
@@ -29,8 +28,6 @@ public class CmdBk extends BaseCommand {
 	ArrayList<Bookmark> bookmarks = new ArrayList<Bookmark>();
 	private static final Logger log = (Logger) LoggerFactory.getLogger(CmdBk.class);
 	private String bookmark_name = "";
-
-	
 
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 1) {
@@ -53,26 +50,25 @@ public class CmdBk extends BaseCommand {
 				final int world_id = admin.getWorldId();
 
 				DB.insertUpdate("INSERT INTO bookmark (" + "`name`,`char_id`, `x`, `y`, `z`,`world_id` )" + " VALUES "
-					+ "(?, ?, ?, ?, ?, ?)", new IUStH() {
+						+ "(?, ?, ?, ?, ?, ?)", new IUStH() {
 
-					@Override
-					public void handleInsertUpdate(PreparedStatement ps) throws SQLException {
-						ps.setString(1, bookmark_name);
-						ps.setInt(2, char_id);
-						ps.setFloat(3, x);
-						ps.setFloat(4, y);
-						ps.setFloat(5, z);
-						ps.setInt(6, world_id);
-						ps.execute();
-					}
-				});
+							@Override
+							public void handleInsertUpdate(PreparedStatement ps) throws SQLException {
+								ps.setString(1, bookmark_name);
+								ps.setInt(2, char_id);
+								ps.setFloat(3, x);
+								ps.setFloat(4, y);
+								ps.setFloat(5, z);
+								ps.setInt(6, world_id);
+								ps.execute();
+							}
+						});
 
-				PacketSendUtility
-					.sendMessage(admin, "Bookmark " + bookmark_name + " sucessfully added to your bookmark list!");
+				PacketSendUtility.sendMessage(admin,
+						"Bookmark " + bookmark_name + " sucessfully added to your bookmark list!");
 
 				updateInfo(admin.getObjectId());
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				showHelp(admin);
 				return;
 			}
@@ -86,19 +82,16 @@ public class CmdBk extends BaseCommand {
 				statement.setString(1, bookmark_name);
 				statement.executeUpdate();
 				statement.close();
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				showHelp(admin);
 				return;
-			}
-			finally {
+			} finally {
 				DatabaseFactory.close(con);
-				PacketSendUtility.sendMessage(admin, "Bookmark " + bookmark_name
-					+ " sucessfully removed from your bookmark list!");
+				PacketSendUtility.sendMessage(admin,
+						"Bookmark " + bookmark_name + " sucessfully removed from your bookmark list!");
 				updateInfo(admin.getObjectId());
 			}
-		}
-		else if (params[0].equals("goto"))
+		} else if (params[0].equals("goto"))
 			try {
 
 				if (params[1].equals("") || params[1] == null) {
@@ -112,16 +105,15 @@ public class CmdBk extends BaseCommand {
 				Bookmark tele_bk = null;
 				try {
 					tele_bk = selectByName(bookmark_name);
-				}
-				finally {
+				} finally {
 					if (tele_bk != null) {
-						TeleportService
-							.teleportTo(admin, tele_bk.getWorld_id(), tele_bk.getX(), tele_bk.getY(), tele_bk.getZ(), 0, true);
-						PacketSendUtility.sendMessage(admin, "Teleported to bookmark " + tele_bk.getName() + " location");
+						TeleportService.teleportTo(admin, tele_bk.getWorld_id(), tele_bk.getX(), tele_bk.getY(),
+								tele_bk.getZ(), 0, true);
+						PacketSendUtility.sendMessage(admin,
+								"Teleported to bookmark " + tele_bk.getName() + " location");
 					}
 				}
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				showHelp(admin);
 				return;
 			}
@@ -131,7 +123,7 @@ public class CmdBk extends BaseCommand {
 			for (Bookmark b : bookmarks) {
 				String chatLink = ChatUtil.position(b.getName(), b.getWorld_id(), b.getX(), b.getY(), b.getZ());
 				PacketSendUtility.sendMessage(admin, " = " + chatLink + " =  " + WorldMapType.getWorld(b.getWorld_id())
-					+ "  ( " + b.getX() + " ," + b.getY() + " ," + b.getZ() + " )");
+						+ "  ( " + b.getX() + " ," + b.getY() + " ," + b.getZ() + " )");
 			}
 			PacketSendUtility.sendMessage(admin, "=====Bookmark list end=======");
 		}
@@ -166,7 +158,7 @@ public class CmdBk extends BaseCommand {
 
 	/**
 	 * @param bk_name
-	 *          - bookmark name
+	 *            - bookmark name
 	 * @return Bookmark from bookmark name
 	 */
 	public Bookmark selectByName(String bk_name) {
@@ -178,7 +170,7 @@ public class CmdBk extends BaseCommand {
 
 	/**
 	 * @param bk_name
-	 *          - bookmark name
+	 *            - bookmark name
 	 * @return true if bookmark exists
 	 */
 	public boolean isBookmarkExists(final String bk_name, final int objId) {
@@ -187,7 +179,7 @@ public class CmdBk extends BaseCommand {
 		try {
 			con = DatabaseFactory.getConnection();
 			PreparedStatement statement = con
-				.prepareStatement("SELECT count(id) as bkcount FROM bookmark WHERE ? = name AND char_id = ?");
+					.prepareStatement("SELECT count(id) as bkcount FROM bookmark WHERE ? = name AND char_id = ?");
 			statement.setString(1, bk_name);
 			statement.setInt(2, objId);
 			ResultSet rset = statement.executeQuery();
@@ -195,16 +187,13 @@ public class CmdBk extends BaseCommand {
 				bkcount = rset.getInt("bkcount");
 			rset.close();
 			statement.close();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Error in reading db", e);
-		}
-		finally {
+		} finally {
 			DatabaseFactory.close(con);
 		}
 		return bkcount > 0;
 	}
-
 
 	public void onFail(Player player, String message) {
 		PacketSendUtility.sendMessage(player, "syntax //bk <add|del|tele|list>");

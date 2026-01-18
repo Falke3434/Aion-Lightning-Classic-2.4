@@ -20,8 +20,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.objects.filter.ObjectFilter;
-import com.aionemu.gameserver.model.EmotionType;
 import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.model.EmotionType;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PrivateStore;
@@ -39,7 +39,7 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  * @author Simple
  */
 public class PrivateStoreService {
-	
+
 	private static final Logger log = LoggerFactory.getLogger(PrivateStoreService.class);
 
 	/**
@@ -56,7 +56,7 @@ public class PrivateStoreService {
 		/**
 		 * Check if player already has a store, if not create one
 		 */
-		//TODO synchronization
+		// TODO synchronization
 		if (activePlayer.getStore() == null)
 			createStore(activePlayer);
 
@@ -97,13 +97,13 @@ public class PrivateStoreService {
 	 * @param activePlayer
 	 */
 	private static void createStore(Player activePlayer) {
-		if (activePlayer.isInState(CreatureState.RESTING)){
+		if (activePlayer.isInState(CreatureState.RESTING)) {
 			return;
 		}
 		activePlayer.setStore(new PrivateStore(activePlayer));
 		activePlayer.setState(CreatureState.PRIVATE_SHOP);
-		PacketSendUtility.broadcastPacket(activePlayer, new SM_EMOTION(activePlayer, EmotionType.OPEN_PRIVATESHOP, 0, 0),
-			true);
+		PacketSendUtility.broadcastPacket(activePlayer,
+				new SM_EMOTION(activePlayer, EmotionType.OPEN_PRIVATESHOP, 0, 0), true);
 	}
 
 	/**
@@ -114,8 +114,8 @@ public class PrivateStoreService {
 	public static void closePrivateStore(Player activePlayer) {
 		activePlayer.setStore(null);
 		activePlayer.unsetState(CreatureState.PRIVATE_SHOP);
-		PacketSendUtility.broadcastPacket(activePlayer, new SM_EMOTION(activePlayer, EmotionType.CLOSE_PRIVATESHOP, 0, 0),
-			true);
+		PacketSendUtility.broadcastPacket(activePlayer,
+				new SM_EMOTION(activePlayer, EmotionType.CLOSE_PRIVATESHOP, 0, 0), true);
 	}
 
 	/**
@@ -176,14 +176,12 @@ public class PrivateStoreService {
 					ItemService.addItem(buyer, item.getItemId(), tradeItem.getCount(), item);
 					if (storeItem.getCount() == tradeItem.getCount())
 						store.removeItem(storeItem.getItemObjId());
-					
-				  // Log the trade
-					log.info("[PRIVATE STORE] > [Seller: " + seller.getName() + "] sold "
-							+ "[Item: " + item.getItemId() + "]"
-							+ "[Amount: " + tradeItem.getCount() + "] to "
-							+ "[Buyer: " + buyer.getName() + "] for "
-							+ "[Price: " + storeItem.getPrice() + "] each and "
-							+ "[Total price: " + storeItem.getPrice() * tradeItem.getCount());
+
+					// Log the trade
+					log.info("[PRIVATE STORE] > [Seller: " + seller.getName() + "] sold " + "[Item: " + item.getItemId()
+							+ "]" + "[Amount: " + tradeItem.getCount() + "] to " + "[Buyer: " + buyer.getName()
+							+ "] for " + "[Price: " + storeItem.getPrice() + "] each and " + "[Total price: "
+							+ storeItem.getPrice() * tradeItem.getCount());
 				}
 			}
 			// Decrease kinah for buyer and Increase kinah for seller
@@ -318,26 +316,32 @@ public class PrivateStoreService {
 		if (name != null) {
 			activePlayer.getStore().setStoreMessage(name);
 			if (CustomConfig.SPEAKING_BETWEEN_FACTIONS) {
-				PacketSendUtility.broadcastPacket(playerActive, new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), name), true);
-			}
-			else {
-				PacketSendUtility.broadcastPacket(playerActive, new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), name), true, new ObjectFilter<Player>() {
-					@Override
-					public boolean acceptObject(Player object) {
-						return ((senderRace == object.getRace().getRaceId() && !object.getBlockList().contains(playerActive.getObjectId())) || object.isGM());
-					}
-				});
-				PacketSendUtility.broadcastPacket(playerActive, new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), ""), false, new ObjectFilter<Player>() {
+				PacketSendUtility.broadcastPacket(playerActive,
+						new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), name), true);
+			} else {
+				PacketSendUtility.broadcastPacket(playerActive,
+						new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), name), true, new ObjectFilter<Player>() {
+							@Override
+							public boolean acceptObject(Player object) {
+								return ((senderRace == object.getRace().getRaceId()
+										&& !object.getBlockList().contains(playerActive.getObjectId()))
+										|| object.isGM());
+							}
+						});
+				PacketSendUtility.broadcastPacket(playerActive,
+						new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), ""), false, new ObjectFilter<Player>() {
 
-					@Override
-					public boolean acceptObject(Player object) {
-						return senderRace != object.getRace().getRaceId() && !object.getBlockList().contains(playerActive.getObjectId()) && !object.isGM();
-					}
-				});
+							@Override
+							public boolean acceptObject(Player object) {
+								return senderRace != object.getRace().getRaceId()
+										&& !object.getBlockList().contains(playerActive.getObjectId())
+										&& !object.isGM();
+							}
+						});
 			}
+		} else {
+			PacketSendUtility.broadcastPacket(playerActive, new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), ""),
+					true);
 		}
-		else {
-			PacketSendUtility.broadcastPacket(playerActive, new SM_PRIVATE_STORE_NAME(playerActive.getObjectId(), ""), true);
-		}
-	}	
+	}
 }

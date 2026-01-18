@@ -17,6 +17,7 @@
 package com.aionemu.gameserver.model.gameobjects.player;
 
 import java.sql.Timestamp;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerPetsDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -240,7 +241,7 @@ public class PetCommonData extends VisibleObjectTemplate {
 
 	/**
 	 * @param moodCdStarted
-	 *          the moodCdStarted to set
+	 *            the moodCdStarted to set
 	 */
 	public void setMoodCdStarted(long moodCdStarted) {
 		this.moodCdStarted = moodCdStarted;
@@ -265,7 +266,7 @@ public class PetCommonData extends VisibleObjectTemplate {
 
 	/**
 	 * @param giftCdStarted
-	 *          the giftCdStarted to set
+	 *            the giftCdStarted to set
 	 */
 	public void setGiftCdStarted(long giftCdStarted) {
 		this.giftCdStarted = giftCdStarted;
@@ -290,7 +291,7 @@ public class PetCommonData extends VisibleObjectTemplate {
 
 	/**
 	 * @param despawnTime
-	 *          the despawnTime to set
+	 *            the despawnTime to set
 	 */
 	public void setDespawnTime(Timestamp despawnTime) {
 		this.despawnTime = despawnTime;

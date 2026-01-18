@@ -16,14 +16,16 @@
  */
 package com.aionemu.gameserver.network.aion;
 
-import com.aionemu.gameserver.network.aion.serverpackets.*;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+import com.aionemu.gameserver.network.aion.serverpackets.*;
+
 /**
- * This class is holding opcodes for all server packets. It's used only to have all opcodes in one place
+ * This class is holding opcodes for all server packets. It's used only to have
+ * all opcodes in one place
  * 
  * @author Luno, alexa026, ATracer, avol, orz, cura
  */
@@ -108,7 +110,7 @@ public class ServerPacketsOpcodes {
 		addPacketOpcode(SM_SHOW_NPC_ON_MAP.class, 0x59, idSet); // 2.4 EU [S_FIND_NPC_POS_RESULT]
 		addPacketOpcode(SM_GROUP_INFO.class, 0x5A, idSet); // 2.4 EU [S_PARTY_INFO]
 		addPacketOpcode(SM_GROUP_MEMBER_INFO.class, 0x5B, idSet); // 2.4 EU [S_PARTY_MEMBER_INFO]
-		//addPacketOpcode(SM_ABYSS_ARTIFACT_INFO.class, 0x60, idSet);
+		addPacketOpcode(SM_ABYSS_ARTIFACT_INFO.class, 0x60, idSet); // 2.4 EU [S_BALAUREA_INFO]
 		addPacketOpcode(SM_QUIT_RESPONSE.class, 0x62, idSet); // 2.4 EU [S_ASK_QUIT_RESULT]
 		addPacketOpcode(SM_CHAT_WINDOW.class, 0x63, idSet); // 2.4 EU [S_ASK_INFO_RESULT]
 		addPacketOpcode(SM_PET.class, 0x65, idSet); // 2.4 EU [S_FUNCTIONAL_PET]
@@ -162,9 +164,10 @@ public class ServerPacketsOpcodes {
 		addPacketOpcode(SM_WAREHOUSE_ADD_ITEM.class, 0xA9, idSet); // 2.4 EU [S_ADD_WAREHOUSE]
 		addPacketOpcode(SM_DELETE_WAREHOUSE_ITEM.class, 0xAA, idSet); // 2.4 EU [S_REMOVE_WAREHOUSE]
 		addPacketOpcode(SM_WAREHOUSE_UPDATE_ITEM.class, 0xAB, idSet); // 2.4 EU [S_CHANGE_WAREHOUSE_ITEM_DESC]
-		//addPacketOpcode(SM_IN_GAME_SHOP_CATEGORY_LIST.class, 0xAC, idSet); // ingameshop
-		//addPacketOpcode(SM_IN_GAME_SHOP_LIST.class, 0xAD, idSet); // ingameshop
-		//addPacketOpcode(SM_IN_GAME_SHOP_ITEM.class, 0xAE, idSet); // ingameshop
+		// addPacketOpcode(SM_IN_GAME_SHOP_CATEGORY_LIST.class, 0xAC, idSet); //
+		// ingameshop
+		// addPacketOpcode(SM_IN_GAME_SHOP_LIST.class, 0xAD, idSet); // ingameshop
+		// addPacketOpcode(SM_IN_GAME_SHOP_ITEM.class, 0xAE, idSet); // ingameshop
 		addPacketOpcode(SM_TITLE_INFO.class, 0xB0, idSet); // 2.4 EU [S_TITLE]
 		addPacketOpcode(SM_CHARACTER_SELECT.class, 0xB1, idSet); // 2.4 EU [S_2ND_PASSWORD]
 		addPacketOpcode(SM_CRAFT_ANIMATION.class, 0xB4, idSet); // 2.4 EU [S_COMBINE_OTHER]
@@ -196,9 +199,9 @@ public class ServerPacketsOpcodes {
 		addPacketOpcode(SM_LEGION_SEND_EMBLEM.class, 0xD5, idSet); // 2.4 EU [S_GUILD_EMBLEM_IMG_BEGIN]
 		addPacketOpcode(SM_LEGION_SEND_EMBLEM_DATA.class, 0xD6, idSet); // 2.4 EU [S_GUILD_EMBLEM_IMG_DATA]
 		addPacketOpcode(SM_LEGION_UPDATE_EMBLEM.class, 0xD7, idSet); // 2.4 EU [S_GUILD_EMBLEM_UPDATED]
-		//addPacketOpcode(SM_ABYSS_ARTIFACT_INFO2.class, 0xD9, idSet);
+		// addPacketOpcode(SM_ABYSS_ARTIFACT_INFO2.class, 0xD9, idSet);
 		addPacketOpcode(SM_SHIELD_EFFECT.class, 0xDA, idSet); // 2.4 EU [S_ABYSS_SHIELD_INFO]
-		//addPacketOpcode(SM_ABYSS_ARTIFACT_INFO3.class, 0xDC, idSet);
+		// addPacketOpcode(SM_ABYSS_ARTIFACT_INFO3.class, 0xDC, idSet);
 		addPacketOpcode(SM_FRIEND_RESPONSE.class, 0xDF, idSet); // 2.4 EU [S_BUDDY_RESULT]
 		addPacketOpcode(SM_BLOCK_RESPONSE.class, 0xE0, idSet); // 2.4 EU [S_BLOCK_RESULT]
 		addPacketOpcode(SM_BLOCK_LIST.class, 0xE1, idSet); // 2.4 EU [S_BLOCK_LIST]
@@ -225,17 +228,21 @@ public class ServerPacketsOpcodes {
 		addPacketOpcode(SM_PRICES.class, 0xFD, idSet); // 2.4 EU [S_TAX_INFO]
 		addPacketOpcode(SM_TRADELIST.class, 0xFE, idSet); // 2.4 EU [S_STORE_SALE_INFO]
 		addPacketOpcode(SM_RECONNECT_KEY.class, 0x100, idSet); // 2.4 EU [S_RECONNECT_KEY]
-		addPacketOpcode(SM_SERVER_ENV.class, 0x10F, idSet); // 2.4 EU
 		addPacketOpcode(SM_GAMEPASS_INFO.class, 0x11A, idSet); // 2.4 EU
+		addPacketOpcode(SM_GAMEPASS_OTHER_UPDATED.class, 0x11B, idSet); // 2.4 EU
 		addPacketOpcode(SM_CHAT_ACCUSE.class, 0x122, idSet); // 2.4 EU
 		addPacketOpcode(SM_SPAM_FILTER_FLAG.class, 0x127, idSet); // 2.4 EU
 		addPacketOpcode(SM_CUSTOM_PACKET.class, 99999, idSet); // 2.4 EU fake packet
-		
+
+		addPacketOpcode(SM_SERVER_ENV.class, 0x10F, idSet);
+		addPacketOpcode(SM_PACKAGE_INFO_NOTIFY.class, 0x102, idSet); // 2.4 EU [S_BM_PACK_LIST]
 		addPacketOpcode(S_REPLY_NP_LOGIN_GAMESVR.class, 0x107, idSet);
 		addPacketOpcode(S_REPLY_NP_CONSUME_TOKEN_RESULT.class, 0x108, idSet);
 		addPacketOpcode(S_REPLY_NP_AUTH_TOKEN.class, 0x109, idSet);
 		addPacketOpcode(S_NPSHOP_GOODS_COUNT.class, 0x10B, idSet);
 		addPacketOpcode(S_READY_ENTER_WORLD.class, 0x11E, idSet);
+		addPacketOpcode(S_AFTER_ENTER_WORLD.class, 0x193, idSet);
+
 	}
 
 	static int getOpcode(Class<? extends AionServerPacket> packetClass) {
@@ -251,7 +258,8 @@ public class ServerPacketsOpcodes {
 			return;
 
 		if (idSet.contains(opcode))
-			throw new IllegalArgumentException(String.format("There already exists another packet with id 0x%02X", opcode));
+			throw new IllegalArgumentException(
+					String.format("There already exists another packet with id 0x%02X", opcode));
 
 		idSet.add(opcode);
 		opcodes.put(packetClass, opcode);

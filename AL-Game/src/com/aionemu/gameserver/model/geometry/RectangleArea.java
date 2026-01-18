@@ -36,7 +36,6 @@ public class RectangleArea extends AbstractArea {
 	 */
 	private final float minX;
 
-	
 	/**
 	 * @return the minX
 	 */
@@ -44,7 +43,6 @@ public class RectangleArea extends AbstractArea {
 		return minX;
 	}
 
-	
 	/**
 	 * @return the maxX
 	 */
@@ -52,7 +50,6 @@ public class RectangleArea extends AbstractArea {
 		return maxX;
 	}
 
-	
 	/**
 	 * @return the minY
 	 */
@@ -60,7 +57,6 @@ public class RectangleArea extends AbstractArea {
 		return minY;
 	}
 
-	
 	/**
 	 * @return the maxY
 	 */
@@ -87,17 +83,17 @@ public class RectangleArea extends AbstractArea {
 	 * Creates new area from given points. Point order doesn't matter
 	 * 
 	 * @param p1
-	 *          point
+	 *            point
 	 * @param p2
-	 *          point
+	 *            point
 	 * @param p3
-	 *          point
+	 *            point
 	 * @param p4
-	 *          point
+	 *            point
 	 * @param minZ
-	 *          minimal z
+	 *            minimal z
 	 * @param maxZ
-	 *          maximal z
+	 *            maximal z
 	 */
 	public RectangleArea(ZoneName zoneName, int worldId, Point p1, Point p2, Point p3, Point p4, int minZ, int maxZ) {
 		super(zoneName, worldId, minZ, maxZ);
@@ -118,19 +114,20 @@ public class RectangleArea extends AbstractArea {
 	 * Creates new are from given coords
 	 * 
 	 * @param minX
-	 *          mimal x point
+	 *            mimal x point
 	 * @param minY
-	 *          minimal y point
+	 *            minimal y point
 	 * @param maxX
-	 *          maximal x point
+	 *            maximal x point
 	 * @param maxY
-	 *          maximal y point
+	 *            maximal y point
 	 * @param minZ
-	 *          minimal z point
+	 *            minimal z point
 	 * @param maxZ
-	 *          maximal z point
+	 *            maximal z point
 	 */
-	public RectangleArea(ZoneName zoneName, int worldId, float minX, float minY, float maxX, float maxY, float minZ, float maxZ) {
+	public RectangleArea(ZoneName zoneName, int worldId, float minX, float minY, float maxX, float maxY, float minZ,
+			float maxZ) {
 		super(zoneName, worldId, minZ, maxZ);
 		this.minX = minX;
 		this.maxX = maxX;
@@ -152,6 +149,7 @@ public class RectangleArea extends AbstractArea {
 			return false;
 		return super.isInside3D(x, y, z);
 	}
+
 	/**
 	 * {@inheritDoc}
 	 */
@@ -159,8 +157,7 @@ public class RectangleArea extends AbstractArea {
 	public double getDistance2D(float x, float y) {
 		if (isInside2D(x, y)) {
 			return 0;
-		}
-		else {
+		} else {
 			Point2D cp = getClosestPoint(x, y);
 			return MathUtil.getDistance(x, y, cp.getX(), cp.getY());
 		}
@@ -173,11 +170,9 @@ public class RectangleArea extends AbstractArea {
 	public double getDistance3D(float x, float y, float z) {
 		if (isInside3D(x, y, z)) {
 			return 0;
-		}
-		else if (isInsideZ(z)) {
+		} else if (isInsideZ(z)) {
 			return getDistance2D(x, y);
-		}
-		else {
+		} else {
 			Point3D cp = getClosestPoint(x, y, z);
 			return MathUtil.getDistance(x, y, z, cp.getX(), cp.getY(), cp.getZ());
 		}
@@ -191,8 +186,7 @@ public class RectangleArea extends AbstractArea {
 
 		if (isInside2D(x, y)) {
 			return new Point2D(x, y);
-		}
-		else {
+		} else {
 			// bottom edge
 			Point2D closestPoint = MathUtil.getClosestPointOnSegment(minX, minY, maxX, minY, x, y);
 			double distance = MathUtil.getDistance(x, y, closestPoint.getX(), closestPoint.getY());
@@ -225,8 +219,12 @@ public class RectangleArea extends AbstractArea {
 		}
 	}
 
-	/* (non-Javadoc)
-	 * @see com.aionemu.gameserver.model.geometry.Area#intersectsRectangle(com.aionemu.gameserver.model.geometry.RectangleArea)
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.aionemu.gameserver.model.geometry.Area#intersectsRectangle(com.aionemu.
+	 * gameserver.model.geometry.RectangleArea)
 	 */
 	@Override
 	public boolean intersectsRectangle(RectangleArea area) {

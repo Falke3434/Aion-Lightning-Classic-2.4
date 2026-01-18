@@ -28,8 +28,7 @@ import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 /**
- * @author ATracer
- * modified by Sippolo
+ * @author ATracer modified by Sippolo
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "PetOrderUseUltraSkillEffect")
@@ -41,11 +40,11 @@ public class PetOrderUseUltraSkillEffect extends EffectTemplate {
 	@Override
 	public void applyEffect(Effect effect) {
 		Player effector = (Player) effect.getEffector();
-		
-		if(effector.getSummon() == null) {
+
+		if (effector.getSummon() == null) {
 			return;
 		}
-		
+
 		int effectorId = effector.getSummon().getObjectId();
 
 		int npcId = effector.getSummon().getNpcId();
@@ -53,7 +52,7 @@ public class PetOrderUseUltraSkillEffect extends EffectTemplate {
 
 		int petUseSkillId = DataManager.PET_SKILL_DATA.getPetOrderSkill(orderSkillId, npcId);
 		int targetId = effect.getEffected().getObjectId();
-		
+
 		// Handle automatic release if skill expects so
 		if (release)
 			effector.getSummon().getController().setReleaseAfterSkill(petUseSkillId);

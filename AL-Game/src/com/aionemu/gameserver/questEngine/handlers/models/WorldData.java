@@ -21,7 +21,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
-
 /**
  * @author vlog
  */
@@ -31,7 +30,7 @@ public class WorldData {
 
 	@XmlAttribute(name = "id", required = true)
 	protected int worldId;
-	
+
 	public int getWorldId() {
 		return worldId;
 	}

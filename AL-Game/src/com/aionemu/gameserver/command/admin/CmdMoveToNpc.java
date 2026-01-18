@@ -7,24 +7,21 @@ import com.aionemu.gameserver.model.templates.npc.NpcTemplate;
 import com.aionemu.gameserver.services.teleport.TeleportService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 public class CmdMoveToNpc extends BaseCommand {
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length < 1) {
 			showHelp(admin);
 			return;
 		}
-		
+
 		int npcId = 0;
 		String message = "";
 		try {
 			npcId = Integer.valueOf(params[0]);
-		}
-		catch (ArrayIndexOutOfBoundsException e) {
+		} catch (ArrayIndexOutOfBoundsException e) {
 			showHelp(admin);
-		}
-		catch (NumberFormatException e) {
+		} catch (NumberFormatException e) {
 			String npcName = "";
 
 			for (int i = 0; i < params.length; i++)
@@ -47,8 +44,8 @@ public class CmdMoveToNpc extends BaseCommand {
 			}
 		}
 
-		if(npcId > 0) {
-			message = "Teleporting to Npc: "+npcId+"\n"+message;
+		if (npcId > 0) {
+			message = "Teleporting to Npc: " + npcId + "\n" + message;
 			PacketSendUtility.sendMessage(admin, message);
 			TeleportService.teleportToNpc(admin, npcId);
 		}

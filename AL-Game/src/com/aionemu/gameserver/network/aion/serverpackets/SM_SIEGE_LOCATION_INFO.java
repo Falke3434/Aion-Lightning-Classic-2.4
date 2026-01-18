@@ -16,6 +16,11 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.gameserver.configs.main.SiegeConfig;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.siege.SiegeLocation;
@@ -25,10 +30,8 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.LegionService;
 import com.aionemu.gameserver.services.SiegeService;
-import java.util.Map;
+
 import javolution.util.FastMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author Sarynth
@@ -84,8 +87,7 @@ public class SM_SIEGE_LOCATION_INFO extends AionServerPacket {
 				writeC(emblem.getColor_r());
 				writeC(emblem.getColor_g());
 				writeC(emblem.getColor_b());
-			}
-			else {
+			} else {
 				writeD(emblem.getCustomEmblemData().length);
 				writeC(255);
 				writeC(emblem.getColor_r());
@@ -99,7 +101,7 @@ public class SM_SIEGE_LOCATION_INFO extends AionServerPacket {
 			writeC(loc.isVulnerable() ? 2 : 0);
 
 			// faction can teleport (0 - no, 1 - yes)
-			writeC(loc.isCanTeleport(player)? 1 : 0);
+			writeC(loc.isCanTeleport(player) ? 1 : 0);
 
 			// Next State (0 - invulnerable, 1 - vulnerable)
 			writeC(loc.getNextState());
@@ -107,13 +109,13 @@ public class SM_SIEGE_LOCATION_INFO extends AionServerPacket {
 			writeH(0); // unk
 			writeH(1);
 			switch (loc.getLocationId()) {
-				case 2111: // veille timer
-				case 3111: // mastarius timer
-					writeD(SiegeService.getInstance().getRemainingSiegeTimeInSeconds(loc.getLocationId()));
-					break;
-				default:
-					writeD(10000);
-					break;
+			case 2111: // veille timer
+			case 3111: // mastarius timer
+				writeD(SiegeService.getInstance().getRemainingSiegeTimeInSeconds(loc.getLocationId()));
+				break;
+			default:
+				writeD(10000);
+				break;
 			}
 		}
 	}

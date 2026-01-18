@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
@@ -13,8 +14,10 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.aionemu.gameserver.GameServerError;
 import com.aionemu.gameserver.command.BaseCommand;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -23,30 +26,25 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_CUSTOM_PACKET.Packet
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 
-
 /*send [file */
-
 
 public class CmdSend extends BaseCommand {
 
-	
 	private static final Logger logger = LoggerFactory.getLogger(CmdSend.class);
 
 	private static final File FOLDER = new File("./data/packets");
 
 	private Unmarshaller unmarshaller;
 
-	
 	public void execute(Player admin, String... params) {
 		if (params.length != 1) {
 			showHelp(admin);
 			return;
 		}
-		
+
 		try {
 			unmarshaller = JAXBContext.newInstance(Packets.class, Packet.class, Part.class).createUnmarshaller();
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			throw new GameServerError("Failed to initialize unmarshaller.", e);
 		}
 
@@ -67,8 +65,7 @@ public class CmdSend extends BaseCommand {
 
 		try {
 			packetsTemplate = (Packets) unmarshaller.unmarshal(packetsData);
-		}
-		catch (JAXBException e) {
+		} catch (JAXBException e) {
 			logger.error("Unmarshalling error", e);
 			return;
 		}
@@ -106,8 +103,7 @@ public class CmdSend extends BaseCommand {
 				if (part.getRepeatCount() == 1) // skip loop
 				{
 					packet.addElement(byCode, value);
-				}
-				else {
+				} else {
 					for (int i = 0; i < part.getRepeatCount(); i++)
 						packet.addElement(byCode, value);
 				}

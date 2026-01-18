@@ -21,6 +21,7 @@ import java.util.Iterator;
 import org.apache.commons.lang.StringUtils;
 
 import com.aionemu.gameserver.ai2.AI2Engine;
+import com.aionemu.gameserver.ai2.poll.AIQuestion;
 import com.aionemu.gameserver.configs.main.AIConfig;
 import com.aionemu.gameserver.controllers.NpcController;
 import com.aionemu.gameserver.controllers.movement.NpcMoveController;
@@ -53,8 +54,8 @@ import com.aionemu.gameserver.world.WorldType;
 import com.google.common.base.Preconditions;
 
 /**
- * This class is a base class for all in-game NPCs, what includes: monsters and npcs that player can talk to (aka
- * Citizens)
+ * This class is a base class for all in-game NPCs, what includes: monsters and
+ * npcs that player can talk to (aka Citizens)
  * 
  * @author Luno
  */
@@ -66,17 +67,20 @@ public class Npc extends Creature {
 	private NpcSkillList skillList;
 	private WalkerGroupShift walkerGroupShift;
 	private long lastShoutedSeconds;
+	private NpcType npcType;
 
 	public Npc(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate objectTemplate) {
 		this(objId, controller, spawnTemplate, objectTemplate, objectTemplate.getLevel());
 	}
 
-	public Npc(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate objectTemplate, byte level) {
+	public Npc(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate objectTemplate,
+			byte level) {
 		super(objId, controller, spawnTemplate, objectTemplate, new WorldPosition());
 		Preconditions.checkNotNull(objectTemplate, "Npcs should be based on template");
 		controller.setOwner(this);
 		moveController = new NpcMoveController(this);
 		skillList = new NpcSkillList(this);
+		npcType = objectTemplate.getNpcType();
 		setupStatContainers(level);
 		AI2Engine.getInstance().setupAI(objectTemplate.getAi(), this);
 		lastShoutedSeconds = System.currentTimeMillis() / 1000;
@@ -90,7 +94,7 @@ public class Npc extends Creature {
 	/**
 	 * @param level
 	 */
-	protected void setupStatContainers(byte level) {
+	protected void setupStatContainers(int level) {
 		setGameStats(new NpcGameStats(this));
 		setLifeStats(new NpcLifeStats(this));
 	}
@@ -137,6 +141,16 @@ public class Npc extends Creature {
 		return getSpawn().getWalkerId() != null || (getSpawn().hasRandomWalk() && AIConfig.ACTIVE_NPC_MOVEMENT);
 	}
 
+	public boolean isPeace() {
+		return getNpcType().equals(NpcType.PEACE);
+	}
+
+	public boolean isFriendTo(Player player) {
+		if (this.getTribe() == TribeClass.NOFIGHT)
+			return false;
+		return DataManager.TRIBE_RELATIONS_DATA.isFriendlyRelation(getTribe(), player.getTribe());
+	}
+
 	@Override
 	public boolean isAggressiveTo(Creature creature) {
 		if (creature instanceof Player)
@@ -154,23 +168,25 @@ public class Npc extends Creature {
 	 * Represents the action of a guard defending its position
 	 * 
 	 * @param npc
-	 * @return true if this npc is a guard and the given npc is aggro to their PC race
+	 * @return true if this npc is a guard and the given npc is aggro to their PC
+	 *         race
 	 */
 	protected boolean guardAgainst(Npc npc) {
 		/*
-		 * Until further testing or reports, npc's will not attack npc's with same name(self). Only happens with guard type npc's.
-		 * This fixes certain NPC's like ascension that should not attack each other breaking the quest.
-		 * Example: http://www.aiondatabase.com/npc/205040/guardian-assassin
+		 * Until further testing or reports, npc's will not attack npc's with same
+		 * name(self). Only happens with guard type npc's. This fixes certain NPC's like
+		 * ascension that should not attack each other breaking the quest. Example:
+		 * http://www.aiondatabase.com/npc/205040/guardian-assassin
 		 */
-		if(getName() == npc.getName()){
+		if (getName() == npc.getName()) {
 			return false;
 		}
 
 		if ((getTribe().isLightGuard() || this.getObjectTemplate().getNpcTemplateType() == NpcTemplateType.GUARD)
-			&& DataManager.TRIBE_RELATIONS_DATA.isAggressiveRelation(npc.getTribe(), TribeClass.PC))
+				&& DataManager.TRIBE_RELATIONS_DATA.isAggressiveRelation(npc.getTribe(), TribeClass.PC))
 			return true;
 		if ((getTribe().isDarkGuard() || this.getObjectTemplate().getNpcTemplateType() == NpcTemplateType.GUARD)
-			&& DataManager.TRIBE_RELATIONS_DATA.isAggressiveRelation(npc.getTribe(), TribeClass.PC_DARK))
+				&& DataManager.TRIBE_RELATIONS_DATA.isAggressiveRelation(npc.getTribe(), TribeClass.PC_DARK))
 			return true;
 		return false;
 	}
@@ -189,10 +205,14 @@ public class Npc extends Creature {
 	public boolean isSupportFrom(Npc npc) {
 		return DataManager.TRIBE_RELATIONS_DATA.isSupportRelation(npc.getTribe(), getTribe());
 	}
-	
+
 	@Override
 	public boolean isFriendFrom(Npc npc) {
 		return DataManager.TRIBE_RELATIONS_DATA.isFriendlyRelation(npc.getTribe(), getTribe());
+	}
+
+	public boolean isNoneRelation(Player player) {
+		return DataManager.TRIBE_RELATIONS_DATA.isNoneRelation(getTribe(), player.getTribe());
 	}
 
 	@Override
@@ -222,6 +242,11 @@ public class Npc extends Creature {
 
 	@Override
 	public boolean isEnemy(Creature creature) {
+		if (creature instanceof Player) {
+			if (getAi2().ask(AIQuestion.CAN_ATTACK_PLAYER).isPositive()) {
+				return true;
+			}
+		}
 		return creature.isEnemyFrom(this);
 	}
 
@@ -315,7 +340,8 @@ public class Npc extends Creature {
 	}
 
 	public boolean isBoss() {
-		return getObjectTemplate().getRating() == NpcRating.HERO || getObjectTemplate().getRating() == NpcRating.LEGENDARY;
+		return getObjectTemplate().getRating() == NpcRating.HERO
+				|| getObjectTemplate().getRating() == NpcRating.LEGENDARY;
 	}
 
 	public boolean hasStatic() {
@@ -332,7 +358,11 @@ public class Npc extends Creature {
 	}
 
 	public NpcType getNpcType() {
-		return getObjectTemplate().getNpcType();
+		return npcType;
+	}
+
+	public void setNpcType(NpcType newType) {
+		npcType = newType;
 	}
 
 	public boolean isRewardAP() {
@@ -352,12 +382,12 @@ public class Npc extends Creature {
 
 	public void shout(final NpcShout shout, final Creature target, final Object param, int delaySeconds) {
 		if (shout.getWhen() != ShoutEventType.DIED && shout.getWhen() != ShoutEventType.BEFORE_DESPAWN
-			&& getLifeStats().isAlreadyDead() || !mayShout(delaySeconds))
+				&& getLifeStats().isAlreadyDead() || !mayShout(delaySeconds))
 			return;
 
 		final int shoutRange = getObjectTemplate().getShoutRange();
-		if (shout.getShoutType() == ShoutType.SAY && !(target instanceof Player) || target != null
-			&& !MathUtil.isIn3dRange(target, this, shoutRange))
+		if (shout.getShoutType() == ShoutType.SAY && !(target instanceof Player)
+				|| target != null && !MathUtil.isIn3dRange(target, this, shoutRange))
 			return;
 
 		final Npc thisNpc = this;
@@ -369,15 +399,14 @@ public class Npc extends Creature {
 			@Override
 			public void run() {
 				if (thisNpc.getLifeStats().isAlreadyDead() && shout.getWhen() != ShoutEventType.DIED
-					&& shout.getWhen() != ShoutEventType.BEFORE_DESPAWN)
+						&& shout.getWhen() != ShoutEventType.BEFORE_DESPAWN)
 					return;
 
 				// message for the specific player (when IDLE we are already broadcasting!!!)
 				if (shout.getShoutType() == ShoutType.SAY || shout.getWhen() == ShoutEventType.IDLE) {
 					// [RR] Should we have lastShoutedSeconds separated from broadcasts (??)
 					PacketSendUtility.sendPacket((Player) target, message);
-				}
-				else {
+				} else {
 					Iterator<Player> iter = thisNpc.getKnownList().getKnownPlayers().values().iterator();
 					while (iter.hasNext()) {
 						Player kObj = iter.next();

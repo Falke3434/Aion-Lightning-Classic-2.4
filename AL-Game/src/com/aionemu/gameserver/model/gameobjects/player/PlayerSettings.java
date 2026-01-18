@@ -50,7 +50,7 @@ public class PlayerSettings {
 
 	/**
 	 * @param persistentState
-	 *          the persistentState to set
+	 *            the persistentState to set
 	 */
 	public void setPersistentState(PersistentState persistentState) {
 		this.persistentState = persistentState;
@@ -65,7 +65,7 @@ public class PlayerSettings {
 
 	/**
 	 * @param uiSettings
-	 *          the uiSettings to set
+	 *            the uiSettings to set
 	 */
 	public void setUiSettings(byte[] uiSettings) {
 		this.uiSettings = uiSettings;
@@ -81,7 +81,7 @@ public class PlayerSettings {
 
 	/**
 	 * @param shortcuts
-	 *          the shortcuts to set
+	 *            the shortcuts to set
 	 */
 	public void setShortcuts(byte[] shortcuts) {
 		this.shortcuts = shortcuts;
@@ -97,7 +97,7 @@ public class PlayerSettings {
 
 	/**
 	 * @param display
-	 *          the display to set
+	 *            the display to set
 	 */
 	public void setDisplay(int display) {
 		this.display = display;
@@ -113,7 +113,7 @@ public class PlayerSettings {
 
 	/**
 	 * @param deny
-	 *          the deny to set
+	 *            the deny to set
 	 */
 	public void setDeny(int deny) {
 		this.deny = deny;

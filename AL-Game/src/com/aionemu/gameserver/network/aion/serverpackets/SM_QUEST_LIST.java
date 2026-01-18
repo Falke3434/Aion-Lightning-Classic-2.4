@@ -16,13 +16,11 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-import javolution.util.FastList;
-
-import com.aionemu.gameserver.dataholders.DataManager;
-import com.aionemu.gameserver.dataholders.QuestsData;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.questEngine.model.QuestState;
+
+import javolution.util.FastList;
 
 public class SM_QUEST_LIST extends AionServerPacket {
 
@@ -41,10 +39,10 @@ public class SM_QUEST_LIST extends AionServerPacket {
 		writeH(0x01); // unk
 		writeH(-questState.size() & 0xFFFF);
 
-		QuestsData QUEST_DATA = DataManager.QUEST_DATA;
+		// QuestsData QUEST_DATA = DataManager.QUEST_DATA;
 		for (QuestState qs : questState) {
-			writeH(qs.getQuestId());
-			writeH(QUEST_DATA.getQuestById(qs.getQuestId()).getCategory().getId());
+			writeD(qs.getQuestId());
+			// writeH(QUEST_DATA.getQuestById(qs.getQuestId()).getCategory().getId());
 			writeC(qs.getStatus().value());
 			writeD(qs.getQuestVars().getQuestVars());
 			writeC(qs.getCompleteCount());

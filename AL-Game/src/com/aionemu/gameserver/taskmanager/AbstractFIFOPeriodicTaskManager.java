@@ -16,7 +16,8 @@
  */
 package com.aionemu.gameserver.taskmanager;
 
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.utils.AEFastSet;
 import com.aionemu.commons.utils.concurrent.RunnableStatsManager;
@@ -40,8 +41,7 @@ public abstract class AbstractFIFOPeriodicTaskManager<T> extends AbstractPeriodi
 		writeLock();
 		try {
 			queue.add(t);
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 	}
@@ -53,8 +53,7 @@ public abstract class AbstractFIFOPeriodicTaskManager<T> extends AbstractPeriodi
 			activeTasks.addAll(queue);
 
 			queue.clear();
-		}
-		finally {
+		} finally {
 			writeUnlock();
 		}
 
@@ -63,11 +62,9 @@ public abstract class AbstractFIFOPeriodicTaskManager<T> extends AbstractPeriodi
 
 			try {
 				callTask(task);
-			}
-			catch (RuntimeException e) {
+			} catch (RuntimeException e) {
 				log.warn("", e);
-			}
-			finally {
+			} finally {
 				RunnableStatsManager.handleStats(task.getClass(), getCalledMethodName(), System.nanoTime() - begin);
 			}
 		}

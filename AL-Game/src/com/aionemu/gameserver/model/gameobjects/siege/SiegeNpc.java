@@ -22,7 +22,7 @@ public class SiegeNpc extends Npc {
 	 * @param controller
 	 * @param spawnTemplate
 	 * @param objectTemplate
-	 *          SiegeNpc constructor
+	 *            SiegeNpc constructor
 	 */
 	public SiegeNpc(int objId, NpcController controller, SiegeSpawnTemplate spawnTemplate, NpcTemplate objectTemplate) {
 		super(objId, controller, spawnTemplate, objectTemplate);
@@ -42,7 +42,5 @@ public class SiegeNpc extends Npc {
 	public SiegeSpawnTemplate getSpawn() {
 		return (SiegeSpawnTemplate) super.getSpawn();
 	}
-	
-	
 
 }

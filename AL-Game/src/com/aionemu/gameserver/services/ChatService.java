@@ -22,12 +22,12 @@ import com.aionemu.gameserver.network.chatserver.ChatServer;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-/** 
+/**
  * @author ATracer
  */
 public class ChatService {
-	//private static final Logger log = LoggerFactory.getLogger(ChatService.class);
-	
+	// private static final Logger log = LoggerFactory.getLogger(ChatService.class);
+
 	private static byte[] ip = { 127, 0, 0, 1 };
 	private static int port = 10241;
 
@@ -43,8 +43,8 @@ public class ChatService {
 	/**
 	 * @param playerId
 	 * @param token
-	 * @param account 
-	 * @param nick 
+	 * @param account
+	 * @param nick
 	 */
 	public static void playerAuthed(int playerId, byte[] token) {
 		Player player = World.getInstance().findPlayer(playerId);
@@ -69,7 +69,7 @@ public class ChatService {
 
 	/**
 	 * @param ip
-	 *          the ip to set
+	 *            the ip to set
 	 */
 	public static void setIp(byte[] _ip) {
 		ip = _ip;
@@ -77,7 +77,7 @@ public class ChatService {
 
 	/**
 	 * @param port
-	 *          the port to set
+	 *            the port to set
 	 */
 	public static void setPort(int _port) {
 		port = _port;

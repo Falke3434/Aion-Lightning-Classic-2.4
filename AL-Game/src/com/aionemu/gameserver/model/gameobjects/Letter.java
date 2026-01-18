@@ -43,10 +43,10 @@ public class Letter extends AionObject {
 	 * @param senderId
 	 * @param senderName
 	 * @param timeStamp
-	 *          new letter constructor
+	 *            new letter constructor
 	 */
 	public Letter(int objId, int recipientId, Item attachedItem, long attachedKinahCount, String title, String message,
-		String senderName, Timestamp timeStamp, boolean unread, boolean express) {
+			String senderName, Timestamp timeStamp, boolean unread, boolean express) {
 		super(objId);
 
 		this.recipientId = recipientId;

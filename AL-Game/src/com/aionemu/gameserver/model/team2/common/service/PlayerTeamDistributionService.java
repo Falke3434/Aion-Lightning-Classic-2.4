@@ -110,11 +110,13 @@ public class PlayerTeamDistributionService {
 			return;
 
 		if (!owner.getAi2().getName().equals("chest") || filteredStats.mentorCount == 0)
-			DropRegistrationService.getInstance().registerDrop(owner, leader, filteredStats.highestLevel, filteredStats.players);
+			DropRegistrationService.getInstance().registerDrop(owner, leader, filteredStats.highestLevel,
+					filteredStats.players);
 	}
 
 	public static void doReward(PlayerAlliance alliance, Npc owner) {
-		// TODO: Merge with group type do-reward. (Near identical to GroupService doReward code.)
+		// TODO: Merge with group type do-reward. (Near identical to GroupService
+		// doReward code.)
 		// Plus complete rewrite of drop system and exp system.
 		// http://www.aionsource.com/topic/40542-character-stats-xp-dp-origin-gerbatorteam-july-2009/
 		// Find Group Members and Determine Highest Level
@@ -156,7 +158,8 @@ public class PlayerTeamDistributionService {
 			expReward = (long) (StatFunctions.calculateGroupExperienceReward(highestLevel, owner));
 
 		// Exp Mod
-		// TODO: Add logic to prevent power leveling. Players 10 levels below highest member should get 0 exp.
+		// TODO: Add logic to prevent power leveling. Players 10 levels below highest
+		// member should get 0 exp.
 		double mod = 1f;
 		if (players.size() > 1)
 			mod = 1.5f + (((players.size() - 2) * 10) / 100);
@@ -192,10 +195,10 @@ public class PlayerTeamDistributionService {
 			return;
 		DropRegistrationService.getInstance().registerDrop(owner, leader, highestLevel, players);
 	}
-	
+
 	public static boolean hasOneLivingPlayer(PlayerGroup group) {
-		for(Player member : group.getMembers()) {
-			if(!member.getLifeStats().isAlreadyDead())
+		for (Player member : group.getMembers()) {
+			if (!member.getLifeStats().isAlreadyDead())
 				return true;
 		}
 		return false;

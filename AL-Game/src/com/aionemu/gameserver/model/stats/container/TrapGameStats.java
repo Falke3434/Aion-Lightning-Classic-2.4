@@ -34,11 +34,11 @@ public class TrapGameStats extends NpcGameStats {
 		if (owner.getMaster() == null)
 			return stat;
 		switch (statEnum) {
-			case BOOST_MAGICAL_SKILL:
-			case MAGICAL_ACCURACY:
-				// bonus is calculated from stat bonus of master (only green value)
-				stat.setBonusRate(0.7f); //TODO: retail formula?
-				return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
+		case BOOST_MAGICAL_SKILL:
+		case MAGICAL_ACCURACY:
+			// bonus is calculated from stat bonus of master (only green value)
+			stat.setBonusRate(0.7f); // TODO: retail formula?
+			return owner.getMaster().getGameStats().getItemStatBoost(statEnum, stat);
 		default:
 			break;
 

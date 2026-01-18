@@ -16,10 +16,10 @@
  */
 package com.aionemu.gameserver.dao;
 
-import javolution.util.FastMap;
-
 import com.aionemu.commons.database.dao.DAO;
 import com.aionemu.gameserver.model.ingameshop.IGItem;
+
+import javolution.util.FastMap;
 
 /**
  * @author xTz, KID
@@ -30,9 +30,11 @@ public abstract class InGameShopDAO implements DAO {
 
 	public abstract FastMap<Integer, IGItem> loadInGameShopItems();
 
-	public abstract void saveIngameShopItem(int objectId, int itemId, int itemCount, int itemPrice, int category, int list, int salesRanking, String description);
+	public abstract void saveIngameShopItem(int objectId, int itemId, int itemCount, int itemPrice, int category,
+			int list, int salesRanking, String description);
 
 	public abstract boolean increaseSales(int object, int current);
+
 	@Override
 	public String getClassName() {
 		return InGameShopDAO.class.getName();

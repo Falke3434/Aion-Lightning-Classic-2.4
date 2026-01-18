@@ -1,9 +1,7 @@
 package com.aionemu.gameserver.model.gameobjects;
 
 public enum LetterType {
-	NORMAL(0),
-	EXPRESS(1),
-	BLACKCLOUD(2);
+	NORMAL(0), EXPRESS(1), BLACKCLOUD(2);
 
 	private int id;
 

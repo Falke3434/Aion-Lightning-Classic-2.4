@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
@@ -47,9 +46,9 @@ public class SM_FRIEND_NOTIFY extends AionServerPacket {
 	 * Constructs a new notify packet
 	 * 
 	 * @param code
-	 *          Message code
+	 *            Message code
 	 * @param name
-	 *          Name of friend
+	 *            Name of friend
 	 */
 	public SM_FRIEND_NOTIFY(int code, String name) {
 		this.code = code;

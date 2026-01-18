@@ -21,9 +21,7 @@ package com.aionemu.gameserver.model.team2.common.legacy;
  */
 public enum LootRuleType {
 
-	FREEFORALL(0),
-	ROUNDROBIN(1),
-	LEADER(2);
+	FREEFORALL(0), ROUNDROBIN(1), LEADER(2);
 
 	private int id;
 

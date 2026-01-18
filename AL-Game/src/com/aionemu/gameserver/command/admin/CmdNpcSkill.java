@@ -9,10 +9,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.npcskill.NpcSkillTemplate;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 public class CmdNpcSkill extends BaseCommand {
-	
-	
 
 	public void execute(Player admin, String... params) {
 		Npc target = NpcTarget(admin);
@@ -51,4 +48,3 @@ public class CmdNpcSkill extends BaseCommand {
 		PacketSendUtility.sendMessage(admin, strbld.toString());
 	}
 }
-

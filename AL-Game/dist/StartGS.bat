@@ -1,25 +1,39 @@
-@ECHO off
-TITLE Aion Lightning - Game Server Console
+@echo off
+TITLE Aion Classic 2.4 - Game Server Console
+SET PATH="C:\Program Files\Java\jdk1.7.0_80\bin"
+set JAVA_HOME=C:\Program Files\Java\jdk1.7.0_80
 :START
 CLS
-IF "%MODE%" == "" (
-CALL PanelGS.bat
-)
-ECHO Starting Aion Lightning Game Server in %MODE% mode.
-C:\glassfish3\jdk\bin\java.exe %JAVA_OPTS% -ea -javaagent:./libs/al-commons-1.3.jar -cp ./libs/*;AL-Game.jar com.aionemu.gameserver.GameServer
+
+echo Starting Aion Classic 2.4 Game Server.
+
+REM -------------------------------------  
+REM Default parameters for a basic server.
+java -Xms1280m -Xmx8192m -XX:MaxHeapSize=8192m -Xdebug -XX:MaxNewSize=24m -XX:NewSize=24m -XX:+UseParNewGC -XX:+CMSParallelRemarkEnabled -XX:+UseConcMarkSweepGC -XX:-UseSplitVerifier -ea -javaagent:./libs/al-commons.jar -cp ./libs/*;./libs/AL-Game.jar com.aionemu.gameserver.GameServer
+REM -------------------------------------
 SET CLASSPATH=%OLDCLASSPATH%
-IF ERRORLEVEL 2 GOTO START
-IF ERRORLEVEL 1 GOTO ERROR
-IF ERRORLEVEL 0 GOTO END
-:ERROR
-ECHO.
-ECHO Game Server has terminated abnormaly!
-ECHO.
-PAUSE
-EXIT
-:END
-ECHO.
-ECHO Game Server is terminated!
-ECHO.
-PAUSE
-EXIT
+
+if ERRORLEVEL 2 goto restart
+if ERRORLEVEL 1 goto error
+if ERRORLEVEL 0 goto end
+
+REM Restart...
+:restart
+echo.
+echo Administrator Restart ...
+echo.
+goto start
+
+REM Error...
+:error
+echo.
+echo Server terminated abnormaly ...
+echo.
+goto end
+
+REM End...
+:end
+echo.
+echo Server terminated ...
+echo.
+pause

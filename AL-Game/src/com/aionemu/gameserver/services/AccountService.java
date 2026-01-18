@@ -16,6 +16,12 @@
  */
 package com.aionemu.gameserver.services;
 
+import java.sql.Timestamp;
+import java.util.Iterator;
+import java.util.List;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.GameServer;
@@ -43,15 +49,10 @@ import com.aionemu.gameserver.services.player.PlayerService;
 import com.aionemu.gameserver.utils.collections.cachemap.CacheMap;
 import com.aionemu.gameserver.utils.collections.cachemap.CacheMapFactory;
 import com.aionemu.gameserver.world.World;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.sql.Timestamp;
-import java.util.Iterator;
-import java.util.List;
 
 /**
- * This class is a front-end for daos and it's responsibility is to retrieve the Account objects
+ * This class is a front-end for daos and it's responsibility is to retrieve the
+ * Account objects
  * 
  * @author Luno
  * @modified cura
@@ -72,7 +73,8 @@ public class AccountService {
 	 * @param membership
 	 * @return Account
 	 */
-	public static Account getAccount(int accountId, String accountName, AccountTime accountTime, byte accessLevel, byte membership, long toll, Timestamp membershipExpire) {
+	public static Account getAccount(int accountId, String accountName, AccountTime accountTime, byte accessLevel,
+			byte membership, long toll, Timestamp membershipExpire) {
 		log.debug("[AS] request for account: " + accountId);
 
 		Account account = accountsMap.get(accountId);
@@ -96,7 +98,8 @@ public class AccountService {
 	}
 
 	/**
-	 * Removes from db characters that should be deleted (their deletion time has passed).
+	 * Removes from db characters that should be deleted (their deletion time has
+	 * passed).
 	 * 
 	 * @param account
 	 */
@@ -111,7 +114,8 @@ public class AccountService {
 				it.remove();
 				account.decrementCountOf(race);
 				PlayerService.deletePlayerFromDB(pad.getPlayerCommonData().getPlayerObjId());
-				if (GSConfig.FACTIONS_RATIO_LIMITED && pad.getPlayerCommonData().getLevel() >= GSConfig.FACTIONS_RATIO_LEVEL) {
+				if (GSConfig.FACTIONS_RATIO_LIMITED
+						&& pad.getPlayerCommonData().getLevel() >= GSConfig.FACTIONS_RATIO_LEVEL) {
 					if (account.getNumberOf(race) == 0) {
 						GameServer.updateRatio(pad.getPlayerCommonData().getRace(), -1);
 					}
@@ -123,6 +127,7 @@ public class AccountService {
 	private static void removeAccountWH(int accountId) {
 		DAOManager.getDAO(InventoryDAO.class).deleteAccountWH(accountId);
 	}
+
 	/**
 	 * Loads account data and returns.
 	 * 
@@ -141,12 +146,13 @@ public class AccountService {
 		for (int playerId : playerIdList) {
 			PlayerCommonData playerCommonData = playerDAO.loadPlayerCommonData(playerId);
 			CharacterBanInfo cbi = DAOManager.getDAO(PlayerPunishmentsDAO.class).getCharBanInfo(playerId);
-			if(playerCommonData.isOnline())  {
-				if(World.getInstance().findPlayer(playerId) == null) {
+			if (playerCommonData.isOnline()) {
+				if (World.getInstance().findPlayer(playerId) == null) {
 					playerCommonData.setOnline(false);
-					log.warn(playerCommonData.getName()+" has online status, but I cant find it in World. Skip online status");
+					log.warn(playerCommonData.getName()
+							+ " has online status, but I cant find it in World. Skip online status");
 				}
-			}			
+			}
 			PlayerAppearance appereance = appereanceDAO.load(playerId);
 
 			LegionMember legionMember = DAOManager.getDAO(LegionMemberDAO.class).loadLegionMember(playerId);
@@ -156,13 +162,15 @@ public class AccountService {
 			 */
 			List<Item> equipment = DAOManager.getDAO(InventoryDAO.class).loadEquipment(playerId);
 
-			PlayerAccountData acData = new PlayerAccountData(playerCommonData, cbi, appereance, equipment, legionMember);
+			PlayerAccountData acData = new PlayerAccountData(playerCommonData, cbi, appereance, equipment,
+					legionMember);
 			playerDAO.setCreationDeletionTime(acData);
 
 			account.addPlayerAccountData(acData);
 
 			if (account.getAccountWarehouse() == null) {
-				Storage accWarehouse = DAOManager.getDAO(InventoryDAO.class).loadStorage(playerId, StorageType.ACCOUNT_WAREHOUSE);
+				Storage accWarehouse = DAOManager.getDAO(InventoryDAO.class).loadStorage(playerId,
+						StorageType.ACCOUNT_WAREHOUSE);
 				ItemService.loadItemStones(accWarehouse.getItems());
 				account.setAccountWarehouse(accWarehouse);
 			}

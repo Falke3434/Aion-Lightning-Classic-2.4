@@ -16,15 +16,27 @@
  */
 package com.aionemu.gameserver.services.siegeservice;
 
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.callbacks.util.GlobalCallbackHelper;
-import com.aionemu.gameserver.configs.main.LoggingConfig;
 import com.aionemu.commons.database.dao.DAOManager;
+import com.aionemu.gameserver.configs.main.LoggingConfig;
 import com.aionemu.gameserver.configs.main.SiegeConfig;
 import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.dao.SiegeDAO;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PlayerCommonData;
-import com.aionemu.gameserver.model.siege.*;
+import com.aionemu.gameserver.model.siege.ArtifactLocation;
+import com.aionemu.gameserver.model.siege.FortressLocation;
+import com.aionemu.gameserver.model.siege.Influence;
+import com.aionemu.gameserver.model.siege.OutpostLocation;
+import com.aionemu.gameserver.model.siege.SiegeRace;
 import com.aionemu.gameserver.model.templates.siegelocation.SiegeLegionReward;
 import com.aionemu.gameserver.model.templates.siegelocation.SiegeReward;
 import com.aionemu.gameserver.model.templates.zone.ZoneType;
@@ -34,14 +46,6 @@ import com.aionemu.gameserver.services.SystemMailService;
 import com.aionemu.gameserver.services.player.PlayerService;
 import com.aionemu.gameserver.world.knownlist.Visitor;
 import com.google.common.collect.Lists;
-
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * Object that controls siege of certain fortress. Siege object is not reusable.
@@ -57,7 +61,7 @@ public class FortressSiege extends Siege<FortressLocation> {
 	/**
 	 * AI name of siege boss npc. TODO: It's dirty hack, remove it in the future
 	 */
-	//@Deprecated
+	// @Deprecated
 	public static final String SIEGE_BOSS_AI_NAME = "siege_protector";
 	public static final int SIEGE_BOSS_MIN_KILL = 10;
 	private final FortressSiegeAbyssPointsAddedListener addAbyssPointsListener = new FortressSiegeAbyssPointsAddedListener(
@@ -71,7 +75,7 @@ public class FortressSiege extends Siege<FortressLocation> {
 
 		// Mark fortress as vulnerable
 		getSiegeLocation().setVulnerable(true);
-		
+
 		getSiegeLocation().doOnAllPlayers(new Visitor<Player>() {
 			@Override
 			public void visit(Player player) {
@@ -81,20 +85,16 @@ public class FortressSiege extends Siege<FortressLocation> {
 
 		// Clear fortress from enemys
 		getSiegeLocation().clearLocation();
-		
+
 		// Clear fortress from enemys
-		/*for (Creature creature : getSiegeLocation().getCreatures().values()) {
-			if (creature instanceof Player) {
-				Player player = (Player) creature;
-				if (!getSiegeLocation().isEnemy(player))
-					player.setInsideZoneType(ZoneType.SIEGE);
-			}
-			else if (creature instanceof Kisk) {
-				Kisk kisk = (Kisk) creature;
-				if (kisk.getRace().getRaceId() != getSiegeLocation().getRace().getRaceId())
-					kisk.getController().die();
-			}
-		}*/
+		/*
+		 * for (Creature creature : getSiegeLocation().getCreatures().values()) { if
+		 * (creature instanceof Player) { Player player = (Player) creature; if
+		 * (!getSiegeLocation().isEnemy(player))
+		 * player.setInsideZoneType(ZoneType.SIEGE); } else if (creature instanceof
+		 * Kisk) { Kisk kisk = (Kisk) creature; if (kisk.getRace().getRaceId() !=
+		 * getSiegeLocation().getRace().getRaceId()) kisk.getController().die(); } }
+		 */
 
 		// Let the world know where the siege are
 		broadcastUpdate(getSiegeLocation());
@@ -107,7 +107,8 @@ public class FortressSiege extends Siege<FortressLocation> {
 		// respawn all NPCs so ppl cannot kill guards before siege
 		SiegeService.getInstance().deSpawnNpcs(getSiegeLocationId());
 		SiegeService.getInstance().deSpawnProtectors(getSiegeLocationId());
-		//SiegeService.getInstance().spawnNpcs(getSiegeLocationId(), getSiegeLocation().getRace());
+		// SiegeService.getInstance().spawnNpcs(getSiegeLocationId(),
+		// getSiegeLocation().getRace());
 		SiegeService.getInstance().spawnProtectors(getSiegeLocationId(), getSiegeLocation().getRace());
 		initSiegeBoss(Collections.singleton(SIEGE_BOSS_AI_NAME));
 	}
@@ -129,7 +130,7 @@ public class FortressSiege extends Siege<FortressLocation> {
 		// Guardian deity general was not killed, fortress stays with previous
 		if (isBossKilled())
 			capture();
-		
+
 		SiegeService.getInstance().deSpawnNpcs(getSiegeLocationId());
 		SiegeService.getInstance().spawnNpcs(getSiegeLocationId(), getSiegeLocation().getRace());
 
@@ -175,8 +176,7 @@ public class FortressSiege extends Siege<FortressLocation> {
 		if (SiegeRace.BALAUR == winner.getSiegeRace()) {
 			getSiegeLocation().setLegionId(0);
 			getArtifact().setLegionId(0);
-		}
-		else {
+		} else {
 			Integer topLegionId = winner.getWinnerLegionId();
 			getSiegeLocation().setLegionId(topLegionId != null ? topLegionId : 0);
 			getArtifact().setLegionId(topLegionId != null ? topLegionId : 0);
@@ -207,11 +207,11 @@ public class FortressSiege extends Siege<FortressLocation> {
 				// In case of balaur fortress ownership
 				// oupost also belongs to balaur
 				newOwnerRace = SiegeRace.BALAUR;
-			}
-			else {
+			} else {
 				// if fortress owner is non-balaur
 				// then outpost owner is opposite to fortress owner
-				// Example: if fortresses are captured by Elyos, then outpost should be captured by Asmo
+				// Example: if fortresses are captured by Elyos, then outpost should be captured
+				// by Asmo
 				newOwnerRace = fortressRace == SiegeRace.ELYOS ? SiegeRace.ASMODIANS : SiegeRace.ELYOS;
 			}
 
@@ -229,8 +229,7 @@ public class FortressSiege extends Siege<FortressLocation> {
 				if (SiegeRace.BALAUR != o.getRace()) {
 					if (o.isSiegeAllowed()) {
 						SiegeService.getInstance().startSiege(o.getLocationId());
-					}
-					else {
+					} else {
 						SiegeService.getInstance().spawnNpcs(o.getLocationId(), o.getRace());
 					}
 				}
@@ -256,12 +255,11 @@ public class FortressSiege extends Siege<FortressLocation> {
 	public void addAbyssPoints(Player player, int abysPoints) {
 		getSiegeCounter().addAbyssPoints(player, abysPoints);
 	}
-	
-	
+
 	public void addKill(Player player) {
 		getSiegeCounter().addKill(player);
 	}
-	
+
 	protected void giveRewardsToLegion(SiegeRaceCounter winnerDamage) {
 		// We do not give rewards if fortress was captured for first time
 		if (isBossKilled()) {
@@ -272,35 +270,33 @@ public class FortressSiege extends Siege<FortressLocation> {
 		if (getSiegeLocation().getLegionId() == 0) {
 			return;
 		}
-		
+
 		/*
-		int nbKillTotal = 0;
-		for (Long long1 : winnerDamage.getPlayerKills().values()) {
-			nbKillTotal += long1;
-		}
-		*/
+		 * int nbKillTotal = 0; for (Long long1 :
+		 * winnerDamage.getPlayerKills().values()) { nbKillTotal += long1; }
+		 */
 
 		// If not enough kill no reward
-		/*if(nbKillTotal <= SIEGE_BOSS_MIN_KILL){
-			if (LoggingConfig.LOG_SIEGE) {	
-				log.info("[SIEGE] > [FORTRESS:" + getSiegeLocationId() + "] [RACE: " + getSiegeLocation().getRace() + "] Legion No defence");
-			}
-			return;
-		}*/
+		/*
+		 * if(nbKillTotal <= SIEGE_BOSS_MIN_KILL){ if (LoggingConfig.LOG_SIEGE) {
+		 * log.info("[SIEGE] > [FORTRESS:" + getSiegeLocationId() + "] [RACE: " +
+		 * getSiegeLocation().getRace() + "] Legion No defence"); } return; }
+		 */
 
 		List<SiegeLegionReward> legionRewards = getSiegeLocation().getLegionReward();
 		int legionBGeneral = LegionService.getInstance().getLegionBGeneral(getSiegeLocation().getLegionId());
 		if (legionBGeneral != 0) {
 			PlayerCommonData BGeneral = DAOManager.getDAO(PlayerDAO.class).loadPlayerCommonData(legionBGeneral);
-			if (LoggingConfig.LOG_SIEGE) {	
-				log.info("[SIEGE] > [FORTRESS:" + getSiegeLocationId() + "] [RACE: " + getSiegeLocation().getRace() + "] Legion Reward in process... LegionId:" 
-				+ getSiegeLocation().getLegionId() + " General Name:" + BGeneral.getName());
+			if (LoggingConfig.LOG_SIEGE) {
+				log.info("[SIEGE] > [FORTRESS:" + getSiegeLocationId() + "] [RACE: " + getSiegeLocation().getRace()
+						+ "] Legion Reward in process... LegionId:" + getSiegeLocation().getLegionId()
+						+ " General Name:" + BGeneral.getName());
 			}
 			if (legionRewards != null) {
 				for (SiegeLegionReward medalsType : legionRewards) {
 					SystemMailService.getInstance().sendMail("SiegeService", BGeneral.getName(), "LegionReward",
-							"Successful defence", medalsType.getItemId(), medalsType.getCount() * SiegeConfig.SIEGE_MEDAL_RATE, 0,
-							false);
+							"Successful defence", medalsType.getItemId(),
+							medalsType.getCount() * SiegeConfig.SIEGE_MEDAL_RATE, 0, false);
 				}
 			}
 		}
@@ -308,15 +304,16 @@ public class FortressSiege extends Siege<FortressLocation> {
 
 	protected void giveRewardsToPlayers(SiegeRaceCounter winnerDamage) {
 
-		//  pic
-		if(!PlayerInfoContainer.error){
+		// pic
+		if (!PlayerInfoContainer.error) {
 			PlayerInfoContainer pic = winnerDamage.getPIC();
-			for(String ip  : pic._playerInfosByIp.keySet()){
+			for (String ip : pic._playerInfosByIp.keySet()) {
 				HashMap<String, PlayerInfoContainer.PlayerInfo> sameIP = pic._playerInfosByIp.get(ip);
-				if(sameIP.size() > 1){
-					log.warn("[SiegeReward] multiple reward on same IP found : "+ ip +" size : " + sameIP.size());
-					for(PlayerInfoContainer.PlayerInfo pi : sameIP.values())
-						log.warn("-----------------  Player Name :"  + pi._playerName + " Player account Name : " + pi._accountName);
+				if (sameIP.size() > 1) {
+					log.warn("[SiegeReward] multiple reward on same IP found : " + ip + " size : " + sameIP.size());
+					for (PlayerInfoContainer.PlayerInfo pi : sameIP.values())
+						log.warn("-----------------  Player Name :" + pi._playerName + " Player account Name : "
+								+ pi._accountName);
 				}
 			}
 		}
@@ -333,14 +330,14 @@ public class FortressSiege extends Siege<FortressLocation> {
 		for (SiegeReward topGrade : playerRewards) {
 			for (int rewardedPC = 0; i < topPlayersIds.size() && rewardedPC < topGrade.getTop(); ++i) {
 				Integer playerId = topPlayersIds.get(i);
-				
-				//no kill no reward
-				if(!playerKills.containsKey(playerId))
+
+				// no kill no reward
+				if (!playerKills.containsKey(playerId))
 					continue;
-				
+
 				++rewardedPC;
-				SystemMailService.getInstance().sendMail("SiegeService", playerNames.get(playerId), "SiegeReward", "Medal",
-						topGrade.getItemId(), topGrade.getCount() * SiegeConfig.SIEGE_MEDAL_RATE, 0, false);
+				SystemMailService.getInstance().sendMail("SiegeService", playerNames.get(playerId), "SiegeReward",
+						"Medal", topGrade.getItemId(), topGrade.getCount() * SiegeConfig.SIEGE_MEDAL_RATE, 0, false);
 			}
 		}
 	}

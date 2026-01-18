@@ -35,15 +35,15 @@ public class PetMoodService {
 
 	public static void checkMood(Pet pet, int type, int shuggleEmotion) {
 		switch (type) {
-			case 0:
-				startCheckingMood(pet);
-				break;
-			case 1:
-				interactWithPet(pet, shuggleEmotion);
-				break;
-			case 3:
-				requestPresent(pet);
-				break;
+		case 0:
+			startCheckingMood(pet);
+			break;
+		case 1:
+			interactWithPet(pet, shuggleEmotion);
+			break;
+		case 3:
+			requestPresent(pet);
+			break;
 		}
 	}
 

@@ -44,14 +44,14 @@ public class PvPArenaPlayerReward extends InstancePlayerReward {
 	private int lifeSerum;
 	private long logoutTime;
 	private boolean isRewarded = false;
-	//private InstanceBuff boostMorale;
+	// private InstanceBuff boostMorale;
 
-	public PvPArenaPlayerReward(Player player, int timeBonus/*, byte buffId*/) {
+	public PvPArenaPlayerReward(Player player, int timeBonus/* , byte buffId */) {
 		super(player);
 		super.addPoints(13000);
 		this.timeBonus = timeBonus;
 		timeBonusModifier = ((float) this.timeBonus / (float) 660000);
-		//boostMorale = new InstanceBuff(buffId);
+		// boostMorale = new InstanceBuff(buffId);
 	}
 
 	public int getPosition() {
@@ -108,7 +108,7 @@ public class PvPArenaPlayerReward extends InstancePlayerReward {
 	}
 
 	public float getParticipation() {
-		return /*(float) getTimeBonus() / timeBonus*/0;
+		return /* (float) getTimeBonus() / timeBonus */0;
 	}
 
 	public int getBasicCrucible() {
@@ -200,26 +200,21 @@ public class PvPArenaPlayerReward extends InstancePlayerReward {
 	}
 
 	public int getScorePoints() {
-		return getPoints();//timeBonus + getPoints();
+		return getPoints();// timeBonus + getPoints();
 	}
 
-	/*public boolean hasBoostMorale() {
-		return boostMorale.hasInstanceBuff();
-	}
+	/*
+	 * public boolean hasBoostMorale() { return boostMorale.hasInstanceBuff(); }
+	 * 
+	 * public void applyBoostMoraleEffect(Player player) {
+	 * boostMorale.applyEffect(player, 25000); }
+	 * 
+	 * public void endBoostMoraleEffect(Player player) {
+	 * boostMorale.endEffect(player); }
+	 */
 
-	public void applyBoostMoraleEffect(Player player) {
-		boostMorale.applyEffect(player, 25000);
-	}
-
-	public void endBoostMoraleEffect(Player player) {
-		boostMorale.endEffect(player);
-	}*/
-
-	/*public int getRemaningTime() {
-		int time = boostMorale.getRemaningTime();
-		if (time >= 0 && time < 25) {
-			return 25 - time;
-		}
-		return 0;
-	}*/
+	/*
+	 * public int getRemaningTime() { int time = boostMorale.getRemaningTime(); if
+	 * (time >= 0 && time < 25) { return 25 - time; } return 0; }
+	 */
 }

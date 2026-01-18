@@ -16,6 +16,11 @@
  */
 package com.aionemu.gameserver.model.templates.item.actions;
 
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlType;
+
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerAppearanceDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -26,10 +31,6 @@ import com.aionemu.gameserver.model.templates.cosmeticitems.CosmeticItemTemplate
 import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_INFO;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import javax.xml.bind.annotation.XmlAccessType;
-import javax.xml.bind.annotation.XmlAccessorType;
-import javax.xml.bind.annotation.XmlAttribute;
-import javax.xml.bind.annotation.XmlType;
 
 /**
  *
@@ -67,32 +68,23 @@ public class CosmeticItemAction extends AbstractItemAction {
 		int id = template.getId();
 		if (type.equals("hair_color")) {
 			playerAppearance.setHairRGB(id);
-		}
-		else if (type.equals("face_color")) {
+		} else if (type.equals("face_color")) {
 			playerAppearance.setSkinRGB(id);
-		}
-		else if (type.equals("lip_color")) {
+		} else if (type.equals("lip_color")) {
 			playerAppearance.setLipRGB(id);
-		}
-		else if (type.equals("eye_color")) {
+		} else if (type.equals("eye_color")) {
 			playerAppearance.setEyeRGB(id);
-		}
-		else if (type.equals("hair_type")) {
+		} else if (type.equals("hair_type")) {
 			playerAppearance.setHair(id);
-		}
-		else if (type.equals("face_type")) {
+		} else if (type.equals("face_type")) {
 			playerAppearance.setFace(id);
-		}
-		else if (type.equals("voice_type")) {
+		} else if (type.equals("voice_type")) {
 			playerAppearance.setVoice(id);
-		}
-		else if (type.equals("makeup_type")) {
+		} else if (type.equals("makeup_type")) {
 			playerAppearance.setTattoo(id);
-		}
-		else if (type.equals("tattoo_type")) {
+		} else if (type.equals("tattoo_type")) {
 			playerAppearance.setDeco(id);
-		}
-		else if (type.equals("preset_name")) {
+		} else if (type.equals("preset_name")) {
 			CosmeticItemTemplate.Preset preset = template.getPreset();
 			playerAppearance.setEyeRGB((preset.getEyeColor()));
 			playerAppearance.setLipRGB((preset.getLipColor()));

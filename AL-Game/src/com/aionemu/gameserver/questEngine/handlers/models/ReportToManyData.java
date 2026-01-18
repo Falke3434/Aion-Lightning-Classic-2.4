@@ -8,10 +8,10 @@ import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.ReportToMany;
+
+import javolution.util.FastMap;
 
 /**
  * @author Hilgert
@@ -46,8 +46,8 @@ public class ReportToManyData extends XMLQuest {
 			if (mi.getVar() > maxVar)
 				maxVar = mi.getVar();
 		}
-		ReportToMany template = new ReportToMany(id, startItemId, startNpcId2, startNpcId, endNpc, endNpc2, NpcInfo, startDialog, endDialog,
-			maxVar);
+		ReportToMany template = new ReportToMany(id, startItemId, startNpcId2, startNpcId, endNpc, endNpc2, NpcInfo,
+				startDialog, endDialog, maxVar);
 		questEngine.addQuestHandler(template);
 	}
 }

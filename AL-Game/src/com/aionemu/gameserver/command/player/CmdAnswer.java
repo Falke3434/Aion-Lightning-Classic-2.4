@@ -16,7 +16,7 @@ public class CmdAnswer extends BaseCommand {
 			showHelp(player);
 			return;
 		}
-		
+
 		if (player.getWorldId() == 510010000 || player.getWorldId() == 520010000) {
 			PacketSendUtility.sendMessage(player, "You can't use this command on prison.");
 			return;
@@ -24,7 +24,7 @@ public class CmdAnswer extends BaseCommand {
 
 		if (wedding == null)
 			PacketSendUtility.sendMessage(player, "Wedding not started.");
-		
+
 		if (params[0].equalsIgnoreCase("yes")) {
 			PacketSendUtility.sendMessage(player, "You accept.");
 			WeddingService.getInstance().acceptWedding(player);

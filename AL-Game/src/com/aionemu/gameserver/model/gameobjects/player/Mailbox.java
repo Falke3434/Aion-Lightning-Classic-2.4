@@ -22,12 +22,12 @@ import java.util.Map;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.gameobjects.Letter;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_MAIL_SERVICE;
 import com.aionemu.gameserver.services.MailService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+
+import javolution.util.FastMap;
 
 /**
  * @author kosyachok
@@ -79,7 +79,7 @@ public class Mailbox {
 		}
 		return letters;
 	}
-	
+
 	/**
 	 * Get all Express letters only in mailbox (sorted according to time received)
 	 * 
@@ -100,7 +100,7 @@ public class Mailbox {
 		});
 
 		for (Letter letter : mails.values()) {
-			if(letter.isExpress())
+			if (letter.isExpress())
 				letters.add(letter);
 		}
 		return letters;
@@ -128,8 +128,8 @@ public class Mailbox {
 		}
 		return false;
 	}
-	
-	public final int getUnreadCount(){
+
+	public final int getUnreadCount() {
 		int unreadCount = 0;
 		for (Letter letter : mails.values()) {
 			if (letter.isUnread())
@@ -145,8 +145,8 @@ public class Mailbox {
 		}
 		return false;
 	}
-	
-	public final int getUnreadExpressCount(){
+
+	public final int getUnreadExpressCount() {
 		int expressCount = 0;
 		for (Letter letter : mails.values()) {
 			if (letter.isUnread() && letter.isExpress())
@@ -185,16 +185,15 @@ public class Mailbox {
 				if (haveFreeSlots()) {
 					mails.put(letter.getObjectId(), letter);
 					reserveMail.remove(letter.getObjectId());
-				}
-				else
+				} else
 					break;
 			}
 			MailService.getInstance().refreshMail(getOwner());
 		}
 	}
-	
-	public void sendMailList(){
-		if(!isMailListSent){
+
+	public void sendMailList() {
+		if (!isMailListSent) {
 			isMailListSent = true;
 			PacketSendUtility.sendPacket(owner, new SM_MAIL_SERVICE(owner, getLetters()));
 		}

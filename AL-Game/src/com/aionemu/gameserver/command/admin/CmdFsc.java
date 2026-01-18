@@ -10,7 +10,6 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  * @author Luno
  */
 public class CmdFsc extends BaseCommand {
-	
 
 	public void execute(Player admin, String... params) {
 		if (params.length < 4) {

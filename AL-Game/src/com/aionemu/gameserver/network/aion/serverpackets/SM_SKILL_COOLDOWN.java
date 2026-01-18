@@ -19,46 +19,53 @@ package com.aionemu.gameserver.network.aion.serverpackets;
 import java.util.ArrayList;
 import java.util.Map;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
+import com.aionemu.gameserver.skillengine.model.SkillTemplate;
 
-/**
- * @author ATracer, nrg
- */
+import javolution.util.FastMap;
+
 public class SM_SKILL_COOLDOWN extends AionServerPacket {
 
-	private FastMap<Integer, Long> cooldowns;
+	private Map<Integer, Long> cooldowns;
+	private boolean reset;
 
-	public SM_SKILL_COOLDOWN(FastMap<Integer, Long> cooldowns) {
+	public SM_SKILL_COOLDOWN(FastMap<Integer, Long> cooldowns, boolean reset) {
 		this.cooldowns = cooldowns;
+		this.reset = reset;
 	}
 
-	/**
-	 * {@inheritDoc}
-	 */
+	public SM_SKILL_COOLDOWN(Map<Integer, Long> cooldowns) {
+		this.cooldowns = cooldowns;
+		this.reset = false;
+	}
+
 	@Override
 	protected void writeImpl(AionConnection con) {
-        writeH(calculateSize());
-        long currentTime = System.currentTimeMillis();
-        for (Map.Entry<Integer, Long> entry : cooldowns.entrySet()) {
-            int left = Math.round((entry.getValue() - currentTime) / 1000);
-            ArrayList<Integer> skillsWithCooldown = DataManager.SKILL_DATA.getSkillsForCooldownId(entry.getKey());
+		this.writeH(this.calculateSize());
+		this.writeC(this.reset ? 1 : 0);
+		long currentTime = System.currentTimeMillis();
+		for (Map.Entry<Integer, Long> entry : cooldowns.entrySet()) {
+			int left = Math.round((entry.getValue() - currentTime) / 1000);
+			ArrayList<Integer> skillsWithCooldown = DataManager.SKILL_DATA.getSkillsForCooldownId(entry.getKey());
 
-            for (int index = 0; index < skillsWithCooldown.size(); index++) {
-                writeH(skillsWithCooldown.get(index));
-                writeD(left > 0 ? left : 0);       
-            }
-        }
+			for (int index = 0; index < skillsWithCooldown.size(); index++) {
+				int skillId = skillsWithCooldown.get(index);
+				SkillTemplate skillTemplate = DataManager.SKILL_DATA.getSkillTemplate(skillId);
+				int cooldown = skillTemplate.getCooldown();
+				this.writeH(skillId);
+				this.writeD(left > 0 ? left : 0);
+				this.writeD(cooldown * 100);
+			}
+		}
 	}
-	
-    private int calculateSize() {
-        int size = 0;
-        for(Map.Entry<Integer, Long> entry : cooldowns.entrySet()) {
-            size += DataManager.SKILL_DATA.getSkillsForCooldownId(entry.getKey()).size();
-        }
-        return size;
-    }
+
+	private int calculateSize() {
+		int size = 0;
+		for (Map.Entry<Integer, Long> entry : cooldowns.entrySet()) {
+			size += DataManager.SKILL_DATA.getSkillsForCooldownId(entry.getKey()).size();
+		}
+		return size;
+	}
 }

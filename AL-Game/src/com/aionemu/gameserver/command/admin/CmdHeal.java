@@ -14,9 +14,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_STATUPDATE_EXP;
 import com.aionemu.gameserver.skillengine.model.SkillTargetSlot;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 public class CmdHeal extends BaseCommand {
-
 
 	public void execute(Player player, String... params) {
 		VisibleObject target = player.getTarget();
@@ -36,27 +34,23 @@ public class CmdHeal extends BaseCommand {
 			creature.getLifeStats().increaseMp(TYPE.MP, creature.getLifeStats().getMaxMp() + 1);
 			creature.getEffectController().removeAbnormalEffectsByTargetSlot(SkillTargetSlot.SPEC2);
 			PacketSendUtility.sendMessage(player, creature.getName() + " has been refreshed !");
-		}
-		else if (params[0].equals("dp") && creature instanceof Player) {
+		} else if (params[0].equals("dp") && creature instanceof Player) {
 			Player targetPlayer = (Player) creature;
 			targetPlayer.getCommonData().setDp(targetPlayer.getGameStats().getMaxDp().getCurrent());
 			PacketSendUtility.sendMessage(player, targetPlayer.getName() + " is now full of DP !");
-		}
-		else if (params[0].equals("fp") && creature instanceof Player) {
+		} else if (params[0].equals("fp") && creature instanceof Player) {
 			Player targetPlayer = (Player) creature;
 			targetPlayer.getLifeStats().setCurrentFp(targetPlayer.getLifeStats().getMaxFp());
 			PacketSendUtility.sendMessage(player, targetPlayer.getName() + " FP has been fully refreshed !");
-		}
-		else if (params[0].equals("repose") && creature instanceof Player) {
+		} else if (params[0].equals("repose") && creature instanceof Player) {
 			Player targetPlayer = (Player) creature;
 			PlayerCommonData pcd = targetPlayer.getCommonData();
 			pcd.setCurrentReposteEnergy(pcd.getMaxReposteEnergy());
-			PacketSendUtility.sendMessage(player, targetPlayer.getName() + " Reposte Energy has been fully refreshed !");
-			PacketSendUtility.sendPacket(targetPlayer,
-					new SM_STATUPDATE_EXP(pcd.getExpShown(), pcd.getExpRecoverable(), pcd.getExpNeed(), pcd
-							.getCurrentReposteEnergy(), pcd.getMaxReposteEnergy()));
-		}
-		else if (params.length ==3) {
+			PacketSendUtility.sendMessage(player,
+					targetPlayer.getName() + " Reposte Energy has been fully refreshed !");
+			PacketSendUtility.sendPacket(targetPlayer, new SM_STATUPDATE_EXP(pcd.getExpShown(), pcd.getExpRecoverable(),
+					pcd.getExpNeed(), pcd.getCurrentReposteEnergy(), pcd.getMaxReposteEnergy()));
+		} else if (params.length == 3) {
 			int hp;
 			try {
 				String percent = params[2];
@@ -72,13 +66,12 @@ public class CmdHeal extends BaseCommand {
 						value = (int) (hp / 100f * cls.getMaxHp());
 					else
 						value = cls.getMaxHp();
-				}
-				else
+				} else
 					value = ParseInteger(params[2]);
 				cls.increaseHp(TYPE.HP, value);
-				PacketSendUtility.sendMessage(player, creature.getName() + " has been healed for " + value +" health points!");
-			}
-			catch (Exception ex) {
+				PacketSendUtility.sendMessage(player,
+						creature.getName() + " has been healed for " + value + " health points!");
+			} catch (Exception ex) {
 				showHelp(player);
 			}
 		}

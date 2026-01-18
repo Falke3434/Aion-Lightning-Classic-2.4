@@ -34,7 +34,6 @@ public class Point2D {
 	@XmlAttribute(name = "x")
 	protected float x;
 
-	
 	/**
 	 * @param x
 	 * @param y
@@ -47,7 +46,6 @@ public class Point2D {
 	public Point2D() {
 		super();
 	}
-
 
 	/**
 	 * @return the y

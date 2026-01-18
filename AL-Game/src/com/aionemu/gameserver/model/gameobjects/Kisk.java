@@ -53,7 +53,8 @@ public class Kisk extends SummonedObject {
 	 * @param spawnTemplate
 	 * @param objectTemplate
 	 */
-	public Kisk(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate npcTemplate, Player owner) {
+	public Kisk(int objId, NpcController controller, SpawnTemplate spawnTemplate, NpcTemplate npcTemplate,
+			Player owner) {
 		super(objId, controller, spawnTemplate, npcTemplate, npcTemplate.getLevel());
 
 		this.kiskStatsTemplate = npcTemplate.getKiskStatsTemplate();
@@ -152,37 +153,37 @@ public class Kisk extends SummonedObject {
 		if (!playerName.equals(getCreatorName())) {
 			// Check if they fit the usemask
 			switch (this.getUseMask()) {
-				case 1: // Race
-					if (this.ownerRace == player.getRace())
-						return false;
-					break;
-
-				case 2: // Legion
-					if (ownerLegion == null)
-						return false;
-					if (!ownerLegion.isMember(player.getObjectId()))
-						return false;
-					break;
-
-				case 3: // Solo
-					return false; // Already Checked Name
-
-				case 4: // Group (PlayerGroup or PlayerAllianceGroup)
-					boolean isMember = false;
-					if(player.isInTeam()){
-						isMember = player.getCurrentGroup().hasMember(getCreatorId());
-					}
-					if (isMember == false)
-						return false;
-					break;
-
-				case 5: // Alliance
-						if (!player.isInAlliance2() || !player.getPlayerAlliance2().hasMember(getCreatorId()))
-							return false;
-					break;
-
-				default:
+			case 1: // Race
+				if (this.ownerRace == player.getRace())
 					return false;
+				break;
+
+			case 2: // Legion
+				if (ownerLegion == null)
+					return false;
+				if (!ownerLegion.isMember(player.getObjectId()))
+					return false;
+				break;
+
+			case 3: // Solo
+				return false; // Already Checked Name
+
+			case 4: // Group (PlayerGroup or PlayerAllianceGroup)
+				boolean isMember = false;
+				if (player.isInTeam()) {
+					isMember = player.getCurrentGroup().hasMember(getCreatorId());
+				}
+				if (isMember == false)
+					return false;
+				break;
+
+			case 5: // Alliance
+				if (!player.isInAlliance2() || !player.getPlayerAlliance2().hasMember(getCreatorId()))
+					return false;
+				break;
+
+			default:
+				return false;
 			}
 		}
 

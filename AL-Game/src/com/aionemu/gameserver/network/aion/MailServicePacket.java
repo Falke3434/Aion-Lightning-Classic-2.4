@@ -30,6 +30,7 @@ import com.aionemu.gameserver.network.aion.iteminfo.ItemInfoBlob;
 public abstract class MailServicePacket extends AionServerPacket {
 
 	protected Player player;
+
 	/**
 	 * @param player
 	 */
@@ -40,7 +41,7 @@ public abstract class MailServicePacket extends AionServerPacket {
 	protected void writeLettersList(Collection<Letter> letters, Player player) {
 		writeD(player.getObjectId());
 		writeC(0);
-		writeH(-letters.size());//-loop cnt [stupid nc shit!]
+		writeH(-letters.size());// -loop cnt [stupid nc shit!]
 
 		for (Letter letter : letters) {
 			writeD(letter.getObjectId());
@@ -50,13 +51,12 @@ public abstract class MailServicePacket extends AionServerPacket {
 			if (letter.getAttachedItem() != null) {
 				writeD(letter.getAttachedItem().getObjectId());
 				writeD(letter.getAttachedItem().getItemTemplate().getTemplateId());
-			}
-			else {
+			} else {
 				writeD(0);
 				writeD(0);
 			}
 			writeQ(letter.getAttachedKinah());
-			writeC(letter.isExpress()? 1 : 0);
+			writeC(letter.isExpress() ? 1 : 0);
 		}
 	}
 
@@ -87,14 +87,13 @@ public abstract class MailServicePacket extends AionServerPacket {
 
 			writeD(item.getObjectId());
 			writeD(itemTemplate.getTemplateId());
-			writeD(1);//unk
-			writeD(0);//unk
+			writeD(1);// unk
+			writeD(0);// unk
 			writeNameId(itemTemplate.getNameId());
 
 			ItemInfoBlob itemInfoBlob = ItemInfoBlob.getFullBlob(player, item);
 			itemInfoBlob.writeMe(getBuf());
-		}
-		else {
+		} else {
 			writeQ(0);
 			writeQ(0);
 			writeD(0);
@@ -117,7 +116,7 @@ public abstract class MailServicePacket extends AionServerPacket {
 		writeMailboxState(totalCount, unreadCount, expressCount);
 
 		writeH(letterIds.length);
-		for(int letterId : letterIds)
+		for (int letterId : letterIds)
 			writeD(letterId);
 	}
 }

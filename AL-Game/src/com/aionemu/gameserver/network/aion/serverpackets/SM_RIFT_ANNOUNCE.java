@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.controllers.RiftController;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -31,13 +30,14 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 	private Race race;
 	private RiftController rift;
 	private int objectId;
+
 	/**
 	 * Rift announce packet
 	 * 
 	 * @param player
 	 */
 	public SM_RIFT_ANNOUNCE(Race race) {
-		
+
 		this.race = race;
 		this.actionId = 0;
 	}
@@ -48,21 +48,21 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 	 * @param player
 	 */
 	public SM_RIFT_ANNOUNCE(RiftController rift, boolean isMaster) {
-		
+
 		this.rift = rift;
 		if (isMaster)
 			this.actionId = 2;
 		else
 			this.actionId = 3;
 	}
-	
+
 	/**
 	 * Rift despawn
 	 * 
 	 * @param objectId
 	 */
 	public SM_RIFT_ANNOUNCE(int objectId) {
-		
+
 		this.objectId = objectId;
 		this.actionId = 4;
 	}
@@ -72,43 +72,43 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 	 */
 	@Override
 	protected void writeImpl(AionConnection con) {
-		switch (actionId){
-			case 0: //announce
-				writeH(0x09);
-				writeC(actionId);
-				switch (race){
-					case ASMODIANS:
-						writeD(1);
-						writeD(0);
-						break;
-					case ELYOS:
-						writeD(1);
-						writeD(0);
-						break;
-				}
+		switch (actionId) {
+		case 0: // announce
+			writeH(0x09);
+			writeC(actionId);
+			switch (race) {
+			case ASMODIANS:
+				writeD(1);
+				writeD(0);
 				break;
-			case 2:
-				writeH(0x21);
-				writeC(actionId);
-				writeD(rift.getOwner().getObjectId());
-				writeD(rift.getMaxEntries()-rift.getUsedEntries());
-				writeD(rift.getRemainTime());
-				writeD(rift.getMinLevel());
-				writeD(rift.getMaxLevel());
-				writeF(rift.getOwner().getX());
-				writeF(rift.getOwner().getY());
-				writeF(rift.getOwner().getZ());
+			case ELYOS:
+				writeD(1);
+				writeD(0);
 				break;
-			case 3:
-				writeH(0x0D);
-				writeC(actionId);
-				writeD(rift.getOwner().getObjectId());
-				writeD(rift.getUsedEntries());
-				writeD(rift.getRemainTime());
-			case 4:
-				writeH(0x05);
-				writeC(actionId);
-				writeD(objectId);
+			}
+			break;
+		case 2:
+			writeH(0x21);
+			writeC(actionId);
+			writeD(rift.getOwner().getObjectId());
+			writeD(rift.getMaxEntries() - rift.getUsedEntries());
+			writeD(rift.getRemainTime());
+			writeD(rift.getMinLevel());
+			writeD(rift.getMaxLevel());
+			writeF(rift.getOwner().getX());
+			writeF(rift.getOwner().getY());
+			writeF(rift.getOwner().getZ());
+			break;
+		case 3:
+			writeH(0x0D);
+			writeC(actionId);
+			writeD(rift.getOwner().getObjectId());
+			writeD(rift.getUsedEntries());
+			writeD(rift.getRemainTime());
+		case 4:
+			writeH(0x05);
+			writeC(actionId);
+			writeD(objectId);
 		}
 	}
 }

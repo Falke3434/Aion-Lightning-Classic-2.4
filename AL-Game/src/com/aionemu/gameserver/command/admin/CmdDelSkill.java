@@ -14,8 +14,7 @@ import com.aionemu.gameserver.world.World;
  * @author xTz
  */
 public class CmdDelSkill extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length < 2 || params.length > 3) {
 			showHelp(admin);
@@ -39,8 +38,7 @@ public class CmdDelSkill extends BaseCommand {
 			else {
 				try {
 					skillId = ParseInteger(params[2]);
-				}
-				catch (NumberFormatException e) {
+				} catch (NumberFormatException e) {
 					PacketSendUtility.sendMessage(admin, "Param 1 must be an integer or <all>.");
 					return;
 				}
@@ -66,8 +64,7 @@ public class CmdDelSkill extends BaseCommand {
 				else {
 					try {
 						skillId = ParseInteger(params[1]);
-					}
-					catch (NumberFormatException e) {
+					} catch (NumberFormatException e) {
 						PacketSendUtility.sendMessage(admin, "Param 0 must be an integer or <all>.");
 						return;
 					}
@@ -77,8 +74,7 @@ public class CmdDelSkill extends BaseCommand {
 				}
 				if (target instanceof Player)
 					apply(admin, player, skillId, playerSkillList);
-			}
-			else
+			} else
 				PacketSendUtility.sendMessage(admin, "This command can only be used on a player !");
 		}
 	}
@@ -99,8 +95,7 @@ public class CmdDelSkill extends BaseCommand {
 		if (skillId != 0) {
 			SkillLearnService.removeSkill(player, skillId);
 			PacketSendUtility.sendMessage(admin, "You have successfully deleted the specified skill.");
-		}
-		else {
+		} else {
 			for (PlayerSkillEntry skillEntry : playerSkillList.getAllSkills()) {
 				if (!skillEntry.isStigma()) {
 					SkillLearnService.removeSkill(player, skillEntry.getSkillId());

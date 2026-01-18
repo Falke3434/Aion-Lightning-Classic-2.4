@@ -16,6 +16,11 @@
  */
 package com.aionemu.gameserver;
 
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.services.CronService;
 import com.aionemu.commons.utils.ExitCode;
 import com.aionemu.commons.utils.concurrent.RunnableStatsManager;
@@ -29,9 +34,6 @@ import com.aionemu.gameserver.services.player.PlayerLeaveWorldService;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.gametime.GameTimeManager;
 import com.aionemu.gameserver.world.World;
-import java.util.Iterator;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 /**
  * @author lord_rex
@@ -48,16 +50,13 @@ public class ShutdownHook extends Thread {
 	public void run() {
 		if (ShutdownConfig.HOOK_MODE == 1) {
 			shutdownHook(ShutdownConfig.HOOK_DELAY, ShutdownConfig.ANNOUNCE_INTERVAL, ShutdownMode.SHUTDOWN);
-		}
-		else if (ShutdownConfig.HOOK_MODE == 2) {
+		} else if (ShutdownConfig.HOOK_MODE == 2) {
 			shutdownHook(ShutdownConfig.HOOK_DELAY, ShutdownConfig.ANNOUNCE_INTERVAL, ShutdownMode.RESTART);
 		}
 	}
 
 	public static enum ShutdownMode {
-		NONE("terminating"),
-		SHUTDOWN("shutting down"),
-		RESTART("restarting");
+		NONE("terminating"), SHUTDOWN("shutting down"), RESTART("restarting");
 
 		private final String text;
 
@@ -78,10 +77,10 @@ public class ShutdownHook extends Thread {
 			while (onlinePlayers.hasNext()) {
 				Player player = onlinePlayers.next();
 				if (player != null && player.getClientConnection() != null)
-					player.getClientConnection().sendPacket(SM_SYSTEM_MESSAGE.STR_SERVER_SHUTDOWN(String.valueOf(seconds)));
+					player.getClientConnection()
+							.sendPacket(SM_SYSTEM_MESSAGE.STR_SERVER_SHUTDOWN(String.valueOf(seconds)));
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 	}
@@ -96,8 +95,7 @@ public class ShutdownHook extends Thread {
 				if (player != null && player.getClientConnection() != null)
 					player.getController().setInShutdownProgress(status);
 			}
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error(e.getMessage());
 		}
 	}
@@ -109,20 +107,17 @@ public class ShutdownHook extends Thread {
 					log.info("Runtime is " + mode.getText() + " in " + i + " seconds.");
 					sendShutdownMessage(i);
 					sendShutdownStatus(ShutdownConfig.SAFE_REBOOT);
-				}
-				else {
+				} else {
 					log.info("Runtime is " + mode.getText() + " now ...");
 					break; // fast exit.
 				}
 
 				if (i > interval) {
 					sleep(interval * 1000);
-				}
-				else {
+				} else {
 					sleep(i * 1000);
 				}
-			}
-			catch (InterruptedException e) {
+			} catch (InterruptedException e) {
 				return;
 			}
 		}
@@ -137,8 +132,7 @@ public class ShutdownHook extends Thread {
 			Player activePlayer = onlinePlayers.next();
 			try {
 				PlayerLeaveWorldService.startLeaveWorld(activePlayer);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.error("Error while saving player " + e.getMessage());
 			}
 		}

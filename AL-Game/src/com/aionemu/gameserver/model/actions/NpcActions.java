@@ -23,7 +23,7 @@ import com.aionemu.gameserver.model.gameobjects.Npc;
  */
 public class NpcActions extends CreatureActions {
 
-    public static void scheduleRespawn(Npc npc) {
-        npc.getController().scheduleRespawn();
-    }
+	public static void scheduleRespawn(Npc npc) {
+		npc.getController().scheduleRespawn();
+	}
 }

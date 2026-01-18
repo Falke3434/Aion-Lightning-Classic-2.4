@@ -9,12 +9,12 @@ import com.aionemu.gameserver.services.ItemRemodelService;
  */
 public class CmdPreview extends BaseCommand {
 
-    public void execute(Player player, String... params) {
-        if (params.length != 1) {
-            showHelp(player);
-            return;
-        }
+	public void execute(Player player, String... params) {
+		if (params.length != 1) {
+			showHelp(player);
+			return;
+		}
 
-        ItemRemodelService.commandPreviewRemodelItem(player, ParseInteger(params[0]), 15);
-    }
+		ItemRemodelService.commandPreviewRemodelItem(player, ParseInteger(params[0]), 15);
+	}
 }

@@ -120,8 +120,7 @@ public final class QuestService {
 		}
 		if (!template.getRewards().isEmpty() || !template.getBonus().isEmpty()) {
 			return giveRewardAndFinish(env, template, false, reward);
-		}
-		else {
+		} else {
 			return setFinishingState(env, template, reward);
 		}
 	}
@@ -133,8 +132,7 @@ public final class QuestService {
 		Rewards rewards;
 		if (extended) {
 			rewards = template.getExtendedRewards().get(reward);
-		}
-		else {
+		} else {
 			rewards = template.getRewards().get(reward);
 		}
 		questItems.addAll(rewards.getRewardItem());
@@ -145,70 +143,66 @@ public final class QuestService {
 				PlayerClass playerClass = player.getCommonData().getPlayerClass();
 				int selRewIndex = dialogId - 8;
 				switch (playerClass) {
-					case ASSASSIN: {
-						classRewardItem = getQuestItemsbyClass(id, template.getAssassinSelectableReward(), selRewIndex);
-						break;
-					}
-					case CHANTER: {
-						classRewardItem = getQuestItemsbyClass(id, template.getChanterSelectableReward(), selRewIndex);
-						break;
-					}
-					case CLERIC: {
-						classRewardItem = getQuestItemsbyClass(id, template.getPriestSelectableReward(), selRewIndex);
-						break;
-					}
-					case GLADIATOR: {
-						classRewardItem = getQuestItemsbyClass(id, template.getFighterSelectableReward(), selRewIndex);
-						break;
-					}
-					case RANGER: {
-						classRewardItem = getQuestItemsbyClass(id, template.getRangerSelectableReward(), selRewIndex);
-						break;
-					}
-					case SORCERER: {
-						classRewardItem = getQuestItemsbyClass(id, template.getWizardSelectableReward(), selRewIndex);
-						break;
-					}
-					case SPIRIT_MASTER: {
-						classRewardItem = getQuestItemsbyClass(id, template.getElementalistSelectableReward(), selRewIndex);
-						break;
-					}
-					case TEMPLAR: {
-						classRewardItem = getQuestItemsbyClass(id, template.getKnightSelectableReward(), selRewIndex);
-						break;
-					}
+				case ASSASSIN: {
+					classRewardItem = getQuestItemsbyClass(id, template.getAssassinSelectableReward(), selRewIndex);
+					break;
+				}
+				case CHANTER: {
+					classRewardItem = getQuestItemsbyClass(id, template.getChanterSelectableReward(), selRewIndex);
+					break;
+				}
+				case CLERIC: {
+					classRewardItem = getQuestItemsbyClass(id, template.getPriestSelectableReward(), selRewIndex);
+					break;
+				}
+				case GLADIATOR: {
+					classRewardItem = getQuestItemsbyClass(id, template.getFighterSelectableReward(), selRewIndex);
+					break;
+				}
+				case RANGER: {
+					classRewardItem = getQuestItemsbyClass(id, template.getRangerSelectableReward(), selRewIndex);
+					break;
+				}
+				case SORCERER: {
+					classRewardItem = getQuestItemsbyClass(id, template.getWizardSelectableReward(), selRewIndex);
+					break;
+				}
+				case SPIRIT_MASTER: {
+					classRewardItem = getQuestItemsbyClass(id, template.getElementalistSelectableReward(), selRewIndex);
+					break;
+				}
+				case TEMPLAR: {
+					classRewardItem = getQuestItemsbyClass(id, template.getKnightSelectableReward(), selRewIndex);
+					break;
+				}
 				}
 				if (classRewardItem != null) {
 					questItems.add(classRewardItem);
 				}
-			}
-			else {
+			} else {
 				QuestItems selectebleRewardItem = null;
 				if (dialogId - 8 >= 0 && dialogId - 8 < rewards.getSelectableRewardItem().size()) {
 					selectebleRewardItem = rewards.getSelectableRewardItem().get(dialogId - 8);
-				}
-				else {
+				} else {
 					log.error("The SelectableRewardItem list has no element with the given index (dialogId - 8) of "
-						+ (dialogId - 8) + ". See quest id " + env.getQuestId());
+							+ (dialogId - 8) + ". See quest id " + env.getQuestId());
 				}
 				if (selectebleRewardItem != null) {
 					questItems.add(selectebleRewardItem);
 				}
 			}
-		}
-		else if (dialogId == 18 && extended && !rewards.getSelectableRewardItem().isEmpty()) {
+		} else if (dialogId == 18 && extended && !rewards.getSelectableRewardItem().isEmpty()) {
 			QuestItems selectebleRewardItem = null;
 			int index = env.getExtendedRewardIndex();
 			if (index - 8 >= 0 && index - 8 < rewards.getSelectableRewardItem().size()) {
 				selectebleRewardItem = rewards.getSelectableRewardItem().get(index - 8);
-			}
-			else if ((index - 1) >= 0 && (index - 1) < rewards.getSelectableRewardItem().size()) {
+			} else if ((index - 1) >= 0 && (index - 1) < rewards.getSelectableRewardItem().size()) {
 				selectebleRewardItem = rewards.getSelectableRewardItem().get(index - 1);
-			}
-			else {
-				log
-					.error("The extended SelectableRewardItem list has no element with the given index (extendedRewardIndex - 8) of "
-						+ (index - 8) + ". See quest id " + env.getQuestId() + ". The size is: " + rewards.getSelectableRewardItem().size());
+			} else {
+				log.error(
+						"The extended SelectableRewardItem list has no element with the given index (extendedRewardIndex - 8) of "
+								+ (index - 8) + ". See quest id " + env.getQuestId() + ". The size is: "
+								+ rewards.getSelectableRewardItem().size());
 			}
 			if (selectebleRewardItem != null) {
 				questItems.add(selectebleRewardItem);
@@ -229,33 +223,32 @@ public final class QuestService {
 		if (ItemService.addQuestItems(player, questItems)) {
 			if (rewards.getGold() != null) {
 				player.getInventory().increaseKinah((long) (player.getRates().getQuestKinahRate() * rewards.getGold()),
-					ItemUpdateType.INC_KINAH_QUEST);
+						ItemUpdateType.INC_KINAH_QUEST);
 			}
 			if (rewards.getExp() != null) {
 				NpcTemplate npcTemplate = DataManager.NPC_DATA.getNpcTemplate(env.getTargetId());
 				player.getCommonData().addExp(rewards.getExp(), RewardType.QUEST,
-					npcTemplate != null ? npcTemplate.getNameId() : 0);
+						npcTemplate != null ? npcTemplate.getNameId() : 0);
 			}
 			if (rewards.getTitle() != null) {
 				player.getTitleList().addTitle(rewards.getTitle(), true, 0);
 			}
 			if (rewards.getRewardAbyssPoint() != null) {
-				AbyssPointsService.addAp(player, (int) (player.getRates().getQuestApRate() * rewards.getRewardAbyssPoint()));
+				AbyssPointsService.addAp(player,
+						(int) (player.getRates().getQuestApRate() * rewards.getRewardAbyssPoint()));
 			}
 			if (rewards.getExtendInventory() != null) {
 				if (rewards.getExtendInventory() == 1) {
 					CubeExpandService.expand(player, false);
-				}
-				else if (rewards.getExtendInventory() == 2) {
+				} else if (rewards.getExtendInventory() == 2) {
 					WarehouseService.expand(player);
 				}
 			}
 			if (rewards.getExtendStigma() != null) {
-				//StigmaService.extendAdvancedStigmaSlots(player);
+				// StigmaService.extendAdvancedStigmaSlots(player);
 			}
 			return setFinishingState(env, template, reward);
-		}
-		else {
+		} else {
 			return false;
 		}
 	}
@@ -298,8 +291,7 @@ public final class QuestService {
 	private static QuestItems getQuestItemsbyClass(int id, List<QuestItems> classSelRew, int selRewIndex) {
 		if (selRewIndex >= 0 && selRewIndex < classSelRew.size()) {
 			return classSelRew.get(selRewIndex);
-		}
-		else {
+		} else {
 			log.error("Wrong selectable reward index " + selRewIndex + " for quest " + id);
 		}
 		return null;
@@ -308,21 +300,20 @@ public final class QuestService {
 	private static Timestamp countNextRepeatTime(Player player, QuestTemplate template) {
 		DateTime now = DateTime.now();
 		DateTime repeatDate;
-		if(now.getHourOfDay() < 9)	
-			 repeatDate = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 9, 0, 0).minusDays(1);
+		if (now.getHourOfDay() < 9)
+			repeatDate = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 9, 0, 0).minusDays(1);
 		else
-			 repeatDate = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 9, 0, 0);
+			repeatDate = new DateTime(now.getYear(), now.getMonthOfYear(), now.getDayOfMonth(), 9, 0, 0);
 		if (template.getRepeatCycle() == QuestRepeatCycle.ALL) {
 			if (now.isAfter(repeatDate))
 				repeatDate = repeatDate.plusHours(24);
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1400855, "9"));
-		}
-		else {
+		} else {
 			int daysToAdd = repeatDate.getDayOfWeek() - template.getRepeatCycle().ordinal();
-            if (daysToAdd <  0)
-                daysToAdd = Math.abs(daysToAdd);
-            else
-                daysToAdd = 7 - daysToAdd;
+			if (daysToAdd < 0)
+				daysToAdd = Math.abs(daysToAdd);
+			else
+				daysToAdd = 7 - daysToAdd;
 			repeatDate = repeatDate.plusDays(daysToAdd);
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1400857, new DescriptionId(1800663), "9"));
 		}
@@ -338,8 +329,7 @@ public final class QuestService {
 	public static boolean checkStartConditions(QuestEnv env) {
 		try {
 			return checkStartConditionsImpl(env);
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("QE: exception in checkStartCondition", ex);
 		}
 		return false;
@@ -356,8 +346,10 @@ public final class QuestService {
 			if (template.getRacePermitted() != player.getRace() && template.getRacePermitted() != Race.PC_ALL)
 				return false;
 
-		// min level - 2 so that the gray quest arrow shows when quest is almost available
-		// quest level will be checked again in QuestService.startQuest() when attempting to start
+		// min level - 2 so that the gray quest arrow shows when quest is almost
+		// available
+		// quest level will be checked again in QuestService.startQuest() when
+		// attempting to start
 		if ((player.getLevel() < template.getMinlevelPermitted() - 2) && (template.getMinlevelPermitted() != 99))
 			return false;
 
@@ -397,15 +389,14 @@ public final class QuestService {
 				skills.add(40004);
 				skills.add(40007);
 				skills.add(40008);
-			}
-			else {
+			} else {
 				skills.add(template.getCombineSkill());
 			}
 			boolean result = false;
 			for (int skillId : skills) {
 				PlayerSkillEntry skill = player.getSkillList().getSkillEntry(skillId);
 				if (skill != null && skill.getSkillLevel() >= template.getCombineSkillPoint()
-					&& skill.getSkillLevel() - 40 <= template.getCombineSkillPoint()) {
+						&& skill.getSkillLevel() - 40 <= template.getCombineSkillPoint()) {
 					result = true;
 					break;
 				}
@@ -426,6 +417,7 @@ public final class QuestService {
 
 	/*
 	 * Check the starting conditions and start a quest Reworked 12.06.2011
+	 * 
 	 * @author vlog
 	 */
 	public static boolean startQuest(QuestEnv env, QuestStatus status) {
@@ -449,7 +441,7 @@ public final class QuestService {
 		}
 
 		if (template.getCategory() != QuestCategory.EVENT && !checkQuestListSize(qsl)
-			&& !player.havePermission(MembershipConfig.QUEST_LIMIT_DISABLED)) {
+				&& !player.havePermission(MembershipConfig.QUEST_LIMIT_DISABLED)) {
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300622, template.getName()));
 			return false;
 		}
@@ -459,8 +451,7 @@ public final class QuestService {
 				return false;
 			}
 			qs.setStatus(status);
-		}
-		else {
+		} else {
 			player.getQuestStateList().addQuest(id, new QuestState(id, status, 0, 0, 0, null, 0, null));
 		}
 
@@ -475,6 +466,7 @@ public final class QuestService {
 
 	/*
 	 * Check the starting conditions and start a quest Reworked 12.06.2011
+	 * 
 	 * @author vlog
 	 */
 	public static boolean startQuest(QuestEnv env) {
@@ -486,7 +478,7 @@ public final class QuestService {
 	 * 
 	 * @param env
 	 * @param status
-	 *          START or LOCKED
+	 *            START or LOCKED
 	 */
 	public static void startMission(QuestEnv env, QuestStatus status) {
 		Player player = env.getPlayer();
@@ -520,7 +512,7 @@ public final class QuestService {
 
 		// Check permitted class
 		if (template.getClassPermitted().size() != 0
-			&& !template.getClassPermitted().contains(player.getCommonData().getPlayerClass()))
+				&& !template.getClassPermitted().contains(player.getCommonData().getPlayerClass()))
 			return false;
 
 		// Check permitted gender
@@ -540,15 +532,14 @@ public final class QuestService {
 				skills.add(40004);
 				skills.add(40007);
 				skills.add(40008);
-			}
-			else {
+			} else {
 				skills.add(template.getCombineSkill());
 			}
 			boolean result = false;
 			for (int skillId : skills) {
 				PlayerSkillEntry skill = player.getSkillList().getSkillEntry(skillId);
 				if (skill != null && skill.getSkillLevel() >= template.getCombineSkillPoint()
-					&& skill.getSkillLevel() - 40 <= template.getCombineSkillPoint()) {
+						&& skill.getSkillLevel() - 40 <= template.getCombineSkillPoint()) {
 					result = true;
 					break;
 				}
@@ -574,8 +565,7 @@ public final class QuestService {
 		if (qs == null) {
 			qs = new QuestState(template.getId(), questStatus, 0, 0, 0, null, 0, null);
 			player.getQuestStateList().addQuest(id, qs);
-		}
-		else {
+		} else {
 			if (template.getMaxRepeatCount() >= qs.getCompleteCount()) {
 				qs.setStatus(questStatus);
 				qs.setQuestVar(0);
@@ -588,6 +578,7 @@ public final class QuestService {
 
 	/*
 	 * Check the player's quest list size for starting a new one Issue #13 fix
+	 * 
 	 * @param quest state list
 	 */
 	private static boolean checkQuestListSize(QuestStateList qsl) {
@@ -621,8 +612,8 @@ public final class QuestService {
 
 		for (CollectItem collectItem : collectItems.getCollectItem()) {
 			int itemId = collectItem.getItemId();
-			long count = itemId == ItemId.KINAH.value() ? player.getInventory().getKinah() : player.getInventory()
-				.getItemCountByItemId(itemId);
+			long count = itemId == ItemId.KINAH.value() ? player.getInventory().getKinah()
+					: player.getInventory().getItemCountByItemId(itemId);
 			if (collectItem.getCount() > count)
 				return false;
 		}
@@ -639,12 +630,13 @@ public final class QuestService {
 	}
 
 	public static VisibleObject addNewSpawn(int worldId, int instanceId, int templateId, float x, float y, float z,
-		byte heading) {
-		return SpawnEngine
-			.spawnObject(SpawnEngine.addNewSingleTimeSpawn(worldId, templateId, x, y, z, heading), instanceId);
+			byte heading) {
+		return SpawnEngine.spawnObject(SpawnEngine.addNewSingleTimeSpawn(worldId, templateId, x, y, z, heading),
+				instanceId);
 	}
 
-	public static int getQuestDrop(Set<DropItem> dropItems, int index, Npc npc, Collection<Player> players, Player player) {
+	public static int getQuestDrop(Set<DropItem> dropItems, int index, Npc npc, Collection<Player> players,
+			Player player) {
 		Collection<QuestDrop> drops = getQuestDrop(npc.getNpcId());
 		if (drops.isEmpty()) {
 			return index;
@@ -663,8 +655,7 @@ public final class QuestService {
 							dropItems.add(regQuestDropItem(drop, index++, member.getObjectId()));
 						}
 					}
-				}
-				else {
+				} else {
 					for (Player member : players) {
 						if (isQuestDrop(member, drop)) {
 							pls.add(member);
@@ -684,8 +675,7 @@ public final class QuestService {
 					}
 					pls.clear();
 				}
-			}
-			else {
+			} else {
 				if (isQuestDrop(player, drop)) {
 					dropItems.add(regQuestDropItem(drop, index++, player.getObjectId()));
 				}
@@ -724,10 +714,10 @@ public final class QuestService {
 				return false;
 		}
 		if (drop instanceof HandlerSideDrop) {
-			if (((HandlerSideDrop) drop).getNeededAmount() <= player.getInventory().getItemCountByItemId(drop.getItemId())) {
+			if (((HandlerSideDrop) drop).getNeededAmount() <= player.getInventory()
+					.getItemCountByItemId(drop.getItemId())) {
 				return false;
-			}
-			else {
+			} else {
 				return true;
 			}
 		}
@@ -840,14 +830,13 @@ public final class QuestService {
 		if (questDrop.containsKey(npcId)) {
 			return questDrop.get(npcId);
 		}
-		return Collections.<QuestDrop> emptyList();
+		return Collections.<QuestDrop>emptyList();
 	}
 
 	public static void addQuestDrop(int npcId, QuestDrop drop) {
 		if (!questDrop.containsKey(npcId)) {
 			questDrop.put(npcId, drop);
-		}
-		else {
+		} else {
 			questDrop.get(npcId).add(drop);
 		}
 	}

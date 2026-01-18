@@ -16,6 +16,13 @@
  */
 package com.aionemu.gameserver.world;
 
+import java.util.Collection;
+import java.util.Collections;
+import java.util.Iterator;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.utils.GenericValidator;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.dataholders.PlayerInitialData.LocationData;
@@ -37,16 +44,10 @@ import com.aionemu.gameserver.world.knownlist.Visitor;
 import gnu.trove.map.hash.TIntObjectHashMap;
 import javolution.util.FastList;
 import javolution.util.FastMap;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.util.Collection;
-import java.util.Collections;
-import java.util.Iterator;
 
 /**
- * World object for storing and spawning, despawning etc players and other in-game objects. It also manage WorldMaps and
- * instances.
+ * World object for storing and spawning, despawning etc players and other
+ * in-game objects. It also manage WorldMaps and instances.
  * 
  * @author -Nemesiss-, Source, Wakizashi
  */
@@ -120,8 +121,7 @@ public class World {
 				synchronized (localSiegeNpcs) {
 					if (localSiegeNpcs.containsKey(siegeNpc.getSiegeId())) {
 						npcs = localSiegeNpcs.get(siegeNpc.getSiegeId());
-					}
-					else {
+					} else {
 						// We now have multi-threaded siege timers
 						// This should be thread-safe
 						npcs = new FastList<SiegeNpc>().shared();
@@ -175,7 +175,7 @@ public class World {
 
 	public Collection<SiegeNpc> getLocalSiegeNpcs(int locationId) {
 		Collection<SiegeNpc> result = localSiegeNpcs.get(locationId);
-		return result != null ? result : Collections.<SiegeNpc> emptySet();
+		return result != null ? result : Collections.<SiegeNpc>emptySet();
 	}
 
 	public Collection<Npc> getNpcs() {
@@ -186,7 +186,7 @@ public class World {
 	 * Finds player by player name.
 	 * 
 	 * @param name
-	 *          - name of player
+	 *            - name of player
 	 * @return Player
 	 */
 	public Player findPlayer(String name) {
@@ -197,7 +197,7 @@ public class World {
 	 * Finds player by player objectId.
 	 * 
 	 * @param objectId
-	 *          - objectId of player
+	 *            - objectId of player
 	 * @return Player
 	 */
 	public Player findPlayer(int objectId) {
@@ -208,7 +208,7 @@ public class World {
 	 * Finds VisibleObject by objectId.
 	 * 
 	 * @param objectId
-	 *          - objectId of AionOabject
+	 *            - objectId of AionOabject
 	 * @return AionObject
 	 */
 	public VisibleObject findVisibleObject(int objectId) {
@@ -229,7 +229,7 @@ public class World {
 	 * Return World Map by id
 	 * 
 	 * @param id
-	 *          - id of world map.
+	 *            - id of world map.
 	 * @return World map.
 	 */
 	public WorldMap getWorldMap(int id) {
@@ -243,8 +243,8 @@ public class World {
 	}
 
 	/**
-	 * Update position of VisibleObject [used when object is moving on one map instance]. Check if active map region
-	 * changed and do all needed updates.
+	 * Update position of VisibleObject [used when object is moving on one map
+	 * instance]. Check if active map region changed and do all needed updates.
 	 * 
 	 * @param object
 	 * @param newX
@@ -264,7 +264,7 @@ public class World {
 	 * @param newHeading
 	 */
 	public void updatePosition(VisibleObject object, float newX, float newY, float newZ, byte newHeading,
-		boolean updateKnownList) {
+			boolean updateKnownList) {
 		// prevent updating object position in despawned state
 		if (!object.isSpawned())
 			return;
@@ -272,13 +272,14 @@ public class World {
 		MapRegion oldRegion = object.getActiveRegion();
 		if (oldRegion == null) {
 			log.warn(String.format("CHECKPOINT: oldregion is null, object coordinates - %f %f %f", object.getX(),
-				object.getY(), object.getZ()));
+					object.getY(), object.getZ()));
 			return;
 		}
 
 		MapRegion newRegion = oldRegion.getParent().getRegion(newX, newY, newZ);
 		if (newRegion == null) {
-			log.warn(String.format("CHECKPOINT: newregion is null, object coordinates - %f %f %f", newX, newY, newZ), new Throwable());
+			log.warn(String.format("CHECKPOINT: newregion is null, object coordinates - %f %f %f", newX, newY, newZ),
+					new Throwable());
 			if (object instanceof Creature)
 				((Creature) object).getMoveController().abortMove();
 			if (object instanceof Player) {
@@ -294,10 +295,9 @@ public class World {
 					y = bplist.getY();
 					z = bplist.getZ();
 					h = bplist.getHeading();
-				}
-				else {
+				} else {
 					LocationData locationData = DataManager.PLAYER_INITIAL_DATA
-						.getSpawnLocation(player.getCommonData().getRace());
+							.getSpawnLocation(player.getCommonData().getRace());
 					worldId = locationData.getMapId();
 					x = locationData.getX();
 					y = locationData.getY();
@@ -325,8 +325,8 @@ public class World {
 	}
 
 	/**
-	 * Set position of VisibleObject without spawning [object will be invisible]. If object is spawned it will be
-	 * despawned first.
+	 * Set position of VisibleObject without spawning [object will be invisible]. If
+	 * object is spawned it will be despawned first.
 	 * 
 	 * @param object
 	 * @param mapId
@@ -335,7 +335,7 @@ public class World {
 	 * @param z
 	 * @param heading
 	 * @throws NotSetPositionException
-	 *           when object has not set position before.
+	 *             when object has not set position before.
 	 */
 	public void setPosition(VisibleObject object, int mapId, float x, float y, float z, byte heading) {
 		int instanceId = 1;
@@ -362,7 +362,8 @@ public class World {
 	}
 
 	/**
-	 * Creates and return {@link WorldPosition} object, representing position with given parameters.
+	 * Creates and return {@link WorldPosition} object, representing position with
+	 * given parameters.
 	 * 
 	 * @param mapId
 	 * @param x
@@ -378,26 +379,24 @@ public class World {
 		position.setMapId(mapId);
 		if (instanceId == 0) {
 			position.setMapRegion(getWorldMap(mapId).getWorldMapInstance().getRegion(x, y, z));
-		}
-		else {
+		} else {
 			position.setMapRegion(getWorldMap(mapId).getWorldMapInstanceById(instanceId).getRegion(x, y, z));
 		}
 		return position;
 	}
 
 	/**
-	 * Spawn VisibleObject at current position [use setPosition ]. Object will be visible by others and will see other
-	 * objects.
+	 * Spawn VisibleObject at current position [use setPosition ]. Object will be
+	 * visible by others and will see other objects.
 	 * 
 	 * @param object
 	 * @throws AlreadySpawnedException
-	 *           when object is already spawned.
+	 *             when object is already spawned.
 	 */
 	public void spawn(VisibleObject object) {
 		if (object.isSpawned()) {
 			throw new AlreadySpawnedException();
 		}
-
 
 		object.getController().onBeforeSpawn();
 		object.getPosition().setIsSpawned(true);
@@ -414,14 +413,15 @@ public class World {
 	}
 
 	/**
-	 * Despawn VisibleObject, object will become invisible and object position will become invalid. All others objects
-	 * will be noticed that this object is no longer visible.
+	 * Despawn VisibleObject, object will become invisible and object position will
+	 * become invalid. All others objects will be noticed that this object is no
+	 * longer visible.
 	 * 
 	 * @throws NullPointerException
-	 *           if object is already despawned
+	 *             if object is already despawned
 	 */
 	public void despawn(VisibleObject object) {
-		if(object == null){
+		if (object == null) {
 			return;
 		}
 		MapRegion oldMapRegion = object.getActiveRegion();
@@ -443,7 +443,7 @@ public class World {
 	public Collection<Player> getAllPlayers() {
 		return allPlayers.getAllPlayers();
 	}
-	
+
 	/**
 	 * @return number of players
 	 */
@@ -463,14 +463,14 @@ public class World {
 	 */
 	public void doOnAllObjects(Visitor<VisibleObject> visitor) {
 		try {
-			for (FastMap.Entry<Integer, VisibleObject> e = allObjects.head(), mapEnd = allObjects.tail(); (e = e.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, VisibleObject> e = allObjects.head(), mapEnd = allObjects
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				VisibleObject object = e.getValue();
 				if (object != null) {
 					visitor.visit(object);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all objects", ex);
 		}
 	}

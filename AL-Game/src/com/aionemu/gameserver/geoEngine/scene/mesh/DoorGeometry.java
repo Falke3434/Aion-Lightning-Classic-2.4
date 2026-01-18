@@ -22,16 +22,14 @@ import com.aionemu.gameserver.geoEngine.collision.Collidable;
 import com.aionemu.gameserver.geoEngine.collision.CollisionResults;
 import com.aionemu.gameserver.geoEngine.scene.Geometry;
 
-
 /**
  * @author MrPoke
  *
  */
 public class DoorGeometry extends Geometry {
 	BitSet instances = new BitSet();
-	
-	
-	public void setDoorState(int instanceId, boolean state){
+
+	public void setDoorState(int instanceId, boolean state) {
 		instances.set(instanceId, state);
 	}
 

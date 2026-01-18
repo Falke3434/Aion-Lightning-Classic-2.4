@@ -17,14 +17,14 @@
 
 package com.aionemu.gameserver.skillengine.effect;
 
-import com.aionemu.gameserver.model.gameobjects.player.Player;
-import com.aionemu.gameserver.skillengine.model.Effect;
-import com.aionemu.gameserver.utils.ThreadPoolManager;
-
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
+
+import com.aionemu.gameserver.model.gameobjects.player.Player;
+import com.aionemu.gameserver.skillengine.model.Effect;
+import com.aionemu.gameserver.utils.ThreadPoolManager;
 
 /**
  * @author Sippolo
@@ -44,10 +44,10 @@ public class DelayedFPAttackInstantEffect extends EffectTemplate {
 			return;
 		if (!super.calculate(effect, null, null))
 			return;
-		
+
 		int maxFP = ((Player) effect.getEffected()).getLifeStats().getMaxFp();
 		int newValue = (percent) ? (int) ((maxFP * value) / 100) : value;
-		
+
 		effect.setReserved2(newValue);
 	}
 

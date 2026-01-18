@@ -21,6 +21,7 @@ import com.aionemu.gameserver.model.siege.Influence;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.SiegeService;
+
 import javolution.util.FastList;
 
 public class SM_FORTRESS_STATUS extends AionServerPacket {
@@ -34,22 +35,21 @@ public class SM_FORTRESS_STATUS extends AionServerPacket {
 		writeF(Influence.getInstance().getAsmos());
 		writeF(Influence.getInstance().getBalaur());
 		writeH(3);
+		// ======[INGGISON]=======
 		writeD(210050000);
 		writeF(Influence.getInstance().getElyos());
 		writeF(Influence.getInstance().getAsmos());
 		writeF(Influence.getInstance().getBalaur());
+		// ======[GELKMAROS]======
 		writeD(220070000);
 		writeF(Influence.getInstance().getElyos());
 		writeF(Influence.getInstance().getAsmos());
 		writeF(Influence.getInstance().getBalaur());
+		// ========[RESHANTA]========
 		writeD(400010000);
 		writeF(Influence.getInstance().getElyos());
 		writeF(Influence.getInstance().getAsmos());
 		writeF(Influence.getInstance().getBalaur());
-		writeD(0);
-		writeD(0);
-		writeD(0);
-		writeD(0);
 		writeH(fortresses.size());
 
 		for (FortressLocation loc : fortresses) {

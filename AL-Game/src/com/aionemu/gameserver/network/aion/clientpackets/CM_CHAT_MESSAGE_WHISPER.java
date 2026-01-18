@@ -86,21 +86,22 @@ public class CM_CHAT_MESSAGE_WHISPER extends AionClientPacket {
 		Player receiver = World.getInstance().findPlayer(formatname);
 
 		if (LoggingConfig.LOG_CHAT)
-			log.info(String.format("[MESSAGE] [%s] Whisper To: %s, Message: %s", sender.getName(), formatname, message));
+			log.info(
+					String.format("[MESSAGE] [%s] Whisper To: %s, Message: %s", sender.getName(), formatname, message));
 
 		if (receiver == null)
 			sendPacket(SM_SYSTEM_MESSAGE.STR_NO_SUCH_USER(formatname));
-		else if (receiver.getCommonData().getGmConfig(GmConfig.GM_WHISPER_OFF) && receiver.getAccessLevel() > sender.getAccessLevel()) {
+		else if (receiver.getCommonData().getGmConfig(GmConfig.GM_WHISPER_OFF)
+				&& receiver.getAccessLevel() > sender.getAccessLevel()) {
 			PacketSendUtility.sendMessage(sender, "You can't talk with this gm.");
 			return;
-		}
-		else if (sender.getLevel() < CustomConfig.LEVEL_TO_WHISPER)
+		} else if (sender.getLevel() < CustomConfig.LEVEL_TO_WHISPER)
 			sendPacket(SM_SYSTEM_MESSAGE.STR_CANT_WHISPER_LEVEL(String.valueOf(CustomConfig.LEVEL_TO_WHISPER)));
 		else if (receiver.getBlockList().contains(sender.getObjectId()))
 			sendPacket(SM_SYSTEM_MESSAGE.STR_YOU_EXCLUDED(receiver.getName()));
 		else if ((!CustomConfig.SPEAKING_BETWEEN_FACTIONS)
-			&& (sender.getRace().getRaceId() != receiver.getRace().getRaceId())
-			&& (sender.getAccessLevel() == 0) && (receiver.getAccessLevel() == 0))
+				&& (sender.getRace().getRaceId() != receiver.getRace().getRaceId()) && (sender.getAccessLevel() == 0)
+				&& (receiver.getAccessLevel() == 0))
 			sendPacket(SM_SYSTEM_MESSAGE.STR_NO_SUCH_USER(formatname));
 		else {
 			if (RestrictionsManager.canChat(sender))

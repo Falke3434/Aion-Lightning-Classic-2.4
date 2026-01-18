@@ -44,7 +44,7 @@ public class SummonSkillAreaEffect extends SummonServantEffect {
 		float x = effect.getX();
 		float y = effect.getY();
 		float z = effect.getZ();
-		if(x == 0 && y == 0){
+		if (x == 0 && y == 0) {
 			Creature effected = effect.getEffected();
 			x = effected.getX();
 			y = effected.getY();
@@ -54,14 +54,14 @@ public class SummonSkillAreaEffect extends SummonServantEffect {
 		// TODO revisit later and find better fix - kecimis
 		int useTime = time;
 		switch (effect.getSkillId()) {
-			case 2291:
-			case 2292:
-			case 2293:
-			case 2294:
-				useTime = 7;
-				break;
+		case 2291:
+		case 2292:
+		case 2293:
+		case 2294:
+			useTime = 7;
+			break;
 		}
-		
+
 		final Servant servant = spawnServant(effect, useTime, NpcObjectType.SKILLAREA, x, y, z);
 		Future<?> task = ThreadPoolManager.getInstance().scheduleAtFixedRate(new Runnable() {
 

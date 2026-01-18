@@ -48,8 +48,8 @@ public class StaticDoorService {
 			PacketSendUtility.sendMessage(player, "door id : " + doorId);
 
 		StaticDoor door = player.getPosition().getWorldMapInstance().getDoors().get(doorId);
-		if (door == null){
-			log.warn("Not spawned door worldId: "+ player.getWorldId()+" doorId: "+doorId);
+		if (door == null) {
+			log.warn("Not spawned door worldId: " + player.getWorldId() + " doorId: " + doorId);
 			return;
 		}
 		int keyId = door.getObjectTemplate().getKeyId();
@@ -59,8 +59,7 @@ public class StaticDoorService {
 
 		if (checkStaticDoorKey(player, doorId, keyId)) {
 			door.setOpen(true);
-		}
-		else
+		} else
 			log.info("Opening door without key ...");
 	}
 
@@ -70,7 +69,7 @@ public class StaticDoorService {
 
 		if (keyId == 0)
 			return true;
-			
+
 		if (keyId == 1)
 			return false;
 

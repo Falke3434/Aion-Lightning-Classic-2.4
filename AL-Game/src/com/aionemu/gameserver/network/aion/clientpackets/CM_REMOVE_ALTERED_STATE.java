@@ -20,6 +20,7 @@ public class CM_REMOVE_ALTERED_STATE extends AionClientPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#readImpl()
 	 */
 	@Override
@@ -30,6 +31,7 @@ public class CM_REMOVE_ALTERED_STATE extends AionClientPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#runImpl()
 	 */
 	@Override

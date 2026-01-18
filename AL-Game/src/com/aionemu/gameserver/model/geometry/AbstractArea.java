@@ -23,7 +23,8 @@ import com.aionemu.gameserver.world.zone.ZoneName;
 /**
  * Class with basic method implementation for ares.<br>
  * If possible it should be subclassed. <br>
- * In other case {@link com.aionemu.gameserver.model.geometry.Area} should be implemented directly
+ * In other case {@link com.aionemu.gameserver.model.geometry.Area} should be
+ * implemented directly
  */
 public abstract class AbstractArea implements Area {
 
@@ -38,15 +39,16 @@ public abstract class AbstractArea implements Area {
 	private final float maxZ;
 
 	private ZoneName zoneName;
-	
+
 	private int worldId;
+
 	/**
 	 * Creates new AbstractArea with min and max z
 	 * 
 	 * @param minZ
-	 *          min z
+	 *            min z
 	 * @param maxZ
-	 *          max z
+	 *            max z
 	 */
 	protected AbstractArea(ZoneName zoneName, int worldId, float minZ, float maxZ) {
 		if (minZ > maxZ) {
@@ -141,11 +143,9 @@ public abstract class AbstractArea implements Area {
 
 		if (isInsideZ(z)) {
 			zCoord = z;
-		}
-		else if (z < getMinZ()) {
+		} else if (z < getMinZ()) {
 			zCoord = getMinZ();
-		}
-		else {
+		} else {
 			zCoord = getMaxZ();
 		}
 
@@ -165,13 +165,12 @@ public abstract class AbstractArea implements Area {
 	public float getMaxZ() {
 		return maxZ;
 	}
-	
+
 	@Override
 	public int getWorldId() {
 		return worldId;
 	}
-	
-	
+
 	/**
 	 * @return the zoneName
 	 */

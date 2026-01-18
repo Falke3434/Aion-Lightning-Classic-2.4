@@ -16,13 +16,23 @@
  */
 package com.aionemu.gameserver.network.aion.clientpackets;
 
+import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
+import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_QUIT_RESPONSE;
+import com.aionemu.gameserver.network.loginserver.LoginServer;
+import com.aionemu.gameserver.services.player.PlayerLeaveWorldService;
 
 /**
  * @author xavier Packet sent by client when player may quit game in 10 seconds
  */
 public class CM_MAY_QUIT extends AionClientPacket {
+
+	/**
+	 * Logout - if true player is wanted to go to character selection.
+	 */
+	private boolean logout;
 
 	/**
 	 * @param opcode
@@ -33,20 +43,46 @@ public class CM_MAY_QUIT extends AionClientPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#readImpl()
 	 */
 	@Override
 	protected void readImpl() {
-		// empty
+		logout = readC() == 1;
 	}
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#runImpl()
 	 */
 	@Override
 	protected void runImpl() {
-		// Nothing to do
-	}
+		AionConnection client = getConnection();
 
+		Player player = null;
+		if (client.getState() == State.IN_GAME) {
+			player = client.getActivePlayer();
+			// TODO! check if may quit
+			if (!logout) {
+				LoginServer.getInstance().aionClientDisconnected(client.getAccount().getId());
+			}
+
+			PlayerLeaveWorldService.startLeaveWorld(player);
+			client.setActivePlayer(null);
+		}
+
+		if (logout) {
+			if (player != null && player.isInEditMode()) {
+				sendPacket(new SM_QUIT_RESPONSE(true));
+				player.setEditMode(false);
+			}
+			else {
+				sendPacket(new SM_QUIT_RESPONSE());
+			}
+		}
+		else {
+			client.close(new SM_QUIT_RESPONSE(), false);
+		}
+	}
 }

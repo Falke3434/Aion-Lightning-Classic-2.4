@@ -6,15 +6,15 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
 
 public class SM_CHAT_ACCUSE extends AionServerPacket {
 
-    private final Player player;
+	private final Player player;
 
-    public SM_CHAT_ACCUSE(Player player) {
-        this.player = player;
-    }
+	public SM_CHAT_ACCUSE(Player player) {
+		this.player = player;
+	}
 
-    @Override
-    protected void writeImpl(AionConnection con) {
-        writeD(this.player.getObjectId());
-        writeC(0); //maybe accused
-    }
+	@Override
+	protected void writeImpl(AionConnection con) {
+		writeD(this.player.getObjectId());
+		writeC(0); // maybe accused
+	}
 }

@@ -29,7 +29,6 @@ import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.skillengine.model.HealType;
 import com.aionemu.gameserver.utils.MathUtil;
 
-
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "HealCastorOnAttackedEffect")
 public class HealCastorOnAttackedEffect extends EffectTemplate {
@@ -66,16 +65,14 @@ public class HealCastorOnAttackedEffect extends EffectTemplate {
 						if (MathUtil.isIn3dRange(effect.getEffected(), p, range))
 							p.getController().onRestore(type, valueWithDelta);
 					}
-				}
-				else if (player.isInAlliance2()) {
-					for(Player p : player.getPlayerAllianceGroup2().getMembers()){
+				} else if (player.isInAlliance2()) {
+					for (Player p : player.getPlayerAllianceGroup2().getMembers()) {
 						if (!p.isOnline())
 							continue;
 						if (MathUtil.isIn3dRange(effect.getEffected(), p, range))
 							p.getController().onRestore(type, valueWithDelta);
 					}
-				}
-				else {
+				} else {
 					if (MathUtil.isIn3dRange(effect.getEffected(), player, range))
 						player.getController().onRestore(type, valueWithDelta);
 				}

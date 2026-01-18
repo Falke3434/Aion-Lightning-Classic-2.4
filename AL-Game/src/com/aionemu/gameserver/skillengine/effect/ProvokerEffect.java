@@ -55,36 +55,36 @@ public class ProvokerEffect extends ShieldEffect {
 		final int prob2 = this.hitTypeProb;
 		final int radius = this.radius;
 		switch (this.hitType) {
-			case NMLATK://ATTACK
-				observer = new ActionObserver(ObserverType.ATTACK) {
+		case NMLATK:// ATTACK
+			observer = new ActionObserver(ObserverType.ATTACK) {
 
-					@Override
-					public void attack(Creature creature) {
-						if (Rnd.get(0, 100) <= prob2) {
-							Creature target = getProvokeTarget(provokeTarget, effector, creature);
-							createProvokedEffect(effector, target, creature);
-						}
+				@Override
+				public void attack(Creature creature) {
+					if (Rnd.get(0, 100) <= prob2) {
+						Creature target = getProvokeTarget(provokeTarget, effector, creature);
+						createProvokedEffect(effector, target, creature);
 					}
+				}
 
-				};
-				break;
-			case EVERYHIT://ATTACKED
-				observer = new ActionObserver(ObserverType.ATTACKED) {
+			};
+			break;
+		case EVERYHIT:// ATTACKED
+			observer = new ActionObserver(ObserverType.ATTACKED) {
 
-					@Override
-					public void attacked(Creature creature) {
-						if (radius > 0) {
-							if (!MathUtil.isIn3dRange(effector, creature, radius))
-								return;
-						}
-						if (Rnd.get(0, 100) <= prob2) {
-							Creature target = getProvokeTarget(provokeTarget, effector, creature);
-							createProvokedEffect(effector, target, creature);
-						}
+				@Override
+				public void attacked(Creature creature) {
+					if (radius > 0) {
+						if (!MathUtil.isIn3dRange(effector, creature, radius))
+							return;
 					}
-				};
-				break;
-				//TODO MAHIT and PHHIT
+					if (Rnd.get(0, 100) <= prob2) {
+						Creature target = getProvokeTarget(provokeTarget, effector, creature);
+						createProvokedEffect(effector, target, creature);
+					}
+				}
+			};
+			break;
+		// TODO MAHIT and PHHIT
 		}
 
 		if (observer == null)
@@ -101,14 +101,15 @@ public class ProvokerEffect extends ShieldEffect {
 	private void createProvokedEffect(final Creature effector, Creature target, final Creature attacker) {
 		SkillTemplate template = DataManager.SKILL_DATA.getSkillTemplate(skillId);
 		/**
-		I dont see a reason for such code
-		boolean isTargetRelationEnemy = (template.getProperties() == null) ? false : (template.getProperties().getTargetRelation() == TargetRelationAttribute.ENEMY);
-		Effect e = null;
-		if ((isTargetRelationEnemy) && (provokeTarget == ProvokeTarget.ME))
-			e = new Effect(attacker, target, template, template.getLvl(), template.getEffectsDuration());
-		else
-			e = new Effect(effector, target, template, template.getLvl(), template.getEffectsDuration());
-		*/
+		 * I dont see a reason for such code boolean isTargetRelationEnemy =
+		 * (template.getProperties() == null) ? false :
+		 * (template.getProperties().getTargetRelation() ==
+		 * TargetRelationAttribute.ENEMY); Effect e = null; if ((isTargetRelationEnemy)
+		 * && (provokeTarget == ProvokeTarget.ME)) e = new Effect(attacker, target,
+		 * template, template.getLvl(), template.getEffectsDuration()); else e = new
+		 * Effect(effector, target, template, template.getLvl(),
+		 * template.getEffectsDuration());
+		 */
 		Effect e = new Effect(effector, target, template, template.getLvl(), template.getEffectsDuration());
 		e.initialize();
 		e.applyEffect();
@@ -122,10 +123,10 @@ public class ProvokerEffect extends ShieldEffect {
 	 */
 	private Creature getProvokeTarget(ProvokeTarget provokeTarget, Creature effector, Creature target) {
 		switch (provokeTarget) {
-			case ME:
-				return effector;
-			case OPPONENT:
-				return target;
+		case ME:
+			return effector;
+		case OPPONENT:
+			return target;
 		}
 		throw new IllegalArgumentException("Provoker target is invalid " + provokeTarget);
 	}

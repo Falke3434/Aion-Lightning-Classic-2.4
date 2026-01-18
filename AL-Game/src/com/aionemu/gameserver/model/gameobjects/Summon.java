@@ -44,11 +44,7 @@ public class Summon extends Creature {
 	private int liveTime = 0;
 
 	public static enum SummonMode {
-		ATTACK(0),
-		GUARD(1),
-		REST(2),
-		RELEASE(3),
-		UNK(5);
+		ATTACK(0), GUARD(1), REST(2), RELEASE(3), UNK(5);
 
 		private int id;
 
@@ -73,14 +69,14 @@ public class Summon extends Creature {
 	 * @param level
 	 */
 	public Summon(int objId, CreatureController<? extends Creature> controller, SpawnTemplate spawnTemplate,
-		VisibleObjectTemplate objectTemplate, byte level) {
+			VisibleObjectTemplate objectTemplate, byte level) {
 		super(objId, controller, spawnTemplate, objectTemplate, new WorldPosition());
 		controller.setOwner(this);
 		moveController = new SummonMoveController(this);
 		this.level = level;
 		this.mode = SummonMode.GUARD;
-		SummonStatsTemplate statsTemplate = DataManager.SUMMON_STATS_DATA.getSummonTemplate(objectTemplate.getTemplateId(),
-			level);
+		SummonStatsTemplate statsTemplate = DataManager.SUMMON_STATS_DATA
+				.getSummonTemplate(objectTemplate.getTemplateId(), level);
 		setGameStats(new SummonGameStats(this, statsTemplate));
 		setLifeStats(new SummonLifeStats(this));
 	}
@@ -102,7 +98,7 @@ public class Summon extends Creature {
 
 	/**
 	 * @param master
-	 *          the master to set
+	 *            the master to set
 	 */
 	public void setMaster(Player master) {
 		this.master = master;
@@ -156,7 +152,7 @@ public class Summon extends Creature {
 
 	/**
 	 * @param mode
-	 *          the mode to set
+	 *            the mode to set
 	 */
 	public void setMode(SummonMode mode) {
 		this.mode = mode;
@@ -189,17 +185,17 @@ public class Summon extends Creature {
 
 		return getMaster().isAggroFrom(npc);
 	}
-	
+
 	@Override
 	public SummonMoveController getMoveController() {
 		return (SummonMoveController) super.getMoveController();
 	}
-	
+
 	@Override
 	public Creature getActingCreature() {
 		return getMaster() == null ? this : getMaster();
 	}
-	
+
 	@Override
 	public Race getRace() {
 		return getMaster() != null ? getMaster().getRace() : Race.NONE;
@@ -211,9 +207,10 @@ public class Summon extends Creature {
 	public int getLiveTime() {
 		return liveTime;
 	}
-	
+
 	/**
-	 * @param liveTime in sec.
+	 * @param liveTime
+	 *            in sec.
 	 */
 	public void setLiveTime(int liveTime) {
 		this.liveTime = liveTime;

@@ -11,12 +11,12 @@ import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
 /**
- * Checks all LOCKED missions for start conditions immediately And starts them, if conditions are fulfilled
+ * Checks all LOCKED missions for start conditions immediately And starts them,
+ * if conditions are fulfilled
  * 
  * @author vlog
  */
 public class CmdMcheck extends BaseCommand {
-
 
 	public void execute(Player player, String... params) {
 		Collection<QuestState> qsl = player.getQuestStateList().getAllQuestState();
@@ -26,7 +26,7 @@ public class CmdMcheck extends BaseCommand {
 				QuestEngine.getInstance().onLvlUp(new QuestEnv(null, player, questId, 0));
 			}
 		PacketSendUtility.sendMessage(player, "Missions checked successfully");
-	
+
 	}
-	
+
 }

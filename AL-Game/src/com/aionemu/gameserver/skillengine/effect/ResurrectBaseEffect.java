@@ -45,9 +45,9 @@ public class ResurrectBaseEffect extends BufEffect {
 						if (effected.isInInstance())
 							PlayerReviveService.instanceRevive(effected);
 						/*
-						else if (effected.getKisk() != null)
-							PlayerReviveService.kiskRevive(effected);
-						*/
+						 * else if (effected.getKisk() != null)
+						 * PlayerReviveService.kiskRevive(effected);
+						 */
 						else
 							PlayerReviveService.bindRevive(effected);
 					}

@@ -22,7 +22,8 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
 /**
- * Opens a yes/no question window on the client. Question based on the code given, defined in client_strings.xml
+ * Opens a yes/no question window on the client. Question based on the code
+ * given, defined in client_strings.xml
  * 
  * @author Ben, avol, Lyahim
  */
@@ -60,6 +61,7 @@ public class SM_QUESTION_WINDOW extends AionServerPacket {
 
 	private int code;
 	private int senderId;
+	private int range;
 	private Object[] params;
 	private ArtifactLocation artifact;
 
@@ -67,11 +69,11 @@ public class SM_QUESTION_WINDOW extends AionServerPacket {
 	 * Creates a new <tt>SM_QUESTION_WINDOW<tt> packet
 	 * 
 	 * @param code
-	 *          code The string code to display, found in client_strings.xml
+	 *            code The string code to display, found in client_strings.xml
 	 * @param senderId
-	 *          sender Object id
+	 *            sender Object id
 	 * @param params
-	 *          params The parameters for the string, if any
+	 *            params The parameters for the string, if any
 	 */
 	public SM_QUESTION_WINDOW(int code, int senderId, Object... params) {
 		this.code = code;
@@ -104,8 +106,7 @@ public class SM_QUESTION_WINDOW extends AionServerPacket {
 				writeH(0x24);
 				writeD(((DescriptionId) param).getValue());
 				writeH(0x00); // unk
-			}
-			else if (param instanceof ArtifactLocation)
+			} else if (param instanceof ArtifactLocation)
 				this.artifact = (ArtifactLocation) param;
 			else
 				writeS(String.valueOf(param));
@@ -117,7 +118,7 @@ public class SM_QUESTION_WINDOW extends AionServerPacket {
 			writeD(0x00);
 			writeD(0x00);
 			writeH(0x00);
-			writeC(1);
+			writeC(0x01);
 			writeD(senderId);
 			writeD(0x05);
 		}
@@ -132,23 +133,21 @@ public class SM_QUESTION_WINDOW extends AionServerPacket {
 				writeD(0x00);
 			else
 				writeD(artifact.getCoolDown());// ArtifactLocation reuse
-		}
-		else if (code == STR_BUDDYLIST_ADD_BUDDY_REQUETS) {
+		} else if (code == STR_BUDDYLIST_ADD_BUDDY_REQUETS) {
 			writeB(new byte[17]);
-		}
-		else if (code == STR_INSTANCE_DUNGEON_WITH_DIFFICULTY_ENTER_CONFIRM) {
+		} else if (code == STR_INSTANCE_DUNGEON_WITH_DIFFICULTY_ENTER_CONFIRM) {
 			writeD(0x00);
 			writeH(0x00);
 			writeC(0x01);
 			writeD(senderId);
 			writeD(0x05);
-		}
-		else {
+		} else {
 			writeD(0x00);// unk
+			writeD(0x00);
 			writeH(0x00);// unk
-			writeC(0x01);// unk
+			writeC(range > 0 ? 0x01 : 0x00);
 			writeD(senderId);
-			writeD(0x06); // group 6, unk
+			writeD(range);
 		}
 	}
 }

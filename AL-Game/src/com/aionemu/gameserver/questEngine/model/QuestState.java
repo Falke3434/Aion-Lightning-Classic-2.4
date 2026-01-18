@@ -18,6 +18,8 @@ package com.aionemu.gameserver.questEngine.model;
 
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,8 +28,6 @@ import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.gameobjects.PersistentState;
 import com.aionemu.gameserver.model.templates.QuestTemplate;
 import com.aionemu.gameserver.model.templates.quest.QuestCategory;
-import java.util.Date;
-import java.util.GregorianCalendar;
 
 /**
  * @author MrPoke
@@ -44,12 +44,13 @@ public class QuestState {
 	private Timestamp nextRepeatTime;
 	private Integer reward;
 	private PersistentState persistentState;
-        private Calendar currentDay = GregorianCalendar.getInstance();
-        private Calendar calendar = GregorianCalendar.getInstance();
+	private Calendar currentDay = GregorianCalendar.getInstance();
+	private Calendar calendar = GregorianCalendar.getInstance();
 
 	private static final Logger log = LoggerFactory.getLogger(QuestState.class);
 
-	public QuestState(int questId, QuestStatus status, int questVars, int completeCount, Timestamp nextRepeatTime, Integer reward, Timestamp completeTime) {
+	public QuestState(int questId, QuestStatus status, int questVars, int completeCount, Timestamp nextRepeatTime,
+			Integer reward, Timestamp completeTime) {
 		this.questId = questId;
 		this.status = status;
 		this.questVars = new QuestVars(questVars);
@@ -60,9 +61,9 @@ public class QuestState {
 		this.completeTime = completeTime;
 		this.persistentState = PersistentState.NEW;
 	}
-	
-	public QuestState(int questId, QuestStatus status, int questVars, int questVars2, int completeCount, Timestamp nextRepeatTime,
-		Integer reward, Timestamp completeTime) {
+
+	public QuestState(int questId, QuestStatus status, int questVars, int questVars2, int completeCount,
+			Timestamp nextRepeatTime, Integer reward, Timestamp completeTime) {
 		this.questId = questId;
 		this.status = status;
 		this.questVars = new QuestVars(questVars);
@@ -99,11 +100,11 @@ public class QuestState {
 		questVars.setVar(var);
 		setPersistentState(PersistentState.UPDATE_REQUIRED);
 	}
-	
+
 	public void setQuestVar2(int questVars2) {
 		this.questVars2 = questVars2;
 	}
-	
+
 	public int getQuestVar2() {
 		return questVars2;
 	}
@@ -160,8 +161,7 @@ public class QuestState {
 	public Integer getReward() {
 		if (reward == null) {
 			log.warn("No reward for the quest " + String.valueOf(questId));
-		}
-		else {
+		} else {
 			return reward;
 		}
 		return 0;
@@ -171,9 +171,8 @@ public class QuestState {
 		QuestTemplate template = DataManager.QUEST_DATA.getQuestById(questId);
 		if (status == QuestStatus.COMPLETE && template.getCategory() == QuestCategory.EVENT)
 			return true;
-		if (status != QuestStatus.NONE
-			&& (status != QuestStatus.COMPLETE || (completeCount >= template.getMaxRepeatCount() && template
-				.getMaxRepeatCount() != 255))) {
+		if (status != QuestStatus.NONE && (status != QuestStatus.COMPLETE
+				|| (completeCount >= template.getMaxRepeatCount() && template.getMaxRepeatCount() != 255))) {
 			return false;
 		}
 		if (questVars.getQuestVars() != 0) {
@@ -197,31 +196,32 @@ public class QuestState {
 
 	/**
 	 * @param persistentState
-	 *          the pState to set
+	 *            the pState to set
 	 */
 	public void setPersistentState(PersistentState persistentState) {
 		switch (persistentState) {
-			case DELETED:
-				if (this.persistentState == PersistentState.NEW)
-					throw new IllegalArgumentException("Cannot change state to DELETED from NEW");
-			case UPDATE_REQUIRED:
-				if (this.persistentState == PersistentState.NEW)
-					break;
-			default:
-				this.persistentState = persistentState;
+		case DELETED:
+			if (this.persistentState == PersistentState.NEW)
+				throw new IllegalArgumentException("Cannot change state to DELETED from NEW");
+		case UPDATE_REQUIRED:
+			if (this.persistentState == PersistentState.NEW)
+				break;
+		default:
+			this.persistentState = persistentState;
 		}
 	}
-        public boolean canRepeatByTime() {
-        Date date = new Date();
-        Date completeDate = new Date(completeTime.getTime());
-        currentDay.setTime(date);
-        calendar.setTime(completeDate);
-        if (calendar.get(Calendar.HOUR_OF_DAY) < 9 && currentDay.get(Calendar.HOUR_OF_DAY) >= 9)
-        	return true;
-        else if((calendar.get(Calendar.DAY_OF_MONTH) != currentDay.get(Calendar.DAY_OF_MONTH))
-             && (currentDay.get(Calendar.HOUR_OF_DAY) >= 9 && currentDay.get(Calendar.HOUR_OF_DAY) <= 23)) {
-            return true;
-        }
-        return false;
-    }
+
+	public boolean canRepeatByTime() {
+		Date date = new Date();
+		Date completeDate = new Date(completeTime.getTime());
+		currentDay.setTime(date);
+		calendar.setTime(completeDate);
+		if (calendar.get(Calendar.HOUR_OF_DAY) < 9 && currentDay.get(Calendar.HOUR_OF_DAY) >= 9)
+			return true;
+		else if ((calendar.get(Calendar.DAY_OF_MONTH) != currentDay.get(Calendar.DAY_OF_MONTH))
+				&& (currentDay.get(Calendar.HOUR_OF_DAY) >= 9 && currentDay.get(Calendar.HOUR_OF_DAY) <= 23)) {
+			return true;
+		}
+		return false;
+	}
 }

@@ -24,8 +24,6 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.locks.ReentrantLock;
 
-import javolution.util.FastList;
-
 import com.aionemu.gameserver.controllers.attack.AttackResult;
 import com.aionemu.gameserver.controllers.attack.AttackStatus;
 import com.aionemu.gameserver.controllers.observer.ActionObserver;
@@ -37,6 +35,8 @@ import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.skillengine.model.Skill;
+
+import javolution.util.FastList;
 
 /**
  * Notes:<br>
@@ -54,7 +54,8 @@ public class ObserveController {
 	protected Collection<AttackCalcObserver> attackCalcObservers = new FastList<AttackCalcObserver>(0).shared();
 
 	/**
-	 * Once used observer add to observerController. If observer notify will be removed.
+	 * Once used observer add to observerController. If observer notify will be
+	 * removed.
 	 * 
 	 * @param observer
 	 */
@@ -63,8 +64,7 @@ public class ObserveController {
 		lock.lock();
 		try {
 			onceUsedObservers.add(observer);
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 	}
@@ -91,8 +91,7 @@ public class ObserveController {
 		lock.lock();
 		try {
 			onceUsedObservers.remove(observer);
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 	}
@@ -124,8 +123,7 @@ public class ObserveController {
 					}
 				}
 			}
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 
@@ -145,41 +143,42 @@ public class ObserveController {
 
 	private void notifyAction(ObserverType type, ActionObserver observer, Object... object) {
 		switch (type) {
-			case ATTACK:
-				observer.attack((Creature) object[0]);
-				break;
-			case ATTACKED:
-				observer.attacked((Creature) object[0]);
-				break;
-			case DEATH:
-				observer.died((Creature) object[0]);
-				break;
-			case EQUIP:
-				observer.equip((Item) object[0], (Player) object[1]);
-				break;
-			case UNEQUIP:
-				observer.unequip((Item) object[0], (Player) object[1]);
-				break;
-			case MOVE:
-				observer.moved();
-				break;
-			case SKILLUSE:
-				observer.skilluse((Skill) object[0]);
-				break;
-			case DOT_ATTACKED:
-				observer.dotattacked((Creature) object[0], (Effect) object[1]);
-				break;
-			case ITEMUSE:
-				observer.itemused((Item) object[0]);
-				break;
-			case NPCDIALOGREQUEST:
-				observer.npcdialogrequested((Npc) object[0]);
-				break;
+		case ATTACK:
+			observer.attack((Creature) object[0]);
+			break;
+		case ATTACKED:
+			observer.attacked((Creature) object[0]);
+			break;
+		case DEATH:
+			observer.died((Creature) object[0]);
+			break;
+		case EQUIP:
+			observer.equip((Item) object[0], (Player) object[1]);
+			break;
+		case UNEQUIP:
+			observer.unequip((Item) object[0], (Player) object[1]);
+			break;
+		case MOVE:
+			observer.moved();
+			break;
+		case SKILLUSE:
+			observer.skilluse((Skill) object[0]);
+			break;
+		case DOT_ATTACKED:
+			observer.dotattacked((Creature) object[0], (Effect) object[1]);
+			break;
+		case ITEMUSE:
+			observer.itemused((Item) object[0]);
+			break;
+		case NPCDIALOGREQUEST:
+			observer.npcdialogrequested((Npc) object[0]);
+			break;
 		}
 	}
 
 	/**
-	 * @param notify that creature died
+	 * @param notify
+	 *            that creature died
 	 */
 	public void notifyDeathObservers(Creature creature) {
 		notifyObservers(ObserverType.DEATH, creature);
@@ -194,7 +193,8 @@ public class ObserveController {
 
 	/**
 	 * notify that creature attacking
-	 * @param damage 
+	 * 
+	 * @param damage
 	 */
 	public void notifyAttackObservers(Creature creature) {
 		notifyObservers(ObserverType.ATTACK, creature);
@@ -236,14 +236,14 @@ public class ObserveController {
 	public void notifyItemUnEquip(Item item, Player owner) {
 		notifyObservers(ObserverType.UNEQUIP, item, owner);
 	}
-	
+
 	/**
 	 * notify that player used an item
 	 */
 	public void notifyItemuseObservers(Item item) {
 		notifyObservers(ObserverType.ITEMUSE, item);
 	}
-	
+
 	/**
 	 * notify that player requested dialog with npc
 	 */
@@ -319,8 +319,7 @@ public class ObserveController {
 		lock.lock();
 		try {
 			onceUsedObservers.clear();
-		}
-		finally {
+		} finally {
 			lock.unlock();
 		}
 		observers.clear();

@@ -49,8 +49,8 @@ public class RiftSpawnManager {
 
 	private static final ConcurrentLinkedQueue<Npc> rifts = new ConcurrentLinkedQueue<Npc>();
 
-	private static final int RIFT_RESPAWN_DELAY	= 3600;	// 1 hour
-	private static final int RIFT_LIFETIME		= 3500;	// 1 hour
+	private static final int RIFT_RESPAWN_DELAY = 3600; // 1 hour
+	private static final int RIFT_LIFETIME = 3500; // 1 hour
 
 	private static final Map<String, SpawnTemplate> spawnGroups = new HashMap<String, SpawnTemplate>();
 
@@ -58,8 +58,7 @@ public class RiftSpawnManager {
 		if (spawn.hasPool()) {
 			SpawnTemplate template = spawn.getSpawnTemplates().get(0);
 			spawnGroups.put(template.getAnchor(), template);
-		}
-		else {
+		} else {
 			for (SpawnTemplate template : spawn.getSpawnTemplates()) {
 				spawnGroups.put(template.getAnchor(), template);
 			}
@@ -76,18 +75,18 @@ public class RiftSpawnManager {
 				ArrayList<Integer> rifts = new ArrayList<Integer>();
 				int nbRift, rndRift;
 
-				for (int i = 0; i < 4; i++){
+				for (int i = 0; i < 4; i++) {
 					// Generate number of rift for each town
 					nbRift = getNbRift();
 
 					log.info("Spawning " + nbRift + " rifts for the map : " + getMapName(i));
 
-					for (int j = 0; j < nbRift; j++){
-						rndRift = Rnd.get(i*7, (i+1)*7-1);
+					for (int j = 0; j < nbRift; j++) {
+						rndRift = Rnd.get(i * 7, (i + 1) * 7 - 1);
 
 						// try to avoid duplicate
 						while (rifts.contains(rndRift))
-							rndRift = Rnd.get(i*7, (i+1)*7-1);
+							rndRift = Rnd.get(i * 7, (i + 1) * 7 - 1);
 
 						// Save rift spawned
 						rifts.add(rndRift);
@@ -105,17 +104,11 @@ public class RiftSpawnManager {
 	 *
 	 * @return
 	 */
-	private static int getNbRift(){
+	private static int getNbRift() {
 		double rnd = Rnd.get(0, 99);
 
 		/*
-		 * 0 : 29%
-		 * 1 : 45%
-		 * 2 : 15%
-		 * 3 : 5%
-		 * 4 : 3%
-		 * 5 : 2%
-		 * 6 : 1%
+		 * 0 : 29% 1 : 45% 2 : 15% 3 : 5% 4 : 3% 5 : 2% 6 : 1%
 		 */
 		if (rnd == 0)
 			return 6;
@@ -138,18 +131,18 @@ public class RiftSpawnManager {
 	 * @param mapId
 	 * @return
 	 */
-	private static String getMapName(int mapId){
-		switch (mapId){
-			case 0:
-				return "ELTNEN";
-			case 1:
-				return "HEIRON";
-			case 2:
-				return "MORHEIM";
-			case 3:
-				return "BELUSLAN";
-			default:
-				return "UNKNOWN";
+	private static String getMapName(int mapId) {
+		switch (mapId) {
+		case 0:
+			return "ELTNEN";
+		case 1:
+			return "HEIRON";
+		case 2:
+			return "MORHEIM";
+		case 3:
+			return "BELUSLAN";
+		default:
+			return "UNKNOWN";
 		}
 	}
 
@@ -185,8 +178,8 @@ public class RiftSpawnManager {
 
 		World world = World.getInstance();
 		world.storeObject(npc);
-		world.setPosition(npc, spawnTemplate.getWorldId(), instanceIndex, spawnTemplate.getX(),
-			spawnTemplate.getY(), spawnTemplate.getZ(), spawnTemplate.getHeading());
+		world.setPosition(npc, spawnTemplate.getWorldId(), instanceIndex, spawnTemplate.getX(), spawnTemplate.getY(),
+				spawnTemplate.getZ(), spawnTemplate.getHeading());
 		world.spawn(npc);
 		rifts.add(npc);
 
@@ -212,37 +205,32 @@ public class RiftSpawnManager {
 	}
 
 	public enum RiftEnum {
-		ELTNEN_AM("ELTNEN_AM", "MORHEIM_AS", 12, 20, 28, Race.ASMODIANS),
-		ELTNEN_BM("ELTNEN_BM", "MORHEIM_BS", 20, 20, 32, Race.ASMODIANS),
-		ELTNEN_CM("ELTNEN_CM", "MORHEIM_CS", 35, 20, 36, Race.ASMODIANS),
-		ELTNEN_DM("ELTNEN_DM", "MORHEIM_DS", 35, 20, 37, Race.ASMODIANS),
-		ELTNEN_EM("ELTNEN_EM", "MORHEIM_ES", 45, 20, 40, Race.ASMODIANS),
-		ELTNEN_FM("ELTNEN_FM", "MORHEIM_FS", 50, 20, 40, Race.ASMODIANS),
-		ELTNEN_GM("ELTNEN_GM", "MORHEIM_GS", 50, 20, 45, Race.ASMODIANS),
+		ELTNEN_AM("ELTNEN_AM", "MORHEIM_AS", 12, 20, 28, Race.ASMODIANS), ELTNEN_BM("ELTNEN_BM", "MORHEIM_BS", 20, 20,
+				32, Race.ASMODIANS), ELTNEN_CM("ELTNEN_CM", "MORHEIM_CS", 35, 20, 36, Race.ASMODIANS), ELTNEN_DM(
+						"ELTNEN_DM", "MORHEIM_DS", 35, 20, 37,
+						Race.ASMODIANS), ELTNEN_EM("ELTNEN_EM", "MORHEIM_ES", 45, 20, 40, Race.ASMODIANS), ELTNEN_FM(
+								"ELTNEN_FM", "MORHEIM_FS", 50, 20, 40,
+								Race.ASMODIANS), ELTNEN_GM("ELTNEN_GM", "MORHEIM_GS", 50, 20, 45, Race.ASMODIANS),
 
-		HEIRON_AM("HEIRON_AM", "BELUSLAN_AS", 24, 20, 35, Race.ASMODIANS),
-		HEIRON_BM("HEIRON_BM", "BELUSLAN_BS", 36, 20, 42, Race.ASMODIANS),
-		HEIRON_CM("HEIRON_CM", "BELUSLAN_CS", 48, 20, 46, Race.ASMODIANS),
-		HEIRON_DM("HEIRON_DM", "BELUSLAN_DS", 48, 20, 40, Race.ASMODIANS),
-		HEIRON_EM("HEIRON_EM", "BELUSLAN_ES", 60, 20, 50, Race.ASMODIANS),
-		HEIRON_FM("HEIRON_FM", "BELUSLAN_FS", 72, 20, CustomConfig.HEIRON_FM, Race.ASMODIANS),
-		HEIRON_GM("HEIRON_GM", "BELUSLAN_GS", 72, 20, CustomConfig.HEIRON_GM, Race.ASMODIANS),
+		HEIRON_AM("HEIRON_AM", "BELUSLAN_AS", 24, 20, 35, Race.ASMODIANS), HEIRON_BM("HEIRON_BM", "BELUSLAN_BS", 36, 20,
+				42, Race.ASMODIANS), HEIRON_CM("HEIRON_CM", "BELUSLAN_CS", 48, 20, 46, Race.ASMODIANS), HEIRON_DM(
+						"HEIRON_DM", "BELUSLAN_DS", 48, 20, 40, Race.ASMODIANS), HEIRON_EM("HEIRON_EM", "BELUSLAN_ES",
+								60, 20, 50, Race.ASMODIANS), HEIRON_FM("HEIRON_FM", "BELUSLAN_FS", 72, 20,
+										CustomConfig.HEIRON_FM, Race.ASMODIANS), HEIRON_GM("HEIRON_GM", "BELUSLAN_GS",
+												72, 20, CustomConfig.HEIRON_GM, Race.ASMODIANS),
 
-		MORHEIM_AM("MORHEIM_AM", "ELTNEN_AS", 12, 20, 28, Race.ELYOS),
-		MORHEIM_BM("MORHEIM_BM", "ELTNEN_BS", 20, 20, 32, Race.ELYOS),
-		MORHEIM_CM("MORHEIM_CM", "ELTNEN_CS", 35, 20, 36, Race.ELYOS),
-		MORHEIM_DM("MORHEIM_DM", "ELTNEN_DS", 35, 20, 37, Race.ELYOS),
-		MORHEIM_EM("MORHEIM_EM", "ELTNEN_ES", 45, 20, 40, Race.ELYOS),
-		MORHEIM_FM("MORHEIM_FM", "ELTNEN_FS", 50, 20, 40, Race.ELYOS),
-		MORHEIM_GM("MORHEIM_GM", "ELTNEN_GS", 50, 20, 45, Race.ELYOS),
+		MORHEIM_AM("MORHEIM_AM", "ELTNEN_AS", 12, 20, 28, Race.ELYOS), MORHEIM_BM("MORHEIM_BM", "ELTNEN_BS", 20, 20, 32,
+				Race.ELYOS), MORHEIM_CM("MORHEIM_CM", "ELTNEN_CS", 35, 20, 36, Race.ELYOS), MORHEIM_DM("MORHEIM_DM",
+						"ELTNEN_DS", 35, 20, 37, Race.ELYOS), MORHEIM_EM("MORHEIM_EM", "ELTNEN_ES", 45, 20, 40,
+								Race.ELYOS), MORHEIM_FM("MORHEIM_FM", "ELTNEN_FS", 50, 20, 40,
+										Race.ELYOS), MORHEIM_GM("MORHEIM_GM", "ELTNEN_GS", 50, 20, 45, Race.ELYOS),
 
-		BELUSLAN_AM("BELUSLAN_AM", "HEIRON_AS", 24, 20, 35, Race.ELYOS),
-		BELUSLAN_BM("BELUSLAN_BM", "HEIRON_BS", 36, 20, 42, Race.ELYOS),
-		BELUSLAN_CM("BELUSLAN_CM", "HEIRON_CS", 48, 20, 46, Race.ELYOS),
-		BELUSLAN_DM("BELUSLAN_DM", "HEIRON_DS", 48, 20, 40, Race.ELYOS),
-		BELUSLAN_EM("BELUSLAN_EM", "HEIRON_ES", 60, 20, 50, Race.ELYOS),
-		BELUSLAN_FM("BELUSLAN_FM", "HEIRON_FS", 72, 20, CustomConfig.BELUSLAN_FM, Race.ELYOS),
-		BELUSLAN_GM("BELUSLAN_GM", "HEIRON_GS", 72, 20, CustomConfig.BELUSLAN_GM, Race.ELYOS);
+		BELUSLAN_AM("BELUSLAN_AM", "HEIRON_AS", 24, 20, 35, Race.ELYOS), BELUSLAN_BM("BELUSLAN_BM", "HEIRON_BS", 36, 20,
+				42, Race.ELYOS), BELUSLAN_CM("BELUSLAN_CM", "HEIRON_CS", 48, 20, 46, Race.ELYOS), BELUSLAN_DM(
+						"BELUSLAN_DM", "HEIRON_DS", 48, 20, 40, Race.ELYOS), BELUSLAN_EM("BELUSLAN_EM", "HEIRON_ES", 60,
+								20, 50, Race.ELYOS), BELUSLAN_FM("BELUSLAN_FM", "HEIRON_FS", 72, 20,
+										CustomConfig.BELUSLAN_FM, Race.ELYOS), BELUSLAN_GM("BELUSLAN_GM", "HEIRON_GS",
+												72, 20, CustomConfig.BELUSLAN_GM, Race.ELYOS);
 
 		private String master;
 		private String slave;

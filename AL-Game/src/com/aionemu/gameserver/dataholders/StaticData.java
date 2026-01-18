@@ -66,7 +66,7 @@ public class StaticData {
 
 	@XmlElement(name = "npc_templates")
 	public NpcData npcData;
-	
+
 	@XmlElement(name = "npc_shouts")
 	public NpcShoutData npcShoutData;
 
@@ -75,7 +75,7 @@ public class StaticData {
 
 	@XmlElement(name = "skill_data")
 	public SkillData skillData;
-	
+
 	@XmlElement(name = "motion_times")
 	public MotionData motionData;
 
@@ -120,7 +120,7 @@ public class StaticData {
 
 	@XmlElement(name = "item_sets")
 	public ItemSetData itemSetData;
-	
+
 	@XmlElement(name = "npc_factions")
 	public NpcFactionsData npcFactionsData;
 
@@ -165,10 +165,10 @@ public class StaticData {
 
 	@XmlElement(name = "flypath_template")
 	public FlyPathData flyPath;
-	
+
 	@XmlElement(name = "windstreams")
 	public WindstreamData windstreamsData;
-	
+
 	@XmlElement(name = "item_restriction_cleanups")
 	public ItemRestrictionCleanupData itemCleanup;
 
@@ -183,16 +183,16 @@ public class StaticData {
 
 	@XmlElement(name = "auto_groups")
 	public AutoGroupData autoGroupData;
-	
+
 	@XmlElement(name = "events_config")
 	public EventData eventData;
 
 	@XmlElement(name = "spawns")
 	public SpawnsData2 spawnsData2;
-	
-	@XmlElement(name="pvp_zone_data")
+
+	@XmlElement(name = "pvp_zone_data")
 	public PvpZoneData pvpZoneData;
-	
+
 	@XmlElement(name = "item_groups")
 	public ItemGroupsData itemGroupsData;
 

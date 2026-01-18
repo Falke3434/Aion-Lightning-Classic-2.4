@@ -21,6 +21,7 @@ import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+
 import javolution.util.FastMap;
 
 /**
@@ -37,15 +38,14 @@ public class PlayerLimitService {
 		int accoutnId = player.getPlayerAccount().getId();
 		Long limit = sellLimit.get(accoutnId);
 		if (limit == null) {
-			limit = CustomConfig.LIMITS_SELL; //TODO get limit from char max lvl
+			limit = CustomConfig.LIMITS_SELL; // TODO get limit from char max lvl
 			sellLimit.put(accoutnId, limit);
 		}
 
 		if (limit < reward) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_DAY_CANNOT_SELL_NPC(limit));
 			return false;
-		}
-		else {
+		} else {
 			limit -= reward;
 			sellLimit.putEntry(accoutnId, limit);
 			return true;

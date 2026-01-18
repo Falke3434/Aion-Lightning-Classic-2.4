@@ -20,7 +20,8 @@ package com.aionemu.gameserver.model;
 import javax.xml.bind.annotation.XmlEnum;
 
 /**
- * Creature gender. Typically there are males and females. But who knows, maybe NC can invent something new ;)
+ * Creature gender. Typically there are males and females. But who knows, maybe
+ * NC can invent something new ;)
  * 
  * @author SoulKeeper
  */
@@ -45,7 +46,7 @@ public enum Gender {
 	 * Constructor.
 	 * 
 	 * @param genderId
-	 *          id of the gender
+	 *            id of the gender
 	 */
 	private Gender(int genderId) {
 		this.genderId = genderId;

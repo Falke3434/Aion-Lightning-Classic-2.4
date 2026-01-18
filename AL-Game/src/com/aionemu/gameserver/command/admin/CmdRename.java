@@ -19,16 +19,13 @@ import com.aionemu.gameserver.services.player.PlayerService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.Util;
 
-
 /*No parameters detected.\n" + "Please use //rename <Player name> <rename>\n"
 			+ "or use //rename [target] <rename> */
 public class CmdRename extends BaseCommand {
-	
 
-	
 	public void execute(Player admin, String... params) {
 		if (params.length < 1 || params.length > 2) {
-			showHelp(admin); 
+			showHelp(admin);
 			return;
 		}
 
@@ -44,7 +41,8 @@ public class CmdRename extends BaseCommand {
 				PacketSendUtility.sendMessage(admin, "Could not find a Player by that name.");
 				return;
 			}
-			PlayerCommonData recipientCommonData = DAOManager.getDAO(PlayerDAO.class).loadPlayerCommonDataByName(recipient);
+			PlayerCommonData recipientCommonData = DAOManager.getDAO(PlayerDAO.class)
+					.loadPlayerCommonDataByName(recipient);
 			player = recipientCommonData.getPlayer();
 
 			if (!check(admin, rename))
@@ -56,10 +54,10 @@ public class CmdRename extends BaseCommand {
 			DAOManager.getDAO(PlayerDAO.class).storePlayerName(recipientCommonData);
 			if (recipientCommonData.isOnline()) {
 				PacketSendUtility.sendPacket(player, new SM_PLAYER_INFO(player, false));
-				PacketSendUtility.sendPacket(player, new SM_MOTION(player.getObjectId(), player.getMotions().getActiveMotions()));
+				PacketSendUtility.sendPacket(player,
+						new SM_MOTION(player.getObjectId(), player.getMotions().getActiveMotions()));
 				sendPacket(admin, player, rename, recipient);
-			}
-			else
+			} else
 				PacketSendUtility.sendMessage(admin, "Player " + recipient + " has been renamed to " + rename);
 		}
 		if (params.length == 1) {
@@ -81,8 +79,7 @@ public class CmdRename extends BaseCommand {
 				player.getCommonData().setName(rename);
 				PacketSendUtility.sendPacket(player, new SM_PLAYER_INFO(player, false));
 				DAOManager.getDAO(PlayerDAO.class).storePlayerName(player.getCommonData());
-			}
-			else
+			} else
 				PacketSendUtility.sendMessage(admin, "The command can be applied only on the player.");
 
 			recipient = target.getName();
@@ -122,5 +119,5 @@ public class CmdRename extends BaseCommand {
 		PacketSendUtility.sendMessage(player, "You have been renamed to " + rename);
 		PacketSendUtility.sendMessage(admin, "Player " + recipient + " has been renamed to " + rename);
 	}
-	
+
 }

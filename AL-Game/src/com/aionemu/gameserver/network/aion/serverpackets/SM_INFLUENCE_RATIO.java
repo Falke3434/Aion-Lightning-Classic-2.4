@@ -39,7 +39,7 @@ public class SM_INFLUENCE_RATIO extends AionServerPacket {
 		writeF(inf.getBalaur());
 
 		// TODO: 1.9 has writeH(3) with balauria values
-		writeH(1);
+		writeH(3);
 
 		writeD(400010000);
 		writeF(inf.getElyos());

@@ -49,7 +49,7 @@ public abstract class AionServerPacket extends BaseServerPacket {
 	private final void writeOP(int value) {
 		/** obfuscate packet id */
 		int op = Crypt.encodeOpcodec(value);
-		buf.putShort((short)(op));
+		buf.putShort((short) (op));
 		/** put static server packet code */
 		buf.put(Crypt.staticServerPacketCode);
 
@@ -103,10 +103,8 @@ public abstract class AionServerPacket extends BaseServerPacket {
 		try {
 			do {
 				PckBuffer.put(tmpBuffer.get());
-			}
-			while (tmpBuffer.remaining() > 0);
-		}
-		catch (Exception e) {
+			} while (tmpBuffer.remaining() > 0);
+		} catch (Exception e) {
 			// e.printStackTrace();
 		}
 		PckBuffer.position(0);
@@ -120,9 +118,11 @@ public abstract class AionServerPacket extends BaseServerPacket {
 	 * @param buf
 	 */
 	public final void write(AionConnection con, ByteBuffer buffer) {
-		if (con.getState().equals(AionConnection.State.IN_GAME) && con.getActivePlayer().getPlayerAccount().getMembership() == 10) {
+		if (con.getState().equals(AionConnection.State.IN_GAME)
+				&& con.getActivePlayer().getPlayerAccount().getMembership() == 10) {
 			if (!this.getPacketName().equals("SM_MESSAGE")) {
-				PacketSendUtility.sendMessage(con.getActivePlayer(), "0x" + Integer.toHexString(this.getOpcode()).toUpperCase() + " : " + this.getPacketName());
+				PacketSendUtility.sendMessage(con.getActivePlayer(),
+						"0x" + Integer.toHexString(this.getOpcode()).toUpperCase() + " : " + this.getPacketName());
 			}
 		}
 
@@ -139,16 +139,17 @@ public abstract class AionServerPacket extends BaseServerPacket {
 
 		Player player = con.getActivePlayer();
 
-		if (con.getState().equals(State.IN_GAME) && player != null && this.getOpcode() != 24 && player.getAccessLevel() >= DeveloperConfig.SHOW_PACKETS_INCHAT_ACCESSLEVEL) {
+		if (con.getState().equals(State.IN_GAME) && player != null && this.getOpcode() != 24
+				&& player.getAccessLevel() >= DeveloperConfig.SHOW_PACKETS_INCHAT_ACCESSLEVEL) {
 			if (isPacketFilterd(DeveloperConfig.FILTERED_PACKETS_INCHAT, this.getPacketName())) {
 				if (DeveloperConfig.SHOW_PACKET_BYTES_INCHAT) {
 					String PckName = String.format("0x%04X : %s", this.getOpcode(), this.getPacketName());
 					PacketSendUtility.sendMessage(player, "********************************************");
 					PacketSendUtility.sendMessage(player, PckName);
-					PacketSendUtility.sendMessage(player, Util.toHexStream(getByteBuffer(buf, DeveloperConfig.TOTAL_PACKET_BYTES_INCHAT)));
+					PacketSendUtility.sendMessage(player,
+							Util.toHexStream(getByteBuffer(buf, DeveloperConfig.TOTAL_PACKET_BYTES_INCHAT)));
 
-				}
-				else if (DeveloperConfig.SHOW_PACKET_NAMES_INCHAT) {
+				} else if (DeveloperConfig.SHOW_PACKET_NAMES_INCHAT) {
 					String PckName = String.format("0x%04X : %s", this.getOpcode(), this.getPacketName());
 					PacketSendUtility.sendMessage(player, PckName);
 				}
@@ -165,23 +166,20 @@ public abstract class AionServerPacket extends BaseServerPacket {
 	/**
 	 * Write String to buffer
 	 *
-	 * @param text
 	 * @param size
 	 */
 	protected final void writeS(String text, int size) {
 		if (text == null) {
 			buf.put(new byte[size]);
-		}
-		else {
+		} else {
 			final int len = text.length();
 			for (int i = 0; i < len; i++)
 				buf.putChar(text.charAt(i));
-			buf.put(new byte[size-(len*2)]);
+			buf.put(new byte[size - (len * 2)]);
 		}
 	}
 
-	protected void writeNameId(int nameId)
-	{
+	protected void writeNameId(int nameId) {
 		writeH(0x24);
 		writeD(nameId);
 		writeH(0x00);

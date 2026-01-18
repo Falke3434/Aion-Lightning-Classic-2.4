@@ -19,14 +19,14 @@ package com.aionemu.gameserver.world.container;
 import java.util.Collection;
 import java.util.Iterator;
 
-import javolution.util.FastMap;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.world.exceptions.DuplicateAionObjectException;
 import com.aionemu.gameserver.world.knownlist.Visitor;
+
+import javolution.util.FastMap;
 
 /**
  * Container for storing Players by objectId and name.
@@ -72,8 +72,9 @@ public class PlayerContainer implements Iterable<Player> {
 	 * Get Player object by objectId.
 	 * 
 	 * @param objectId
-	 *          - ObjectId of player.
-	 * @return Player with given ojectId or null if Player with given objectId is not logged.
+	 *            - ObjectId of player.
+	 * @return Player with given ojectId or null if Player with given objectId is
+	 *         not logged.
 	 */
 	public Player get(int objectId) {
 		return playersById.get(objectId);
@@ -83,8 +84,9 @@ public class PlayerContainer implements Iterable<Player> {
 	 * Get Player object by name.
 	 * 
 	 * @param name
-	 *          - name of player
-	 * @return Player with given name or null if Player with given name is not logged.
+	 *            - name of player
+	 * @return Player with given name or null if Player with given name is not
+	 *         logged.
 	 */
 	public Player get(String name) {
 		return playersByName.get(name);
@@ -100,14 +102,14 @@ public class PlayerContainer implements Iterable<Player> {
 	 */
 	public void doOnAllPlayers(Visitor<Player> visitor) {
 		try {
-			for (FastMap.Entry<Integer, Player> e = playersById.head(), mapEnd = playersById.tail(); (e = e.getNext()) != mapEnd;) {
+			for (FastMap.Entry<Integer, Player> e = playersById.head(), mapEnd = playersById
+					.tail(); (e = e.getNext()) != mapEnd;) {
 				Player player = e.getValue();
 				if (player != null) {
 					visitor.visit(player);
 				}
 			}
-		}
-		catch (Exception ex) {
+		} catch (Exception ex) {
 			log.error("Exception when running visitor on all players" + ex);
 		}
 	}
@@ -115,7 +117,7 @@ public class PlayerContainer implements Iterable<Player> {
 	public Collection<Player> getAllPlayers() {
 		return playersById.values();
 	}
-	
+
 	public int countAllPlayers() {
 		return playersById.size();
 	}

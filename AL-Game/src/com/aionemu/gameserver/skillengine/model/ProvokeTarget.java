@@ -25,6 +25,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "ProvokeTarget")
 @XmlEnum
 public enum ProvokeTarget {
-	ME,
-	OPPONENT
+	ME, OPPONENT
 }

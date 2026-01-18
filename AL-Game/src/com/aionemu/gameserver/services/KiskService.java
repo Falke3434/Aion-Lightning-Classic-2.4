@@ -20,7 +20,6 @@ import com.aionemu.gameserver.model.gameobjects.Kisk;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.zone.ZoneType;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_LEVEL_UPDATE;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_SET_BIND_POINT;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.services.teleport.TeleportService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
@@ -49,7 +48,8 @@ public class KiskService {
 	public static void removeKisk(Kisk kisk) {
 		for (Player member : kisk.getCurrentMemberList()) {
 			kiskContainer.remove(member);
-			PacketSendUtility.sendPacket(member, new SM_SET_BIND_POINT(0, 0f, 0f, 0f, member));
+			// PacketSendUtility.sendPacket(member, new SM_SET_BIND_POINT(0, 0f, 0f, 0f,
+			// member));
 			member.setKisk(null);
 			if (member.getLifeStats().isAlreadyDead())
 				member.getController().sendDie();
@@ -61,10 +61,10 @@ public class KiskService {
 	 * @param player
 	 */
 	public static void onBind(Kisk kisk, Player player) {
-		if(kisk.isInsideZoneType(ZoneType.SIEGE)){
+		if (kisk.isInsideZoneType(ZoneType.SIEGE)) {
 			return;
 		}
-		
+
 		if (player.getKisk() != null) {
 			kiskContainer.remove(player);
 			player.getKisk().removePlayer(player);
@@ -80,8 +80,8 @@ public class KiskService {
 		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_BINDSTONE_REGISTER);
 
 		// Send Animated Bind Flash
-		PacketSendUtility.broadcastPacket(player, new SM_LEVEL_UPDATE(player.getObjectId(), 2, player.getCommonData()
-			.getLevel()), true);
+		PacketSendUtility.broadcastPacket(player,
+				new SM_LEVEL_UPDATE(player.getObjectId(), 2, player.getCommonData().getLevel()), true);
 	}
 
 	/**

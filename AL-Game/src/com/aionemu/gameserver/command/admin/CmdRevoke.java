@@ -7,10 +7,8 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.Util;
 import com.aionemu.gameserver.world.World;
 
-
 public class CmdRevoke extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length != 3) {
 			showHelp(admin);
@@ -32,6 +30,7 @@ public class CmdRevoke extends BaseCommand {
 			PacketSendUtility.sendMessage(admin, "The specified player is not online.");
 			return;
 		}
-        LoginServer.getInstance().sendLsControlPacket(player.getAcountName(), player.getName(), admin.getName(), 0, type, type);
+		LoginServer.getInstance().sendLsControlPacket(player.getAcountName(), player.getName(), admin.getName(), 0,
+				type, type);
 	}
 }

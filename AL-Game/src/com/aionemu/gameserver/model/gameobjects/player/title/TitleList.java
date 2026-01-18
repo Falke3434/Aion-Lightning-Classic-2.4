@@ -18,8 +18,6 @@ package com.aionemu.gameserver.model.gameobjects.player.title;
 
 import java.util.Collection;
 
-import javolution.util.FastMap;
-
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerTitleListDAO;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -31,6 +29,8 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_TITLE_INFO;
 import com.aionemu.gameserver.taskmanager.tasks.ExpireTimerTask;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+
+import javolution.util.FastMap;
 
 /**
  * @author xavier, cura, xTz
@@ -81,8 +81,7 @@ public class TitleList {
 				if (time != 0)
 					ExpireTimerTask.getInstance().addTask(entry, owner);
 				DAOManager.getDAO(PlayerTitleListDAO.class).storeTitles(owner, entry);
-			}
-			else {
+			} else {
 				PacketSendUtility.sendPacket(owner, SM_SYSTEM_MESSAGE.STR_TOOLTIP_LEARNED_TITLE);
 				return false;
 			}

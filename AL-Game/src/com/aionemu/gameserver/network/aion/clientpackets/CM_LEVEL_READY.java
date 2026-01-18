@@ -23,7 +23,11 @@ import com.aionemu.gameserver.model.templates.windstreams.Location2D;
 import com.aionemu.gameserver.model.templates.windstreams.WindstreamTemplate;
 import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
-import com.aionemu.gameserver.network.aion.serverpackets.*;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_CUBE_UPDATE;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_MOTION;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_INFO;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
+import com.aionemu.gameserver.network.aion.serverpackets.SM_WINDSTREAM_ANNOUNCE;
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.services.LegionService;
@@ -57,13 +61,14 @@ public class CM_LEVEL_READY extends AionClientPacket {
 		sendPacket(new SM_MOTION(activePlayer.getObjectId(), activePlayer.getMotions().getActiveMotions()));
 		activePlayer.getController().startProtectionActiveTask();
 
-		WindstreamTemplate template = DataManager.WINDSTREAM_DATA.getStreamTemplate(activePlayer.getPosition().getMapId());
+		WindstreamTemplate template = DataManager.WINDSTREAM_DATA
+				.getStreamTemplate(activePlayer.getPosition().getMapId());
 		Location2D location;
 		if (template != null)
 			for (int i = 0; i < template.getLocations().getLocation().size(); i++) {
 				location = template.getLocations().getLocation().get(i);
-				sendPacket(new SM_WINDSTREAM_ANNOUNCE(location.getBidirectional(), template.getMapid(), location.getId(),
-						location.getBoost()));
+				sendPacket(new SM_WINDSTREAM_ANNOUNCE(location.getBidirectional(), template.getMapid(),
+						location.getId(), location.getBoost()));
 			}
 		location = null;
 		template = null;
@@ -84,9 +89,9 @@ public class CM_LEVEL_READY extends AionClientPacket {
 		 * Loading weather for the player's region
 		 */
 		WeatherService.getInstance().loadWeather(activePlayer);
-		
+
 		SerialKillerService.getInstance().onEnterMap(activePlayer);
-		
+
 		QuestEngine.getInstance().onEnterWorld(new QuestEnv(null, activePlayer, 0, 0));
 
 		activePlayer.getController().onEnterWorld();
@@ -105,7 +110,7 @@ public class CM_LEVEL_READY extends AionClientPacket {
 		Pet pet = activePlayer.getPet();
 		if (pet != null)
 			World.getInstance().spawn(pet);
-		
+
 		if (activePlayer.isLegionMember())
 			LegionService.getInstance().onPlayerChangeMap(activePlayer);
 	}

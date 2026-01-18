@@ -16,7 +16,19 @@
  */
 package com.aionemu.gameserver.model.instance.instancereward;
 
-import static ch.lambdaj.Lambda.*;
+import static ch.lambdaj.Lambda.maxFrom;
+import static ch.lambdaj.Lambda.minFrom;
+import static ch.lambdaj.Lambda.on;
+import static ch.lambdaj.Lambda.sort;
+import static ch.lambdaj.Lambda.sum;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.instance.instanceposition.ChaosInstancePosition;
@@ -27,12 +39,7 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_INSTANCE_SCORE;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+
 import javolution.util.FastList;
 
 /**
@@ -261,36 +268,13 @@ public class PvPArenaReward extends InstanceReward<PvPArenaPlayerReward> {
 		if (!isRewarded()) {
 			return 0;
 		}
-		/*switch (mapId) {
-		case 300430000:
-		case 300360000:
-			switch (playerRank) {
-			case 0:
-				return 48700;
-			case 1:
-				return 20300;
-			default:
-				return 20300;
-			}
-		case 300350000:
-		case 300420000:
-			switch (playerRank) {
-			case 0:
-				return 75900;
-			case 1:
-				return 57000;
-			case 2:
-				return 47900;
-			case 3:
-				return 39500;
-			case 4:
-				return 31100;
-			case 5:
-				return 22700;
-			default:
-				return 14200;
-			}
-		}*/
+		/*
+		 * switch (mapId) { case 300430000: case 300360000: switch (playerRank) { case
+		 * 0: return 48700; case 1: return 20300; default: return 20300; } case
+		 * 300350000: case 300420000: switch (playerRank) { case 0: return 75900; case
+		 * 1: return 57000; case 2: return 47900; case 3: return 39500; case 4: return
+		 * 31100; case 5: return 22700; default: return 14200; } }
+		 */
 		return 0;
 	}
 

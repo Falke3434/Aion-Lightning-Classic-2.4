@@ -16,11 +16,10 @@
  */
 package com.aionemu.gameserver.services;
 
-import com.aionemu.commons.services.CronService;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.dataholders.GoodsListData;
 import com.aionemu.gameserver.dataholders.TradeListData;
@@ -35,9 +34,8 @@ import javolution.util.FastMap;
 /**
  * @author xTz
  * 
- * TYPE_A: BuyLimit == 0 && SellLimit != 0
- * TYPE_B: BuyLimit != 0 && SellLimit == 0
- * TYPE_C: BuyLimit != 0 && SellLimit != 0
+ *         TYPE_A: BuyLimit == 0 && SellLimit != 0 TYPE_B: BuyLimit != 0 &&
+ *         SellLimit == 0 TYPE_C: BuyLimit != 0 && SellLimit != 0
  */
 public class LimitedItemTradeService {
 
@@ -60,8 +58,7 @@ public class LimitedItemTradeService {
 				}
 				if (!limitedTradeNpcs.containsKey(npcId)) {
 					limitedTradeNpcs.putIfAbsent(npcId, new LimitedTradeNpc(limitedItems));
-				}
-				else {
+				} else {
 					limitedTradeNpcs.get(npcId).putLimitedItems(limitedItems);
 				}
 			}

@@ -78,8 +78,7 @@ public class CM_DUEL_REQUEST extends AionClientPacket {
 			}
 			duelService.onDuelRequest(activePlayer, targetPlayer);
 			duelService.confirmDuelWith(activePlayer, targetPlayer);
-		}
-		else {
+		} else {
 			sendPacket(SM_SYSTEM_MESSAGE.STR_DUEL_PARTNER_INVALID(target.getName()));
 		}
 	}

@@ -95,8 +95,7 @@ public class PlayerAlliance extends TemporaryPlayerTeam<PlayerAllianceMember> {
 					return playerAllianceGroup;
 				}
 			}
-		}
-		finally {
+		} finally {
 			unlock();
 		}
 		throw new IllegalStateException("All alliance groups are full.");
@@ -143,8 +142,8 @@ public class PlayerAlliance extends TemporaryPlayerTeam<PlayerAllianceMember> {
 	public final int groupSize() {
 		return groups.size();
 	}
-	
-	public final Collection<PlayerAllianceGroup> getGroups(){
+
+	public final Collection<PlayerAllianceGroup> getGroups() {
 		return groups.values();
 	}
 

@@ -16,10 +16,10 @@
  */
 package com.aionemu.gameserver.taskmanager.tasks;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.taskmanager.AbstractPeriodicTaskManager;
+
+import javolution.util.FastMap;
 
 /**
  * @author ATracer
@@ -42,7 +42,8 @@ public class PlayerMoveTaskManager extends AbstractPeriodicTaskManager {
 
 	@Override
 	public void run() {
-		for (FastMap.Entry<Integer, Creature> e = movingPlayers.head(), mapEnd = movingPlayers.tail(); (e = e.getNext()) != mapEnd;) {
+		for (FastMap.Entry<Integer, Creature> e = movingPlayers.head(), mapEnd = movingPlayers
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			Creature player = e.getValue();
 			player.getMoveController().moveToDestination();
 		}

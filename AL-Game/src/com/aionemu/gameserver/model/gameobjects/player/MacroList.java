@@ -3,11 +3,11 @@ package com.aionemu.gameserver.model.gameobjects.player;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Set;
 import java.util.Map.Entry;
+import java.util.Set;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Player macrosses collection, contains all player macrosses.
@@ -57,11 +57,11 @@ public class MacroList {
 	 * Add macro to the collection.
 	 * 
 	 * @param macroPosition
-	 *          Macro order.
+	 *            Macro order.
 	 * @param macroXML
-	 *          Macro Xml contents.
-	 * @return <tt>true</tt> if macro addition was successful, and it can be stored into database. Otherwise
-	 *         <tt>false</tt>.
+	 *            Macro Xml contents.
+	 * @return <tt>true</tt> if macro addition was successful, and it can be stored
+	 *         into database. Otherwise <tt>false</tt>.
 	 */
 	public synchronized boolean addMacro(int macroPosition, String macroXML) {
 		if (macrosses.containsKey(macroPosition)) {
@@ -78,8 +78,8 @@ public class MacroList {
 	 * Remove macro from the list.
 	 * 
 	 * @param macroPosition
-	 * @return <tt>true</tt> if macro deletion was successful, and changes can be stored into database. Otherwise
-	 *         <tt>false</tt>.
+	 * @return <tt>true</tt> if macro deletion was successful, and changes can be
+	 *         stored into database. Otherwise <tt>false</tt>.
 	 */
 	public synchronized boolean removeMacro(int macroPosition) {
 		String m = macrosses.remove(macroPosition);
@@ -97,11 +97,11 @@ public class MacroList {
 	public int getSize() {
 		return macrosses.size();
 	}
-	
+
 	/**
-     * Returns an entry set of macro id to macro contents.
-     */
-    public Set<Entry<Integer, String>> entrySet() {
+	 * Returns an entry set of macro id to macro contents.
+	 */
+	public Set<Entry<Integer, String>> entrySet() {
 		return Collections.unmodifiableSet(getMacrosses().entrySet());
 	}
 }

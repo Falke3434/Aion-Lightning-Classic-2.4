@@ -17,14 +17,13 @@
 
 package com.aionemu.gameserver.model.gameobjects;
 
+import javax.annotation.Nullable;
 
 import com.google.common.base.Function;
 
-import javax.annotation.Nullable;
-
 /**
- * This is the base class for all "in-game" objects, that player can interact with, such as: npcs, monsters, players,
- * items.<br>
+ * This is the base class for all "in-game" objects, that player can interact
+ * with, such as: npcs, monsters, players, items.<br>
  * <br>
  * Each AionObject is uniquely identified by objectId.
  * 

@@ -20,11 +20,7 @@ package com.aionemu.gameserver.utils.stats;
  * @author ATracer, Jangan
  */
 public enum XPLossEnum {
-	LEVEL_6(6, 1.0),
-	LEVEL_30(30, 1.0),
-	LEVEL_40(40, 0.35),
-	LEVEL_50(50, 0.25),
-	LEVEL_55(55, 0.25);
+	LEVEL_6(6, 1.0), LEVEL_30(30, 1.0), LEVEL_40(40, 0.35), LEVEL_50(50, 0.25), LEVEL_55(55, 0.25);
 
 	private int level;
 	private double param;

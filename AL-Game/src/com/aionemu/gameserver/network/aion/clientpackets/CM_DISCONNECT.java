@@ -21,7 +21,8 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionConnection.State;
 
 /**
- * In this packets aion client is notify quit. ie after this packet client will close connection.
+ * In this packets aion client is notify quit. ie after this packet client will
+ * close connection.
  * 
  * @author -Nemesiss-
  */

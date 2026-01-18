@@ -18,8 +18,8 @@ package com.aionemu.gameserver.configs;
 
 import java.util.Properties;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.configs.CommonsConfig;
 import com.aionemu.commons.configs.DatabaseConfig;
@@ -31,7 +31,36 @@ import com.aionemu.gameserver.configs.custom.CustomDrop;
 import com.aionemu.gameserver.configs.custom.CustomFun;
 import com.aionemu.gameserver.configs.custom.RecursiveAddConf;
 import com.aionemu.gameserver.configs.custom.WebShopConf;
-import com.aionemu.gameserver.configs.main.*;
+import com.aionemu.gameserver.configs.main.AIConfig;
+import com.aionemu.gameserver.configs.main.CacheConfig;
+import com.aionemu.gameserver.configs.main.CraftConfig;
+import com.aionemu.gameserver.configs.main.CustomConfig;
+import com.aionemu.gameserver.configs.main.DredgionConfig;
+import com.aionemu.gameserver.configs.main.DropConfig;
+import com.aionemu.gameserver.configs.main.EnchantsConfig;
+import com.aionemu.gameserver.configs.main.EventBoostConfig;
+import com.aionemu.gameserver.configs.main.EventsConfig;
+import com.aionemu.gameserver.configs.main.FallDamageConfig;
+import com.aionemu.gameserver.configs.main.GSConfig;
+import com.aionemu.gameserver.configs.main.GeoDataConfig;
+import com.aionemu.gameserver.configs.main.GroupConfig;
+import com.aionemu.gameserver.configs.main.HTMLConfig;
+import com.aionemu.gameserver.configs.main.InGameShopConfig;
+import com.aionemu.gameserver.configs.main.LegionConfig;
+import com.aionemu.gameserver.configs.main.LoggingConfig;
+import com.aionemu.gameserver.configs.main.MembershipConfig;
+import com.aionemu.gameserver.configs.main.PeriodicSaveConfig;
+import com.aionemu.gameserver.configs.main.PlayerTransferConfig;
+import com.aionemu.gameserver.configs.main.PricesConfig;
+import com.aionemu.gameserver.configs.main.PunishmentConfig;
+import com.aionemu.gameserver.configs.main.PvPConfig;
+import com.aionemu.gameserver.configs.main.RankingConfig;
+import com.aionemu.gameserver.configs.main.RateConfig;
+import com.aionemu.gameserver.configs.main.ShutdownConfig;
+import com.aionemu.gameserver.configs.main.SiegeConfig;
+import com.aionemu.gameserver.configs.main.ThreadConfig;
+import com.aionemu.gameserver.configs.main.WeddingsConfig;
+import com.aionemu.gameserver.configs.main.WorldConfig;
 import com.aionemu.gameserver.configs.network.IPConfig;
 import com.aionemu.gameserver.configs.network.NetworkConfig;
 import com.aionemu.gameserver.utils.Util;
@@ -52,8 +81,7 @@ public class Config {
 			try {
 				log.info("Loading: mygs.properties");
 				myProps = PropertiesUtils.load("./config/mygs.properties");
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.info("No override properties found");
 			}
 
@@ -66,7 +94,7 @@ public class Config {
 
 			ConfigurableProcessor.process(AdminConfig.class, adminProps);
 			log.info("Loading: " + administration + "/admin.properties");
-			
+
 			ConfigurableProcessor.process(DeveloperConfig.class, adminProps);
 			log.info("Loading: " + administration + "/developer.properties");
 
@@ -85,7 +113,7 @@ public class Config {
 
 			ConfigurableProcessor.process(CacheConfig.class, mainProps);
 			log.info("Loading: " + main + "/cache.properties");
-			
+
 			ConfigurableProcessor.process(CraftConfig.class, mainProps);
 			log.info("Loading: " + main + "/craft.properties");
 
@@ -160,15 +188,18 @@ public class Config {
 
 			ConfigurableProcessor.process(PunishmentConfig.class, mainProps);
 			log.info("Loading: " + main + "/punishment.properties");
-			
+
 			ConfigurableProcessor.process(PvPConfig.class, mainProps);
 			log.info("Loading: " + main + "/PvP.properties");
-			
+
 			ConfigurableProcessor.process(EventsConfig.class, mainProps);
 			log.info("Loading: " + main + "/events.properties");
-                        
-                       // ConfigurableProcessor.process(GlobalityConfig.class, mainProps);
-			//log.info("Loading: " + main + "/globality.properties");
+			
+			ConfigurableProcessor.process(EventBoostConfig.class, mainProps);
+			log.info("Loading: " + main + "/boostevent.properties");
+
+			// ConfigurableProcessor.process(GlobalityConfig.class, mainProps);
+			// log.info("Loading: " + main + "/globality.properties");
 
 			// Network
 			Util.printSection("Network");
@@ -181,17 +212,16 @@ public class Config {
 			ConfigurableProcessor.process(DatabaseConfig.class, networkProps);
 			log.info("Loading: " + network + "/network.properties");
 			ConfigurableProcessor.process(NetworkConfig.class, networkProps);
-			
-			
+
 			Util.printSection("Custom");
 			String custom = "./config/custom";
-			
+
 			Properties[] customProps = PropertiesUtils.loadAllFromDirectory(custom);
 			PropertiesUtils.overrideProperties(customProps, myProps);
-			
+
 			log.info("Loading: " + custom + "/customDrop.properties");
 			ConfigurableProcessor.process(CustomDrop.class, customProps);
-			
+
 			log.info("Loading: " + custom + "/recursiveAdd.properties");
 			ConfigurableProcessor.process(RecursiveAddConf.class, customProps);
 			log.info("Loading: " + custom + "/customfun.properties");
@@ -199,8 +229,7 @@ public class Config {
 			log.info("Loading: " + custom + "/webshop.properties");
 			ConfigurableProcessor.process(WebShopConf.class, customProps);
 
-		}
-		catch (Exception e) {
+		} catch (Exception e) {
 			log.error("Can't load gameserver configuration: ", e);
 			throw new Error("Can't load gameserver configuration: ", e);
 		}

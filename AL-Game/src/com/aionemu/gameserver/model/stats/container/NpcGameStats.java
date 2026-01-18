@@ -45,6 +45,7 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	private long lastChangeTarget = 0;
 	private int pAccuracy = 0;
 	private int mRes = 0;
+
 	public NpcGameStats(Npc owner) {
 		super(owner);
 	}
@@ -53,7 +54,7 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	protected void onStatsChange() {
 		checkSpeedStats();
 	}
-	
+
 	private void checkSpeedStats() {
 		Stat2 oldSpeed = cachedSpeedStat;
 		cachedSpeedStat = null;
@@ -89,19 +90,16 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 		Stat2 newSpeedStat = null;
 		if (owner.isInFlyingState() || owner.isInState(CreatureState.GLIDING)) {
 			newSpeedStat = getStat(StatEnum.FLY_SPEED,
-				Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeed() * 1.3f * 1000));
-		}
-		else if (owner.isInState(CreatureState.WEAPON_EQUIPPED)) {
+					Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeed() * 1.3f * 1000));
+		} else if (owner.isInState(CreatureState.WEAPON_EQUIPPED)) {
 			newSpeedStat = getStat(StatEnum.SPEED,
-				Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeedFight() * 1000));
-		}
-		else if (owner.isInState(CreatureState.WALKING)) {
+					Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeedFight() * 1000));
+		} else if (owner.isInState(CreatureState.WALKING)) {
 			newSpeedStat = getStat(StatEnum.SPEED,
-				Math.round(owner.getObjectTemplate().getStatsTemplate().getWalkSpeed() * 1000));
-		}
-		else {
+					Math.round(owner.getObjectTemplate().getStatsTemplate().getWalkSpeed() * 1000));
+		} else {
 			newSpeedStat = getStat(StatEnum.SPEED,
-				Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeed() * 1000));
+					Math.round(owner.getObjectTemplate().getStatsTemplate().getRunSpeed() * 1000));
 		}
 		cachedState = currentState;
 		cachedSpeedStat = newSpeedStat;
@@ -120,8 +118,8 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 
 	@Override
 	public Stat2 getMResist() {
-		if (mRes == 0){
-			mRes = Math.round(owner.getLevel()*17.5f+75);
+		if (mRes == 0) {
+			mRes = Math.round(owner.getLevel() * 17.5f + 75);
 		}
 		return getStat(StatEnum.MAGICAL_RESIST, mRes);
 	}
@@ -204,7 +202,8 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	public Stat2 getMAccuracy() {
 		if (pAccuracy == 0)
 			calcStats();
-		// Trap's MAccuracy is being calculated into TrapGameStats and is related to master's MAccuracy
+		// Trap's MAccuracy is being calculated into TrapGameStats and is related to
+		// master's MAccuracy
 		if (owner instanceof SummonedObject)
 			return getStat(StatEnum.MAGICAL_ACCURACY, pAccuracy);
 		return getMainHandPAccuracy();
@@ -268,11 +267,11 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 		}
 		return nextAttack;
 	}
-	
+
 	/**
 	 * @return next possible skill time depending on time
 	 */
-	
+
 	public void renewLastSkillTime() {
 		this.lastSkillTime = System.currentTimeMillis();
 	}
@@ -280,7 +279,7 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	public void renewLastSkilledTime() {
 		this.lastSkilledTime = System.currentTimeMillis();
 	}
-	
+
 	public void renewLastChangeTargetTime() {
 		this.lastChangeTarget = System.currentTimeMillis();
 	}
@@ -292,13 +291,13 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	public int getLastSkilledTimeDelta() {
 		return Math.round((System.currentTimeMillis() - lastSkilledTime) / 1000f);
 	}
-	
+
 	public int getLastChangeTargetTimeDelta() {
 		return Math.round((System.currentTimeMillis() - lastChangeTarget) / 1000f);
 	}
 
 	public boolean canUseNextSkill() {
-		if (getLastSkilledTimeDelta() >= 6 + Rnd.get(-3,3))
+		if (getLastSkilledTimeDelta() >= 6 + Rnd.get(-3, 3))
 			return true;
 		else
 			return false;
@@ -312,33 +311,34 @@ public class NpcGameStats extends CreatureGameStats<Npc> {
 	public final long getLastGeoZUpdate() {
 		return lastGeoZUpdate;
 	}
-	
+
 	/**
-	 * @param lastGeoZUpdate the lastGeoZUpdate to set
+	 * @param lastGeoZUpdate
+	 *            the lastGeoZUpdate to set
 	 */
 	public void setLastGeoZUpdate(long lastGeoZUpdate) {
 		this.lastGeoZUpdate = lastGeoZUpdate;
 	}
 
-	private void calcStats(){
+	private void calcStats() {
 		int lvl = owner.getLevel();
-		double accuracy = lvl*(33.6f-(0.16*lvl))+5;
-		switch (owner.getObjectTemplate().getRank()){
-			case NOVICE:
-			case DISCIPLINED:
-				break;
-			case SEASONED:
-				accuracy *= 1.05f;
-				break;
-			case EXPERT:
-				accuracy *= 1.15f;
-				break;
-			case MASTER:
-				accuracy *= 1.25f;
-				break;
-			case VETERAN:
-				accuracy *= 1.35f;
-				break;
+		double accuracy = lvl * (33.6f - (0.16 * lvl)) + 5;
+		switch (owner.getObjectTemplate().getRank()) {
+		case NOVICE:
+		case DISCIPLINED:
+			break;
+		case SEASONED:
+			accuracy *= 1.05f;
+			break;
+		case EXPERT:
+			accuracy *= 1.15f;
+			break;
+		case MASTER:
+			accuracy *= 1.25f;
+			break;
+		case VETERAN:
+			accuracy *= 1.35f;
+			break;
 		}
 		this.pAccuracy = (int) Math.round(accuracy);
 	}

@@ -16,7 +16,8 @@
  */
 package com.aionemu.gameserver.taskmanager;
 
-import org.slf4j.Logger; import org.slf4j.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import com.aionemu.commons.taskmanager.AbstractLockManager;
 import com.aionemu.commons.utils.Rnd;
@@ -25,7 +26,8 @@ import com.aionemu.gameserver.GameServer.StartupHook;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 
 /**
- * @author lord_rex and MrPoke based on l2j-free engines. This can be used for periodic calls.
+ * @author lord_rex and MrPoke based on l2j-free engines. This can be used for
+ *         periodic calls.
  */
 public abstract class AbstractPeriodicTaskManager extends AbstractLockManager implements Runnable, StartupHook {
 
@@ -43,7 +45,8 @@ public abstract class AbstractPeriodicTaskManager extends AbstractLockManager im
 
 	@Override
 	public final void onStartup() {
-		ThreadPoolManager.getInstance().scheduleAtFixedRate(this, 1000 + Rnd.get(period), Rnd.get(period - 5, period + 5));
+		ThreadPoolManager.getInstance().scheduleAtFixedRate(this, 1000 + Rnd.get(period),
+				Rnd.get(period - 5, period + 5));
 	}
 
 	@Override

@@ -25,8 +25,8 @@ import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.EmotionType;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.Pet;
-import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.PetCommonData;
+import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.team2.common.legacy.LootRuleType;
 import com.aionemu.gameserver.model.templates.item.ItemUseLimits;
 import com.aionemu.gameserver.model.templates.item.actions.AbstractItemAction;
@@ -80,7 +80,8 @@ public class PetService {
 		Pet pet = player.getPet();
 		pet.getCommonData().setCancelFeed(false);
 		PacketSendUtility.sendPacket(player, new SM_PET(1, action, item.getObjectId(), count, pet));
-		PacketSendUtility.sendPacket(player, new SM_EMOTION(player, EmotionType.START_FEEDING, 0, player.getObjectId()));
+		PacketSendUtility.sendPacket(player,
+				new SM_EMOTION(player, EmotionType.START_FEEDING, 0, player.getObjectId()));
 
 		schedule(pet, player, item, count, action);
 	}
@@ -111,26 +112,27 @@ public class PetService {
 
 			if (foodType != null) {
 				player.getInventory().decreaseItemCount(item, 1, ItemUpdateType.DEC_PET_FOOD);
-				reward = flavour.processFeedResult(progress, foodType, item.getItemTemplate().getLevel(), player
-					.getCommonData().getLevel());
+				reward = flavour.processFeedResult(progress, foodType, item.getItemTemplate().getLevel(),
+						player.getCommonData().getLevel());
 				if (progress.getHungryLevel() == PetHungryLevel.FULL && reward != null)
 					PacketSendUtility.sendPacket(player, new SM_PET(2, action, item.getObjectId(), 0, pet));
 				else
 					PacketSendUtility.sendPacket(player, new SM_PET(2, action, item.getObjectId(), --count, pet));
-			}
-			else {
+			} else {
 				// non eatable item
 				PacketSendUtility.sendPacket(player, new SM_PET(5, action, 0, 0, pet));
-				PacketSendUtility.sendPacket(player, new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
 				PacketSendUtility.sendPacket(player,
-					SM_SYSTEM_MESSAGE.STR_MSG_TOYPET_FEED_FOOD_NOT_LOVEFLAVOR(pet.getName(), item.getItemTemplate().getNameId()));
+						new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
+				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE
+						.STR_MSG_TOYPET_FEED_FOOD_NOT_LOVEFLAVOR(pet.getName(), item.getItemTemplate().getNameId()));
 				return;
 			}
 
 			if (progress.getHungryLevel() == PetHungryLevel.FULL && reward != null) {
 				PacketSendUtility.sendPacket(player, new SM_PET(6, action, reward.getItem(), 0, pet));
 				PacketSendUtility.sendPacket(player, new SM_PET(5, action, 0, 0, pet));
-				PacketSendUtility.sendPacket(player, new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
+				PacketSendUtility.sendPacket(player,
+						new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
 				PacketSendUtility.sendPacket(player, new SM_PET(7, action, 0, 0, pet)); // 2151591961
 
 				ItemService.addItem(player, reward.getItem(), 1);
@@ -138,12 +140,12 @@ public class PetService {
 				commonData.setCurentTime(System.currentTimeMillis());
 				DAOManager.getDAO(PlayerPetsDAO.class).setTime(player, pet.getPetId(), System.currentTimeMillis());
 				progress.reset();
-			}
-			else if (count > 0)
+			} else if (count > 0)
 				schedule(pet, player, item, count, action);
 			else {
 				PacketSendUtility.sendPacket(player, new SM_PET(5, action, 0, 0, pet));
-				PacketSendUtility.sendPacket(player, new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
+				PacketSendUtility.sendPacket(player,
+						new SM_EMOTION(player, EmotionType.END_FEEDING, 0, player.getObjectId()));
 			}
 		}
 	}
@@ -166,8 +168,7 @@ public class PetService {
 			PacketSendUtility.sendPacket(player, new SM_PET(0, targetItem, destinationSlot));
 			pet.getCommonData().getDopingBag().setItem(0, targetSlot);
 			PacketSendUtility.sendPacket(player, new SM_PET(0, 0, targetSlot));
-		}
-		else {
+		} else {
 			pet.getCommonData().getDopingBag().setItem(scrollBag[destinationSlot - 2], targetSlot);
 			PacketSendUtility.sendPacket(player, new SM_PET(0, scrollBag[destinationSlot - 2], targetSlot));
 			pet.getCommonData().getDopingBag().setItem(targetItem, destinationSlot);
@@ -183,8 +184,7 @@ public class PetService {
 		if (action < 2) { // add, replace or delete item
 			pet.getCommonData().getDopingBag().setItem(itemId, slot);
 			action = 0;
-		}
-		else if (action == 3) { // use item
+		} else if (action == 3) { // use item
 			List<Item> items = player.getInventory().getItemsByItemId(itemId);
 			for (;;) {
 				Item useItem = items.get(0);

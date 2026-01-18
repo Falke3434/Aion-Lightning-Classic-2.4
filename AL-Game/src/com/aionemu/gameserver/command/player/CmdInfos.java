@@ -68,7 +68,7 @@ public class CmdInfos extends BaseCommand {
 				float chance = drop.getChance() * dropGroup.getDropModifier()
 						* (npcTemplate.getRating() == NpcRating.NORMAL ? 1 : player.getRates().getDropRate());
 				chance = Math.min(100, chance);
-						
+
 				PacketSendUtility.sendMessage(player, "[item:" + drop.getItemId() + "]" + "  Rate: " + chance);
 				count++;
 			}

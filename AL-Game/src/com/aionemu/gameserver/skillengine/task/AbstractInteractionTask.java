@@ -91,7 +91,8 @@ public abstract class AbstractInteractionTask {
 
 	/**
 	 * Stop current interaction
-	 * @param b 
+	 * 
+	 * @param b
 	 */
 	public void stop(boolean participantNull) {
 		if (!participantNull)
@@ -124,7 +125,7 @@ public abstract class AbstractInteractionTask {
 	public boolean validateParticipants() {
 		return requestor != null;
 	}
-	
+
 	public void setInterval(int interval) {
 		this.interval = interval;
 	}

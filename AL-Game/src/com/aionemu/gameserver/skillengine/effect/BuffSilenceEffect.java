@@ -22,7 +22,6 @@ import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.skillengine.model.Effect;
 
-
 /**
  * @author kecimis
  *
@@ -30,9 +29,9 @@ import com.aionemu.gameserver.skillengine.model.Effect;
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "BuffSilenceEffect")
 public class BuffSilenceEffect extends SilenceEffect {
-	
+
 	@Override
 	public void calculate(Effect effect) {
-			effect.addSucessEffect(this);
+		effect.addSucessEffect(this);
 	}
 }

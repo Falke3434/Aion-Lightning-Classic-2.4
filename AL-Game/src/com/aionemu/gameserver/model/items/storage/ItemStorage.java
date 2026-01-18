@@ -1,9 +1,9 @@
 package com.aionemu.gameserver.model.items.storage;
 
+import com.aionemu.gameserver.model.gameobjects.Item;
+
 import javolution.util.FastList;
 import javolution.util.FastMap;
-
-import com.aionemu.gameserver.model.gameobjects.Item;
 
 /**
  * @author KID
@@ -57,7 +57,7 @@ public class ItemStorage {
 		}
 		return temp;
 	}
-	
+
 	public int countItemsById(int itemId) {
 		int count = 0;
 		for (Item item : items.values()) {

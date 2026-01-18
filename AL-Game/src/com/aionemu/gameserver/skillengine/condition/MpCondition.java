@@ -35,7 +35,7 @@ public class MpCondition extends Condition {
 
 	@XmlAttribute
 	protected int delta;
-	
+
 	@XmlAttribute
 	protected boolean ratio;
 

@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
@@ -32,9 +31,10 @@ public class SM_QUEST_ACTION extends AionServerPacket {
 	protected int action;
 	private int timer;
 
-	SM_QUEST_ACTION(){
-		
+	SM_QUEST_ACTION() {
+
 	}
+
 	/**
 	 * Accept Quest(1)
 	 * 
@@ -103,8 +103,10 @@ public class SM_QUEST_ACTION extends AionServerPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see
-	 * com.aionemu.commons.network.mmocore.SendablePacket#writeImpl(com.aionemu.commons.network.mmocore.MMOConnection)
+	 * com.aionemu.commons.network.mmocore.SendablePacket#writeImpl(com.aionemu.
+	 * commons.network.mmocore.MMOConnection)
 	 */
 	@Override
 	protected void writeImpl(AionConnection con) {
@@ -112,33 +114,33 @@ public class SM_QUEST_ACTION extends AionServerPacket {
 		writeC(action);
 		writeD(questId);
 		switch (action) {
-			case 1:
-				writeC(status);// quest status goes by ENUM value
-				writeC(0x0);
-				writeD(step);// current quest step
-				writeH(0);
-				break;
-			case 2:
-				writeC(status);// quest status goes by ENUM value
-				writeC(0x0);
-				writeD(step);// current quest step
-				writeH(0);
-				break;
-			case 3:
-				writeC(status);// quest status goes by ENUM value
-				writeC(0x0);
-				writeD(step);// current quest step
-				writeH(0);
-				break;
-			case 4:
-				writeD(timer);// sets client timer ie 84030000 is 900 seconds/15 mins
-				writeC(0x01);
-				writeH(0x0);
-				writeC(0x01);
-			case 6:
-				writeH(0x01);// ???
-				writeD(0x0);// current quest step
-				writeH(0x0);
+		case 1:
+			writeC(status);// quest status goes by ENUM value
+			writeC(0x0);
+			writeD(step);// current quest step
+			writeH(0);
+			break;
+		case 2:
+			writeC(status);// quest status goes by ENUM value
+			writeC(0x0);
+			writeD(step);// current quest step
+			writeH(0);
+			break;
+		case 3:
+			writeC(status);// quest status goes by ENUM value
+			writeC(0x0);
+			writeD(step);// current quest step
+			writeH(0);
+			break;
+		case 4:
+			writeD(timer);// sets client timer ie 84030000 is 900 seconds/15 mins
+			writeC(0x01);
+			writeH(0x0);
+			writeC(0x01);
+		case 6:
+			writeH(0x01);// ???
+			writeD(0x0);// current quest step
+			writeH(0x0);
 		}
 	}
 }

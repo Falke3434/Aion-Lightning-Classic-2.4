@@ -62,23 +62,25 @@ public class CM_SUMMON_EMOTION extends AionClientPacket {
 
 		Summon summon = player.getSummon();
 		if (summon == null) {
-			log.warn("summon emotion without active summon on "+player.getName()+".");
+			log.warn("summon emotion without active summon on " + player.getName() + ".");
 			return;
 		}
 
 		switch (emotionType) {
-			case FLY:
-			case LAND:
-				PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
-				break;
-			case ATTACKMODE: // start attacking
-				summon.setState(CreatureState.WEAPON_EQUIPPED);
-				PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
-				break;
-			case NEUTRALMODE: // stop attacking
-				summon.unsetState(CreatureState.WEAPON_EQUIPPED);
-				PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
-				break;
+		case FLY:
+		case LAND:
+			PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
+			break;
+		case ATTACKMODE: // start attacking
+			summon.setState(CreatureState.WEAPON_EQUIPPED);
+			PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
+			break;
+		case NEUTRALMODE: // stop attacking
+			summon.unsetState(CreatureState.WEAPON_EQUIPPED);
+			PacketSendUtility.broadcastPacket(summon, new SM_EMOTION(summon, emotionType));
+			break;
+		default:
+			break;
 		}
 	}
 }

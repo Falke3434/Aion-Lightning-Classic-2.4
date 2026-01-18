@@ -102,7 +102,8 @@ public class Announcement {
 	}
 
 	/**
-	 * Return the announcement's faction in Race enum mode : - Race.ELYOS - Race.ASMODIANS
+	 * Return the announcement's faction in Race enum mode : - Race.ELYOS -
+	 * Race.ASMODIANS
 	 * 
 	 * @return Race - Announcement's faction
 	 */

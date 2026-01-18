@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.services;
 
+import java.util.Set;
+import java.util.concurrent.Future;
+
 import com.aionemu.gameserver.model.drop.DropItem;
 import com.aionemu.gameserver.model.gameobjects.Npc;
 import com.aionemu.gameserver.model.gameobjects.VisibleObject;
@@ -28,15 +31,13 @@ import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.utils.gametime.DayTime;
 import com.aionemu.gameserver.utils.gametime.GameTimeManager;
 import com.aionemu.gameserver.world.World;
-import java.util.Set;
-import java.util.concurrent.Future;
 
 /**
  * @author ATracer, Source, xTz
  */
 public class RespawnService {
 	private static final int IMMEDIATE_DECAY = 5 * 1000;
-	private static final int WITHOUT_DROP_DECAY = (int)(1.5 * 60 * 1000);
+	private static final int WITHOUT_DROP_DECAY = (int) (1.5 * 60 * 1000);
 	private static final int WITH_DROP_DECAY = 5 * 60 * 1000;
 
 	/**
@@ -47,9 +48,9 @@ public class RespawnService {
 		int decayInterval;
 		Set<DropItem> drop = DropRegistrationService.getInstance().geCurrentDropMap().get(npc.getObjectId());
 
-		if(drop == null)
+		if (drop == null)
 			decayInterval = IMMEDIATE_DECAY;
-		else if(drop.isEmpty())
+		else if (drop.isEmpty())
 			decayInterval = WITHOUT_DROP_DECAY;
 		else
 			decayInterval = WITH_DROP_DECAY;

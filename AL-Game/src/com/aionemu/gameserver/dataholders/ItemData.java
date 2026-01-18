@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -36,6 +34,8 @@ import com.aionemu.gameserver.model.templates.item.ItemTemplate;
 import com.aionemu.gameserver.model.templates.item.actions.AdoptPetAction;
 import com.aionemu.gameserver.model.templates.restriction.ItemCleanupTemplate;
 
+import gnu.trove.map.hash.TIntObjectHashMap;
+
 /**
  * @author Luno
  */
@@ -48,10 +48,10 @@ public class ItemData {
 
 	@XmlTransient
 	private TIntObjectHashMap<ItemTemplate> items;
-	
+
 	@XmlTransient
 	private TIntObjectHashMap<ItemTemplate> petEggs = new TIntObjectHashMap<ItemTemplate>();
-	
+
 	@XmlTransient
 	Map<Integer, List<ItemTemplate>> manastones = new HashMap<Integer, List<ItemTemplate>>();
 
@@ -75,9 +75,9 @@ public class ItemData {
 		}
 		its = null;
 	}
-	
+
 	public void cleanup() {
-		for(ItemCleanupTemplate ict : DataManager.ITEM_CLEAN_UP.getList()) {
+		for (ItemCleanupTemplate ict : DataManager.ITEM_CLEAN_UP.getList()) {
 			ItemTemplate template = items.get(ict.getId());
 			applyCleanup(template, ict.resultTrade(), ItemMask.TRADEABLE);
 			applyCleanup(template, ict.resultSell(), ItemMask.SELLABLE);
@@ -86,16 +86,16 @@ public class ItemData {
 			applyCleanup(template, ict.resultLegionWH(), ItemMask.STORABLE_IN_LWH);
 		}
 	}
-	
+
 	private void applyCleanup(ItemTemplate item, byte result, int mask) {
-		if(result != -1) {
-			switch(result) {
-				case 1:
-					item.modifyMask(true, mask);
-					break;
-				case 0:
-					item.modifyMask(false, mask);
-					break;
+		if (result != -1) {
+			switch (result) {
+			case 1:
+				item.modifyMask(true, mask);
+				break;
+			case 0:
+				item.modifyMask(false, mask);
+				break;
 			}
 		}
 	}

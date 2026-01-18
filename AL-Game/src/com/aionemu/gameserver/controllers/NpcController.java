@@ -86,8 +86,7 @@ public class NpcController extends CreatureController<Npc> {
 			// TODO see player ai event
 			if (owner.getLifeStats().isAlreadyDead())
 				DropService.getInstance().see((Player) object, owner);
-		}
-		else if (object instanceof Summon) {
+		} else if (object instanceof Summon) {
 			// TODO see summon ai event
 		}
 	}
@@ -131,8 +130,8 @@ public class NpcController extends CreatureController<Npc> {
 		Npc owner = getOwner();
 		if (owner.getSpawn().hasPool())
 			owner.getSpawn().setUse(false);
-		PacketSendUtility.broadcastPacket(owner, new SM_EMOTION(owner, EmotionType.DIE, 0, lastAttacker == null ? 0
-			: lastAttacker.getObjectId()));
+		PacketSendUtility.broadcastPacket(owner,
+				new SM_EMOTION(owner, EmotionType.DIE, 0, lastAttacker == null ? 0 : lastAttacker.getObjectId()));
 		if (owner.getAi2().poll(AIQuestion.SHOULD_REWARD))
 			this.doReward();
 
@@ -141,7 +140,8 @@ public class NpcController extends CreatureController<Npc> {
 
 		if (owner.getAi2().poll(AIQuestion.SHOULD_DECAY))
 			addTask(TaskId.DECAY, RespawnService.scheduleDecayTask(owner));
-		if (owner.getAi2().poll(AIQuestion.SHOULD_RESPAWN) && !SiegeService.getInstance().isSiegeNpcInActiveSiege(getOwner()))
+		if (owner.getAi2().poll(AIQuestion.SHOULD_RESPAWN)
+				&& !SiegeService.getInstance().isSiegeNpcInActiveSiege(getOwner()))
 			scheduleRespawn();
 		else {
 			if (!hasScheduledTask(TaskId.DECAY))
@@ -156,10 +156,10 @@ public class NpcController extends CreatureController<Npc> {
 		if (winner == null)
 			return;
 
-		//CustomRank
-		if(CustomFun.CUSTOM_RANK_ENABLED)
+		// CustomRank
+		if (CustomFun.CUSTOM_RANK_ENABLED)
 			CustomPlayerRank.onMonsterKill(getOwner());
-		
+
 		if (winner instanceof PlayerAlliance)
 			PlayerTeamDistributionService.doReward((PlayerAlliance) winner, getOwner());
 		else if (winner instanceof PlayerGroup)
@@ -169,10 +169,12 @@ public class NpcController extends CreatureController<Npc> {
 		else {
 			super.doReward();
 
-			Player player = (Player) ((Creature) winner).getActingCreature();;
+			Player player = (Player) ((Creature) winner).getActingCreature();
+			;
 
 			long expReward = StatFunctions.calculateSoloExperienceReward(player, getOwner());
-			player.getCommonData().addExp(expReward, RewardType.HUNTING, this.getOwner().getObjectTemplate().getNameId());
+			player.getCommonData().addExp(expReward, RewardType.HUNTING,
+					this.getOwner().getObjectTemplate().getNameId());
 
 			int currentDp = player.getCommonData().getDp();
 			int dpReward = StatFunctions.calculateSoloDPReward(player, getOwner());
@@ -185,9 +187,9 @@ public class NpcController extends CreatureController<Npc> {
 			DropRegistrationService.getInstance().registerDrop(getOwner(), player, player.getLevel(), null);
 			// notify instance script
 		}
-		
+
 		// Custom DropShopPoint
-		if(CustomDrop.SHOPPOINTS_DROPABLE) {
+		if (CustomDrop.SHOPPOINTS_DROPABLE) {
 			DropShopPoint d = new DropShopPoint(getOwner());
 			d.callNpcShopPointRewardForPlayer();
 		}
@@ -221,8 +223,8 @@ public class NpcController extends CreatureController<Npc> {
 		if (getOwner().getLifeStats().isAlreadyDead())
 			return;
 		final Creature actingCreature;
-		
-		//summon should gain its own aggro
+
+		// summon should gain its own aggro
 		if (creature instanceof Summon)
 			actingCreature = creature;
 		else
@@ -236,7 +238,7 @@ public class NpcController extends CreatureController<Npc> {
 			QuestEngine.getInstance().onAttack(new QuestEnv(npc, (Player) actingCreature, 0, 0));
 		}
 
-		PacketSendUtility.broadcastPacket(npc, new SM_ATTACK_STATUS(npc, type, skillId, damage, log));
+		PacketSendUtility.broadcastPacket(npc, new SM_ATTACK_STATUS(npc, actingCreature, type, skillId, damage, log));
 	}
 
 	@Override
@@ -257,10 +259,9 @@ public class NpcController extends CreatureController<Npc> {
 		Player player = npc.getQuestPlayer();
 		if (zoneInstance.getAreaTemplate().getZoneName() == null) {
 			log.error("No name found for a Zone in the map " + zoneInstance.getAreaTemplate().getWorldId());
-		}
-		else {
+		} else {
 			QuestEngine.getInstance().onEnterZone(new QuestEnv(npc, player, 0, 0),
-				zoneInstance.getAreaTemplate().getZoneName());
+					zoneInstance.getAreaTemplate().getZoneName());
 		}
 	}
 

@@ -25,13 +25,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "skillSubType")
 @XmlEnum
 public enum SkillSubType {
-	NONE,
-	ATTACK,
-	CHANT,
-	HEAL,
-	BUFF,
-	DEBUFF,
-	SUMMON,
-	SUMMONHOMING,
-	SUMMONTRAP
+	NONE, ATTACK, CHANT, HEAL, BUFF, DEBUFF, SUMMON, SUMMONHOMING, SUMMONTRAP
 }

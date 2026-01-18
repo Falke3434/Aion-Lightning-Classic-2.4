@@ -77,14 +77,13 @@ public class CM_CHARACTER_EDIT extends AionClientPacket {
 		gender_change = playerCommonData.getGender().getGenderId() == gender ? false : true;
 		if (!gender_change) {
 			if (player.getInventory().getItemCountByItemId(169650000) == 0
-				&& player.getInventory().getItemCountByItemId(169650001) == 0) {
+					&& player.getInventory().getItemCountByItemId(169650001) == 0) {
 				check_ticket = false;
 				return;
 			}
-		}
-		else {
+		} else {
 			if (player.getInventory().getItemCountByItemId(169660000) == 0
-				&& player.getInventory().getItemCountByItemId(169660001) == 0) {
+					&& player.getInventory().getItemCountByItemId(169660001) == 0) {
 				check_ticket = false;
 				return;
 			}
@@ -144,7 +143,7 @@ public class CM_CHARACTER_EDIT extends AionClientPacket {
 		playerAppearance.setChest(readC()); // only woman
 		playerAppearance.setWaist(readC());
 		playerAppearance.setHips(readC());
-		
+
 		playerAppearance.setArmThickness(readC());
 
 		playerAppearance.setHandSize(readC());
@@ -173,20 +172,18 @@ public class CM_CHARACTER_EDIT extends AionClientPacket {
 		PlayerEnterWorldService.enterWorld(client, objectId);
 		Player player = client.getActivePlayer();
 		if (!check_ticket) {
-			if(!gender_change)
+			if (!gender_change)
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_EDIT_CHAR_ALL_CANT_NO_ITEM);
 			else
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_EDIT_CHAR_GENDER_CANT_NO_ITEM);
-		}
-		else {
+		} else {
 			// Remove ticket and save appearance
 			if (!gender_change) {
 				if (player.getInventory().getItemCountByItemId(169650000) > 0) // plastic surgery ticket normal
 					player.getInventory().decreaseByItemId(169650000, 1);
 				else if (player.getInventory().getItemCountByItemId(169650001) > 0) // plastic surgery ticket event
 					player.getInventory().decreaseByItemId(169650001, 1);
-			}
-			else {
+			} else {
 				if (player.getInventory().getItemCountByItemId(169660000) > 0) // gender switch ticket normal
 					player.getInventory().decreaseByItemId(169660000, 1);
 				else if (player.getInventory().getItemCountByItemId(169660001) > 0) // gender switch ticket event

@@ -16,9 +16,10 @@
  */
 package com.aionemu.gameserver.model.autogroup;
 
-import com.aionemu.gameserver.model.gameobjects.player.Player;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.aionemu.gameserver.model.gameobjects.player.Player;
 
 /**
  *
@@ -64,7 +65,7 @@ public class LookingForParty {
 
 	public SearchInstance getSearchInstance(byte instanceMaskId) {
 		for (SearchInstance si : searchInstances) {
-			if (si.getInstanceMaskId() == instanceMaskId ) {
+			if (si.getInstanceMaskId() == instanceMaskId) {
 				return si;
 			}
 		}
@@ -73,7 +74,7 @@ public class LookingForParty {
 
 	public boolean isRegistredInstance(byte instanceMaskId) {
 		for (SearchInstance si : searchInstances) {
-			if (si.getInstanceMaskId() == instanceMaskId ) {
+			if (si.getInstanceMaskId() == instanceMaskId) {
 				return true;
 			}
 		}
@@ -118,7 +119,7 @@ public class LookingForParty {
 	}
 
 	public boolean isOnStartEnterTask() {
-		if (System.currentTimeMillis() - startEnterTime <= (120000 * 2)){
+		if (System.currentTimeMillis() - startEnterTime <= (120000 * 2)) {
 			return true;
 		}
 		return false;

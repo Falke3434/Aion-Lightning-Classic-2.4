@@ -1,5 +1,11 @@
 package com.aionemu.gameserver.services.siegeservice;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.LinkedList;
+import java.util.Map;
+import java.util.concurrent.atomic.AtomicLong;
+
 import com.aionemu.commons.utils.GenericValidator;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -7,16 +13,12 @@ import com.aionemu.gameserver.model.siege.SiegeRace;
 import com.aionemu.gameserver.model.team.legion.Legion;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+
 import javolution.util.FastMap;
 
-import java.util.Collections;
-import java.util.Comparator;
-import java.util.LinkedList;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicLong;
-
 /**
- * A class that contains all the counters for the siege. One SiegeCounter per race should be used.
+ * A class that contains all the counters for the siege. One SiegeCounter per
+ * race should be used.
  *
  * @author SoulKeeper
  */
@@ -30,9 +32,9 @@ public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 
 	private final Map<Integer, AtomicLong> playerAPCounter = new FastMap<Integer, AtomicLong>().shared();
 	private final Map<Integer, AtomicLong> playerKillCounter = new FastMap<Integer, AtomicLong>().shared();
-	
+
 	private final PlayerInfoContainer pIC = new PlayerInfoContainer();
-	
+
 	private final SiegeRace siegeRace;
 
 	public SiegeRaceCounter(SiegeRace siegeRace) {
@@ -66,17 +68,19 @@ public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 	}
 
 	public void addAbyssPoints(Player player, int abyssPoints) {
-		//custom reg
-		pIC.updatePlayerInfo(player.getClientConnection().getIP(), player.getName(), player.getAcountName(), abyssPoints);
+		// custom reg
+		pIC.updatePlayerInfo(player.getClientConnection().getIP(), player.getName(), player.getAcountName(),
+				abyssPoints);
 		addToCounter(player.getObjectId(), abyssPoints, playerAPCounter);
 	}
 
 	public void addKill(Player player) {
-		//custom reg
-		//pIC.updatePlayerInfo(player.getClientConnection().getIP(), player.getName(), player.getAcountName(), abyssPoints);
+		// custom reg
+		// pIC.updatePlayerInfo(player.getClientConnection().getIP(), player.getName(),
+		// player.getAcountName(), abyssPoints);
 		addToCounter(player.getObjectId(), 1, playerKillCounter);
 	}
-	
+
 	protected <K> void addToCounter(K key, int value, Map<K, AtomicLong> counterMap) {
 
 		// Get the counter for specific key
@@ -116,8 +120,8 @@ public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 	}
 
 	/**
-	 * Returns "legionId to damage" map.
-	 * Map is ordered by damage in "descending" order
+	 * Returns "legionId to damage" map. Map is ordered by damage in "descending"
+	 * order
 	 *
 	 * @return map with legion damages
 	 */
@@ -126,8 +130,8 @@ public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 	}
 
 	/**
-	 * Returns "legionId to damage" map.
-	 * Map is ordered by damage in "descending" order
+	 * Returns "legionId to damage" map. Map is ordered by damage in "descending"
+	 * order
 	 *
 	 * @return map with legion damages
 	 */
@@ -136,23 +140,23 @@ public class SiegeRaceCounter implements Comparable<SiegeRaceCounter> {
 	}
 
 	/**
-	 * Returns "player to abyss points" map.
-	 * Map is ordered by abyssPoints in descending order
+	 * Returns "player to abyss points" map. Map is ordered by abyssPoints in
+	 * descending order
 	 *
 	 * @return map with player abyss points
 	 */
 	public Map<Integer, Long> getPlayerAbyssPoints() {
 		return getOrderedCounterMap(playerAPCounter);
 	}
-	
-	
+
 	public Map<Integer, Long> getPlayerKills() {
 		return getOrderedCounterMap(playerKillCounter);
 	}
+
 	public PlayerInfoContainer getPIC() {
 		return pIC;
 	}
-	
+
 	protected <K> Map<K, Long> getOrderedCounterMap(Map<K, AtomicLong> unorderedMap) {
 		if (GenericValidator.isBlankOrNull(unorderedMap)) {
 			return Collections.emptyMap();

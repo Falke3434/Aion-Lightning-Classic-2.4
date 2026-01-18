@@ -36,18 +36,8 @@ public class GameTime {
 	private DayTime dayTime;
 
 	private enum Monthes {
-		JANUARY(31),
-		FEBRUARY(28),
-		MARCH(31),
-		APRIL(30),
-		MAY(31),
-		JUNE(30),
-		JULY(31),
-		AUGUST(31),
-		SEPTEMBER(30),
-		OCTOBER(31),
-		NOVEMBER(30),
-		DECEMBER(31);
+		JANUARY(31), FEBRUARY(28), MARCH(31), APRIL(30), MAY(31), JUNE(30), JULY(31), AUGUST(31), SEPTEMBER(
+				30), OCTOBER(31), NOVEMBER(30), DECEMBER(31);
 
 		private int _days;
 
@@ -61,10 +51,11 @@ public class GameTime {
 	};
 
 	/**
-	 * Constructs a GameTime with the given time in minutes since midnight 01.01.0000
+	 * Constructs a GameTime with the given time in minutes since midnight
+	 * 01.01.0000
 	 * 
 	 * @param time
-	 *          Minutes since midnight 01.01.0000
+	 *            Minutes since midnight 01.01.0000
 	 */
 	public GameTime(int time) {
 		if (time < 0)
@@ -161,12 +152,10 @@ public class GameTime {
 			if ((minutesInYear - getProperMinutesInMonth(m)) > 0) {
 				minutesInYear = minutesInYear - getProperMinutesInMonth(m);
 				answer = answer + 1;
-			}
-			else if ((minutesInYear - getProperMinutesInMonth(m)) == 0) {
+			} else if ((minutesInYear - getProperMinutesInMonth(m)) == 0) {
 				answer = answer + 1;
 				break;
-			}
-			else {
+			} else {
 				break;
 			}
 		}
@@ -184,11 +173,9 @@ public class GameTime {
 		for (Monthes m : Monthes.values()) {
 			if ((minutesInYear - getProperMinutesInMonth(m)) > 0) {
 				minutesInYear = minutesInYear - getProperMinutesInMonth(m);
-			}
-			else if ((minutesInYear - getProperMinutesInMonth(m)) == 0) {
+			} else if ((minutesInYear - getProperMinutesInMonth(m)) == 0) {
 				break;
-			}
-			else {
+			} else {
 				answer = minutesInYear / MINUTES_IN_DAY + 1;
 				break;
 			}
@@ -234,7 +221,7 @@ public class GameTime {
 	 * Subtract the given game time from this game time
 	 * 
 	 * @param game
-	 *          time to subtract
+	 *            time to subtract
 	 * @return new game time
 	 */
 	public GameTime minus(GameTime gt) {
@@ -245,7 +232,7 @@ public class GameTime {
 	 * Add the given game time to this game time
 	 * 
 	 * @param game
-	 *          time to add
+	 *            time to add
 	 * @return new game time
 	 */
 	public GameTime plus(GameTime gt) {
@@ -276,7 +263,7 @@ public class GameTime {
 	 * Compare two game times
 	 * 
 	 * @param GameTime
-	 *          object
+	 *            object
 	 * @return true or false
 	 * @author vlog
 	 */

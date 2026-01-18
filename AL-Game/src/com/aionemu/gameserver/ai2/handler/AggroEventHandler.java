@@ -47,9 +47,8 @@ public class AggroEventHandler {
 		if (creature.getAdminNeutral() == 1 || creature.getAdminNeutral() == 3 || creature.getAdminEnmity() == 1
 				|| creature.getAdminEnmity() == 3)
 			return;
-		PacketSendUtility.broadcastPacket(
-				owner,
-				new SM_ATTACK(owner, creature, 0, 633, 0, Collections.singletonList(new AttackResult(0, AttackStatus.NORMALHIT))));
+		PacketSendUtility.broadcastPacket(owner, new SM_ATTACK(owner, creature, 0, 633, 0,
+				Collections.singletonList(new AttackResult(0, AttackStatus.NORMALHIT))));
 
 		ThreadPoolManager.getInstance().schedule(new AggroNotifier(owner, creature, true), 500);
 	}
@@ -61,10 +60,8 @@ public class AggroEventHandler {
 			VisibleObject target = creature.getTarget();
 			if (target != null && target instanceof Creature) {
 				Creature targetCreature = (Creature) target;
-				PacketSendUtility.broadcastPacket(
-						owner,
-						new SM_ATTACK(owner, targetCreature, 0, 633, 0, Collections.singletonList(new AttackResult(0,
-						AttackStatus.NORMALHIT))));
+				PacketSendUtility.broadcastPacket(owner, new SM_ATTACK(owner, targetCreature, 0, 633, 0,
+						Collections.singletonList(new AttackResult(0, AttackStatus.NORMALHIT))));
 				ThreadPoolManager.getInstance().schedule(new AggroNotifier(owner, targetCreature, false), 500);
 			}
 		}
@@ -79,7 +76,8 @@ public class AggroEventHandler {
 		VisibleObject target = attacker.getTarget();
 		if (target != null && target instanceof Player) {
 			Player playerTarget = (Player) target;
-			if (!owner.isEnemy(playerTarget) && owner.isEnemy(attacker) && MathUtil.isInRange(owner, playerTarget, owner.getAggroRange())
+			if (!owner.isEnemy(playerTarget) && owner.isEnemy(attacker)
+					&& MathUtil.isInRange(owner, playerTarget, owner.getAggroRange())
 					&& GeoService.getInstance().canSee(owner, attacker)) {
 				owner.getAggroList().startHate(attacker);
 			}

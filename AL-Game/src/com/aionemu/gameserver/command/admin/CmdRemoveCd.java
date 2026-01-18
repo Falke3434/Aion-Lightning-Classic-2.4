@@ -12,19 +12,15 @@ import com.aionemu.gameserver.network.aion.serverpackets.SM_ITEM_COOLDOWN;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SKILL_COOLDOWN;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 
-
 /*syntax: //removecd instance <all|worldId> */
 
-public class CmdRemoveCd  extends BaseCommand {
+public class CmdRemoveCd extends BaseCommand {
 
-
-	
 	public void execute(Player admin, String... params) {
 		VisibleObject target = admin.getTarget();
-		if(target == null)
+		if (target == null)
 			target = admin;
-		   
-		
+
 		if (target instanceof Player) {
 			Player player = (Player) target;
 			if (params.length == 0) {
@@ -57,58 +53,57 @@ public class CmdRemoveCd  extends BaseCommand {
 					PacketSendUtility.sendMessage(admin, "You have removed cooldowns of player: " + player.getName());
 					PacketSendUtility.sendMessage(player, "Your cooldowns were removed by admin");
 				}
-			}
-			else if (params[0].contains("instance")) {
-				if (player.getPortalCooldownList() == null || player.getPortalCooldownList().getPortalCoolDowns() == null)
+			} else if (params[0].contains("instance")) {
+				if (player.getPortalCooldownList() == null
+						|| player.getPortalCooldownList().getPortalCoolDowns() == null)
 					return;
 				if (params.length >= 2) {
 					if (params[1].equalsIgnoreCase("all")) {
 						List<Integer> mapIds = new ArrayList<Integer>();
-						for (Entry<Integer, Long> mapId : player.getPortalCooldownList().getPortalCoolDowns().entrySet())
+						for (Entry<Integer, Long> mapId : player.getPortalCooldownList().getPortalCoolDowns()
+								.entrySet())
 							mapIds.add(mapId.getKey());
-							
+
 						for (Integer id : mapIds)
 							player.getPortalCooldownList().addPortalCooldown(id, 0);
-							
-						mapIds.clear();	
+
+						mapIds.clear();
 						if (player.equals(admin))
 							PacketSendUtility.sendMessage(admin, "Your instance cooldowns were removed");
 						else {
-							PacketSendUtility.sendMessage(admin, "You have removed instance cooldowns of player: " + player.getName());
+							PacketSendUtility.sendMessage(admin,
+									"You have removed instance cooldowns of player: " + player.getName());
 							PacketSendUtility.sendMessage(player, "Your instance cooldowns were removed by admin");
 						}
-					}
-					else {
+					} else {
 						int worldId = 0;
 						try {
 							worldId = Integer.parseInt(params[1]);
-						}
-						catch (NumberFormatException e) {
+						} catch (NumberFormatException e) {
 							PacketSendUtility.sendMessage(admin, "WorldId has to be integer or use \"all\"");
 							return;
 						}
-						
+
 						if (player.getPortalCooldownList().isPortalUseDisabled(worldId)) {
 							player.getPortalCooldownList().addPortalCooldown(worldId, 0);
-							
+
 							if (player.equals(admin))
-								PacketSendUtility.sendMessage(admin, "Your instance cooldown worldId: "+worldId+" was removed");
+								PacketSendUtility.sendMessage(admin,
+										"Your instance cooldown worldId: " + worldId + " was removed");
 							else {
-								PacketSendUtility.sendMessage(admin, "You have removed instance cooldown worldId: "+worldId+" of player: " + player.getName());
-								PacketSendUtility.sendMessage(player, "Your instance cooldown worldId: "+worldId+" was removed by admin");
+								PacketSendUtility.sendMessage(admin, "You have removed instance cooldown worldId: "
+										+ worldId + " of player: " + player.getName());
+								PacketSendUtility.sendMessage(player,
+										"Your instance cooldown worldId: " + worldId + " was removed by admin");
 							}
-						}
-						else
+						} else
 							PacketSendUtility.sendMessage(admin, "You or your target can enter given instance");
-						
+
 					}
-				}
-				else
-					showHelp(admin); 
+				} else
+					showHelp(admin);
 			}
-		}
-		else
+		} else
 			PacketSendUtility.sendMessage(admin, "Only players are allowed as target");
 	}
 }
-

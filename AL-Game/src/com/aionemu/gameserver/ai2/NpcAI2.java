@@ -143,10 +143,11 @@ public class NpcAI2 extends AITemplate {
 	}
 
 	@Override
-	public List<Player> getClosePlayer(int range){
+	public List<Player> getClosePlayer(int range) {
 		List<Player> players = new ArrayList<Player>();
 		for (Player player : getPosition().getWorldMapInstance().getPlayersInside()) {
-			if (!player.getLifeStats().isAlreadyDead() && MathUtil.isIn3dRange(player, getOwner(), range) && (!player.isGM() || NetworkConfig.GAMESERVER_ID == 100)) {
+			if (!player.getLifeStats().isAlreadyDead() && MathUtil.isIn3dRange(player, getOwner(), range)
+					&& (!player.isGM() || NetworkConfig.GAMESERVER_ID == 100)) {
 				players.add(player);
 			}
 		}
@@ -176,16 +177,16 @@ public class NpcAI2 extends AITemplate {
 	@Override
 	protected AIAnswer pollInstance(AIQuestion question) {
 		switch (question) {
-			case SHOULD_DECAY:
-				return NpcAIPolls.shouldDecay(this);
-			case SHOULD_RESPAWN:
-				return NpcAIPolls.shouldRespawn(this);
-			case SHOULD_REWARD:
-				return AIAnswers.POSITIVE;
-			case CAN_SHOUT:
-				return isMayShout() ? AIAnswers.POSITIVE : AIAnswers.NEGATIVE;
-			default:
-				return null;
+		case SHOULD_DECAY:
+			return NpcAIPolls.shouldDecay(this);
+		case SHOULD_RESPAWN:
+			return NpcAIPolls.shouldRespawn(this);
+		case SHOULD_REWARD:
+			return AIAnswers.POSITIVE;
+		case CAN_SHOUT:
+			return isMayShout() ? AIAnswers.POSITIVE : AIAnswers.NEGATIVE;
+		default:
+			return null;
 		}
 	}
 

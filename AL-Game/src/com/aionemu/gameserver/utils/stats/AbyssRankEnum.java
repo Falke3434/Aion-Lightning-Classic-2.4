@@ -16,12 +16,12 @@
  */
 package com.aionemu.gameserver.utils.stats;
 
+import javax.xml.bind.annotation.XmlEnum;
+
 import com.aionemu.gameserver.configs.main.RateConfig;
 import com.aionemu.gameserver.model.DescriptionId;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
-
-import javax.xml.bind.annotation.XmlEnum;
 
 /**
  * @author ATracer
@@ -30,29 +30,23 @@ import javax.xml.bind.annotation.XmlEnum;
  */
 @XmlEnum
 public enum AbyssRankEnum {
-	GRADE9_SOLDIER(1, 120, 9, 0, 0, 1802431),
-	GRADE8_SOLDIER(2, 168, 18, 1200, 0, 1802433),
-	GRADE7_SOLDIER(3, 235, 36, 4220, 0, 1802435),
-	GRADE6_SOLDIER(4, 329, 59, 10990, 0, 1802437),
-	GRADE5_SOLDIER(5, 461, 75, 23500, 0, 1802439),
-	GRADE4_SOLDIER(6, 645, 90, 42780, 0, 1802441),
-	GRADE3_SOLDIER(7, 903, 125, 69700, 0, 1802443),
-	GRADE2_SOLDIER(8, 1264, 250, 105600, 0, 1802445),
-	GRADE1_SOLDIER(9, 1770, 500, 150800, 0, 1802447),
-	STAR1_OFFICER(10, 2124, 800, 214100, 1000, 1802449),
-	STAR2_OFFICER(11, 2549, 1300, 278700, 800, 1802451),
-	STAR3_OFFICER(12, 3059, 1700, 344500, 500, 1802453),
-	STAR4_OFFICER(13, 3671, 2300, 411700, 300, 1802455),
-	/*STAR5_OFFICER(14, 4405, 2700, 488200, 100, 1802457),
-	GENERAL(15, 5286, 4300, 565400, 30, 1802459),
-	GREAT_GENERAL(16, 6343, 7000, 643200, 10, 1802461),
-	COMMANDER(17, 7612, 9500, 721600, 3, 1802463),
-	SUPREME_COMMANDER(18, 9134, 12000, 800700, 1, 1802465);*/
-	STAR5_OFFICER(14, 4405, 2700, 488200, 1, 1802457),
-	GENERAL(15, 5286, 4300, 565400, 1, 1802459),
-	GREAT_GENERAL(16, 6343, 7000, 643200, 1, 1802461),
-	COMMANDER(17, 7612, 9500, 721600, 1, 1802463),
-	SUPREME_COMMANDER(18, 9134, 12000, 800700, 1, 1802465);
+	GRADE9_SOLDIER(1, 120, 9, 0, 0, 1802431), GRADE8_SOLDIER(2, 168, 18, 1200, 0, 1802433), GRADE7_SOLDIER(3, 235, 36,
+			4220, 0, 1802435), GRADE6_SOLDIER(4, 329, 59, 10990, 0, 1802437), GRADE5_SOLDIER(5, 461, 75, 23500, 0,
+					1802439), GRADE4_SOLDIER(6, 645, 90, 42780, 0, 1802441), GRADE3_SOLDIER(7, 903, 125, 69700, 0,
+							1802443), GRADE2_SOLDIER(8, 1264, 250, 105600, 0, 1802445), GRADE1_SOLDIER(9, 1770, 500,
+									150800, 0,
+									1802447), STAR1_OFFICER(10, 2124, 800, 214100, 1000, 1802449), STAR2_OFFICER(11,
+											2549, 1300, 278700, 800, 1802451), STAR3_OFFICER(12, 3059, 1700, 344500,
+													500, 1802453), STAR4_OFFICER(13, 3671, 2300, 411700, 300, 1802455),
+	/*
+	 * STAR5_OFFICER(14, 4405, 2700, 488200, 100, 1802457), GENERAL(15, 5286, 4300,
+	 * 565400, 30, 1802459), GREAT_GENERAL(16, 6343, 7000, 643200, 10, 1802461),
+	 * COMMANDER(17, 7612, 9500, 721600, 3, 1802463), SUPREME_COMMANDER(18, 9134,
+	 * 12000, 800700, 1, 1802465);
+	 */
+	STAR5_OFFICER(14, 4405, 2700, 488200, 1, 1802457), GENERAL(15, 5286, 4300, 565400, 1, 1802459), GREAT_GENERAL(16,
+			6343, 7000, 643200, 1, 1802461), COMMANDER(17, 7612, 9500, 721600, 1,
+					1802463), SUPREME_COMMANDER(18, 9134, 12000, 800700, 1, 1802465);
 
 	private int id;
 	private int pointsGained;
@@ -111,12 +105,12 @@ public enum AbyssRankEnum {
 	public int getQuota() {
 		return quota;
 	}
-	
+
 	public int getDescriptionId() {
 		return descriptionId;
 	}
 
-	public static DescriptionId getRankDescriptionId(Player player){
+	public static DescriptionId getRankDescriptionId(Player player) {
 		int pRankId = player.getAbyssRank().getRank().getId();
 		for (AbyssRankEnum rank : values()) {
 			if (rank.getId() == pRankId) {

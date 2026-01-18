@@ -27,12 +27,14 @@ import com.aionemu.gameserver.world.WorldType;
 import com.aionemu.gameserver.world.knownlist.KnownList;
 
 /**
- * This class is representing visible objects. It's a base class for all in-game objects that can be spawned in the
- * world at some particular position (such as players, npcs).<br>
+ * This class is representing visible objects. It's a base class for all in-game
+ * objects that can be spawned in the world at some particular position (such as
+ * players, npcs).<br>
  * <br>
- * Objects of this class, as can be spawned in game, can be seen by other visible objects. To keep track of which
- * objects are already "known" by this visible object and which are not, VisibleObject is containing {@link KnownList}
- * which is responsible for holding this information.
+ * Objects of this class, as can be spawned in game, can be seen by other
+ * visible objects. To keep track of which objects are already "known" by this
+ * visible object and which are not, VisibleObject is containing
+ * {@link KnownList} which is responsible for holding this information.
  * 
  * @author -Nemesiss-
  */
@@ -47,7 +49,7 @@ public abstract class VisibleObject extends AionObject {
 	 * @param objectTemplate
 	 */
 	public VisibleObject(int objId, VisibleObjectController<? extends VisibleObject> controller,
-		SpawnTemplate spawnTemplate, VisibleObjectTemplate objectTemplate, WorldPosition position) {
+			SpawnTemplate spawnTemplate, VisibleObjectTemplate objectTemplate, WorldPosition position) {
 		super(objId);
 		this.controller = controller;
 		this.position = position;
@@ -81,6 +83,7 @@ public abstract class VisibleObject extends AionObject {
 	private SpawnTemplate spawn;
 
 	private boolean isNewSpawn = true;
+
 	/**
 	 * Returns current WorldRegion AionObject is in.
 	 */
@@ -126,7 +129,7 @@ public abstract class VisibleObject extends AionObject {
 	public float getZ() {
 		return position.getZ();
 	}
-	
+
 	public void setXYZH(Float x, Float y, Float z, Byte h) {
 		position.setXYZH(x, y, z, h);
 	}
@@ -222,9 +225,9 @@ public abstract class VisibleObject extends AionObject {
 		if (currTarget == null) {
 			return 0;
 		}
-		return (float) MathUtil.getDistance(getX(), getY(), getZ(), currTarget.getX(), currTarget.getY(), currTarget.getZ())
-			- this.getObjectTemplate().getBoundRadius().getCollision()
-			- currTarget.getObjectTemplate().getBoundRadius().getCollision();
+		return (float) MathUtil.getDistance(getX(), getY(), getZ(), currTarget.getX(), currTarget.getY(),
+				currTarget.getZ()) - this.getObjectTemplate().getBoundRadius().getCollision()
+				- currTarget.getObjectTemplate().getBoundRadius().getCollision();
 	}
 
 	/**
@@ -254,6 +257,7 @@ public abstract class VisibleObject extends AionObject {
 	public void setSpawn(SpawnTemplate spawn) {
 		this.spawn = spawn;
 	}
+
 	/**
 	 * @return the objectTemplate
 	 */
@@ -263,16 +267,16 @@ public abstract class VisibleObject extends AionObject {
 
 	/**
 	 * @param objectTemplate
-	 *          the objectTemplate to set
+	 *            the objectTemplate to set
 	 */
 	public void setObjectTemplate(VisibleObjectTemplate objectTemplate) {
 		this.objectTemplate = objectTemplate;
 	}
-	
+
 	/**
 	 * @param position
 	 * 
-	 *  to do remove this after reworked transformSumonAI
+	 *            to do remove this after reworked transformSumonAI
 	 */
 	public void setPosition(WorldPosition position) {
 		this.position = position;
@@ -285,7 +289,7 @@ public abstract class VisibleObject extends AionObject {
 	public void setIsNewSpawn(boolean isNewSpawn) {
 		this.isNewSpawn = isNewSpawn;
 	}
-	
+
 	@Override
 	public String toString() {
 		if (objectTemplate == null)

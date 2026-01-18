@@ -38,7 +38,6 @@ import com.aionemu.gameserver.geoEngine.scene.Node;
 import com.aionemu.gameserver.geoEngine.scene.Spatial;
 import com.aionemu.gameserver.geoEngine.scene.VertexBuffer;
 
-
 /**
  * @author Mr. Poke
  */
@@ -70,7 +69,7 @@ public class GeoWorldLoader {
 			Node node = new Node(DEBUG ? name : null);
 			for (int c = 0; c < modelCount; c++) {
 				Mesh m = new Mesh();
-				int vectorCount = ((int)geo.getShort()) * 3;
+				int vectorCount = ((int) geo.getShort()) * 3;
 				FloatBuffer vertices = FloatBuffer.allocate(vectorCount);
 				for (int x = 0; x < vectorCount; x++) {
 					vertices.put(geo.getFloat());
@@ -94,7 +93,7 @@ public class GeoWorldLoader {
 		}
 		return geoms;
 	}
-	
+
 	@SuppressWarnings("resource")
 	public static boolean loadWorld(int worldId, Map<String, Spatial> models, GeoMap map) throws IOException {
 		File geoFile = new File(GEO_DIR + worldId + ".geo");
@@ -129,8 +128,7 @@ public class GeoWorldLoader {
 				Spatial nodeClone = null;
 				try {
 					nodeClone = node.clone();
-				}
-				catch (CloneNotSupportedException e) {
+				} catch (CloneNotSupportedException e) {
 					e.printStackTrace();
 				}
 				nodeClone.setTransform(matrix3f, loc, scale);

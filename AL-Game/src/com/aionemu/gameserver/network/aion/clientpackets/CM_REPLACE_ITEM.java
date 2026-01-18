@@ -47,7 +47,8 @@ public class CM_REPLACE_ITEM extends AionClientPacket {
 	@Override
 	protected void runImpl() {
 		Player player = getConnection().getActivePlayer();
-		ItemMoveService.switchItemsInStorages(player, sourceStorageType, sourceItemObjId, replaceStorageType, replaceItemObjId);
+		ItemMoveService.switchItemsInStorages(player, sourceStorageType, sourceItemObjId, replaceStorageType,
+				replaceItemObjId);
 	}
 
 }

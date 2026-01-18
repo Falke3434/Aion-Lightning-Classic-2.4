@@ -48,7 +48,8 @@ public class StaticDoorSpawnManager {
 			return;
 		int counter = 0;
 		for (StaticDoorTemplate data : staticDoorWorld.getStaticDoors()) {
-			SpawnTemplate spawn = new SpawnTemplate(new SpawnGroup2(worldId, 300001), data.getX(), data.getY(), data.getZ(), (byte) 0, 0, null, 0, 0);
+			SpawnTemplate spawn = new SpawnTemplate(new SpawnGroup2(worldId, 300001), data.getX(), data.getY(),
+					data.getZ(), (byte) 0, 0, null, 0, 0);
 			spawn.setStaticId(data.getDoorId());
 			int objectId = IDFactory.getInstance().nextId();
 			StaticDoor staticDoor = new StaticDoor(objectId, new StaticObjectController(), spawn, data);
@@ -69,7 +70,7 @@ public class StaticDoorSpawnManager {
 		World world = World.getInstance();
 		world.storeObject(visibleObject);
 		world.setPosition(visibleObject, spawn.getWorldId(), instanceIndex, spawn.getX(), spawn.getY(), spawn.getZ(),
-			spawn.getHeading());
+				spawn.getHeading());
 		world.spawn(visibleObject);
 	}
 }

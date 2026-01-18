@@ -127,17 +127,15 @@ public class ItemEquipmentListener {
 					int boostMagicalSkill = Math.round(0.1f * weaponStats.getBoostMagicalSkill());
 					int attack = Math.round(0.1f * weaponStats.getMeanDamage());
 					if (fusionedItemTemplate.getWeaponType() == WeaponType.ORB_2H
-						|| fusionedItemTemplate.getWeaponType() == WeaponType.BOOK_2H) {
+							|| fusionedItemTemplate.getWeaponType() == WeaponType.BOOK_2H) {
 						allModifiers.add(new StatAddFunction(StatEnum.MAGICAL_ATTACK, attack, false));
 						allModifiers.add(new StatAddFunction(StatEnum.BOOST_MAGICAL_SKILL, boostMagicalSkill, false));
-					}
-					else
+					} else
 						allModifiers.add(new StatAddFunction(StatEnum.MAIN_HAND_POWER, attack, false));
 				}
 			}
 			cgs.addEffect(item, allModifiers);
-		}
-		else {
+		} else {
 			cgs.addEffect(item, modifiers);
 		}
 
@@ -157,12 +155,12 @@ public class ItemEquipmentListener {
 		List<IStatFunction> allModifiers = new ArrayList<IStatFunction>();
 		for (StatFunction modifier : modifiers) {
 			switch (modifier.getName()) {
-				case ATTACK_SPEED:
-				case PVP_ATTACK_RATIO:
-				case BOOST_CASTING_TIME:
-					continue;
-				default:
-					allModifiers.add(modifier);
+			case ATTACK_SPEED:
+			case PVP_ATTACK_RATIO:
+			case BOOST_CASTING_TIME:
+				continue;
+			default:
+				allModifiers.add(modifier);
 			}
 		}
 		return allModifiers;
@@ -198,8 +196,7 @@ public class ItemEquipmentListener {
 				if (itempartbonus.getCount() <= itemSetPartsEquipped) {
 					player.getGameStats().addEffect(itemSetTemplate, itempartbonus.getModifiers());
 				}
-			}
-			else if (!isWeapon) {
+			} else if (!isWeapon) {
 				// If the partbonus was not applied before, do it now
 				if (itempartbonus.getCount() <= itemSetPartsEquipped) {
 					player.getGameStats().addEffect(itemSetTemplate, itempartbonus.getModifiers());
@@ -207,10 +204,12 @@ public class ItemEquipmentListener {
 			}
 		}
 
-		// 3.- Finally check if all items are applied and set the full bonus if not already applied
+		// 3.- Finally check if all items are applied and set the full bonus if not
+		// already applied
 		FullBonus fullbonus = itemSetTemplate.getFullbonus();
 		if (fullbonus != null && itemSetPartsEquipped == fullbonus.getCount()) {
-			// Add the full bonus with index = total parts + 1 to avoid confusion with part bonus equal to number of
+			// Add the full bonus with index = total parts + 1 to avoid confusion with part
+			// bonus equal to number of
 			// objects
 			player.getGameStats().addEffect(itemSetTemplate, fullbonus.getModifiers());
 		}

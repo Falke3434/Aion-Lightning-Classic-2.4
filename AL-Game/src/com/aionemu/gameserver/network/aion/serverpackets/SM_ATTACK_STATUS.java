@@ -16,7 +16,7 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
+import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
@@ -28,29 +28,18 @@ import com.aionemu.gameserver.network.aion.AionServerPacket;
  */
 public class SM_ATTACK_STATUS extends AionServerPacket {
 
-	private Creature creature;
+	private Creature attacked;
+	private Creature attacker;
 	private TYPE type;
 	private int skillId;
 	private int value;
 	private int logId;
 
 	public static enum TYPE {
-		NATURAL_HP(3),
-		USED_HP(4),//when skill uses hp as cost parameter
-		REGULAR(5),
-		ABSORBED_HP(6),
-		DAMAGE(7),
-		HP(7),
-		PROTECTDMG(8),
-		DELAYDAMAGE(10),
-		FALL_DAMAGE(17),
-		HEAL_MP(19),
-		ABSORBED_MP(20),
-		MP(21),
-		NATURAL_MP(22),
-		FP_RINGS(23),
-		FP(25),
-		NATURAL_FP(26);
+		NATURAL_HP(3), USED_HP(4), // when skill uses hp as cost parameter
+		REGULAR(5), ABSORBED_HP(6), DAMAGE(7), HP(7), PROTECTDMG(8), DELAYDAMAGE(10), FALL_DAMAGE(17), HEAL_MP(
+				19), ABSORBED_MP(
+						20), MP(21), NATURAL_MP(22), ATTACK(23), FP_RINGS(24), FP(25), NATURAL_FP(26), NATURAL_FP2(27);
 
 		private int value;
 
@@ -62,21 +51,11 @@ public class SM_ATTACK_STATUS extends AionServerPacket {
 			return this.value;
 		}
 	}
-	
+
 	public static enum LOG {
-		SPELLATK(1),
-		HEAL(3),
-		MPHEAL(4),
-		SKILLLATKDRAININSTANT(23),
-		SPELLATKDRAININSTANT(24),
-		POISON(25),
-		BLEED(26),
-		PROCATKINSTANT(92),
-		DELAYEDSPELLATKINSTANT(95),
-		SPELLATKDRAIN(130),
-		FPHEAL(133),
-		REGULARHEAL(170),
-		REGULAR(171);
+		SPELLATK(1), HEAL(3), MPHEAL(4), SKILLLATKDRAININSTANT(23), SPELLATKDRAININSTANT(24), POISON(25), BLEED(
+				26), PROCATKINSTANT(92), DELAYEDSPELLATKINSTANT(
+						95), SPELLATKDRAIN(130), FPHEAL(133), REGULARHEAL(170), REGULAR(173), ATTACK(172);
 
 		private int value;
 
@@ -89,20 +68,21 @@ public class SM_ATTACK_STATUS extends AionServerPacket {
 		}
 	}
 
-	public SM_ATTACK_STATUS(Creature creature, TYPE type, int skillId, int value, LOG log) {
-		this.creature = creature;
+	public SM_ATTACK_STATUS(Creature attacked, Creature attacker, TYPE type, int skillId, int value, LOG log) {
+		this.attacked = attacked;
+		this.attacker = attacker;
 		this.type = type;
 		this.skillId = skillId;
 		this.value = value;
 		this.logId = log.getValue();
 	}
-	
-	public SM_ATTACK_STATUS(Creature creature, TYPE type, int skillId, int value) {
-		this(creature, type, skillId, value, LOG.REGULAR);
+
+	public SM_ATTACK_STATUS(Creature attacked, Creature attacker, TYPE type, int skillId, int value) {
+		this(attacked, attacker, type, skillId, value, LOG.REGULAR);
 	}
 
-	public SM_ATTACK_STATUS(Creature creature, int value) {
-		this(creature, TYPE.REGULAR, 0, value, LOG.REGULAR);
+	public SM_ATTACK_STATUS(Creature attacked, Creature attacker, int value) {
+		this(attacked, attacker, TYPE.REGULAR, 0, value, LOG.REGULAR);
 	}
 
 	/**
@@ -111,45 +91,23 @@ public class SM_ATTACK_STATUS extends AionServerPacket {
 
 	@Override
 	protected void writeImpl(AionConnection con) {
-		writeD(creature.getObjectId());
-		switch (type) {
-			case DAMAGE:
-			case DELAYDAMAGE:
-				writeD(-value);
-				break;
-			default:
-				writeD(value);
+		writeD(this.attacked.getObjectId());
+		switch (this.type) {
+		case DAMAGE:
+		case DELAYDAMAGE:
+			writeD(-this.value);
+			break;
+		default:
+			writeD(this.value);
 		}
-		writeC(type.getValue());
-		writeC(creature.getLifeStats().getHpPercentage());
-		writeH(skillId);
-		writeH(logId);
+		writeC(this.type.getValue());
+		if ((this.type.getValue() == 19) || (this.type.getValue() == 20) || (this.type.getValue() == 21)
+				|| (this.type.getValue() == 22)) {
+			writeC(this.attacked.getLifeStats().getMpPercentage());
+		} else {
+			writeC(this.attacked.getLifeStats().getHpPercentage());
+		}
+		writeH(0);
+		writeH(GSConfig.SERVER_COUNTRY_CODE == 0 ? 178 : 173);
 	}
-
-	// logId
-	// depends on effecttemplate
-	// effecttemplate (TYPE) LOG.getValue()
-	// spellattack(hp) 1
-	// poison(hp) 25
-	// delaydamage(hp) 95
-	// bleed(hp) 26
-	// mp regen(natural_mp) 171
-	// hp regen(natural_hp) 171
-	// fp regen(natural_fp) 171
-	// fp pot(fp) 171
-	// prochp(hp) 171
-	// procmp(mp) 171
-	// heal_instant (regular) 171
-	// SpellAtkDrainInstantEffect(absorbed_mp) 24(refactoring shard)
-	// mpheal(mp) 4
-	// heal(hp) 3
-	// fpheal(fp) 133
-	// spellatkdrain(hp) 130
-	// falldmg (17) 170
-	// mpheal (19) 171
-	// hp as cost parameter(4) logId 170
-	// procatkinstant - (7) 92
-	// protecteffect on protector - (8) 171
-
-	// TODO find rest of logIds
 }

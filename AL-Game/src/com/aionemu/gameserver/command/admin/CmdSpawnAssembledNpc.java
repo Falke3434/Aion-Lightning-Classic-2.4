@@ -18,8 +18,6 @@ package com.aionemu.gameserver.command.admin;
 
 import java.util.Iterator;
 
-import javolution.util.FastList;
-
 import com.aionemu.gameserver.command.BaseCommand;
 import com.aionemu.gameserver.dataholders.DataManager;
 import com.aionemu.gameserver.model.assemblednpc.AssembledNpc;
@@ -31,10 +29,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.idfactory.IDFactory;
 import com.aionemu.gameserver.world.World;
 
+import javolution.util.FastList;
 
-public class CmdSpawnAssembledNpc  extends BaseCommand {
-	
-	
+public class CmdSpawnAssembledNpc extends BaseCommand {
+
 	public void execute(Player admin, String... params) {
 		if (params.length != 2) {
 			showHelp(admin);
@@ -43,8 +41,7 @@ public class CmdSpawnAssembledNpc  extends BaseCommand {
 		int spawnId = 0;
 		try {
 			spawnId = ParseInteger(params[1]);
-		}
-		catch(Exception e) {
+		} catch (Exception e) {
 			showHelp(admin);
 			return;
 		}
@@ -58,7 +55,8 @@ public class CmdSpawnAssembledNpc  extends BaseCommand {
 		for (AssembledNpcTemplate.AssembledNpcPartTemplate npcPart : template.getAssembledNpcPartTemplates()) {
 			assembledPatrs.add(new AssembledNpcPart(IDFactory.getInstance().nextId(), npcPart));
 		}
-		AssembledNpc npc = new AssembledNpc(template.getRouteId(), template.getMapId(), template.getLiveTime(), assembledPatrs);
+		AssembledNpc npc = new AssembledNpc(template.getRouteId(), template.getMapId(), template.getLiveTime(),
+				assembledPatrs);
 		Iterator<Player> iter = World.getInstance().getPlayersIterator();
 		Player findedPlayer = null;
 		while (iter.hasNext()) {

@@ -11,7 +11,6 @@ import com.aionemu.gameserver.world.World;
  * @author Source
  */
 public class CmdGroupToMe extends BaseCommand {
-	
 
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 1) {
@@ -32,10 +31,10 @@ public class CmdGroupToMe extends BaseCommand {
 
 		for (Player target : groupToMove.getPlayerGroup2().getMembers())
 			if (target != admin) {
-				TeleportService.teleportTo(target, admin.getWorldId(), admin.getInstanceId(), admin.getX(), admin.getY(),
-					admin.getZ(), admin.getHeading(), 0, true);
+				TeleportService.teleportTo(target, admin.getWorldId(), admin.getInstanceId(), admin.getX(),
+						admin.getY(), admin.getZ(), admin.getHeading(), 0, true);
 				PacketSendUtility.sendMessage(target, "You have been summoned by " + admin.getName() + ".");
 				PacketSendUtility.sendMessage(admin, "You summon " + target.getName() + ".");
-		}
+			}
 	}
 }

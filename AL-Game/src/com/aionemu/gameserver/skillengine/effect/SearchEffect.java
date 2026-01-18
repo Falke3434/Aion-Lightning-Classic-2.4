@@ -34,7 +34,8 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 @XmlType(name = "SearchEffect")
 public class SearchEffect extends EffectTemplate {
 
-	//TODO! value should be enum already (@XmlEnum) - having int here is just stupid 
+	// TODO! value should be enum already (@XmlEnum) - having int here is just
+	// stupid
 
 	@Override
 	public void applyEffect(Effect effect) {
@@ -48,18 +49,18 @@ public class SearchEffect extends EffectTemplate {
 		CreatureSeeState seeState;
 
 		switch (value) {
-			case 1:
-				seeState = CreatureSeeState.SEARCH1;
-				break;
-			case 2:
-				seeState = CreatureSeeState.SEARCH2;
-				break;
-			case 5:
-				seeState = CreatureSeeState.SEARCH5;
-				break;
-			default:
-				seeState = CreatureSeeState.NORMAL;
-				break;
+		case 1:
+			seeState = CreatureSeeState.SEARCH1;
+			break;
+		case 2:
+			seeState = CreatureSeeState.SEARCH2;
+			break;
+		case 5:
+			seeState = CreatureSeeState.SEARCH5;
+			break;
+		default:
+			seeState = CreatureSeeState.NORMAL;
+			break;
 		}
 		effected.unsetSeeState(seeState);
 
@@ -75,18 +76,18 @@ public class SearchEffect extends EffectTemplate {
 		CreatureSeeState seeState;
 
 		switch (value) {
-			case 1:
-				seeState = CreatureSeeState.SEARCH1;
-				break;
-			case 2:
-				seeState = CreatureSeeState.SEARCH2;
-				break;
-			case 5:
-				seeState = CreatureSeeState.SEARCH5;
-				break;
-			default:
-				seeState = CreatureSeeState.NORMAL;
-				break;
+		case 1:
+			seeState = CreatureSeeState.SEARCH1;
+			break;
+		case 2:
+			seeState = CreatureSeeState.SEARCH2;
+			break;
+		case 5:
+			seeState = CreatureSeeState.SEARCH5;
+			break;
+		default:
+			seeState = CreatureSeeState.NORMAL;
+			break;
 		}
 		effected.setSeeState(seeState);
 

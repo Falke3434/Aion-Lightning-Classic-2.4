@@ -16,6 +16,13 @@
  */
 package com.aionemu.gameserver.services.siegeservice;
 
+import java.util.Collection;
+import java.util.Date;
+import java.util.concurrent.atomic.AtomicBoolean;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.callbacks.EnhancedObject;
 import com.aionemu.gameserver.ai2.AbstractAI;
 import com.aionemu.gameserver.configs.main.SiegeConfig;
@@ -24,11 +31,6 @@ import com.aionemu.gameserver.model.gameobjects.siege.SiegeNpc;
 import com.aionemu.gameserver.model.siege.SiegeLocation;
 import com.aionemu.gameserver.services.SiegeService;
 import com.aionemu.gameserver.world.World;
-import java.util.Collection;
-import java.util.Date;
-import java.util.concurrent.atomic.AtomicBoolean;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public abstract class Siege<SL extends SiegeLocation> {
 
@@ -55,8 +57,7 @@ public abstract class Siege<SL extends SiegeLocation> {
 		synchronized (this) {
 			if (started) {
 				doubleStart = true;
-			}
-			else {
+			} else {
 				startTime = new Date();
 				started = true;
 			}
@@ -68,7 +69,7 @@ public abstract class Siege<SL extends SiegeLocation> {
 		}
 
 		onSiegeStart();
-		//Check for Balaur Assault
+		// Check for Balaur Assault
 		if (SiegeConfig.BALAUR_AUTO_ASSAULT) {
 			BalaurAssaultService.getInstance().onSiegeStart(this);
 		}
@@ -77,12 +78,11 @@ public abstract class Siege<SL extends SiegeLocation> {
 	public final void stopSiege() {
 		if (finished.compareAndSet(false, true)) {
 			onSiegeFinish();
-			//Check for Balaur Assault
+			// Check for Balaur Assault
 			if (SiegeConfig.BALAUR_AUTO_ASSAULT) {
 				BalaurAssaultService.getInstance().onSiegeFinish(this);
 			}
-		}
-		else {
+		} else {
 			log.error("Attempt to stop siege of SiegeLocation#" + siegeLocation.getLocationId() + " for 2 times");
 		}
 	}
@@ -148,8 +148,7 @@ public abstract class Siege<SL extends SiegeLocation> {
 	/**
 	 * Returns siege duration in seconds or -1 if it's endless
 	 *
-	 * @return siege duration in seconnd or -1 if siege should never end using
-	 * timer
+	 * @return siege duration in seconnd or -1 if siege should never end using timer
 	 */
 	public abstract int getDurationInSeconds();
 

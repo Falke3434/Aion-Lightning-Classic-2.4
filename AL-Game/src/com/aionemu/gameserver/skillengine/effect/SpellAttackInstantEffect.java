@@ -35,36 +35,31 @@ public class SpellAttackInstantEffect extends DamageEffect {
 
 	@Override
 	public void calculate(Effect effect) {
-		
-		final Creature effected = effect.getEffected();				
-		
-		if (effected instanceof Player)
-		{
-			//core support for http://www.aiondatabase.com/skill/19332
-			if (effect.getSkillId() == 19332)
-			{
-				if (((Player)effected).getFlyState() > 0)
-				{
+
+		final Creature effected = effect.getEffected();
+
+		if (effected instanceof Player) {
+			// core support for http://www.aiondatabase.com/skill/19332
+			if (effect.getSkillId() == 19332) {
+				if (((Player) effected).getFlyState() > 0) {
 					return;
-				}	
-			}
-			//core support for http://www.aiondatabase.com/skill/18916 and http://www.aiondatabase.com/skill/18915
-			for(Effect ef : effect.getEffected().getEffectController().getAbnormalEffects())
-			{
-				if (ef.getSkillId() == 18916)
-				{
-					if (effect.getSkillId() == 18913)
-						return;					
 				}
-				
-				if (ef.getSkillId() == 18915)
-				{
+			}
+			// core support for http://www.aiondatabase.com/skill/18916 and
+			// http://www.aiondatabase.com/skill/18915
+			for (Effect ef : effect.getEffected().getEffectController().getAbnormalEffects()) {
+				if (ef.getSkillId() == 18916) {
+					if (effect.getSkillId() == 18913)
+						return;
+				}
+
+				if (ef.getSkillId() == 18915) {
 					if (effect.getSkillId() == 18912)
-						return;					
-				}					
+						return;
+				}
 			}
 		}
-		
+
 		super.calculate(effect, DamageType.MAGICAL);
 	}
 }

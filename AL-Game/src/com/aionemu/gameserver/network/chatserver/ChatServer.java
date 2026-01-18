@@ -31,7 +31,7 @@ import com.aionemu.gameserver.network.chatserver.serverpackets.SM_CS_PLAYER_LOGO
 import com.aionemu.gameserver.network.factories.CsPacketHandlerFactory;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 
-/** 
+/**
  * @author ATracer
  */
 public class ChatServer {
@@ -76,8 +76,7 @@ public class ChatServer {
 				chatServer.initialized();
 
 				return chatServer;
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 				log.info("Cant connect to ChatServer: " + e.getMessage());
 			}
 			try {
@@ -85,8 +84,7 @@ public class ChatServer {
 				 * 10s sleep
 				 */
 				Thread.sleep(10 * 1000);
-			}
-			catch (Exception e) {
+			} catch (Exception e) {
 			}
 		}
 	}
@@ -116,7 +114,8 @@ public class ChatServer {
 	 */
 	public void sendPlayerLoginRequst(Player player) {
 		if (chatServer != null)
-			chatServer.sendPacket(new SM_CS_PLAYER_AUTH(player.getObjectId(), player.getAcountName(), player.getName()));
+			chatServer
+					.sendPacket(new SM_CS_PLAYER_AUTH(player.getObjectId(), player.getAcountName(), player.getName()));
 	}
 
 	/**
@@ -134,6 +133,6 @@ public class ChatServer {
 
 	public void sendPlayerGagPacket(Integer objectId, long chatserverGagTime) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

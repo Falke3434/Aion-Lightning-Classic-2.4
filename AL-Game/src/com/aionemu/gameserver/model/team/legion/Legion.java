@@ -81,7 +81,7 @@ public class Legion {
 
 	/**
 	 * @param legionId
-	 *          the legionId to set
+	 *            the legionId to set
 	 */
 	public void setLegionId(int legionId) {
 		this.legionId = legionId;
@@ -96,7 +96,7 @@ public class Legion {
 
 	/**
 	 * @param legionName
-	 *          the legionName to set
+	 *            the legionName to set
 	 */
 	public void setLegionName(String legionName) {
 		this.legionName = legionName;
@@ -111,7 +111,7 @@ public class Legion {
 
 	/**
 	 * @param legionMembers
-	 *          the legionMembers to set
+	 *            the legionMembers to set
 	 */
 	public void setLegionMembers(ArrayList<Integer> legionMembers) {
 		this.legionMembers = legionMembers;
@@ -167,14 +167,14 @@ public class Legion {
 	 * @param centurionPermission2
 	 * @return true or false
 	 */
-	public boolean setLegionPermissions(short deputyPermission,	short centurionPermission,	short legionaryPermission,	short volunteerPermission) {
-			this.deputyPermission = deputyPermission;
-			this.centurionPermission = centurionPermission;
-			this.legionaryPermission = legionaryPermission;
-			this.volunteerPermission = volunteerPermission;
-			return true;
+	public boolean setLegionPermissions(short deputyPermission, short centurionPermission, short legionaryPermission,
+			short volunteerPermission) {
+		this.deputyPermission = deputyPermission;
+		this.centurionPermission = centurionPermission;
+		this.legionaryPermission = legionaryPermission;
+		this.volunteerPermission = volunteerPermission;
+		return true;
 	}
-
 
 	/**
 	 * @return the deputyPermission
@@ -183,7 +183,6 @@ public class Legion {
 		return deputyPermission;
 	}
 
-
 	/**
 	 * @return the centurionPermission
 	 */
@@ -191,14 +190,12 @@ public class Legion {
 		return centurionPermission;
 	}
 
-
 	/**
 	 * @return the legionarPermission
 	 */
 	public short getLegionaryPermission() {
 		return legionaryPermission;
 	}
-
 
 	/**
 	 * @return the volunteerPermission
@@ -223,7 +220,7 @@ public class Legion {
 
 	/**
 	 * @param legionRank
-	 *          the legionRank to set
+	 *            the legionRank to set
 	 */
 	public void setLegionRank(int legionRank) {
 		this.legionRank = legionRank;
@@ -238,7 +235,7 @@ public class Legion {
 
 	/**
 	 * @param contributionPoints
-	 *          the contributionPoints to set
+	 *            the contributionPoints to set
 	 */
 	public void addContributionPoints(int contributionPoints) {
 		this.contributionPoints = this.contributionPoints + contributionPoints;
@@ -269,22 +266,22 @@ public class Legion {
 	 */
 	public boolean hasRequiredMembers() {
 		switch (getLegionLevel()) {
-			case 1:
-				if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL2_REQUIRED_MEMBERS)
-					return true;
-				break;
-			case 2:
-				if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL3_REQUIRED_MEMBERS)
-					return true;
-				break;
-			case 3:
-				if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL4_REQUIRED_MEMBERS)
-					return true;
-				break;
-			case 4:
-				if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL5_REQUIRED_MEMBERS)
-					return true;
-				break;
+		case 1:
+			if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL2_REQUIRED_MEMBERS)
+				return true;
+			break;
+		case 2:
+			if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL3_REQUIRED_MEMBERS)
+				return true;
+			break;
+		case 3:
+			if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL4_REQUIRED_MEMBERS)
+				return true;
+			break;
+		case 4:
+			if (getLegionMembers().size() >= LegionConfig.LEGION_LEVEL5_REQUIRED_MEMBERS)
+				return true;
+			break;
 		}
 		return false;
 	}
@@ -296,14 +293,14 @@ public class Legion {
 	 */
 	public int getKinahPrice() {
 		switch (getLegionLevel()) {
-			case 1:
-				return LegionConfig.LEGION_LEVEL2_REQUIRED_KINAH;
-			case 2:
-				return LegionConfig.LEGION_LEVEL3_REQUIRED_KINAH;
-			case 3:
-				return LegionConfig.LEGION_LEVEL4_REQUIRED_KINAH;
-			case 4:
-				return LegionConfig.LEGION_LEVEL5_REQUIRED_KINAH;
+		case 1:
+			return LegionConfig.LEGION_LEVEL2_REQUIRED_KINAH;
+		case 2:
+			return LegionConfig.LEGION_LEVEL3_REQUIRED_KINAH;
+		case 3:
+			return LegionConfig.LEGION_LEVEL4_REQUIRED_KINAH;
+		case 4:
+			return LegionConfig.LEGION_LEVEL5_REQUIRED_KINAH;
 		}
 		return 0;
 	}
@@ -315,14 +312,14 @@ public class Legion {
 	 */
 	public int getContributionPrice() {
 		switch (getLegionLevel()) {
-			case 1:
-				return LegionConfig.LEGION_LEVEL2_REQUIRED_CONTRIBUTION;
-			case 2:
-				return LegionConfig.LEGION_LEVEL3_REQUIRED_CONTRIBUTION;
-			case 3:
-				return LegionConfig.LEGION_LEVEL4_REQUIRED_CONTRIBUTION;
-			case 4:
-				return LegionConfig.LEGION_LEVEL5_REQUIRED_CONTRIBUTION;
+		case 1:
+			return LegionConfig.LEGION_LEVEL2_REQUIRED_CONTRIBUTION;
+		case 2:
+			return LegionConfig.LEGION_LEVEL3_REQUIRED_CONTRIBUTION;
+		case 3:
+			return LegionConfig.LEGION_LEVEL4_REQUIRED_CONTRIBUTION;
+		case 4:
+			return LegionConfig.LEGION_LEVEL5_REQUIRED_CONTRIBUTION;
 		}
 		return 0;
 	}
@@ -334,33 +331,33 @@ public class Legion {
 	 */
 	private boolean canAddMember() {
 		switch (getLegionLevel()) {
-			case 1:
-				if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL1_MAX_MEMBERS)
-					return true;
-				break;
-			case 2:
-				if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL2_MAX_MEMBERS)
-					return true;
-				break;
-			case 3:
-				if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL3_MAX_MEMBERS)
-					return true;
-				break;
-			case 4:
-				if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL4_MAX_MEMBERS)
-					return true;
-				break;
-			case 5:
-				if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL5_MAX_MEMBERS)
-					return true;
-				break;
+		case 1:
+			if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL1_MAX_MEMBERS)
+				return true;
+			break;
+		case 2:
+			if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL2_MAX_MEMBERS)
+				return true;
+			break;
+		case 3:
+			if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL3_MAX_MEMBERS)
+				return true;
+			break;
+		case 4:
+			if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL4_MAX_MEMBERS)
+				return true;
+			break;
+		case 5:
+			if (getLegionMembers().size() < LegionConfig.LEGION_LEVEL5_MAX_MEMBERS)
+				return true;
+			break;
 		}
 		return false;
 	}
 
 	/**
 	 * @param announcementList
-	 *          the announcementList to set
+	 *            the announcementList to set
 	 */
 	public void setAnnouncementList(TreeMap<Timestamp, String> announcementList) {
 		this.announcementList = announcementList;
@@ -398,7 +395,7 @@ public class Legion {
 
 	/**
 	 * @param disbandTime
-	 *          the disbandTime to set
+	 *            the disbandTime to set
 	 */
 	public void setDisbandTime(int disbandTime) {
 		this.disbandTime = disbandTime;
@@ -430,7 +427,7 @@ public class Legion {
 
 	/**
 	 * @param legionEmblem
-	 *          the legionEmblem to set
+	 *            the legionEmblem to set
 	 */
 	public void setLegionEmblem(LegionEmblem legionEmblem) {
 		this.legionEmblem = legionEmblem;
@@ -445,7 +442,7 @@ public class Legion {
 
 	/**
 	 * @param legionWarehouse
-	 *          the legionWarehouse to set
+	 *            the legionWarehouse to set
 	 */
 	public void setLegionWarehouse(LegionWarehouse legionWarehouse) {
 		this.legionWarehouse = legionWarehouse;
@@ -465,22 +462,21 @@ public class Legion {
 	 */
 	public int getWarehouseSlots() {
 		switch (getLegionLevel()) {
-			case 1:
-				return LegionConfig.LWH_LEVEL1_SLOTS;
-			case 2:
-				return LegionConfig.LWH_LEVEL2_SLOTS;
-			case 3:
-				return LegionConfig.LWH_LEVEL3_SLOTS;
-			case 4:
-				return LegionConfig.LWH_LEVEL4_SLOTS;
-			case 5:
-				return LegionConfig.LWH_LEVEL5_SLOTS;
+		case 1:
+			return LegionConfig.LWH_LEVEL1_SLOTS;
+		case 2:
+			return LegionConfig.LWH_LEVEL2_SLOTS;
+		case 3:
+			return LegionConfig.LWH_LEVEL3_SLOTS;
+		case 4:
+			return LegionConfig.LWH_LEVEL4_SLOTS;
+		case 5:
+			return LegionConfig.LWH_LEVEL5_SLOTS;
 		}
 		return LegionConfig.LWH_LEVEL1_SLOTS;
 	}
 
-	public int getWarehouseLevel()
-	{
+	public int getWarehouseLevel() {
 		return getLegionLevel() - 1;
 	}
 
@@ -490,11 +486,11 @@ public class Legion {
 	public Collection<LegionHistory> getLegionHistory() {
 		return this.legionHistory;
 	}
-	
+
 	public Collection<LegionHistory> getLegionHistoryByTabId(int tabId) {
 		if (legionHistory.isEmpty())
 			return legionHistory;
-		
+
 		SortedSet<LegionHistory> result = new TreeSet<LegionHistory>(new Comparator<LegionHistory>() {
 
 			@Override
@@ -509,45 +505,45 @@ public class Legion {
 		}
 		return result;
 	}
-	
+
 	private boolean isLegionHistoryTypeForTabId(int tabId, LegionHistory legionHistory) {
 		switch (legionHistory.getLegionHistoryType().getHistoryId()) {
-			case 0: //CREATE(0)
-			case 1: //JOIN(1)
-			case 2: //KICK(2)
-			case 3: //LEVEL_UP(3)
-			case 4: //APPOINTED(4)
-			case 5: //EMBLEM_REGISTER(5)
-			case 6: //EMBLEM_MODIFIED(6)
-				return tabId == 0;
-			case 15: //ITEM_DEPOSIT(15)
-			case 16: //ITEM_WITHDRAW(16)
-			case 17: //KINAH_DEPOSIT(17)
-			case 18: //KINAH_WITHDRAW(18)
-				return tabId == 2;
+		case 0: // CREATE(0)
+		case 1: // JOIN(1)
+		case 2: // KICK(2)
+		case 3: // LEVEL_UP(3)
+		case 4: // APPOINTED(4)
+		case 5: // EMBLEM_REGISTER(5)
+		case 6: // EMBLEM_MODIFIED(6)
+			return tabId == 0;
+		case 15: // ITEM_DEPOSIT(15)
+		case 16: // ITEM_WITHDRAW(16)
+		case 17: // KINAH_DEPOSIT(17)
+		case 18: // KINAH_WITHDRAW(18)
+			return tabId == 2;
 		}
 		return false;
 	}
-	
+
 	public static int getTabIdFromLegionHistoryType(LegionHistory legionHistory) {
 		switch (legionHistory.getLegionHistoryType().getHistoryId()) {
-			case 0: //CREATE(0)
-			case 1: //JOIN(1)
-			case 2: //KICK(2)
-			case 3: //LEVEL_UP(3)
-			case 4: //APPOINTED(4)
-			case 5: //EMBLEM_REGISTER(5)
-			case 6: //EMBLEM_MODIFIED(6)
-				return 0;
-			case 15: //ITEM_DEPOSIT(15)
-			case 16: //ITEM_WITHDRAW(16)
-			case 17: //KINAH_DEPOSIT(17)
-			case 18: //KINAH_WITHDRAW(18)
-				return 2;
+		case 0: // CREATE(0)
+		case 1: // JOIN(1)
+		case 2: // KICK(2)
+		case 3: // LEVEL_UP(3)
+		case 4: // APPOINTED(4)
+		case 5: // EMBLEM_REGISTER(5)
+		case 6: // EMBLEM_MODIFIED(6)
+			return 0;
+		case 15: // ITEM_DEPOSIT(15)
+		case 16: // ITEM_WITHDRAW(16)
+		case 17: // KINAH_DEPOSIT(17)
+		case 18: // KINAH_WITHDRAW(18)
+			return 2;
 		}
 		return 0;
 	}
-	
+
 	/**
 	 * @param history
 	 */
@@ -557,8 +553,10 @@ public class Legion {
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || getClass() != o.getClass())
+			return false;
 
 		Legion legion = (Legion) o;
 		return legionId == legion.legionId;

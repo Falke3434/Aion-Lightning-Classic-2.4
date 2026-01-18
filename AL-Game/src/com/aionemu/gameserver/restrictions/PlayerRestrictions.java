@@ -54,14 +54,14 @@ public class PlayerRestrictions extends AbstractRestrictions {
 			return false;
 
 		if (((Creature) target).getLifeStats().isAlreadyDead() && !skill.getSkillTemplate().hasResurrectEffect()
-			&& !skill.checkNonTargetAOE()) {
+				&& !skill.checkNonTargetAOE()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_SKILL_TARGET_IS_NOT_VALID);
 			return false;
 		}
-		
-		//cant ressurect non players and non dead
-		if (skill.getSkillTemplate().hasResurrectEffect() && (!(target instanceof Player) || 
-			!((Creature)target).getLifeStats().isAlreadyDead() || !((Creature)target).isInDeadState()))
+
+		// cant ressurect non players and non dead
+		if (skill.getSkillTemplate().hasResurrectEffect() && (!(target instanceof Player)
+				|| !((Creature) target).getLifeStats().isAlreadyDead() || !((Creature) target).isInDeadState()))
 			return false;
 
 		if (skill.getSkillTemplate().hasItemHealFpEffect() && !player.isInFlyingState()) { // player must be
@@ -74,17 +74,20 @@ public class PlayerRestrictions extends AbstractRestrictions {
 				return false;
 		}
 
-		// Fix for Summon Group Member, cannot be used while either caster or summoned is actively in combat
+		// Fix for Summon Group Member, cannot be used while either caster or summoned
+		// is actively in combat
 		if (skill.getSkillTemplate().getSkillId() == 1606) {
 			// skill properties should already filter only players
 			if (player.getController().isInCombat() || ((Player) target).getController().isInCombat()) {
-				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_Recall_CANNOT_ACCEPT_EFFECT(target.getName()));
+				PacketSendUtility.sendPacket(player,
+						SM_SYSTEM_MESSAGE.STR_MSG_Recall_CANNOT_ACCEPT_EFFECT(target.getName()));
 				return false;
 			}
 		}
 
 		if (player.isInState(CreatureState.PRIVATE_SHOP)) { // You cannot use an item while running a Private Store.
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_MSG_CANNOT_USE_ITEM_DURING_PATH_FLYING(new DescriptionId(2800123)));
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_MSG_CANNOT_USE_ITEM_DURING_PATH_FLYING(new DescriptionId(2800123)));
 			return false;
 		}
 
@@ -98,7 +101,7 @@ public class PlayerRestrictions extends AbstractRestrictions {
 
 		// Don't allow the use of skills in Fly Teleport state
 		if (player.isUsingFlyTeleport()
-			|| (target != null && target instanceof Player && ((Player) target).isUsingFlyTeleport()))
+				|| (target != null && target instanceof Player && ((Player) target).isUsingFlyTeleport()))
 			return false;
 
 		// check if is casting to avoid multicast exploit
@@ -109,7 +112,8 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		if ((!player.canAttack()) && (template.getSkillId() != 1968))
 			return false;
 
-		if (template.getType() == SkillType.MAGICAL && player.getEffectController().isAbnormalSet(AbnormalState.SILENCE))
+		if (template.getType() == SkillType.MAGICAL
+				&& player.getEffectController().isAbnormalSet(AbnormalState.SILENCE))
 			return false;
 
 		if (template.getType() == SkillType.PHYSICAL && player.getEffectController().isAbnormalSet(AbnormalState.BIND))
@@ -118,16 +122,16 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		if (player.isSkillDisabled(template))
 			return false;
 
-		//cannot use skills while transformed
+		// cannot use skills while transformed
 		if (player.getTransformedModelId() != 0) {
-			for(Effect ef : player.getEffectController().getAbnormalEffects()) {
+			for (Effect ef : player.getEffectController().getAbnormalEffects()) {
 				if (ef.getTransformType() == TransformType.NONE) {
 					PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_SKILL_CAN_NOT_CAST_IN_SHAPECHANGE);
 					return false;
 				}
 			}
 		}
-		
+
 		if (template.getEffects() != null && template.getEffects().isResurrect()) {
 			if (!(target instanceof Player)) {
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_SKILL_TARGET_IS_NOT_VALID);
@@ -150,56 +154,47 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		if (group != null && group.isFull()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_CANT_ADD_NEW_MEMBER);
 			return false;
-		}
-		else if (group != null && !player.getObjectId().equals(group.getLeader().getObjectId())) {
+		} else if (group != null && !player.getObjectId().equals(group.getLeader().getObjectId())) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_ONLY_LEADER_CAN_INVITE);
 			return false;
-		}
-		else if (target == null) {
+		} else if (target == null) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_NO_USER_TO_INVITE);
 			return false;
-		}
-		else if (target.getRace() != player.getRace() && !GroupConfig.GROUP_INVITEOTHERFACTION) {
+		} else if (target.getRace() != player.getRace() && !GroupConfig.GROUP_INVITEOTHERFACTION) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_CANT_INVITE_OTHER_RACE);
 			return false;
-		}
-		else if (target.sameObjectId(player.getObjectId())) {
+		} else if (target.sameObjectId(player.getObjectId())) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_CAN_NOT_INVITE_SELF);
 			return false;
-		}
-		else if (target.getLifeStats().isAlreadyDead()) {
+		} else if (target.getLifeStats().isAlreadyDead()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_UI_PARTY_DEAD);
 			return false;
-		}
-		else if (player.getLifeStats().isAlreadyDead()) {
+		} else if (player.getLifeStats().isAlreadyDead()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_CANT_INVITE_WHEN_DEAD);
 			return false;
-		}
-		else if (player.isInGroup2() && target.isInGroup2()
-			&& player.getPlayerGroup2().getTeamId() == target.getPlayerGroup2().getTeamId()) {
+		} else if (player.isInGroup2() && target.isInGroup2()
+				&& player.getPlayerGroup2().getTeamId() == target.getPlayerGroup2().getTeamId()) {
 			PacketSendUtility.sendPacket(player,
-				SM_SYSTEM_MESSAGE.STR_PARTY_HE_IS_ALREADY_MEMBER_OF_OUR_PARTY(target.getName()));
-		}
-		else if (target.isInGroup2()) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_HE_IS_ALREADY_MEMBER_OF_OTHER_PARTY(target.getName()));
+					SM_SYSTEM_MESSAGE.STR_PARTY_HE_IS_ALREADY_MEMBER_OF_OUR_PARTY(target.getName()));
+		} else if (target.isInGroup2()) {
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_PARTY_HE_IS_ALREADY_MEMBER_OF_OTHER_PARTY(target.getName()));
 			return false;
-		}
-		else if (target.isInAlliance2()) {
+		} else if (target.isInAlliance2()) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_FORCE_ALREADY_OTHER_FORCE(target.getName()));
 			return false;
 		}
 
 		return true;
 	}
-	
+
 	public boolean canInviteToAlliance(Player player, Player target) {
 		if (target == null) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_FORCE_NO_USER_TO_INVITE);
 			return false;
 		}
 
-		if (target.getRace() != player.getRace()
-			&& !GroupConfig.ALLIANCE_INVITEOTHERFACTION) {
+		if (target.getRace() != player.getRace() && !GroupConfig.ALLIANCE_INVITEOTHERFACTION) {
 			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_CANT_INVITE_OTHER_RACE);
 			return false;
 		}
@@ -209,10 +204,9 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		if (target.isInAlliance2()) {
 			if (target.getPlayerAlliance2() == alliance) {
 				PacketSendUtility.sendPacket(player,
-					SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_HE_IS_ALREADY_MEMBER_OF_OUR_ALLIANCE(target.getName()));
+						SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_HE_IS_ALREADY_MEMBER_OF_OUR_ALLIANCE(target.getName()));
 				return false;
-			}
-			else {
+			} else {
 				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_FORCE_ALREADY_OTHER_FORCE(target.getName()));
 				return false;
 			}
@@ -224,7 +218,8 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		}
 
 		if (alliance != null && !alliance.isSomeCaptain(player)) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_ONLY_PARTY_LEADER_CAN_LEAVE_ALLIANCE);
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_PARTY_ALLIANCE_ONLY_PARTY_LEADER_CAN_LEAVE_ALLIANCE);
 			return false;
 		}
 
@@ -246,8 +241,8 @@ public class PlayerRestrictions extends AbstractRestrictions {
 		if (target.isInGroup2()) {
 			PlayerGroup targetGroup = target.getPlayerGroup2();
 			if (targetGroup.isLeader(target)) {
-				PacketSendUtility.sendPacket(player,
-					SM_SYSTEM_MESSAGE.STR_FORCE_INVITE_PARTY_HIM(target.getName(), targetGroup.getLeader().getName()));
+				PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_FORCE_INVITE_PARTY_HIM(target.getName(),
+						targetGroup.getLeader().getName()));
 				return false;
 			}
 			if (alliance != null && (targetGroup.size() + alliance.size() >= 24)) {
@@ -324,11 +319,10 @@ public class PlayerRestrictions extends AbstractRestrictions {
 
 		if (item.getItemTemplate().hasAreaRestriction()) {
 			ZoneName restriction = item.getItemTemplate().getUseArea();
-			if (restriction == ZoneName._ABYSS_CASTLE_AREA_){
+			if (restriction == ZoneName._ABYSS_CASTLE_AREA_) {
 				if (!player.isInsideZoneType(ZoneType.SIEGE))
 					return false;
-			}
-			else if (restriction != null && !player.isInsideZone(restriction)) {
+			} else if (restriction != null && !player.isInsideZone(restriction)) {
 				// You cannot use that item here.
 				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300143));
 				return false;

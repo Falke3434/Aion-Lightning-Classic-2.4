@@ -20,7 +20,8 @@ import javax.xml.bind.annotation.XmlType;
  * <p>
  * Java class for RequireSkill complex type.
  * <p>
- * The following schema fragment specifies the expected content contained within this class.
+ * The following schema fragment specifies the expected content contained within
+ * this class.
  * 
  * <pre>
  * &lt;complexType name="RequireSkill">
@@ -47,9 +48,10 @@ public class RequireSkill {
 	/**
 	 * Gets the value of the skillId property.
 	 * <p>
-	 * This accessor method returns a reference to the live list, not a snapshot. Therefore any modification you make to
-	 * the returned list will be present inside the JAXB object. This is why there is not a <CODE>set</CODE> method for
-	 * the skillId property.
+	 * This accessor method returns a reference to the live list, not a snapshot.
+	 * Therefore any modification you make to the returned list will be present
+	 * inside the JAXB object. This is why there is not a <CODE>set</CODE> method
+	 * for the skillId property.
 	 * <p>
 	 * For example, to add a new item, do as follows:
 	 * 

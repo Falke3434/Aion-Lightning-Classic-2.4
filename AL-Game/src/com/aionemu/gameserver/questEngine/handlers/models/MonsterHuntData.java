@@ -25,20 +25,17 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import javax.xml.bind.annotation.XmlType;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.questEngine.QuestEngine;
 import com.aionemu.gameserver.questEngine.handlers.template.MonsterHunt;
+
+import javolution.util.FastMap;
 
 /**
  * @author MrPoke
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "MonsterHuntData", propOrder = { "monster" })
-@XmlSeeAlso({
-    KillSpawnedData.class,
-    MentorMonsterHuntData.class
-})
+@XmlSeeAlso({ KillSpawnedData.class, MentorMonsterHuntData.class })
 public class MonsterHuntData extends XMLQuest {
 
 	@XmlElement(name = "monster", required = true)

@@ -1,6 +1,5 @@
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import java.util.Collection;
 
 import com.aionemu.gameserver.model.gameobjects.player.Player;
@@ -33,8 +32,7 @@ public class SM_CHAT_WINDOW extends AionServerPacket {
 			writeC(target.getPlayerClass().getClassId());
 			writeC(target.getLevel());
 			writeC(0); // unk
-		}
-		else {
+		} else {
 			writeC(2); // group
 			writeS(target.getName());
 			writeD(group.getTeamId());

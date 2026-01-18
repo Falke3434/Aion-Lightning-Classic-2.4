@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.services;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -43,6 +41,8 @@ import com.aionemu.gameserver.questEngine.model.QuestStatus;
 import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author Rolandas
@@ -84,7 +84,8 @@ public class EventService {
 	/**
 	 * This method is called just after player logged in to the game.<br>
 	 * <br>
-	 * <b><font color='red'>NOTICE: </font>This method must not be called from anywhere else.</b>
+	 * <b><font color='red'>NOTICE: </font>This method must not be called from
+	 * anywhere else.</b>
 	 */
 	public void onPlayerLogin(Player player) {
 		List<Integer> activeStartQuests = new ArrayList<Integer>();
@@ -113,7 +114,7 @@ public class EventService {
 	}
 
 	void StartOrMaintainQuests(Player player, ListIterator<Integer> questList,
-		TIntObjectHashMap<List<EventTemplate>> templateMap, boolean start) {
+			TIntObjectHashMap<List<EventTemplate>> templateMap, boolean start) {
 		while (questList.hasNext()) {
 			int questId = questList.next();
 			QuestState qs = player.getQuestStateList().getQuestState(questId);
@@ -175,13 +176,11 @@ public class EventService {
 					}
 					// re-register quests
 					if (status == QuestStatus.COMPLETE) {
-						PacketSendUtility
-							.sendPacket(player, new SM_QUEST_ACTION(questId, status, qs.getQuestVars().getQuestVars()));
-					}
-					else
+						PacketSendUtility.sendPacket(player,
+								new SM_QUEST_ACTION(questId, status, qs.getQuestVars().getQuestVars()));
+					} else
 						QuestService.startEventQuest(cookie, status);
-				}
-				else if (start) {
+				} else if (start) {
 					QuestService.startEventQuest(cookie, status);
 				}
 			}
@@ -281,7 +280,7 @@ public class EventService {
 			boolean hasFreeStack = false;
 			for (Item item : items) {
 				if (item.getPersistentState() == PersistentState.DELETED
-					|| item.getItemCount() < item.getItemTemplate().getMaxStackCount()) {
+						|| item.getItemCount() < item.getItemTemplate().getMaxStackCount()) {
 					hasFreeStack = true;
 					break;
 				}

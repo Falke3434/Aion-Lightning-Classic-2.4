@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.questEngine.handlers.template;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.questEngine.handlers.QuestHandler;
 import com.aionemu.gameserver.questEngine.handlers.models.QuestSkillData;
@@ -25,6 +23,8 @@ import com.aionemu.gameserver.questEngine.model.QuestDialog;
 import com.aionemu.gameserver.questEngine.model.QuestEnv;
 import com.aionemu.gameserver.questEngine.model.QuestState;
 import com.aionemu.gameserver.questEngine.model.QuestStatus;
+
+import javolution.util.FastMap;
 
 /**
  * @author vlog
@@ -42,8 +42,7 @@ public class SkillUse extends QuestHandler {
 		this.startNpc = startNpc;
 		if (endNpc != 0) {
 			this.endNpc = endNpc;
-		}
-		else {
+		} else {
 			this.endNpc = startNpc;
 		}
 		this.qsd = qsd;
@@ -72,25 +71,21 @@ public class SkillUse extends QuestHandler {
 			if (targetId == startNpc) {
 				if (dialog == QuestDialog.START_DIALOG) {
 					return sendQuestDialog(env, 4762);
-				}
-				else {
+				} else {
 					return sendQuestStartDialog(env);
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.START) {
+		} else if (qs.getStatus() == QuestStatus.START) {
 			int var = qs.getQuestVarById(0);
 			if (targetId == endNpc) {
 				if (dialog == QuestDialog.START_DIALOG) {
 					return sendQuestDialog(env, 10002);
-				}
-				else if (dialog == QuestDialog.SELECT_REWARD) {
+				} else if (dialog == QuestDialog.SELECT_REWARD) {
 					changeQuestStep(env, var, var, true); // reward
 					return sendQuestDialog(env, 5);
 				}
 			}
-		}
-		else if (qs.getStatus() == QuestStatus.REWARD) {
+		} else if (qs.getStatus() == QuestStatus.REWARD) {
 			if (targetId == endNpc) {
 				return sendQuestEndDialog(env);
 			}
@@ -101,6 +96,6 @@ public class SkillUse extends QuestHandler {
 	@Override
 	public boolean onUseSkillEvent(QuestEnv env, int skillId) {
 		return defaultOnUseSkillEvent(env, qsd.get(skillId).getStartVar(), qsd.get(skillId).getEndVar(),
-			qsd.get(skillId).getVarNum());
+				qsd.get(skillId).getVarNum());
 	}
 }

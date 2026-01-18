@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.THashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -30,6 +28,7 @@ import javax.xml.bind.annotation.XmlTransient;
 
 import com.aionemu.gameserver.skillengine.model.MotionTime;
 
+import gnu.trove.map.hash.THashMap;
 
 /**
  * @author kecimis
@@ -57,7 +56,7 @@ public class MotionData {
 	public List<MotionTime> getMotionTimes() {
 		if (motionTimes == null)
 			motionTimes = new ArrayList<MotionTime>();
-		
+
 		return motionTimes;
 	}
 
@@ -68,7 +67,7 @@ public class MotionData {
 	public int size() {
 		if (motionTimes == null)
 			return 0;
-		
+
 		return motionTimes.size();
 	}
 }

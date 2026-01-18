@@ -48,11 +48,15 @@ public class SM_GROUP_MEMBER_INFO extends AionServerPacket {
 		PlayerLifeStats pls = player.getLifeStats();
 		PlayerCommonData pcd = player.getCommonData();
 		WorldPosition wp = pcd.getPosition();
-
+		if (wp == null) {
+			return;
+		}
 		if (event == GroupEvent.ENTER && !player.isOnline()) {
 			event = GroupEvent.ENTER_OFFLINE;
 		}
-
+		if (event == GroupEvent.UPDATE && !player.isOnline()) {
+			event = GroupEvent.DISCONNECTED;
+		}
 		writeD(groupId);
 		writeD(player.getObjectId());
 		if (player.isOnline()) {
@@ -62,24 +66,19 @@ public class SM_GROUP_MEMBER_INFO extends AionServerPacket {
 			writeD(pls.getCurrentMp());
 			writeD(pls.getMaxFp()); // maxflighttime
 			writeD(pls.getCurrentFp()); // currentflighttime
+		} else {
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(0);
+			writeD(0);
 			writeD(wp.getMapId());
 			writeD(wp.getMapId());
 			writeF(wp.getX());
 			writeF(wp.getY());
 			writeF(wp.getZ());
-		}
-		else {
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeD(0);
-			writeF(0);
-			writeF(0);
-			writeF(0);
 		}
 
 		writeC(pcd.getPlayerClass().getClassId()); // class id
@@ -88,34 +87,36 @@ public class SM_GROUP_MEMBER_INFO extends AionServerPacket {
 
 		writeC(event.getId()); // something events
 		writeH(player.isOnline() ? 1 : 0); // TODO channel?
-		writeC(player.isMentor() ? 0x01 : 0x00);
+		writeC(player.isMentor() ? 1 : 0);
 
 		switch (event) {
-			case MOVEMENT:
-				break;
-			case LEAVE:
-				writeH(0x00); // unk
-				writeC(0x00); // unk
-				break;
-			case ENTER_OFFLINE:
-			case JOIN:
-				writeS(pcd.getName()); // name
-				break;
-			default:
-				writeS(pcd.getName()); // name
-				writeD(0x00); // unk
-				writeD(0x00); // unk
-				List<Effect> abnormalEffects = player.getEffectController().getAbnormalEffects();
-				writeH(abnormalEffects.size()); // Abnormal effects
-				for (Effect effect : abnormalEffects) {
-					writeD(effect.getEffectorId()); // casterid
-					writeH(effect.getSkillId()); // spellid
-					writeC(effect.getSkillLevel()); // spell level
-					writeC(effect.getTargetSlot()); // unk ?
-					writeD(effect.getRemainingTime()); // estimatedtime
-				}
-				writeD(0x25F7); // unk 9719
-				break;
+		case MOVEMENT:
+		case DISCONNECTED:
+			break;
+		case LEAVE:
+			writeH(0x00); // unk
+			writeC(0x00); // unk
+			break;
+		case JOIN:
+		case ENTER_OFFLINE:
+			writeS(pcd.getName()); // name
+			break;
+		case ENTER:
+		case UPDATE:
+			writeS(pcd.getName()); // name
+			writeD(0x00); // unk
+			writeD(0x00); // unk
+			List<Effect> abnormalEffects = player.getEffectController().getAbnormalEffects();
+			writeH(abnormalEffects.size()); // Abnormal effects
+			for (Effect effect : abnormalEffects) {
+				writeD(effect.getEffectorId()); // casterid
+				writeH(effect.getSkillId()); // spellid
+				writeC(effect.getSkillLevel()); // spell level
+				writeC(effect.getTargetSlot()); // unk ?
+				writeD(effect.getRemainingTime()); // estimatedtime
+			}
+			writeD(2835);
+			break;
 		}
 	}
 

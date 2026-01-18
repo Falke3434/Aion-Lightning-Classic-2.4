@@ -54,8 +54,7 @@ public class ChangeMemberGroupEvent extends AlwaysTrueTeamEvent implements Predi
 		Preconditions.checkArgument(secondMemberId == 0 || secondMember != null, "Second member should not be null");
 		if (secondMember != null) {
 			swapMembersInGroup(firstMember, secondMember);
-		}
-		else {
+		} else {
 			moveMemberToGroup(firstMember, allianceGroupId);
 		}
 		alliance.apply(this);
@@ -63,11 +62,11 @@ public class ChangeMemberGroupEvent extends AlwaysTrueTeamEvent implements Predi
 
 	@Override
 	public boolean apply(PlayerAllianceMember member) {
-		PacketSendUtility.sendPacket(member.getObject(), new SM_ALLIANCE_MEMBER_INFO(firstMember,
-			PlayerAllianceEvent.MEMBER_GROUP_CHANGE));
+		PacketSendUtility.sendPacket(member.getObject(),
+				new SM_ALLIANCE_MEMBER_INFO(firstMember, PlayerAllianceEvent.MEMBER_GROUP_CHANGE));
 		if (secondMember != null) {
-			PacketSendUtility.sendPacket(member.getObject(), new SM_ALLIANCE_MEMBER_INFO(secondMember,
-				PlayerAllianceEvent.MEMBER_GROUP_CHANGE));
+			PacketSendUtility.sendPacket(member.getObject(),
+					new SM_ALLIANCE_MEMBER_INFO(secondMember, PlayerAllianceEvent.MEMBER_GROUP_CHANGE));
 		}
 		return true;
 	}

@@ -52,15 +52,16 @@ public class WarehouseService {
 	 */
 	public static void expandWarehouse(final Player player, Npc npc) {
 		final WarehouseExpandTemplate expandTemplate = DataManager.WAREHOUSEEXPANDER_DATA
-			.getWarehouseExpandListTemplate(npc.getNpcId());
+				.getWarehouseExpandListTemplate(npc.getNpcId());
 
 		if (expandTemplate == null) {
-			log.error("Warehouse Expand Template could not be found for Npc ID: " + npc.getObjectTemplate().getTemplateId());
+			log.error("Warehouse Expand Template could not be found for Npc ID: "
+					+ npc.getObjectTemplate().getTemplateId());
 			return;
 		}
 
 		if (npcCanExpandLevel(expandTemplate, player.getWarehouseSize() + 1)
-			&& validateNewSize(player.getWarehouseSize() + 1)) {
+				&& validateNewSize(player.getWarehouseSize() + 1)) {
 			if (validateNewSize(player.getWarehouseSize() + 1)) {
 				/**
 				 * Check if our player can pay the warehouse expand price
@@ -89,8 +90,7 @@ public class WarehouseService {
 					PacketSendUtility.sendPacket(player, new SM_QUESTION_WINDOW(900686, 0, String.valueOf(price)));
 				}
 			}
-		}
-		else
+		} else
 			PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300432));
 	}
 
@@ -142,7 +142,8 @@ public class WarehouseService {
 	}
 
 	/**
-	 * The guy who created cube template should blame himself :) One day I will rewrite them
+	 * The guy who created cube template should blame himself :) One day I will
+	 * rewrite them
 	 * 
 	 * @param template
 	 * @param level
@@ -172,27 +173,27 @@ public class WarehouseService {
 
 			while (index + 10 < itemsSize) {
 				PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(items.subList(index, index + 10),
-					StorageType.REGULAR_WAREHOUSE.getId(), whSize, firstPacket, player));
+						StorageType.REGULAR_WAREHOUSE.getId(), whSize, firstPacket, player));
 				index += 10;
 				firstPacket = false;
 			}
 			PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(items.subList(index, itemsSize),
-				StorageType.REGULAR_WAREHOUSE.getId(), whSize, firstPacket, player));
+					StorageType.REGULAR_WAREHOUSE.getId(), whSize, firstPacket, player));
 		}
 
-		PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(null, StorageType.REGULAR_WAREHOUSE.getId(), whSize,
-			false, player));
+		PacketSendUtility.sendPacket(player,
+				new SM_WAREHOUSE_INFO(null, StorageType.REGULAR_WAREHOUSE.getId(), whSize, false, player));
 
 		if (sendAccountWh) {
 			/**
 			 * Account warehouse
 			 */
 			PacketSendUtility.sendPacket(player,
-				new SM_WAREHOUSE_INFO(player.getStorage(StorageType.ACCOUNT_WAREHOUSE.getId()).getItemsWithKinah(),
-					StorageType.ACCOUNT_WAREHOUSE.getId(), 0, true, player));
+					new SM_WAREHOUSE_INFO(player.getStorage(StorageType.ACCOUNT_WAREHOUSE.getId()).getItemsWithKinah(),
+							StorageType.ACCOUNT_WAREHOUSE.getId(), 0, true, player));
 		}
 
-		PacketSendUtility.sendPacket(player, new SM_WAREHOUSE_INFO(null, StorageType.ACCOUNT_WAREHOUSE.getId(), 0, false,
-			player));
+		PacketSendUtility.sendPacket(player,
+				new SM_WAREHOUSE_INFO(null, StorageType.ACCOUNT_WAREHOUSE.getId(), 0, false, player));
 	}
 }

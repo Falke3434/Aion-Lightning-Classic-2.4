@@ -10,16 +10,13 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
  * @author KID
  */
 public class CmdStatus extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (params[1].equalsIgnoreCase("alliance")) {
 			PacketSendUtility.sendMessage(admin, PlayerAllianceService.getServiceStatus());
-		}
-		else if (params[1].equalsIgnoreCase("group")) {
+		} else if (params[1].equalsIgnoreCase("group")) {
 			PacketSendUtility.sendMessage(admin, PlayerGroupService.getServiceStatus());
-		}
-		else{
+		} else {
 			showHelp(admin);
 		}
 	}

@@ -43,6 +43,7 @@ public class CM_QUESTIONNAIRE extends AionClientPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#readImpl()
 	 */
 	@Override
@@ -59,6 +60,7 @@ public class CM_QUESTIONNAIRE extends AionClientPacket {
 
 	/*
 	 * (non-Javadoc)
+	 * 
 	 * @see com.aionemu.commons.network.packet.BaseClientPacket#runImpl()
 	 */
 	@Override

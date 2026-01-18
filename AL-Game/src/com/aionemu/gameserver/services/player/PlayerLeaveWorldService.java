@@ -66,19 +66,22 @@ public class PlayerLeaveWorldService {
 	 */
 
 	/**
-	 * This method is called when player leaves the game, which includes just two cases: either player goes back to char
-	 * selection screen or it's leaving the game [closing client].<br>
+	 * This method is called when player leaves the game, which includes just two
+	 * cases: either player goes back to char selection screen or it's leaving the
+	 * game [closing client].<br>
 	 * <br>
-	 * <b><font color='red'>NOTICE: </font> This method is called only from {@link GameConnection} and {@link CM_QUIT} and
-	 * must not be called from anywhere else</b>
+	 * <b><font color='red'>NOTICE: </font> This method is called only from
+	 * {@link GameConnection} and {@link CM_QUIT} and must not be called from
+	 * anywhere else</b>
 	 */
 	public static final void startLeaveWorld(Player player) {
 		log.info("Player logged out: " + player.getName() + " Account: "
-			+ (player.getClientConnection() != null ? player.getClientConnection().getAccount().getName() : "disconnected"));
-		
-		if(player.getEventTeamId() != -1)
+				+ (player.getClientConnection() != null ? player.getClientConnection().getAccount().getName()
+						: "disconnected"));
+
+		if (player.getEventTeamId() != -1)
 			com.aionemu.gameserver.eventengine.Event.instance.removePlayer(player);
-		
+
 		player.setVar("dp", player.getCommonData().getDp(), true);
 		FindGroupService.getInstance().removeFindGroup(player.getRace(), 0x00, player.getObjectId());
 		FindGroupService.getInstance().removeFindGroup(player.getRace(), 0x04, player.getObjectId());
@@ -90,7 +93,7 @@ public class PlayerLeaveWorldService {
 		InstanceService.onLogOut(player);
 		GMService.getInstance().onPlayerLogedOut(player);
 
-		if(player.isLooting())
+		if (player.isLooting())
 			DropService.getInstance().closeDropList(player, player.getLootingNpcOid());
 
 		// Update prison timer
@@ -116,16 +119,17 @@ public class PlayerLeaveWorldService {
 				PlayerReviveService.instanceRevive(player);
 			else
 				PlayerReviveService.bindRevive(player);
-		}/*
-		if (player.getLifeStats().isAlreadyDead() && !player.isInInstance())
-			TeleportService.moveToBindLocation(player, false);
-*/
+		} /*
+			 * if (player.getLifeStats().isAlreadyDead() && !player.isInInstance())
+			 * TeleportService.moveToBindLocation(player, false);
+			 */
 		else if (DuelService.getInstance().isDueling(player.getObjectId())) {
 			DuelService.getInstance().loseDuel(player);
 		}
-            /*    if (TvtService.getInstance().getTvtByLevel(player.getLevel()).getHolders().getPlayer(player)) {
-                   TvtService.getInstance().unRegPlayer(player);
-                }*/
+		/*
+		 * if (TvtService.getInstance().getTvtByLevel(player.getLevel()).getHolders().
+		 * getPlayer(player)) { TvtService.getInstance().unRegPlayer(player); }
+		 */
 
 		if (player.getSummon() != null)
 			player.getSummon().getController().release(UnsummonType.LOGOUT);
@@ -135,7 +139,7 @@ public class PlayerLeaveWorldService {
 		if (player.getPostman() != null)
 			player.getPostman().getController().onDelete();
 		player.setPostman(null);
-                
+
 		PunishmentService.stopPrisonTask(player, true);
 		PunishmentService.stopGatherableTask(player, true);
 
@@ -144,6 +148,8 @@ public class PlayerLeaveWorldService {
 
 		PlayerGroupService.onPlayerLogout(player);
 		PlayerAllianceService.onPlayerLogout(player);
+		
+		BoostEventService.getInstance().boostEventLogout(player);
 
 		QuestEngine.getInstance().onLogOut(new QuestEnv(null, player, 0, 0));
 
@@ -181,7 +187,6 @@ public class PlayerLeaveWorldService {
 		}
 	}
 
-
 	public static final void startLeaveWorldDelay(final Player player, int delay) {
 		// force stop movement of player
 		player.getController().stopMoving();
@@ -195,4 +200,4 @@ public class PlayerLeaveWorldService {
 		}, delay);
 	}
 
-	}
+}

@@ -21,12 +21,7 @@ package com.aionemu.gameserver.model;
  */
 public enum TaskId {
 
-	DECAY,
-	RESPAWN,
-	PRISON,
-	PROTECTION_ACTIVE,
-	DROWN,
-	DESPAWN,
+	DECAY, RESPAWN, PRISON, PROTECTION_ACTIVE, DROWN, DESPAWN,
 	/**
 	 * Quest task with timer
 	 */
@@ -34,14 +29,5 @@ public enum TaskId {
 	/**
 	 * Follow task checker
 	 */
-	QUEST_FOLLOW,
-	PLAYER_UPDATE,
-	INVENTORY_UPDATE,
-	GAG,
-	ITEM_USE,
-	ACTION_ITEM_NPC,
-	SKILL_USE,
-	PORTAL,
-	GATHERABLE,
-	PET_UPDATE
+	QUEST_FOLLOW, PLAYER_UPDATE, INVENTORY_UPDATE, GAG, ITEM_USE, ACTION_ITEM_NPC, SKILL_USE, PORTAL, GATHERABLE, PET_UPDATE
 }

@@ -10,8 +10,5 @@ import javax.xml.bind.annotation.XmlType;
 @XmlType(name = "TransformType")
 @XmlEnum
 public enum TransformType {
-	FORM1,
-	AVATAR,
-	PC,
-	NONE
+	FORM1, AVATAR, PC, NONE
 }

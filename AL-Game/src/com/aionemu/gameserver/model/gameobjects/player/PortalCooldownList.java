@@ -16,10 +16,10 @@
  */
 package com.aionemu.gameserver.model.gameobjects.player;
 
-import javolution.util.FastMap;
-
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INSTANCE_INFO;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+
+import javolution.util.FastMap;
 
 /**
  * @author ATracer
@@ -87,7 +87,7 @@ public class PortalCooldownList {
 		long nextUseTime = System.currentTimeMillis() + useDelay;
 		portalCooldowns.put(worldId, nextUseTime);
 
-		if(owner.isInTeam()){
+		if (owner.isInTeam()) {
 			owner.getCurrentTeam().sendPacket(new SM_INSTANCE_INFO(owner, worldId));
 			return;
 		}

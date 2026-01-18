@@ -1,5 +1,7 @@
 package com.aionemu.gameserver.command.player;
 
+import org.apache.commons.lang.StringUtils;
+
 import com.aionemu.gameserver.command.BaseCommand;
 import com.aionemu.gameserver.configs.main.CustomConfig;
 import com.aionemu.gameserver.model.Race;
@@ -10,15 +12,12 @@ import com.aionemu.gameserver.services.player.PlayerChatService;
 import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.world.World;
 
-import org.apache.commons.lang.StringUtils;
-
 /*"syntax .f <message> */
 
 /**
  * @author Shepper
  */
 public class CmdF extends BaseCommand {
-
 
 	public void execute(Player player, String... params) {
 		Storage sender = player.getInventory();
@@ -36,8 +35,7 @@ public class CmdF extends BaseCommand {
 		if (player.getWorldId() == 510010000 || player.getWorldId() == 520010000) {
 			PacketSendUtility.sendMessage(player, "You can't talk in Prison.");
 			return;
-		}
-		else if (player.isGagged()) {
+		} else if (player.isGagged()) {
 			PacketSendUtility.sendMessage(player, "You are gaged, you can't talk.");
 			return;
 		}

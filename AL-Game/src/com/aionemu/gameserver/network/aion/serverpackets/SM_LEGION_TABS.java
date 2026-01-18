@@ -47,18 +47,19 @@ public class SM_LEGION_TABS extends AionServerPacket {
 
 	@Override
 	protected void writeImpl(AionConnection con) {
+		int size = legionHistory.size();
 		/**
 		 * If history size is less than page*8 return
 		 */
-		if (legionHistory.size() < (page * 8))
+		if (size < (page * 8))
 			return;
 
 		// TODO: Formula's could use a refactor
-		int hisSize = legionHistory.size() - (page * 8);
-		if(legionHistory.size() > (page + 1) * 8)
+		int hisSize = size - (page * 8);
+		if (size > (page + 1) * 8)
 			hisSize = 8;
-		
-		writeD(legionHistory.size());//writeD(0x79); // Unk
+
+		writeD(size);
 		writeD(page); // current page
 		writeD(hisSize);
 
@@ -66,10 +67,11 @@ public class SM_LEGION_TABS extends AionServerPacket {
 		for (LegionHistory history : legionHistory) {
 			if (i >= (page * 8) && i <= (8 + (page * 8))) {
 				writeD((int) (history.getTime().getTime() / 1000));
-				writeH(history.getLegionHistoryType().getHistoryId());
-				writeB(this.render(history.getName()).array());
+				writeC(history.getLegionHistoryType().getHistoryId());
+				writeC(0); // unk
+				writeS(history.getName(), 64);
 				writeH(0); // unk
-				writeS(history.getDescription(), 64);//writeB(new byte[64]);
+				writeS(history.getDescription(), 64);// writeB(new byte[64]);
 				writeD(0); // unk
 			}
 			i++;
@@ -79,10 +81,10 @@ public class SM_LEGION_TABS extends AionServerPacket {
 		writeC(tabId);
 		writeC(0);
 	}
-	
+
 	private ByteBuffer render(String name) {
 		ByteBuffer bb1 = ByteBuffer.allocate(64);
-		for(char ch : name.toCharArray()) {
+		for (char ch : name.toCharArray()) {
 			bb1.putChar(ch);
 		}
 		bb1.rewind();

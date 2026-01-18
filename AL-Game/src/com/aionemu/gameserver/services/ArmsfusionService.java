@@ -18,8 +18,10 @@ package com.aionemu.gameserver.services;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
 import com.aionemu.commons.database.DatabaseFactory;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.Npc;
@@ -67,11 +69,12 @@ public class ArmsfusionService {
 
 		int price = (int) (priceMod * priceRate * taxRate * rarity * level * level);
 		log.debug("Rarete: " + rarity + " Prix Ratio: " + priceRate + " Tax: " + taxRate + " Mod: " + priceMod
-			+ " NiveauDeLArme: " + level);
+				+ " NiveauDeLArme: " + level);
 		log.debug("Prix: " + price);
 
 		if (player.getInventory().getKinah() < price) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_COMPOUND_ERROR_NOT_ENOUGH_MONEY(firstItem.getNameID(), secondItem.getNameID()));
+			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE
+					.STR_COMPOUND_ERROR_NOT_ENOUGH_MONEY(firstItem.getNameID(), secondItem.getNameID()));
 			return;
 		}
 
@@ -79,11 +82,13 @@ public class ArmsfusionService {
 		 * Fusioned weapons must be not fusioned
 		 */
 		if (firstItem.hasFusionedItem()) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_COMPOUND_ERROR_NOT_AVAILABLE(firstItem.getNameID()));
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_COMPOUND_ERROR_NOT_AVAILABLE(firstItem.getNameID()));
 			return;
 		}
 		if (secondItem.hasFusionedItem()) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_COMPOUND_ERROR_NOT_AVAILABLE(secondItem.getNameID()));
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_COMPOUND_ERROR_NOT_AVAILABLE(secondItem.getNameID()));
 			return;
 		}
 
@@ -125,7 +130,7 @@ public class ArmsfusionService {
 
 		ItemSocketService.copyFusionStones(secondItem, firstItem);
 
-		//DAOManager.getDAO(InventoryDAO.class).store(firstItem, player);
+		// DAOManager.getDAO(InventoryDAO.class).store(firstItem, player);
 
 		if (!player.getInventory().decreaseByObjectId(secondItemUniqueId, 1))
 			return;
@@ -133,23 +138,24 @@ public class ArmsfusionService {
 		ItemPacketService.updateItemAfterInfoChange(player, firstItem);
 		player.getInventory().decreaseKinah(price);
 
-		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_COMPOUND_SUCCESS(firstItem.getNameID(), secondItem.getNameID()));
+		PacketSendUtility.sendPacket(player,
+				SM_SYSTEM_MESSAGE.STR_COMPOUND_SUCCESS(firstItem.getNameID(), secondItem.getNameID()));
 	}
 
 	private static double rarityRate(ItemQuality rarity) {
 		switch (rarity) {
-			case COMMON:
-				return 1.0;
-			case RARE:
-				return 1.25;
-			case LEGEND:
-				return 1.5;
-			case UNIQUE:
-				return 2.0;
-			case EPIC:
-				return 2.5;
-			default:
-				return 1.0;
+		case COMMON:
+			return 1.0;
+		case RARE:
+			return 1.25;
+		case LEGEND:
+			return 1.5;
+		case UNIQUE:
+			return 2.0;
+		case EPIC:
+			return 2.5;
+		default:
+			return 1.0;
 		}
 	}
 
@@ -162,13 +168,17 @@ public class ArmsfusionService {
 			return;
 
 		if (!weaponToBreak.hasFusionedItem()) {
-			PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_DECOMPOUND_ERROR_NOT_AVAILABLE(weaponToBreak.getNameID()));
+			PacketSendUtility.sendPacket(player,
+					SM_SYSTEM_MESSAGE.STR_DECOMPOUND_ERROR_NOT_AVAILABLE(weaponToBreak.getNameID()));
 			return;
 		}
 
 		weaponToBreak.setFusionedItemId(0);
 
-		/* TODO: Fix Hack: DB Hack, Find out why Item update to only armsbreaking does not persist to DB */
+		/*
+		 * TODO: Fix Hack: DB Hack, Find out why Item update to only armsbreaking does
+		 * not persist to DB
+		 */
 		Connection con = null;
 		try {
 			con = DatabaseFactory.getConnection();
@@ -176,20 +186,22 @@ public class ArmsfusionService {
 			stmt.setInt(1, weaponToBreak.getObjectId());
 			stmt.execute();
 			stmt.close();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			log.error("Could not save armsbreaking!", e);
 		} finally {
 			DatabaseFactory.close(con);
 		}
-		
+
 		ItemSocketService.removeAllFusionStone(player, weaponToBreak);
-		//DAOManager.getDAO(InventoryDAO.class).store(weaponToBreak, player);
-		
-		//ItemPacketService.updateItemAfterInfoChange(player, weaponToBreak);
-		// TODO: Fix Hack: Check this against retail, item update does not update combine status must refresh item in client for now
+		// DAOManager.getDAO(InventoryDAO.class).store(weaponToBreak, player);
+
+		// ItemPacketService.updateItemAfterInfoChange(player, weaponToBreak);
+		// TODO: Fix Hack: Check this against retail, item update does not update
+		// combine status must refresh item in client for now
 		PacketSendUtility.sendPacket(player, new SM_DELETE_ITEM(weaponToBreak.getObjectId()));
 		ItemPacketService.sendStorageUpdatePacket(player, StorageType.CUBE, weaponToBreak);
-		
-		PacketSendUtility.sendPacket(player, SM_SYSTEM_MESSAGE.STR_COMPOUNDED_ITEM_DECOMPOUND_SUCCESS(weaponToBreak.getNameID()));
+
+		PacketSendUtility.sendPacket(player,
+				SM_SYSTEM_MESSAGE.STR_COMPOUNDED_ITEM_DECOMPOUND_SUCCESS(weaponToBreak.getNameID()));
 	}
 }

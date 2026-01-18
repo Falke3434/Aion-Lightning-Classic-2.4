@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlType;
 
+import com.aionemu.commons.utils.Rnd;
 import com.aionemu.gameserver.controllers.observer.ActionObserver;
 import com.aionemu.gameserver.controllers.observer.ObserverType;
 import com.aionemu.gameserver.model.gameobjects.Creature;
@@ -28,7 +29,6 @@ import com.aionemu.gameserver.model.stats.container.StatEnum;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_TARGET_IMMOBILIZE;
 import com.aionemu.gameserver.skillengine.model.Effect;
 import com.aionemu.gameserver.utils.PacketSendUtility;
-import com.aionemu.commons.utils.Rnd;
 
 /**
  * @author ATracer
@@ -39,7 +39,7 @@ public class RootEffect extends EffectTemplate {
 
 	@XmlAttribute
 	protected int resistchance = 100;
-	
+
 	@Override
 	public void applyEffect(Effect effect) {
 		effect.addToEffectedController();

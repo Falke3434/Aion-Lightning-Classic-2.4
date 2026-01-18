@@ -16,8 +16,7 @@ import com.aionemu.gameserver.world.World;
  * @author Watson
  */
 public class CmdGag extends BaseCommand {
-	
-	
+
 	public void execute(Player admin, String... params) {
 		if (params.length < 2) {
 			showHelp(admin);
@@ -49,7 +48,7 @@ public class CmdGag extends BaseCommand {
 				}
 			}, time * 60000L));
 		}
-		
+
 		if (GSConfig.ENABLE_CHAT_SERVER) {
 			long chatserverGagTime = System.currentTimeMillis() + time * 60 * 1000;
 			ChatServer.getInstance().sendPlayerGagPacket(player.getObjectId(), chatserverGagTime);
@@ -57,6 +56,7 @@ public class CmdGag extends BaseCommand {
 
 		PacketSendUtility.sendMessage(player, "You have been gagged" + (time != 0 ? " for " + time + " minutes" : ""));
 
-		PacketSendUtility.sendMessage(admin, "Player " + name + " gagged" + (time != 0 ? " for " + time + " minutes" : ""));
+		PacketSendUtility.sendMessage(admin,
+				"Player " + name + " gagged" + (time != 0 ? " for " + time + " minutes" : ""));
 	}
 }

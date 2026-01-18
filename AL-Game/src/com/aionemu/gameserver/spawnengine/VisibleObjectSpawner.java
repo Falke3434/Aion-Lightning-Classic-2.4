@@ -62,8 +62,8 @@ import com.aionemu.gameserver.model.templates.npc.NpcRating;
 import com.aionemu.gameserver.model.templates.npc.NpcTemplate;
 import com.aionemu.gameserver.model.templates.pet.PetTemplate;
 import com.aionemu.gameserver.model.templates.portal.PortalTemplate;
-import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
+import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_PLAYER_STATE;
 import com.aionemu.gameserver.services.SiegeService;
 import com.aionemu.gameserver.services.SkillLearnService;
@@ -170,8 +170,7 @@ public class VisibleObjectSpawner {
 			// default: GUARD
 			npc = new SiegeNpc(iDFactory.nextId(), new NpcController(), spawn, npcTemplate);
 			npc.setKnownlist(new NpcKnownList(npc));
-		}
-		else if (spawn.isAssault() && loc.isVulnerable() && spawn.getSiegeRace().equals(SiegeRace.BALAUR)) {
+		} else if (spawn.isAssault() && loc.isVulnerable() && spawn.getSiegeRace().equals(SiegeRace.BALAUR)) {
 			// attakers
 			npc = new SiegeNpc(iDFactory.nextId(), new NpcController(), spawn, npcTemplate);
 			npc.setKnownlist(new NpcKnownList(npc));

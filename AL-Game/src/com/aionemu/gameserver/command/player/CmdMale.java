@@ -15,31 +15,30 @@ public class CmdMale extends BaseCommand {
 
 	private ArrayList<Player> _killers = new ArrayList<Player>();
 	private SerialKillerDebuff debuff = new SerialKillerDebuff();;
-	
+
 	@Override
 	public void execute(Player player, String... params) {
-		if(player.getSKInfo() == null)
+		if (player.getSKInfo() == null)
 			player.setSKInfo(new SerialKiller(player));
-		
+
 		if (params.length == 0) {// remove
-			if(player.getSKInfo().getRank() != 0)
-			{
-			player.getSKInfo().setRank(0);
-			_killers.remove(player);
-			debuff.endEffect(player);
+			if (player.getSKInfo().getRank() != 0) {
+				player.getSKInfo().setRank(0);
+				_killers.remove(player);
+				debuff.endEffect(player);
 			}
 		} else {// add lv
 			int rank = player.getSKInfo().getRank();
-			if (rank < 2){
+			if (rank < 2) {
 				player.getSKInfo().setRank(++rank);
-				if(!_killers.contains(player))
+				if (!_killers.contains(player))
 					_killers.add(player);
 				debuff.applyEffect(player, rank);
 			}
 		}
 		sendToAll();
 	}
-	
+
 	private void sendToAll() {// NEED OPTI
 		HashMap<Integer, ArrayList<Player>> maps = new HashMap<Integer, ArrayList<Player>>();
 
@@ -54,7 +53,7 @@ public class CmdMale extends BaseCommand {
 			map.add(pl);
 		}
 
-		for (int mapId : maps.keySet()) {//send
+		for (int mapId : maps.keySet()) {// send
 			final ArrayList<Player> killers = maps.get(mapId);
 			for (Player ppl : World.getInstance().getWorldMap(mapId).getWorld().getAllPlayers())
 				PacketSendUtility.sendPacket(ppl, new SM_SERIAL_KILLER(killers));

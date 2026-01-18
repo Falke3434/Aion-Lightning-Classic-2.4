@@ -7,13 +7,10 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 import com.aionemu.gameserver.utils.Util;
 import com.aionemu.gameserver.world.World;
 
-
 public class CmdMoveToMe extends BaseCommand {
-	
-	
 
 	public void execute(Player admin, String... params) {
-		if ( params.length < 1) {
+		if (params.length < 1) {
 			showHelp(admin);
 			return;
 		}

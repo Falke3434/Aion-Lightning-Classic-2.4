@@ -34,18 +34,19 @@ public class SelfFlyingCondition extends Condition {
 
 	@XmlAttribute(required = true)
 	protected FlyingRestriction restriction;
+
 	@Override
 	public boolean validate(Skill env) {
 		if (env.getEffector() == null)
 			return false;
-		
+
 		switch (restriction) {
-			case FLY:
-				return env.getEffector().isFlying();
-			case GROUND:
-				return !env.getEffector().isFlying();
+		case FLY:
+			return env.getEffector().isFlying();
+		case GROUND:
+			return !env.getEffector().isFlying();
 		}
-		
+
 		return true;
 	}
 
@@ -53,16 +54,15 @@ public class SelfFlyingCondition extends Condition {
 	public boolean validate(Effect effect) {
 		if (effect.getEffector() == null)
 			return false;
-		
+
 		switch (restriction) {
-			case FLY:
-				return effect.getEffector().isFlying();
-			case GROUND:
-				return !effect.getEffector().isFlying();
+		case FLY:
+			return effect.getEffector().isFlying();
+		case GROUND:
+			return !effect.getEffector().isFlying();
 		}
-		
+
 		return true;
 	}
 
 }
-

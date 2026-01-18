@@ -16,6 +16,9 @@
  */
 package com.aionemu.gameserver.model.templates.spawns;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,8 +27,6 @@ import com.aionemu.gameserver.model.siege.SiegeModType;
 import com.aionemu.gameserver.model.siege.SiegeRace;
 import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
 import com.aionemu.gameserver.spawnengine.SpawnHandlerType;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * @author xTz
@@ -141,7 +142,7 @@ public class SpawnGroup2 {
 				templates.add(template);
 			}
 		}
-		if(templates.size() == 0) {
+		if (templates.size() == 0) {
 			log.warn("Pool size more then spots, npcId: " + npcId + ", worldId: " + worldId);
 			return null;
 		}

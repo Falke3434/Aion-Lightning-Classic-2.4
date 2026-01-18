@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,6 +27,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.model.templates.stats.SummonStatsTemplate;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer

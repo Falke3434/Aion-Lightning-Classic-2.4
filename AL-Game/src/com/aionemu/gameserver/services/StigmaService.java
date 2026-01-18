@@ -49,8 +49,8 @@ public class StigmaService {
 		int newAdvancedSlotSize = player.getCommonData().getAdvencedStigmaSlotSize() + Nb;
 		if (newAdvancedSlotSize <= 6) { // maximum
 			player.getCommonData().setAdvencedStigmaSlotSize(newAdvancedSlotSize);
-			PacketSendUtility.sendPacket(player, SM_CUBE_UPDATE.stigmaSlots(player.getCommonData()
-				.getAdvencedStigmaSlotSize()));
+			PacketSendUtility.sendPacket(player,
+					SM_CUBE_UPDATE.stigmaSlots(player.getCommonData().getAdvencedStigmaSlotSize()));
 			return true;
 		}
 		return false;
@@ -69,22 +69,24 @@ public class StigmaService {
 				int psc = getPossibleStigmaCount(player);
 				int rsc = player.getEquipment().getEquippedItemsRegularStigma().size();
 				if (psc <= rsc) {
-					AuditLogger.info(player, "Possible client hack, normal stigma count big : player has " + rsc + " and should have " + psc);
+					AuditLogger.info(player, "Possible client hack, normal stigma count big : player has " + rsc
+							+ " and should have " + psc);
 					return false;
 				}
-			}
-			else if (slot >= ItemSlot.ADV_STIGMA1.getSlotIdMask() && slot <= ItemSlot.ADV_STIGMA5.getSlotIdMask()) {
+			} else if (slot >= ItemSlot.ADV_STIGMA1.getSlotIdMask() && slot <= ItemSlot.ADV_STIGMA5.getSlotIdMask()) {
 				// check the number of advanced stigma wearing
 				int pasc = getPossibleAdvencedStigmaCount(player);
 				int rasc = player.getEquipment().getEquippedItemsAdvencedStigma().size();
 				if (pasc <= rasc) {
-					AuditLogger.info(player, "Possible client hack, advanced stigma count big : player has " + rasc + " and should have " + pasc);
+					AuditLogger.info(player, "Possible client hack, advanced stigma count big : player has " + rasc
+							+ " and should have " + pasc);
 					return false;
 				}
 			}
 
 			if (resultItem.getItemTemplate().isClassSpecific(player.getCommonData().getPlayerClass()) == false) {
-				AuditLogger.info(player,"Possible client hack, stigma " + resultItem.getItemId() + " not valid for class " + player.getCommonData().getPlayerClass());
+				AuditLogger.info(player, "Possible client hack, stigma " + resultItem.getItemId()
+						+ " not valid for class " + player.getCommonData().getPlayerClass());
 				return false;
 			}
 
@@ -98,11 +100,11 @@ public class StigmaService {
 			int skillId = stigmaInfo.getSkillid();
 			int shardCount = stigmaInfo.getShard();
 			if (player.getInventory().getItemCountByItemId(141000001) < shardCount) {
-				AuditLogger.info(player,"Possible client hack, stigma shard count low.");
+				AuditLogger.info(player, "Possible client hack, stigma shard count low.");
 				return false;
 			}
 			int needSkill = stigmaInfo.getRequireSkill().size();
-			//log.warn("needSkill : " + needSkill);
+			// log.warn("needSkill : " + needSkill);
 			for (RequireSkill rs : stigmaInfo.getRequireSkill()) {
 				for (int id : rs.getSkillId()) {
 					if (player.getSkillList().isSkillPresent(id))
@@ -110,9 +112,9 @@ public class StigmaService {
 					break;
 				}
 			}
-			//log.warn("needSkill : " + needSkill);
+			// log.warn("needSkill : " + needSkill);
 			if (needSkill != 0) {
-				AuditLogger.info(player,"Possible client hack, advanced stigma skill.");
+				AuditLogger.info(player, "Possible client hack, advanced stigma skill.");
 			}
 
 			if (!player.getInventory().decreaseByItemId(141000001, shardCount))
@@ -137,8 +139,10 @@ public class StigmaService {
 					continue;
 				for (RequireSkill rs : si.getRequireSkill()) {
 					if (rs.getSkillId().contains(skillId)) {
-						PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300410, new DescriptionId(resultItem
-							.getItemTemplate().getNameId()), new DescriptionId(item.getItemTemplate().getNameId())));
+						PacketSendUtility.sendPacket(player,
+								new SM_SYSTEM_MESSAGE(1300410,
+										new DescriptionId(resultItem.getItemTemplate().getNameId()),
+										new DescriptionId(item.getItemTemplate().getNameId())));
 						return false;
 					}
 				}
@@ -171,7 +175,7 @@ public class StigmaService {
 		for (Item item : equippedItems) {
 			if (item.getItemTemplate().isStigma()) {
 				if (!isPossibleEquippedStigma(player, item)) {
-					AuditLogger.info(player,"Possible client hack stigma count big :O");
+					AuditLogger.info(player, "Possible client hack stigma count big :O");
 					player.getEquipment().unEquipItem(item.getObjectId(), 0);
 					continue;
 				}
@@ -194,12 +198,12 @@ public class StigmaService {
 					}
 				}
 				if (needSkill != 0) {
-					AuditLogger.info(player,"Possible client hack advenced stigma skill.");
+					AuditLogger.info(player, "Possible client hack advenced stigma skill.");
 					player.getEquipment().unEquipItem(item.getObjectId(), 0);
 					continue;
 				}
 				if (item.getItemTemplate().isClassSpecific(player.getCommonData().getPlayerClass()) == false) {
-					AuditLogger.info(player,"Possible client hack not valid for class.");
+					AuditLogger.info(player, "Possible client hack not valid for class.");
 					player.getEquipment().unEquipItem(item.getObjectId(), 0);
 					continue;
 				}
@@ -228,13 +232,12 @@ public class StigmaService {
 
 		if (player.getRace() == Race.ELYOS) {
 			isCompleteQuest = player.isCompleteQuest(1929)
-				|| (player.getQuestStateList().getQuestState(1929).getStatus() == QuestStatus.START && player
-					.getQuestStateList().getQuestState(1929).getQuestVars().getQuestVars() == 98);
-		}
-		else {
+					|| (player.getQuestStateList().getQuestState(1929).getStatus() == QuestStatus.START
+							&& player.getQuestStateList().getQuestState(1929).getQuestVars().getQuestVars() == 98);
+		} else {
 			isCompleteQuest = player.isCompleteQuest(2900)
-				|| (player.getQuestStateList().getQuestState(2900).getStatus() == QuestStatus.START && player
-					.getQuestStateList().getQuestState(2900).getQuestVars().getQuestVars() == 99);
+					|| (player.getQuestStateList().getQuestState(2900).getStatus() == QuestStatus.START
+							&& player.getQuestStateList().getQuestState(2900).getQuestVars().getQuestVars() == 99);
 		}
 
 		int playerLevel = player.getLevel();
@@ -267,7 +270,7 @@ public class StigmaService {
 		if (player.havePermission(MembershipConfig.STIGMA_SLOT_QUEST)) {
 			return 5;
 		}
-		
+
 		int playerLevel = player.getLevel();
 
 		if (playerLevel < 50)
@@ -276,48 +279,31 @@ public class StigmaService {
 			return 3;
 		else if (playerLevel < 55)
 			return 4;
-		else 
+		else
 			return 5;
 
 		/*
-		 * Advenced Stigma Quest 1st - Elyos: 3930, Asmodians: 4934 2nd - Elyos: 3931, Asmodians: 4935 3rd- Elyos: 3932,
-		 * Asmodians: 4936 4th - Elyos: 11049, Asmodians: 21049 5th - Elyos: 30217, Asmodians: 30317
+		 * Advenced Stigma Quest 1st - Elyos: 3930, Asmodians: 4934 2nd - Elyos: 3931,
+		 * Asmodians: 4935 3rd- Elyos: 3932, Asmodians: 4936 4th - Elyos: 11049,
+		 * Asmodians: 21049 5th - Elyos: 30217, Asmodians: 30317
 		 */
 		/*
-		if (player.getRace() == Race.ELYOS) {
-			// Check whether Stigma Quests
-			if (!player.isCompleteQuest(1929))
-				return 0;
-
-			if (player.isCompleteQuest(30217) || player.isCompleteQuest(11276))
-				return 5;
-			else if (player.isCompleteQuest(11049))
-				return 4;
-			else if (player.isCompleteQuest(3932))
-				return 3;
-			else if (player.isCompleteQuest(3931))
-				return 2;
-			else if (player.isCompleteQuest(3930))
-				return 1;
-		}
-		else {
-			// Check whether Stigma Quests
-			if (!player.isCompleteQuest(2900))
-				return 0;
-
-			if (player.isCompleteQuest(30317) || player.isCompleteQuest(21278))
-				return 5;
-			else if (player.isCompleteQuest(21049))
-				return 4;
-			else if (player.isCompleteQuest(4936))
-				return 3;
-			else if (player.isCompleteQuest(4935))
-				return 2;
-			else if (player.isCompleteQuest(4934))
-				return 1;
-		}
-		return 0;
-		*/
+		 * if (player.getRace() == Race.ELYOS) { // Check whether Stigma Quests if
+		 * (!player.isCompleteQuest(1929)) return 0;
+		 * 
+		 * if (player.isCompleteQuest(30217) || player.isCompleteQuest(11276)) return 5;
+		 * else if (player.isCompleteQuest(11049)) return 4; else if
+		 * (player.isCompleteQuest(3932)) return 3; else if
+		 * (player.isCompleteQuest(3931)) return 2; else if
+		 * (player.isCompleteQuest(3930)) return 1; } else { // Check whether Stigma
+		 * Quests if (!player.isCompleteQuest(2900)) return 0;
+		 * 
+		 * if (player.isCompleteQuest(30317) || player.isCompleteQuest(21278)) return 5;
+		 * else if (player.isCompleteQuest(21049)) return 4; else if
+		 * (player.isCompleteQuest(4936)) return 3; else if
+		 * (player.isCompleteQuest(4935)) return 2; else if
+		 * (player.isCompleteQuest(4934)) return 1; } return 0;
+		 */
 	}
 
 	/**
@@ -334,73 +320,65 @@ public class StigmaService {
 		int itemSlotToEquip = item.getEquipmentSlot();
 
 		// Stigma
-		if (itemSlotToEquip >= ItemSlot.STIGMA1.getSlotIdMask() && itemSlotToEquip <= ItemSlot.STIGMA6.getSlotIdMask()) {
+		if (itemSlotToEquip >= ItemSlot.STIGMA1.getSlotIdMask()
+				&& itemSlotToEquip <= ItemSlot.STIGMA6.getSlotIdMask()) {
 			int stigmaCount = getPossibleStigmaCount(player);
 
 			if (stigmaCount > 0) {
 				if (stigmaCount == 1) {
 					if (itemSlotToEquip == ItemSlot.STIGMA1.getSlotIdMask())
 						return true;
-				}
-				else if (stigmaCount == 2) {
+				} else if (stigmaCount == 2) {
 					if (itemSlotToEquip == ItemSlot.STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask())
 						return true;
-				}
-				else if (stigmaCount == 3) {
+				} else if (stigmaCount == 3) {
 					if (itemSlotToEquip == ItemSlot.STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask())
 						return true;
-				}
-				else if (stigmaCount == 4) {
+				} else if (stigmaCount == 4) {
 					if (itemSlotToEquip == ItemSlot.STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA4.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA4.getSlotIdMask())
 						return true;
-				}
-				else if (stigmaCount == 5) {
+				} else if (stigmaCount == 5) {
 					if (itemSlotToEquip == ItemSlot.STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA4.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.STIGMA5.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.STIGMA2.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA3.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA4.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.STIGMA5.getSlotIdMask())
 						return true;
-				}
-				else if (stigmaCount == 6)
+				} else if (stigmaCount == 6)
 					return true;
 			}
 		}
 		// Advenced Stigma
 		else if (itemSlotToEquip >= ItemSlot.ADV_STIGMA1.getSlotIdMask()
-			&& itemSlotToEquip <= ItemSlot.ADV_STIGMA5.getSlotIdMask()) {
+				&& itemSlotToEquip <= ItemSlot.ADV_STIGMA5.getSlotIdMask()) {
 			int advStigmaCount = getPossibleAdvencedStigmaCount(player);
 
 			if (advStigmaCount > 0) {
 				if (advStigmaCount == 1) {
 					if (itemSlotToEquip == ItemSlot.ADV_STIGMA1.getSlotIdMask())
 						return true;
-				}
-				else if (advStigmaCount == 2) {
+				} else if (advStigmaCount == 2) {
 					if (itemSlotToEquip == ItemSlot.ADV_STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask())
 						return true;
-				}
-				else if (advStigmaCount == 3) {
+				} else if (advStigmaCount == 3) {
 					if (itemSlotToEquip == ItemSlot.ADV_STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA3.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA3.getSlotIdMask())
 						return true;
-				}
-				else if (advStigmaCount == 4) {
+				} else if (advStigmaCount == 4) {
 					if (itemSlotToEquip == ItemSlot.ADV_STIGMA1.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA3.getSlotIdMask()
-						|| itemSlotToEquip == ItemSlot.ADV_STIGMA4.getSlotIdMask())
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA2.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA3.getSlotIdMask()
+							|| itemSlotToEquip == ItemSlot.ADV_STIGMA4.getSlotIdMask())
 						return true;
-				}
-				else if (advStigmaCount == 5)
+				} else if (advStigmaCount == 5)
 					return true;
 			}
 		}

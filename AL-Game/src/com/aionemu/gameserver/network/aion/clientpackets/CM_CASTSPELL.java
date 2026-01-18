@@ -15,7 +15,8 @@ import com.aionemu.gameserver.utils.PacketSendUtility;
 public class CM_CASTSPELL extends AionClientPacket {
 
 	private int spellid;
-	// 0 - obj id, 1 - point location, 2 - unk, 3 - object not in sight(skill 1606)? 4 - unk
+	// 0 - obj id, 1 - point location, 2 - unk, 3 - object not in sight(skill 1606)?
+	// 4 - unk
 	private int targetType;
 	private float x, y, z;
 
@@ -42,29 +43,29 @@ public class CM_CASTSPELL extends AionClientPacket {
 		targetType = readC();
 
 		switch (targetType) {
-			case 0:
-			case 3:
-			case 4:
-				targetObjectId = readD();
-				break;
-			case 1:
-				x = readF();
-				y = readF();
-				z = readF();
-				break;
-			case 2:
-				x = readF();
-				y = readF();
-				z = readF();
-				readF();// unk1
-				readF();// unk2
-				readF();// unk3
-				readF();// unk4
-				readF();// unk5
-				readF();// unk6
-				readF();// unk7
-				readF();// unk8
-				break;
+		case 0:
+		case 3:
+		case 4:
+			targetObjectId = readD();
+			break;
+		case 1:
+			x = readF();
+			y = readF();
+			z = readF();
+			break;
+		case 2:
+			x = readF();
+			y = readF();
+			z = readF();
+			readF();// unk1
+			readF();// unk2
+			readF();// unk3
+			readF();// unk4
+			readF();// unk5
+			readF();// unk6
+			readF();// unk7
+			readF();// unk8
+			break;
 		}
 
 		hitTime = readH();

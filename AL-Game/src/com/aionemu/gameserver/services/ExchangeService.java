@@ -41,8 +41,8 @@ import com.aionemu.gameserver.services.item.ItemFactory;
 import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.taskmanager.AbstractFIFOPeriodicTaskManager;
 import com.aionemu.gameserver.taskmanager.tasks.TemporaryTradeTimeTask;
-import com.aionemu.gameserver.utils.audit.AuditLogger;
 import com.aionemu.gameserver.utils.PacketSendUtility;
+import com.aionemu.gameserver.utils.audit.AuditLogger;
 
 /**
  * @author ATracer
@@ -184,8 +184,8 @@ public class ExchangeService {
 
 		if (currentExchange.isExchangeListFull())
 			return;
-		
-		if(!AdminService.getInstance().canOperate(activePlayer, partner, item, "trade"))
+
+		if (!AdminService.getInstance().canOperate(activePlayer, partner, item, "trade"))
 			return;
 
 		ExchangeItem exchangeItem = currentExchange.getItems().get(item.getObjectId());
@@ -196,8 +196,7 @@ public class ExchangeService {
 			Item newItem = null;
 			if (itemCount < item.getItemCount()) {
 				newItem = ItemFactory.newItem(item.getItemId(), itemCount);
-			}
-			else {
+			} else {
 				newItem = item;
 			}
 			exchangeItem = new ExchangeItem(itemObjId, itemCount, newItem);
@@ -280,9 +279,9 @@ public class ExchangeService {
 
 		cleanupExchanges(activePlayer, currentPartner);
 
-		if (!removeItemsFromInventory(activePlayer, exchange1) || !removeItemsFromInventory(currentPartner, exchange2)) {
-			AuditLogger.info(activePlayer, "Exchange kinah exploit partner: "
-				+ currentPartner.getName());
+		if (!removeItemsFromInventory(activePlayer, exchange1)
+				|| !removeItemsFromInventory(currentPartner, exchange2)) {
+			AuditLogger.info(activePlayer, "Exchange kinah exploit partner: " + currentPartner.getName());
 			return;
 		}
 
@@ -291,34 +290,38 @@ public class ExchangeService {
 
 		putItemToInventory(currentPartner, exchange1, exchange2);
 		putItemToInventory(activePlayer, exchange2, exchange1);
-		
-		if(LoggingConfig.LOG_PLAYER_EXCHANGE) {
-			//TODO: improve the code here 
+
+		if (LoggingConfig.LOG_PLAYER_EXCHANGE) {
+			// TODO: improve the code here
 			for (ExchangeItem exchangeItem : exchange1.getItems().values()) {
 				Item itemToPut = exchangeItem.getItem();
-				log.info("[PLAYER EXCHANGE] > [Player: " + activePlayer.getName() + "] exchanged "
-						+ "[Item: " + itemToPut.getItemId() 
-						+ (LoggingConfig.ENABLE_ADVANCED_LOGGING ? "] [Item Name: " + itemToPut.getItemName() + "]" : "]") 
-						+ " [Count: " + exchangeItem.getItemCount() + " with [Partner: " + currentPartner.getName() + "]");
+				log.info("[PLAYER EXCHANGE] > [Player: " + activePlayer.getName() + "] exchanged " + "[Item: "
+						+ itemToPut.getItemId()
+						+ (LoggingConfig.ENABLE_ADVANCED_LOGGING ? "] [Item Name: " + itemToPut.getItemName() + "]"
+								: "]")
+						+ " [Count: " + exchangeItem.getItemCount() + " with [Partner: " + currentPartner.getName()
+						+ "]");
 			}
 			for (ExchangeItem exchangeItem : exchange2.getItems().values()) {
 				Item itemToPut = exchangeItem.getItem();
-				log.info("[PLAYER EXCHANGE] > [Player: " + currentPartner.getName() + "] exchanged "
-						+ "[Item: " + itemToPut.getItemId() 
-						+ (LoggingConfig.ENABLE_ADVANCED_LOGGING ? "] [Item Name: " + itemToPut.getItemName() + "]" : "]") 
-						+ " [Count: " + exchangeItem.getItemCount() + " with [Partner: " + activePlayer.getName() + "]");
+				log.info("[PLAYER EXCHANGE] > [Player: " + currentPartner.getName() + "] exchanged " + "[Item: "
+						+ itemToPut.getItemId()
+						+ (LoggingConfig.ENABLE_ADVANCED_LOGGING ? "] [Item Name: " + itemToPut.getItemName() + "]"
+								: "]")
+						+ " [Count: " + exchangeItem.getItemCount() + " with [Partner: " + activePlayer.getName()
+						+ "]");
 			}
 			long kinahToExchange = exchange1.getKinahCount() + exchange2.getKinahCount();
 			if (kinahToExchange > 0) {
-				log.info("[PLAYER EXCHANGE] > [Player: " + activePlayer.getName() + "] exchanged " + exchange1.getKinahCount()
-						+ " kinahs with " + currentPartner.getName());
-				log.info("[PLAYER EXCHANGE] > [Player: " + currentPartner.getName() + "] exchanged " + exchange2.getKinahCount()
-						+ " kinahs with " + activePlayer.getName());
+				log.info("[PLAYER EXCHANGE] > [Player: " + activePlayer.getName() + "] exchanged "
+						+ exchange1.getKinahCount() + " kinahs with " + currentPartner.getName());
+				log.info("[PLAYER EXCHANGE] > [Player: " + currentPartner.getName() + "] exchanged "
+						+ exchange2.getKinahCount() + " kinahs with " + activePlayer.getName());
 			}
 		}
-		
-		saveManager.add(new ExchangeOpSaveTask(exchange1.getActiveplayer().getObjectId(), exchange2.getActiveplayer()
-			.getObjectId(), exchange1.getItemsToUpdate(), exchange2.getItemsToUpdate()));
+
+		saveManager.add(new ExchangeOpSaveTask(exchange1.getActiveplayer().getObjectId(),
+				exchange2.getActiveplayer().getObjectId(), exchange1.getItemsToUpdate(), exchange2.getItemsToUpdate()));
 	}
 
 	/**
@@ -347,23 +350,23 @@ public class ExchangeService {
 		for (ExchangeItem exchangeItem : exchange.getItems().values()) {
 			Item item = exchangeItem.getItem();
 			Item itemInInventory = inventory.getItemByObjId(exchangeItem.getItemObjId());
-			if(itemInInventory == null) {
+			if (itemInInventory == null) {
 				AuditLogger.info(player, "Try to trade unexisting item.");
 				return false;
 			}
-			
+
 			long itemCount = exchangeItem.getItemCount();
 
 			if (itemCount < itemInInventory.getItemCount()) {
 				inventory.decreaseItemCount(itemInInventory, itemCount);
 				exchange.addItemToUpdate(itemInInventory);
-			}
-			else {
-				//remove from source inventory only
+			} else {
+				// remove from source inventory only
 				inventory.remove(itemInInventory);
 				exchangeItem.setItem(itemInInventory);
-				// release when only part stack was added in the beginning -> full stack in the end
-				if (item.getObjectId() != exchangeItem.getItemObjId()){
+				// release when only part stack was added in the beginning -> full stack in the
+				// end
+				if (item.getObjectId() != exchangeItem.getItemObjId()) {
 					ItemService.releaseItemId(item);
 				}
 				PacketSendUtility.sendPacket(player, new SM_DELETE_ITEM(itemInInventory.getObjectId()));
@@ -438,7 +441,8 @@ public class ExchangeService {
 	}
 
 	/**
-	 * This class is used for storing all items in one shot after any exchange operation
+	 * This class is used for storing all items in one shot after any exchange
+	 * operation
 	 */
 	public static final class ExchangeOpSaveTask implements Runnable {
 

@@ -40,7 +40,7 @@ public abstract class TaskFromDBHandler implements Runnable {
 	 * Task's param(s)
 	 * 
 	 * @param params
-	 *          String[]
+	 *            String[]
 	 */
 	public void setParam(String params[]) {
 		this.params = params;

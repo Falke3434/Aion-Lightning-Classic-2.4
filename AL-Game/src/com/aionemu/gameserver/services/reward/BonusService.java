@@ -30,7 +30,9 @@ import com.aionemu.gameserver.dataholders.ItemGroupsData;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.templates.QuestTemplate;
 import com.aionemu.gameserver.model.templates.item.ItemTemplate;
-import com.aionemu.gameserver.model.templates.itemgroups.*;
+import com.aionemu.gameserver.model.templates.itemgroups.CraftGroup;
+import com.aionemu.gameserver.model.templates.itemgroups.ItemGroup;
+import com.aionemu.gameserver.model.templates.itemgroups.ManastoneGroup;
 import com.aionemu.gameserver.model.templates.quest.QuestBonuses;
 import com.aionemu.gameserver.model.templates.quest.QuestItems;
 import com.aionemu.gameserver.model.templates.rewards.BonusType;
@@ -48,7 +50,7 @@ public class BonusService {
 
 	private BonusService() {
 	}
-	
+
 	public static BonusService getInstance() {
 		return instance;
 	}
@@ -60,25 +62,25 @@ public class BonusService {
 
 	public ItemGroup[] getGroupsByType(BonusType type) {
 		switch (type) {
-			case BOSS:
-				return itemGroups.getBossGroups();
-			case ENCHANT:
-				return itemGroups.getEnchantGroups();
-			case FOOD:
-				return itemGroups.getFoodGroups();
-			case GATHER:
-				return (ItemGroup[]) ArrayUtils.addAll(itemGroups.getOreGroups(), itemGroups.getGatherGroups());
-			case MANASTONE:
-				return itemGroups.getManastoneGroups();
-			case MEDICINE:
-				return itemGroups.getMedicineGroups();
-			case TASK:
-				return itemGroups.getCraftGroups();
-			case MOVIE:
-				return null;
-			default:
-				log.warn("Bonus of type " + type + " is not implemented");
-				return null;
+		case BOSS:
+			return itemGroups.getBossGroups();
+		case ENCHANT:
+			return itemGroups.getEnchantGroups();
+		case FOOD:
+			return itemGroups.getFoodGroups();
+		case GATHER:
+			return (ItemGroup[]) ArrayUtils.addAll(itemGroups.getOreGroups(), itemGroups.getGatherGroups());
+		case MANASTONE:
+			return itemGroups.getManastoneGroups();
+		case MEDICINE:
+			return itemGroups.getMedicineGroups();
+		case TASK:
+			return itemGroups.getCraftGroups();
+		case MOVIE:
+			return null;
+		default:
+			log.warn("Bonus of type " + type + " is not implemented");
+			return null;
 		}
 	}
 
@@ -97,8 +99,7 @@ public class BonusService {
 				if (Rnd.get(0, percent) <= chance) {
 					chosenGroup = gr;
 					break;
-				}
-				else
+				} else
 					percent -= chance;
 			}
 		}
@@ -123,15 +124,15 @@ public class BonusService {
 			return null;
 
 		switch (bonus.getType()) {
-			case TASK:
-				return getCraftBonus(player, questTemplate);
-			case MANASTONE:
-				return getManastoneBonus(player, bonus);
-			case MOVIE:
-				return null;
-			default:
-				log.warn("Bonus of type " + bonus.getType() + " is not implemented");
-				return null;
+		case TASK:
+			return getCraftBonus(player, questTemplate);
+		case MANASTONE:
+			return getManastoneBonus(player, bonus);
+		case MOVIE:
+			return null;
+		default:
+			log.warn("Bonus of type " + bonus.getType() + " is not implemented");
+			return null;
 		}
 	}
 

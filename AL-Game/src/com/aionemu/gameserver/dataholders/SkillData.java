@@ -16,8 +16,6 @@
  */
 package com.aionemu.gameserver.dataholders;
 
-import gnu.trove.map.hash.TIntObjectHashMap;
-
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -29,6 +27,8 @@ import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 
 import com.aionemu.gameserver.skillengine.model.SkillTemplate;
+
+import gnu.trove.map.hash.TIntObjectHashMap;
 
 /**
  * @author ATracer
@@ -76,36 +76,37 @@ public class SkillData {
 
 	/**
 	 * @param skillTemplates
-	 *          the skillTemplates to set
+	 *            the skillTemplates to set
 	 */
 	public void setSkillTemplates(List<SkillTemplate> skillTemplates) {
 		this.skillTemplates = skillTemplates;
 		afterUnmarshal(null, null);
 	}
-	
+
 	/**
-	 * This method creates a HashMap with all skills assigned to their representative cooldownIds
+	 * This method creates a HashMap with all skills assigned to their
+	 * representative cooldownIds
 	 */
-    public void initializeCooldownGroups() {
-        cooldownGroups = new HashMap<Integer, ArrayList<Integer>>();
-        for (SkillTemplate skillTemplate : skillTemplates) {
-        	int cooldownId = skillTemplate.getCooldownId();
-            if(!cooldownGroups.containsKey(cooldownId)) {
-                cooldownGroups.put(cooldownId, new ArrayList<Integer>());
-            }
-            cooldownGroups.get(cooldownId).add(skillTemplate.getSkillId());
-        }
-    }
-    
-    /**
-     * This method is used to get all skills assigned to a specific cooldownId
-     * 
-     * @param cooldownId
-     * @return ArrayList<Integer> including all skills for asked cooldownId
-     */
-    public ArrayList<Integer> getSkillsForCooldownId(int cooldownId) {
-        if(cooldownGroups == null)
-            initializeCooldownGroups();
-        return cooldownGroups.get(cooldownId);
-    }
+	public void initializeCooldownGroups() {
+		cooldownGroups = new HashMap<Integer, ArrayList<Integer>>();
+		for (SkillTemplate skillTemplate : skillTemplates) {
+			int cooldownId = skillTemplate.getCooldownId();
+			if (!cooldownGroups.containsKey(cooldownId)) {
+				cooldownGroups.put(cooldownId, new ArrayList<Integer>());
+			}
+			cooldownGroups.get(cooldownId).add(skillTemplate.getSkillId());
+		}
+	}
+
+	/**
+	 * This method is used to get all skills assigned to a specific cooldownId
+	 * 
+	 * @param cooldownId
+	 * @return ArrayList<Integer> including all skills for asked cooldownId
+	 */
+	public ArrayList<Integer> getSkillsForCooldownId(int cooldownId) {
+		if (cooldownGroups == null)
+			initializeCooldownGroups();
+		return cooldownGroups.get(cooldownId);
+	}
 }

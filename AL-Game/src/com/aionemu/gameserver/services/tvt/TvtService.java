@@ -1,13 +1,16 @@
 package com.aionemu.gameserver.services.tvt;
 
-import com.aionemu.commons.services.CronService;
-import com.google.common.base.Predicate;
-import com.google.common.collect.Lists;
-import com.google.common.collect.Maps;
 import java.util.List;
 import java.util.Map;
+
 import javax.annotation.Nullable;
-import javolution.util.FastMap;
+
+import org.quartz.JobDetail;
+import org.quartz.Trigger;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.aionemu.commons.services.CronService;
 import com.aionemu.gameserver.configs.main.EventsConfig;
 import com.aionemu.gameserver.configs.shedule.TvtSchedule;
 import com.aionemu.gameserver.dataholders.DataManager;
@@ -25,344 +28,354 @@ import com.aionemu.gameserver.world.WorldMap;
 import com.aionemu.gameserver.world.WorldMapInstance;
 import com.aionemu.gameserver.world.WorldMapInstanceFactory;
 import com.aionemu.gameserver.world.knownlist.Visitor;
-import org.quartz.JobDetail;
-import org.quartz.Trigger;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import com.google.common.base.Predicate;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 
-
+import javolution.util.FastMap;
 
 public class TvtService extends InstanceService {
 
-    /**
-     * Just a logger
-     */
-    private static final Logger log = LoggerFactory.getLogger(TvtService.class);
-    /**
-     * Singleton that is loaded on the class initialization. Guys, we really do
-     * not SingletonHolder classes
-     */
-    private static final TvtService instance = new TvtService();
-    private TvtSchedule tvtSchedule;
-    private static final String TVT_LOOP_STATUS_BROADCAST_SCHEDULE = "0 0 * ? * *";
-    private final Map<Integer, TvtRegistrator> activeTvt = new FastMap<Integer, TvtRegistrator>().shared();
-    private final Map<Byte, TvtRegistrator> activeTvtForLevel = new FastMap<Byte, TvtRegistrator>().shared();
-    private WorldMapInstance pvpArenaMap;
-    /**
-     * Returns the single instance of siege service
-     *
-     * @return siege service instance
-     */
-    public static TvtService getInstance() {
-        return instance;
-    }
+	/**
+	 * Just a logger
+	 */
+	private static final Logger log = LoggerFactory.getLogger(TvtService.class);
+	/**
+	 * Singleton that is loaded on the class initialization. Guys, we really do not
+	 * SingletonHolder classes
+	 */
+	private static final TvtService instance = new TvtService();
+	private TvtSchedule tvtSchedule;
+	private static final String TVT_LOOP_STATUS_BROADCAST_SCHEDULE = "0 0 * ? * *";
+	private final Map<Integer, TvtRegistrator> activeTvt = new FastMap<Integer, TvtRegistrator>().shared();
+	private final Map<Byte, TvtRegistrator> activeTvtForLevel = new FastMap<Byte, TvtRegistrator>().shared();
+	private WorldMapInstance pvpArenaMap;
 
-    public void initTvt() {
-        if (!EventsConfig.TVT_ENABLE) {
-            return;
-        }
+	/**
+	 * Returns the single instance of siege service
+	 *
+	 * @return siege service instance
+	 */
+	public static TvtService getInstance() {
+		return instance;
+	}
 
-        tvtSchedule = TvtSchedule.load();
+	public void initTvt() {
+		if (!EventsConfig.TVT_ENABLE) {
+			return;
+		}
 
-        for (TvtSchedule.TvtLevel l : tvtSchedule.getTvtLevelList()) {
-            for (String tvtTime : l.getTvtTimes()) {
-                CronService.getInstance().schedule(new TvtStartRunnable(l.getId(), l.getStartTime(), l.getDuration(), l.getLevel(), l.getMapId()), tvtTime);
-                log.info("[Ascension] Scheduled tvt of id " + l.getId() + " based on cron expression: " + tvtTime);
-            }
-        }
+		tvtSchedule = TvtSchedule.load();
 
-        updateNextStage();
+		for (TvtSchedule.TvtLevel l : tvtSchedule.getTvtLevelList()) {
+			for (String tvtTime : l.getTvtTimes()) {
+				CronService.getInstance().schedule(
+						new TvtStartRunnable(l.getId(), l.getStartTime(), l.getDuration(), l.getLevel(), l.getMapId()),
+						tvtTime);
+				log.info("[Ascension] Scheduled tvt of id " + l.getId() + " based on cron expression: " + tvtTime);
+			}
+		}
 
-        // Schedule tvt status broadcast (every hour)
-        CronService.getInstance().schedule(new Runnable() {
+		updateNextStage();
 
-            @Override
-            public void run() {
-                updateNextStage();
-            }
-        }, TVT_LOOP_STATUS_BROADCAST_SCHEDULE);
-        log.info("[Ascension] Broadcasting Tvt Begining status based on expression: " + TVT_LOOP_STATUS_BROADCAST_SCHEDULE);
+		// Schedule tvt status broadcast (every hour)
+		CronService.getInstance().schedule(new Runnable() {
 
-    }
+			@Override
+			public void run() {
+				updateNextStage();
+			}
+		}, TVT_LOOP_STATUS_BROADCAST_SCHEDULE);
+		log.info("[Ascension] Broadcasting Tvt Begining status based on expression: "
+				+ TVT_LOOP_STATUS_BROADCAST_SCHEDULE);
 
-    public void startTvt(final int tvtId, final int startTime, final int duration, final int level, final int mapId) {
-        log.info("[Ascension] Starting tvt registration of tvt id: " + tvtId);
-        TvtRegistrator tvt;
-        synchronized (this) {
-            if (activeTvt.containsKey(tvtId)) {
-                log.error("[Ascension] Attempt to start tvt twice for tvt id: " + tvtId);
-                return;
-            }
-            tvt = newTvt(tvtId, startTime, duration, level, mapId);
-            activeTvt.put(tvtId, tvt);
-            activeTvtForLevel.put((byte) tvt.getLevel(), tvt);
-        }
+	}
 
-        // schedule tvt start
-        ThreadPoolManager.getInstance().schedule(new Runnable() {
+	public void startTvt(final int tvtId, final int startTime, final int duration, final int level, final int mapId) {
+		log.info("[Ascension] Starting tvt registration of tvt id: " + tvtId);
+		TvtRegistrator tvt;
+		synchronized (this) {
+			if (activeTvt.containsKey(tvtId)) {
+				log.error("[Ascension] Attempt to start tvt twice for tvt id: " + tvtId);
+				return;
+			}
+			tvt = newTvt(tvtId, startTime, duration, level, mapId);
+			activeTvt.put(tvtId, tvt);
+			activeTvtForLevel.put((byte) tvt.getLevel(), tvt);
+		}
 
-            @Override
-            public void run() {
-                startEvent(tvtId);
-            }
-        }, tvt.getStartTime() * 1000 /*
-                 * 30 * 1000
-                 */);
-        log.info("[Ascension] Spawning registration npc for tvt id: " + tvtId);
-        tvt.spawnRegNpc();
-        sendWelcomeMeaasge();
-        timeForBegin(tvt);
-    }
+		// schedule tvt start
+		ThreadPoolManager.getInstance().schedule(new Runnable() {
 
-    @Deprecated
-    private void timeForBegin(final TvtRegistrator tvt) {
-        ThreadPoolManager.getInstance().schedule(new Runnable() {
+			@Override
+			public void run() {
+				startEvent(tvtId);
+			}
+		}, tvt.getStartTime() * 1000 /*
+										 * 30 * 1000
+										 */);
+		log.info("[Ascension] Spawning registration npc for tvt id: " + tvtId);
+		tvt.spawnRegNpc();
+		sendWelcomeMeaasge();
+		timeForBegin(tvt);
+	}
 
-            @Override
-            public void run() {
-                sendMessage(tvt);
-                if (tvt.getRemainingTime() > 0) {
-                    timeForBegin(tvt);
-                }
-            }
-        }, 60000);
-    }
+	@Deprecated
+	private void timeForBegin(final TvtRegistrator tvt) {
+		ThreadPoolManager.getInstance().schedule(new Runnable() {
 
-    private void startEvent(final int tvtId) {
-        log.info("[Ascension] Starting tvt event of tvt id: " + tvtId);
-        TvtRegistrator tvt;
-        synchronized (this) {
-            tvt = activeTvt.get(tvtId);
-        }
-        if (tvt == null) {
-            return;
-        }
+			@Override
+			public void run() {
+				sendMessage(tvt);
+				if (tvt.getRemainingTime() > 0) {
+					timeForBegin(tvt);
+				}
+			}
+		}, 60000);
+	}
 
-        pvpArenaMap = (WorldMapInstance) getNextJSUnionInstance(tvt.getMapId());
-        tvt.getHolders().makeGroup();
-        tvt.despawnRegNpc();
-    }
+	private void startEvent(final int tvtId) {
+		log.info("[Ascension] Starting tvt event of tvt id: " + tvtId);
+		TvtRegistrator tvt;
+		synchronized (this) {
+			tvt = activeTvt.get(tvtId);
+		}
+		if (tvt == null) {
+			return;
+		}
 
-    public void forceStopTvt(int tvtId) {
-        log.info("[Ascension] Forced stopping tvt event of tvt id: " + tvtId);
+		pvpArenaMap = (WorldMapInstance) getNextJSUnionInstance(tvt.getMapId());
+		tvt.getHolders().makeGroup();
+		tvt.despawnRegNpc();
+	}
 
-        TvtRegistrator tvt;
-        synchronized (this) {
-            tvt = activeTvt.remove(tvtId);
-        }
+	public void forceStopTvt(int tvtId) {
+		log.info("[Ascension] Forced stopping tvt event of tvt id: " + tvtId);
 
-        if (tvt == null) {
-            return;
-        }
+		TvtRegistrator tvt;
+		synchronized (this) {
+			tvt = activeTvt.remove(tvtId);
+		}
 
-        tvt.getHolders().clearAll();
-        tvt.setIsStarted(false);
-    }
+		if (tvt == null) {
+			return;
+		}
 
-    public Map<Integer, TvtRegistrator> getActiveTvt() {
-        return activeTvt;
-    }
+		tvt.getHolders().clearAll();
+		tvt.setIsStarted(false);
+	}
 
-    public boolean regPlayer(Player player) {
-        TvtRegistrator tvt;
-        synchronized (this) {
-            tvt = activeTvtForLevel.get(player.getLevel());
-        }
-        if (tvt == null) {
-            TvtService.sendPublicMsg(player, "[Ascension]Tvt: Sorry, Not found Tvt for Your Level!.");
-            return false;
-        }
-        if (tvt.getHolders().addPlayer(player)) {
-        	TvtService.sendPublicMsg(player, "[Ascension]Tvt: You have been registered!");
-            return true;
-        }
-        return false;
-    }
+	public Map<Integer, TvtRegistrator> getActiveTvt() {
+		return activeTvt;
+	}
 
-    public void unRegPlayer(Player player) {
-        TvtRegistrator tvt;
-        synchronized (this) {
-            tvt = activeTvtForLevel.get(player.getLevel());
-        }
-        if (tvt == null) {
-            return;
-        }
-        tvt.getHolders().removePlayer(player);
-    }
+	public boolean regPlayer(Player player) {
+		TvtRegistrator tvt;
+		synchronized (this) {
+			tvt = activeTvtForLevel.get(player.getLevel());
+		}
+		if (tvt == null) {
+			TvtService.sendPublicMsg(player, "[Ascension]Tvt: Sorry, Not found Tvt for Your Level!.");
+			return false;
+		}
+		if (tvt.getHolders().addPlayer(player)) {
+			TvtService.sendPublicMsg(player, "[Ascension]Tvt: You have been registered!");
+			return true;
+		}
+		return false;
+	}
 
-    public void info(Player player, boolean isAdmin) {
-        TvtRegistrator tvt;
-        synchronized (this) {
-            tvt = activeTvtForLevel.get(player.getLevel());
-        }
-        if (tvt == null) {
-            return;
-        }
-        tvt.getHolders().info(player, isAdmin);
-    }
+	public void unRegPlayer(Player player) {
+		TvtRegistrator tvt;
+		synchronized (this) {
+			tvt = activeTvtForLevel.get(player.getLevel());
+		}
+		if (tvt == null) {
+			return;
+		}
+		tvt.getHolders().removePlayer(player);
+	}
 
-    public void portPlayer(TvtRegistrator tvt) {
-        PvpZoneTemplate.PvpWorld world = DataManager.PVP_ZONE_DATA.getMapId(tvt.getMapId());
-        if (world == null) {
-            return;
-        }
-        PvpZoneTemplate.PvpStage list = world.getPositionForStage(0);
-        if (list == null) {
-            return;
-        }
-        List<PvpZoneTemplate.PvpPosition> position = list.getPosition();
-        int e = 0;
-        int a = 6;
+	public void info(Player player, boolean isAdmin) {
+		TvtRegistrator tvt;
+		synchronized (this) {
+			tvt = activeTvtForLevel.get(player.getLevel());
+		}
+		if (tvt == null) {
+			return;
+		}
+		tvt.getHolders().info(player, isAdmin);
+	}
 
-        if (tvt.getHolders().getGroups() != null) {
-            for (PlayerGroup group : tvt.getHolders().getGroups()) {
-                registerGroupWithInstance(pvpArenaMap, group);
-            }
-        } else //only for GM and for Test 
-        {
-            for (Player player : tvt.getHolders().getPlayers()) {
-                registerPlayerWithInstance(pvpArenaMap, player);
-            }
-        }
+	public void portPlayer(TvtRegistrator tvt) {
+		PvpZoneTemplate.PvpWorld world = DataManager.PVP_ZONE_DATA.getMapId(tvt.getMapId());
+		if (world == null) {
+			return;
+		}
+		PvpZoneTemplate.PvpStage list = world.getPositionForStage(0);
+		if (list == null) {
+			return;
+		}
+		List<PvpZoneTemplate.PvpPosition> position = list.getPosition();
+		int e = 0;
+		int a = 6;
 
-        for (Player player : tvt.getHolders().getPlayers()) {
-            if ((!player.isInGroup2() && !player.isGM()) || player == null) {
-                continue;
-            }
+		if (tvt.getHolders().getGroups() != null) {
+			for (PlayerGroup group : tvt.getHolders().getGroups()) {
+				registerGroupWithInstance(pvpArenaMap, group);
+			}
+		} else // only for GM and for Test
+		{
+			for (Player player : tvt.getHolders().getPlayers()) {
+				registerPlayerWithInstance(pvpArenaMap, player);
+			}
+		}
 
-            if (player.getKisk() != null) {
-                player.getKisk().removePlayer(player);
-                player.setKisk(null);
-            }
-            switch (player.getRace()) {
-                case ELYOS:
-                    TeleportService.teleportTo(player, tvt.getMapId(), pvpArenaMap.getInstanceId(),
-                            position.get(e).getX(), position.get(e).getY(), position.get(e).getZ(), 3000, true);
-                    e++;
-                    if (e >= 5) {
-                        e = 0;
-                    }
-                    break;
-                case ASMODIANS:
-                    TeleportService.teleportTo(player, tvt.getMapId(), pvpArenaMap.getInstanceId(),
-                            position.get(a).getX(), position.get(a).getY(), position.get(a).getZ(), 3000, true);
-                    a++;
-                    if (a >= 11) {
-                        a = 0;
-                    }
-                    break;
+		for (Player player : tvt.getHolders().getPlayers()) {
+			if ((!player.isInGroup2() && !player.isGM()) || player == null) {
+				continue;
+			}
 
-            }
-        }
-        tvt.getHolders().clearPlayer();
-    }
+			if (player.getKisk() != null) {
+				player.getKisk().removePlayer(player);
+				player.setKisk(null);
+			}
+			switch (player.getRace()) {
+			case ELYOS:
+				TeleportService.teleportTo(player, tvt.getMapId(), pvpArenaMap.getInstanceId(), position.get(e).getX(),
+						position.get(e).getY(), position.get(e).getZ(), 3000, true);
+				e++;
+				if (e >= 5) {
+					e = 0;
+				}
+				break;
+			case ASMODIANS:
+				TeleportService.teleportTo(player, tvt.getMapId(), pvpArenaMap.getInstanceId(), position.get(a).getX(),
+						position.get(a).getY(), position.get(a).getZ(), 3000, true);
+				a++;
+				if (a >= 11) {
+					a = 0;
+				}
+				break;
 
-    private TvtRegistrator newTvt(int id, int st, int d, int l, int m) {
-        return new TvtRegistrator(id, st, d, l, m);
-    }
+			}
+		}
+		tvt.getHolders().clearPlayer();
+	}
 
-    public static void sendPublicMsg(Player p, String message) {
-        PacketSendUtility.sendWhiteMessageOnCenter(p, message);
-    }
+	private TvtRegistrator newTvt(int id, int st, int d, int l, int m) {
+		return new TvtRegistrator(id, st, d, l, m);
+	}
 
-    public void sendWelcomeMeaasge() {
-        World.getInstance().doOnAllPlayers(new Visitor<Player>() {
+	public static void sendPublicMsg(Player p, String message) {
+		PacketSendUtility.sendWhiteMessageOnCenter(p, message);
+	}
 
-            @Override
-            public void visit(Player player) {
-                switch (player.getRace()) {
-                    case ASMODIANS:
-                    	PacketSendUtility.sendWhiteMessage(player, "[Ascension]Tvt: Manager Rukbar Waiting in Pandaemonium.");
-                        break;
-                    case ELYOS:
-                    	PacketSendUtility.sendWhiteMessage(player, "[Ascension]Tvt: Manager Hippotades Waiting in Sanctum");
-                        break;
-                }
-            }
-        });
-    }
+	public void sendWelcomeMeaasge() {
+		World.getInstance().doOnAllPlayers(new Visitor<Player>() {
 
-    protected void updateNextStage() {
-        // filter tvt start runnables
-        Map<Runnable, JobDetail> tvtStartRunables = CronService.getInstance().getRunnables();
-        tvtStartRunables = Maps.filterKeys(tvtStartRunables, new Predicate<Runnable>() {
+			@Override
+			public void visit(Player player) {
+				switch (player.getRace()) {
+				case ASMODIANS:
+					PacketSendUtility.sendWhiteMessage(player,
+							"[Ascension]Tvt: Manager Rukbar Waiting in Pandaemonium.");
+					break;
+				case ELYOS:
+					PacketSendUtility.sendWhiteMessage(player, "[Ascension]Tvt: Manager Hippotades Waiting in Sanctum");
+					break;
+				}
+			}
+		});
+	}
 
-            @Override
-            public boolean apply(@Nullable Runnable runnable) {
-                return runnable instanceof TvtStartRunnable;
-            }
-        });
+	protected void updateNextStage() {
+		// filter tvt start runnables
+		Map<Runnable, JobDetail> tvtStartRunables = CronService.getInstance().getRunnables();
+		tvtStartRunables = Maps.filterKeys(tvtStartRunables, new Predicate<Runnable>() {
 
-        // Create map TvtLevel-To-AllTriggers
-        Map<Integer, List<Trigger>> tvtIdTotvtStartTriggers = Maps.newHashMap();
-        for (Map.Entry<Runnable, JobDetail> entry : tvtStartRunables.entrySet()) {
-            TvtStartRunnable fssr = (TvtStartRunnable) entry.getKey();
+			@Override
+			public boolean apply(@Nullable Runnable runnable) {
+				return runnable instanceof TvtStartRunnable;
+			}
+		});
 
-            List<Trigger> storage = tvtIdTotvtStartTriggers.get(fssr.getTvtId());
-            if (storage == null) {
-                storage = Lists.newArrayList();
-                tvtIdTotvtStartTriggers.put(fssr.getTvtId(), storage);
-            }
-            storage.addAll(CronService.getInstance().getJobTriggers(entry.getValue()));
-        }
-    }
+		// Create map TvtLevel-To-AllTriggers
+		Map<Integer, List<Trigger>> tvtIdTotvtStartTriggers = Maps.newHashMap();
+		for (Map.Entry<Runnable, JobDetail> entry : tvtStartRunables.entrySet()) {
+			TvtStartRunnable fssr = (TvtStartRunnable) entry.getKey();
 
-    public TvtSchedule getTvtSchedule() {
-        return tvtSchedule;
-    }
+			List<Trigger> storage = tvtIdTotvtStartTriggers.get(fssr.getTvtId());
+			if (storage == null) {
+				storage = Lists.newArrayList();
+				tvtIdTotvtStartTriggers.put(fssr.getTvtId(), storage);
+			}
+			storage.addAll(CronService.getInstance().getJobTriggers(entry.getValue()));
+		}
+	}
 
-    public TvtRegistrator getTvt(Integer tvtId) {
-        return activeTvt.get(tvtId);
-    }
+	public TvtSchedule getTvtSchedule() {
+		return tvtSchedule;
+	}
 
-    public TvtRegistrator getTvtByLevel(Byte level) {
-        return activeTvtForLevel.get(level);
-    }
+	public TvtRegistrator getTvt(Integer tvtId) {
+		return activeTvt.get(tvtId);
+	}
 
-    private WorldMapInstance getNextJSUnionInstance(int worldId) {
-        WorldMap map = World.getInstance().getWorldMap(worldId);
+	public TvtRegistrator getTvtByLevel(Byte level) {
+		return activeTvtForLevel.get(level);
+	}
 
-        if (!map.isInstanceType()) {
-            throw new UnsupportedOperationException("Invalid call for next available instance  of " + worldId);
-        }
+	private WorldMapInstance getNextJSUnionInstance(int worldId) {
+		WorldMap map = World.getInstance().getWorldMap(worldId);
 
-        int nextInstanceId = map.getNextInstanceId();
+		if (!map.isInstanceType()) {
+			throw new UnsupportedOperationException("Invalid call for next available instance  of " + worldId);
+		}
 
-        log.info("[TVT] Creating new Tvt instance: " + nextInstanceId);
+		int nextInstanceId = map.getNextInstanceId();
 
-        WorldMapInstance pvpArenaInstance = WorldMapInstanceFactory.createWorldMapInstance(map, nextInstanceId);
-        InstanceService.startInstanceChecker(pvpArenaInstance);
-        map.addInstance(nextInstanceId, pvpArenaInstance);
-        SpawnEngine.spawnInstance(worldId, pvpArenaInstance.getInstanceId());
-        InstanceEngine.getInstance().onInstanceCreate(pvpArenaInstance);
-        return pvpArenaInstance;
-    }
+		log.info("[TVT] Creating new Tvt instance: " + nextInstanceId);
 
-    private void sendMessage(final TvtRegistrator tvt) {
-        switch (tvt.getRemainingTime() / 60) {
-            case 20:
-            case 15:
-            case 10:
-            case 5:
-            case 2:
-            case 1:
-                World.getInstance().doOnAllPlayers(new Visitor<Player>() {
+		WorldMapInstance pvpArenaInstance = WorldMapInstanceFactory.createWorldMapInstance(map, nextInstanceId);
+		InstanceService.startInstanceChecker(pvpArenaInstance);
+		map.addInstance(nextInstanceId, pvpArenaInstance);
+		SpawnEngine.spawnInstance(worldId, pvpArenaInstance.getInstanceId());
+		InstanceEngine.getInstance().onInstanceCreate(pvpArenaInstance);
+		return pvpArenaInstance;
+	}
 
-                    @Override
-                    public void visit(Player player) {
-                        if (!tvt.getHolders().getPlayer(player) && player.getCommonData().getLevel() >= tvt.getLevel()) {
-                            switch (player.getRace()) {
-                                case ASMODIANS:
-                                	PacketSendUtility.sendWhiteMessageOnCenter(player, "[Ascension]Tvt: Registration will be ending for: " + tvt.getRemainingTime() / 60 + " minutes.\nAsmodians:"+ tvt.getHolders().getAsmoReg() +" | Elyos:"+tvt.getHolders().getElysReg());
-                                    break;
-                                case ELYOS:
-                                	PacketSendUtility.sendWhiteMessageOnCenter(player, "[Ascension]Tvt: Registration will be ending for: " + tvt.getRemainingTime() / 60 + " minutes.\nAsmodians:"+ tvt.getHolders().getAsmoReg() +" | Elyos:"+tvt.getHolders().getElysReg());
-                                    break;
-                            }
-                        }
-                    }
-                });
-                break;
-        }
-    }
+	private void sendMessage(final TvtRegistrator tvt) {
+		switch (tvt.getRemainingTime() / 60) {
+		case 20:
+		case 15:
+		case 10:
+		case 5:
+		case 2:
+		case 1:
+			World.getInstance().doOnAllPlayers(new Visitor<Player>() {
+
+				@Override
+				public void visit(Player player) {
+					if (!tvt.getHolders().getPlayer(player) && player.getCommonData().getLevel() >= tvt.getLevel()) {
+						switch (player.getRace()) {
+						case ASMODIANS:
+							PacketSendUtility.sendWhiteMessageOnCenter(player,
+									"[Ascension]Tvt: Registration will be ending for: " + tvt.getRemainingTime() / 60
+											+ " minutes.\nAsmodians:" + tvt.getHolders().getAsmoReg() + " | Elyos:"
+											+ tvt.getHolders().getElysReg());
+							break;
+						case ELYOS:
+							PacketSendUtility.sendWhiteMessageOnCenter(player,
+									"[Ascension]Tvt: Registration will be ending for: " + tvt.getRemainingTime() / 60
+											+ " minutes.\nAsmodians:" + tvt.getHolders().getAsmoReg() + " | Elyos:"
+											+ tvt.getHolders().getElysReg());
+							break;
+						}
+					}
+				}
+			});
+			break;
+		}
+	}
 }

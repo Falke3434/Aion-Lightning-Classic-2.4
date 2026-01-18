@@ -22,9 +22,6 @@ import java.util.TreeSet;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicInteger;
 
-import javolution.util.FastMap;
-import javolution.util.FastMap.Entry;
-
 import org.apache.commons.lang.ArrayUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -37,6 +34,9 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.utils.ThreadPoolManager;
 import com.aionemu.gameserver.world.zone.ZoneInstance;
 import com.aionemu.gameserver.world.zone.ZoneName;
+
+import javolution.util.FastMap;
+import javolution.util.FastMap.Entry;
 
 /**
  * Just some part of map.
@@ -96,7 +96,8 @@ public class MapRegion {
 	}
 
 	/**
-	 * Return an instance of {@link World}, which keeps map, to which belongs this region
+	 * Return an instance of {@link World}, which keeps map, to which belongs this
+	 * region
 	 */
 	public World getWorld() {
 		return getParent().getWorld();
@@ -173,8 +174,7 @@ public class MapRegion {
 	final void checkActiveness(boolean active) {
 		if (active && regionActive.compareAndSet(false, true)) {
 			startActivation();
-		}
-		else if (!active) {
+		} else if (!active) {
 			startDeactivation();
 		}
 	}
@@ -258,7 +258,8 @@ public class MapRegion {
 	}
 
 	public void revalidateZones(Creature creature) {
-		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap.tail(); (e = e.getNext()) != mapEnd;) {
+		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			boolean foundZone = false;
 			int category = e.getKey();
 			TreeSet<ZoneInstance> zones = e.getValue();
@@ -282,7 +283,8 @@ public class MapRegion {
 
 	public List<ZoneInstance> getZones(Creature creature) {
 		List<ZoneInstance> z = new ArrayList<ZoneInstance>();
-		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap.tail(); (e = e.getNext()) != mapEnd;) {
+		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			TreeSet<ZoneInstance> zones = e.getValue();
 			for (ZoneInstance zone : zones) {
 				if (zone.isInsideCreature(creature)) {
@@ -293,8 +295,9 @@ public class MapRegion {
 		return z;
 	}
 
-	public boolean onDie(Creature attacker, Creature target){
-		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap.tail(); (e = e.getNext()) != mapEnd;) {
+	public boolean onDie(Creature attacker, Creature target) {
+		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			TreeSet<ZoneInstance> zones = e.getValue();
 			for (ZoneInstance zone : zones) {
 				if (zone.isInsideCreature(target)) {
@@ -307,7 +310,8 @@ public class MapRegion {
 	}
 
 	public boolean isInsideZone(ZoneName zoneName, float x, float y, float z) {
-		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap.tail(); (e = e.getNext()) != mapEnd;) {
+		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			TreeSet<ZoneInstance> zones = e.getValue();
 			for (ZoneInstance zone : zones) {
 				if (zone.getZoneTemplate().getName() != zoneName)
@@ -319,7 +323,8 @@ public class MapRegion {
 	}
 
 	public boolean isInsideZone(ZoneName zoneName, Creature creature) {
-		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap.tail(); (e = e.getNext()) != mapEnd;) {
+		for (Entry<Integer, TreeSet<ZoneInstance>> e = zoneMap.head(), mapEnd = zoneMap
+				.tail(); (e = e.getNext()) != mapEnd;) {
 			TreeSet<ZoneInstance> zones = e.getValue();
 			for (ZoneInstance zone : zones) {
 				if (zone.getZoneTemplate().getName() != zoneName)

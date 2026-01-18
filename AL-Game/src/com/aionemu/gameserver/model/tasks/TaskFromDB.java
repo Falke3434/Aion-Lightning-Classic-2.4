@@ -35,22 +35,22 @@ public class TaskFromDB {
 	 * Constructor
 	 * 
 	 * @param id
-	 *          : int
+	 *            : int
 	 * @param name
-	 *          : String
+	 *            : String
 	 * @param type
-	 *          : String
+	 *            : String
 	 * @param lastActivation
-	 *          : Timestamp
+	 *            : Timestamp
 	 * @param startTime
-	 *          : String
+	 *            : String
 	 * @param delay
-	 *          : int
+	 *            : int
 	 * @param param
-	 *          : String
+	 *            : String
 	 */
 	public TaskFromDB(int id, String name, String type, Timestamp lastActivation, String startTime, int delay,
-		String param) {
+			String param) {
 		this.id = id;
 		this.name = name;
 		this.type = type;

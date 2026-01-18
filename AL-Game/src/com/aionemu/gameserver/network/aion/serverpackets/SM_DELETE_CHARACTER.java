@@ -16,7 +16,6 @@
  */
 package com.aionemu.gameserver.network.aion.serverpackets;
 
-
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 
@@ -47,8 +46,7 @@ public class SM_DELETE_CHARACTER extends AionServerPacket {
 			writeD(0x00);// unk
 			writeD(playerObjId);
 			writeD(deletionTime);
-		}
-		else {
+		} else {
 			writeD(0x10);// unk
 			writeD(0x00);
 			writeD(0x00);

@@ -71,7 +71,8 @@ public class Util {
 
 	public static void printRotatingBarHeader(int dataSize) {
 		String anim = "|/-\\";
-		System.out.print("\r" + anim.charAt(Math.round(dataSize / 50) % anim.length()) + " Processing data : " + dataSize + " data" + (dataSize <= 1 ? "." : "s.                 "));
+		System.out.print("\r" + anim.charAt(Math.round(dataSize / 50) % anim.length()) + " Processing data : "
+				+ dataSize + " data" + (dataSize <= 1 ? "." : "s.                 "));
 		System.out.print("\r");
 	}
 
@@ -132,10 +133,11 @@ public class Util {
 	}
 
 	/**
-	 * Gets last <tt>cnt</tt> read bytes from the <tt>data</tt> buffer and puts into <tt>result</tt> buffer in special format:
+	 * Gets last <tt>cnt</tt> read bytes from the <tt>data</tt> buffer and puts into
+	 * <tt>result</tt> buffer in special format:
 	 * <ul>
-	 * <li>if byte represents char from partition 0x1F to 0x80 (which are normal ascii chars) then it's put into buffer as
-	 * it is</li>
+	 * <li>if byte represents char from partition 0x1F to 0x80 (which are normal
+	 * ascii chars) then it's put into buffer as it is</li>
 	 * <li>otherwise dot is put into buffer</li>
 	 * </ul>
 	 * 

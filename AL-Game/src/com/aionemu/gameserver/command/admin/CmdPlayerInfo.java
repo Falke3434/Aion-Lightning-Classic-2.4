@@ -23,15 +23,12 @@ import com.google.common.base.Predicate;
 
 /*syntax //playerinfo <playername> <loc | item | group | skill | legion | ap | chars>*/
 
-
 public class CmdPlayerInfo extends BaseCommand {
-
-	
-
 
 	public void execute(Player admin, String... params) {
 		if (params == null || params.length < 1) {
-			PacketSendUtility.sendMessage(admin, "syntax //playerinfo <playername> <loc | item | group | skill | legion | ap | chars> ");
+			PacketSendUtility.sendMessage(admin,
+					"syntax //playerinfo <playername> <loc | item | group | skill | legion | ap | chars> ");
 			return;
 		}
 
@@ -42,13 +39,12 @@ public class CmdPlayerInfo extends BaseCommand {
 			return;
 		}
 
-		PacketSendUtility.sendMessage(
-			admin,
-			"\n[Infos sur " + target.getName() + "]\n- Common : niveau " + target.getLevel() + "("
-				+ target.getCommonData().getExpShown() + " xp), " + target.getRace() + ", "
-				+ target.getPlayerClass() + "\n- IP: " + target.getClientConnection().getIP() + "\n- MAC: "
-				+ target.getClientConnection().getMacAddress() + "\n" + "- Nom de compte : "
-				+ target.getClientConnection().getAccount().getName() + "\n");
+		PacketSendUtility.sendMessage(admin,
+				"\n[Infos sur " + target.getName() + "]\n- Common : niveau " + target.getLevel() + "("
+						+ target.getCommonData().getExpShown() + " xp), " + target.getRace() + ", "
+						+ target.getPlayerClass() + "\n- IP: " + target.getClientConnection().getIP() + "\n- MAC: "
+						+ target.getClientConnection().getMacAddress() + "\n" + "- Nom de compte : "
+						+ target.getClientConnection().getAccount().getName() + "\n");
 
 		if (params.length < 2)
 			return;
@@ -65,8 +61,8 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 
 					Item act = it.next();
-					strbld.append("    " + act.getItemCount() + " x " + ChatUtil.item(act.getItemTemplate().getTemplateId())
-						+ "\n");
+					strbld.append("    " + act.getItemCount() + " x "
+							+ ChatUtil.item(act.getItemTemplate().getTemplateId()) + "\n");
 				}
 			items.clear();
 			items = target.getEquipment().getEquippedItems();
@@ -77,8 +73,8 @@ public class CmdPlayerInfo extends BaseCommand {
 			else
 				while (it.hasNext()) {
 					Item act = it.next();
-					strbld.append("    " + act.getItemCount() + " x " + ChatUtil.item(act.getItemTemplate().getTemplateId())
-						+ "\n");
+					strbld.append("    " + act.getItemCount() + " x "
+							+ ChatUtil.item(act.getItemTemplate().getTemplateId()) + "\n");
 				}
 
 			items.clear();
@@ -91,14 +87,14 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 					Item act = it.next();
 					strbld.append("    " + act.getItemCount() + " x " + "[item:" + act.getItemTemplate().getTemplateId()
-						+ "]" + "\n");
+							+ "]" + "\n");
 				}
-			
+
 			IStorage pet6 = target.getStorage(StorageType.PET_BAG_6.getId());
 			IStorage pet12 = target.getStorage(StorageType.PET_BAG_12.getId());
 			IStorage pet18 = target.getStorage(StorageType.PET_BAG_18.getId());
 			IStorage pet24 = target.getStorage(StorageType.PET_BAG_24.getId());
-			
+
 			items.clear();
 			if (pet6 != null) {
 				items = pet6.getItems();
@@ -111,9 +107,9 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 					Item act = it.next();
 					strbld.append("    " + act.getItemCount() + " x " + "[item:" + act.getItemTemplate().getTemplateId()
-						+ "]" + "\n");
+							+ "]" + "\n");
 				}
-			
+
 			items.clear();
 			if (pet12 != null) {
 				items = pet12.getItems();
@@ -126,9 +122,9 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 					Item act = it.next();
 					strbld.append("    " + act.getItemCount() + " x " + "[item:" + act.getItemTemplate().getTemplateId()
-						+ "]" + "\n");
+							+ "]" + "\n");
 				}
-			
+
 			items.clear();
 			if (pet18 != null) {
 				items = pet18.getItems();
@@ -141,9 +137,9 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 					Item act = it.next();
 					strbld.append("    " + act.getItemCount() + " x " + "[item:" + act.getItemTemplate().getTemplateId()
-						+ "]" + "\n");
+							+ "]" + "\n");
 				}
-			
+
 			items.clear();
 			if (pet24 != null) {
 				items = pet24.getItems();
@@ -156,49 +152,45 @@ public class CmdPlayerInfo extends BaseCommand {
 				while (it.hasNext()) {
 					Item act = it.next();
 					strbld.append("    " + act.getItemCount() + " x " + "[item:" + act.getItemTemplate().getTemplateId()
-						+ "]" + "\n");
+							+ "]" + "\n");
 				}
-			
+
 			showAllLines(admin, strbld.toString());
-		}
-		else if (params[1].equals("group")) {
+		} else if (params[1].equals("group")) {
 			final StringBuilder strbld = new StringBuilder("-group info:\n   Leader: ");
 
-				PlayerGroup group = target.getPlayerGroup2();
-				if (group == null)
-					PacketSendUtility.sendMessage(admin, "- Group info: Pas dans un groupe");
-				else {
-					strbld.append(group.getLeader().getName() + "\n  Membres:\n");
-					group.applyOnMembers(new Predicate<Player>() {
+			PlayerGroup group = target.getPlayerGroup2();
+			if (group == null)
+				PacketSendUtility.sendMessage(admin, "- Group info: Pas dans un groupe");
+			else {
+				strbld.append(group.getLeader().getName() + "\n  Membres:\n");
+				group.applyOnMembers(new Predicate<Player>() {
 
-						@Override
-						public boolean apply(Player player) {
-							strbld.append("    " + player.getName() + "\n");
-							return true;
-						}
+					@Override
+					public boolean apply(Player player) {
+						strbld.append("    " + player.getName() + "\n");
+						return true;
+					}
 
-					});
-					PacketSendUtility.sendMessage(admin, strbld.toString());
-				}
-			
-		}
-		else if (params[1].equals("skill")) {
+				});
+				PacketSendUtility.sendMessage(admin, strbld.toString());
+			}
+
+		} else if (params[1].equals("skill")) {
 			StringBuilder strbld = new StringBuilder("- List des skills:\n");
 
 			PlayerSkillEntry sle[] = target.getSkillList().getAllSkills();
 
 			for (int i = 0; i < sle.length; i++)
-				strbld.append("#" + sle[i].getSkillId() + " : " + sle[i].getSkillName() + " au level " + sle[i].getSkillLevel() + "\n");
+				strbld.append("#" + sle[i].getSkillId() + " : " + sle[i].getSkillName() + " au level "
+						+ sle[i].getSkillLevel() + "\n");
 			showAllLines(admin, strbld.toString());
-		}
-		else if (params[1].equals("loc")) {
+		} else if (params[1].equals("loc")) {
 			String chatLink = ChatUtil.position(target.getName(), target.getPosition());
-			PacketSendUtility.sendMessage(
-				admin,
-				"- " + chatLink + "'s location:\n  mapid: " + target.getWorldId() + "\n  X: " + target.getX() + " Y: "
-					+ target.getY() + "Z: " + target.getZ() + "heading: " + target.getHeading());
-		}
-		else if (params[1].equals("legion")) {
+			PacketSendUtility.sendMessage(admin,
+					"- " + chatLink + "'s location:\n  mapid: " + target.getWorldId() + "\n  X: " + target.getX()
+							+ " Y: " + target.getY() + "Z: " + target.getZ() + "heading: " + target.getHeading());
+		} else if (params[1].equals("legion")) {
 			StringBuilder strbld = new StringBuilder();
 
 			Legion legion = target.getLegion();
@@ -209,36 +201,35 @@ public class CmdPlayerInfo extends BaseCommand {
 				Iterator<LegionMemberEx> it = legionmemblist.iterator();
 
 				strbld.append("-legion info:\n  name: " + legion.getLegionName() + ", level: " + legion.getLegionLevel()
-					+ "\n  members(online):\n");
+						+ "\n  members(online):\n");
 				while (it.hasNext()) {
 					LegionMemberEx act = it.next();
 					strbld.append("    " + act.getName() + "(" + ((act.isOnline() == true) ? "online" : "offline") + ")"
-						+ act.getRank().toString() + "\n");
+							+ act.getRank().toString() + "\n");
 				}
 			}
 			showAllLines(admin, strbld.toString());
-		}
-		else if(params[1].equals("ap"))	{
+		} else if (params[1].equals("ap")) {
 			PacketSendUtility.sendMessage(admin, "AP info about " + target.getName());
 			PacketSendUtility.sendMessage(admin, "Total AP = " + target.getAbyssRank().getAp());
 			PacketSendUtility.sendMessage(admin, "Total Kills = " + target.getAbyssRank().getAllKill());
 			PacketSendUtility.sendMessage(admin, "Today Kills = " + target.getAbyssRank().getDailyKill());
 			PacketSendUtility.sendMessage(admin, "Today AP = " + target.getAbyssRank().getDailyAP());
-		}
-		else if(params[1].equals("chars")) {
-			PacketSendUtility.sendMessage(admin, "Autres personnages de " + target.getName() + " (" + target.getClientConnection().getAccount().size() + ") :");
+		} else if (params[1].equals("chars")) {
+			PacketSendUtility.sendMessage(admin, "Autres personnages de " + target.getName() + " ("
+					+ target.getClientConnection().getAccount().size() + ") :");
 
 			Iterator<PlayerAccountData> data = target.getClientConnection().getAccount().iterator();
-			while(data.hasNext()) {
+			while (data.hasNext()) {
 				PlayerAccountData d = data.next();
-				if(d != null && d.getPlayerCommonData() != null) {
+				if (d != null && d.getPlayerCommonData() != null) {
 					PacketSendUtility.sendMessage(admin, d.getPlayerCommonData().getName());
 				}
 			}
-		}
-		else {
+		} else {
 			PacketSendUtility.sendMessage(admin, "bad switch!");
-			PacketSendUtility.sendMessage(admin, "syntax //playerinfo <playername> <loc | item | group | skill | legion | ap | chars> ");
+			PacketSendUtility.sendMessage(admin,
+					"syntax //playerinfo <playername> <loc | item | group | skill | legion | ap | chars> ");
 		}
 	}
 

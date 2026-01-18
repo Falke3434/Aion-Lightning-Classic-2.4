@@ -48,7 +48,7 @@ public class CM_SHOW_DIALOG extends AionClientPacket {
 		Player player = getConnection().getActivePlayer();
 		if (player.isTrading())
 			return;
-		
+
 		VisibleObject obj = player.getKnownList().getObject(targetObjectId);
 
 		if (obj instanceof Npc) {

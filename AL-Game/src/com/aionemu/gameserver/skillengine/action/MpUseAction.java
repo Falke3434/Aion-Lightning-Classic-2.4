@@ -45,7 +45,7 @@ public class MpUseAction extends Action {
 	@Override
 	public void act(Skill skill) {
 		Creature effector = skill.getEffector();
-		if(((Player) effector).isInvul() && ((Player) effector).isGM()) {
+		if (((Player) effector).isInvul() && ((Player) effector).isGM()) {
 			// No MP reducing only if effector is GM and is Invulnerable
 			return;
 		}

@@ -5,18 +5,17 @@ import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.network.aion.AionServerPacket;
 import com.aionemu.gameserver.services.PetitionService;
 
-public class SM_PETITION_STATUS extends AionServerPacket
-{
+public class SM_PETITION_STATUS extends AionServerPacket {
 	private Petition petition;
-	
+
 	public SM_PETITION_STATUS() {
 		this.petition = null;
 	}
-	
+
 	public SM_PETITION_STATUS(Petition petition) {
 		this.petition = petition;
 	}
-	
+
 	@Override
 	protected void writeImpl(AionConnection con) {
 		if (petition == null) {

@@ -23,10 +23,11 @@ import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlType;
 
 import com.aionemu.gameserver.model.limiteditems.LimitedItem;
-import javax.xml.bind.annotation.XmlElement;
+
 import javolution.util.FastList;
 
 /**
@@ -88,7 +89,8 @@ public class GoodsList {
 	 * <p>
 	 * Java class for anonymous complex type.
 	 * <p>
-	 * The following schema fragment specifies the expected content contained within this class.
+	 * The following schema fragment specifies the expected content contained within
+	 * this class.
 	 * 
 	 * <pre>
 	 * &lt;complexType>

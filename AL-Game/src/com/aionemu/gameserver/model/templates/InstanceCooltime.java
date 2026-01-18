@@ -29,7 +29,7 @@ import com.aionemu.gameserver.model.Race;
  */
 @XmlAccessorType(XmlAccessType.FIELD)
 @XmlType(name = "InstanceCooltime", propOrder = { "entCoolTime", "maxMemberLight", "maxMemberDark",
-	"enterMinLevelLight", "enterMaxLevelLight", "enterMinLevelDark", "enterMaxLevelDark", "can_enter_mentor" })
+		"enterMinLevelLight", "enterMaxLevelLight", "enterMinLevelDark", "enterMaxLevelDark", "can_enter_mentor" })
 public class InstanceCooltime {
 
 	@XmlElement(name = "ent_cool_time")

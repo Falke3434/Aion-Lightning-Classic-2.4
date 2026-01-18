@@ -56,22 +56,22 @@ public class PlayerSkillEntry extends SkillEntry {
 	 */
 	public int getExtraLvl() {
 		switch (skillId) {
-			case 30002:
-			case 30003:
-				if (skillLevel > 399 && skillLevel < 500)
-					return 4;
-			case 40001:
-			case 40002:
-			case 40003:
-			case 40004:
-			case 40007:
-			case 40008:
-				if (skillLevel > 449 && skillLevel < 500)
-					return 5;
-				else if (skillLevel > 499 && skillLevel < 550)
-					return 6;
-				else
-					return skillLevel / 100;
+		case 30002:
+		case 30003:
+			if (skillLevel > 399 && skillLevel < 500)
+				return 4;
+		case 40001:
+		case 40002:
+		case 40003:
+		case 40004:
+		case 40007:
+		case 40008:
+			if (skillLevel > 449 && skillLevel < 500)
+				return 5;
+			else if (skillLevel > 499 && skillLevel < 550)
+				return 6;
+			else
+				return skillLevel / 100;
 		}
 		return 0;
 	}
@@ -85,7 +85,7 @@ public class PlayerSkillEntry extends SkillEntry {
 
 	/**
 	 * @param currentXp
-	 *          the currentXp to set
+	 *            the currentXp to set
 	 */
 	public void setCurrentXp(int currentXp) {
 		this.currentXp = currentXp;
@@ -104,36 +104,29 @@ public class PlayerSkillEntry extends SkillEntry {
 				if (skillLevel > 0 && skillLevel < 99) {
 					if (skillUp > 99)
 						skillUp = 99;
-				}
-				else if (skillLevel > 99 && skillLevel < 199) {
+				} else if (skillLevel > 99 && skillLevel < 199) {
 					if (skillUp > 199)
 						skillUp = 199;
-				}
-				else if (skillLevel > 199 && skillLevel < 299) {
+				} else if (skillLevel > 199 && skillLevel < 299) {
 					if (skillUp > 299)
 						skillUp = 299;
-				}
-				else if (skillLevel > 299 && skillLevel < 399) {
+				} else if (skillLevel > 299 && skillLevel < 399) {
 					if (skillUp > 399)
 						skillUp = 399;
-				}
-				else if (skillLevel > 399 && skillLevel < 449) {
+				} else if (skillLevel > 399 && skillLevel < 449) {
 					if (skillUp > 449)
 						skillUp = 449;
-				}
-				else if (skillLevel > 449 && skillLevel < 499) {
+				} else if (skillLevel > 449 && skillLevel < 499) {
 					if (skillUp > 499)
 						skillUp = 499;
-				}
-				else if (skillLevel > 499 && skillLevel < 549) {
+				} else if (skillLevel > 499 && skillLevel < 549) {
 					if (skillUp > 549)
 						skillUp = 549;
 				}
 
 				setSkillLvl(skillUp);
 				currentXp = 0;
-			}
-			else {
+			} else {
 				setSkillLvl(skillLevel + 1);
 				currentXp = 0;
 			}
@@ -151,24 +144,24 @@ public class PlayerSkillEntry extends SkillEntry {
 
 	/**
 	 * @param persistentState
-	 *          the pState to set
+	 *            the pState to set
 	 */
 	public void setPersistentState(PersistentState persistentState) {
 		switch (persistentState) {
-			case DELETED:
-				if (this.persistentState == PersistentState.NEW)
-					this.persistentState = PersistentState.NOACTION;
-				else
-					this.persistentState = PersistentState.DELETED;
-				break;
-			case UPDATE_REQUIRED:
-				if (this.persistentState != PersistentState.NEW)
-					this.persistentState = PersistentState.UPDATE_REQUIRED;
-				break;
-			case NOACTION:
-				break;
-			default:
-				this.persistentState = persistentState;
+		case DELETED:
+			if (this.persistentState == PersistentState.NEW)
+				this.persistentState = PersistentState.NOACTION;
+			else
+				this.persistentState = PersistentState.DELETED;
+			break;
+		case UPDATE_REQUIRED:
+			if (this.persistentState != PersistentState.NEW)
+				this.persistentState = PersistentState.UPDATE_REQUIRED;
+			break;
+		case NOACTION:
+			break;
+		default:
+			this.persistentState = persistentState;
 		}
 	}
 

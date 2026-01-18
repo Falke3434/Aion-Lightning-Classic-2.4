@@ -20,10 +20,10 @@ import java.sql.Timestamp;
 import java.util.Collection;
 import java.util.List;
 
-import javolution.util.FastMap;
-
 import com.aionemu.commons.database.dao.DAOManager;
 import com.aionemu.gameserver.dao.PlayerPetsDAO;
+
+import javolution.util.FastMap;
 
 /**
  * @author ATracer
@@ -49,7 +49,7 @@ public class PetList {
 				lastUsedPet = pet;
 		}
 
-		if(lastUsedPet != null)
+		if (lastUsedPet != null)
 			lastUsedPetId = lastUsedPet.getPetId();
 	}
 
@@ -69,7 +69,7 @@ public class PetList {
 		return getPet(lastUsedPetId);
 	}
 
-	public void setLastUsedPetId(int lastUsedPetId){
+	public void setLastUsedPetId(int lastUsedPetId) {
 		this.lastUsedPetId = lastUsedPetId;
 	}
 

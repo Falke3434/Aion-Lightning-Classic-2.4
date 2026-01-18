@@ -33,34 +33,34 @@ public class SpawnSpotTemplate {
 
 	@XmlAttribute(name = "state")
 	private Integer state = 0;
-	
+
 	@XmlAttribute(name = "anchor")
 	private String anchor;
-	
+
 	@XmlAttribute(name = "fly")
 	private Integer fly = 0;
 
 	@XmlAttribute(name = "walker_index")
 	private Integer walkerIdx;
-	
+
 	@XmlAttribute(name = "walker_id")
 	private String walkerId;
-	
+
 	@XmlAttribute(name = "random_walk")
 	private Integer randomWalk = 0;
-	
+
 	@XmlAttribute(name = "static_id")
 	private Integer staticId = 0;
-	
+
 	@XmlAttribute(name = "h", required = true)
 	private byte h;
-	
+
 	@XmlAttribute(name = "z", required = true)
 	private float z;
 
 	@XmlAttribute(name = "y", required = true)
 	private float y;
-	
+
 	@XmlAttribute(name = "x", required = true)
 	private float x;
 
@@ -69,9 +69,9 @@ public class SpawnSpotTemplate {
 
 	public SpawnSpotTemplate() {
 	}
-	
+
 	private static final Integer ZERO = new Integer(0);
-	
+
 	void beforeMarshal(Marshaller marshaller) {
 		if (ZERO.equals(staticId))
 			staticId = null;
@@ -84,7 +84,7 @@ public class SpawnSpotTemplate {
 		if (ZERO.equals(walkerIdx))
 			walkerIdx = null;
 	}
-	
+
 	void afterMarshal(Marshaller marshaller) {
 		if (staticId == null)
 			staticId = 0;
@@ -136,11 +136,11 @@ public class SpawnSpotTemplate {
 	public String getWalkerId() {
 		return walkerId;
 	}
-	
+
 	public void setWalkerId(String walkerId) {
 		this.walkerId = walkerId;
 	}
-	
+
 	public int getWalkerIndex() {
 		if (walkerIdx == null)
 			return 0;
