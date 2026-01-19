@@ -120,78 +120,79 @@ public class ItemInfoBlob extends PacketWriteHelper {
 			ItemBlobEntry newBlobEntry() {
 				return new GeneralInfoBlobEntry();
 			}
-		}, // 30 + S OK
+		},
 		SLOTS_WEAPON(0x01) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new WeaponInfoBlobEntry();
 			}
-		}, // 9 OK
+		},
 		SLOTS_ARMOR(0x02) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new ArmorInfoBlobEntry();
 			}
-		}, // 13 OK
+		},
 		SLOTS_SHIELD(0x03) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new ShieldInfoBlobEntry();
 			}
-		}, // 13 OK [Not handled before]
+		},
 		SLOTS_ACCESSORY(0x04) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new AccessoryInfoBlobEntry();
 			}
-		}, // 9 OK [Not handled before]
-		// missing(0x05),//9 [dd] [Not handled before]
+		},
 		EQUIPPED_SLOT(0x06) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new EquippedSlotBlobEntry();
 			}
-		}, // 5 OK
+		},
 		STIGMA_INFO(0x07) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new StigmaInfoBlobEntry();
 			}
-		}, // 259 OK
-		// missing(0x08),//5 [d] Stigma Shard? [Not handled before]
-		// missing(0x09),//15? [Not handled before]
+		},
+		STIGMA_SHARD(0x08) {
+			@Override
+			ItemBlobEntry newBlobEntry() {
+				return new StigmaShardInfoBlobEntry();
+			}
+		},
 		STAT_MOD(0x0A) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				throw new RuntimeException("not impl yet!");
 			}
-		}, // 8 [hdc] ?? [Not handled before] retail send it xx times (smth dynamically
-			// changed)
+		},
 		MANA_SOCKETS(0x0B) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new ManaStoneInfoBlobEntry();
 			}
-		}, // 45 OK
-		// 0x0C - not used?
+		},
 		SLOTS_CLOTHES(0x0D) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new ClothesInfoBlobEntry();
 			}
-		}, // 9 OK [Not handled before]
+		},
 		COMPOSITE_ITEM(0x0E) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new CompositeItemBlobEntry();
 			}
-		}, // 30 OK
+		},
 		CONDITIONING_INFO(0x0F) {
 			@Override
 			ItemBlobEntry newBlobEntry() {
 				return new ConditioningInfoBlobEntry();
 			}
-		}; // 5 OK
+		};
 
 		private int entryId;
 

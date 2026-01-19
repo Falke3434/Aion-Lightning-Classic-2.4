@@ -32,6 +32,8 @@ public class CmdSysMail extends BaseCommand {
 				return race == Race.ASMODIANS;
 			case ALL:
 				return race == Race.ELYOS || race == Race.ASMODIANS;
+			default:
+				break;
 			}
 			return false;
 		}

@@ -38,6 +38,8 @@ public class TvtPlayerHolder {
 			case ELYOS:
 				addElysReg();
 				break;
+			default:
+				break;
 			}
 			return true;
 		}
@@ -121,6 +123,8 @@ public class TvtPlayerHolder {
 			case ELYOS:
 				elyos.add(player);
 				addElys();
+				break;
+			default:
 				break;
 			}
 		}
@@ -287,6 +291,8 @@ public class TvtPlayerHolder {
 		case ELYOS:
 			raceinfo = "Elyos ";
 			otherRace = "Asmodians ";
+			break;
+		default:
 			break;
 		}
 		TvtPlayerHolder.sentUnRegMess(player,

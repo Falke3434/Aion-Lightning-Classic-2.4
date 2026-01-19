@@ -245,14 +245,10 @@ public class SM_PLAYER_INFO extends AionServerPacket {
 		writeH(0x00); // unk - 0x01
 		writeD(player.getTarget() == null ? 0 : player.getTarget().getObjectId());
 		writeC(0); // suspect id
-		writeD(0);
+		writeD(player.getCurrentTeamId());
 		writeC(player.isMentor() ? 1 : 0);
-
-		//
-		writeD(player.getPlayerAccount().getMembership() == 2 ? 3 : 1);
-		writeC(0); // test
+		writeD(0x01); //SIEL
+		writeD(0);//NEW 2.4 EU
 		writeD(0);
-
-		// writeD(player.getPlayerAccount().getMembership() == 2 ? 3 : 0);
 	}
 }

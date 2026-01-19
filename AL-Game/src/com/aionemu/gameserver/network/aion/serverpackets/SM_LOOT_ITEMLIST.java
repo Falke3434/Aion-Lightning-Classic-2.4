@@ -20,6 +20,8 @@ import java.util.Set;
 
 import org.slf4j.LoggerFactory;
 
+import com.aionemu.gameserver.dataholders.DataManager;
+import com.aionemu.gameserver.model.drop.Drop;
 import com.aionemu.gameserver.model.drop.DropItem;
 import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.network.aion.AionConnection;
@@ -44,8 +46,11 @@ public class SM_LOOT_ITEMLIST extends AionServerPacket {
 		}
 
 		for (DropItem item : setItems) {
-			if (item.getPlayerObjId() == 0 || player.getObjectId() == item.getPlayerObjId())
-				dropItems.add(item);
+			if (item.getPlayerObjId() == 0 || player.getObjectId() == item.getPlayerObjId()) {
+				if (DataManager.ITEM_DATA.getItemTemplate(item.getDropTemplate().getItemId()) != null) {
+					dropItems.add(item);
+				}
+			}
 		}
 	}
 
@@ -55,13 +60,15 @@ public class SM_LOOT_ITEMLIST extends AionServerPacket {
 	@Override
 	protected void writeImpl(AionConnection con) {
 		writeD(targetObjectId);
-		writeC(dropItems.size());
+		writeH(dropItems.size());
 
 		for (DropItem dropItem : dropItems) {
-			writeC(dropItem.getIndex()); // index in droplist
-			writeD(dropItem.getDropTemplate().getItemId());
+			Drop drop = dropItem.getDropTemplate();
+			writeD(dropItem.getIndex());
+			writeD(drop.getItemId());
 			writeD((int) dropItem.getCount());
-			writeH(0);
+	        writeC(0);
+	        writeC(0);
 		}
 
 		FastList.recycle(dropItems);

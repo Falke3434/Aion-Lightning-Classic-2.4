@@ -17,6 +17,9 @@
 package com.aionemu.gameserver.utils;
 
 import java.nio.ByteBuffer;
+import java.util.List;
+
+import javolution.util.FastList;
 
 /**
  * @author -Nemesiss-
@@ -167,5 +170,26 @@ public class Util {
 			return name.substring(0, 1).toUpperCase() + name.toLowerCase().substring(1);
 		else
 			return "";
+	}
+
+	public static String intListToString(List<Integer> list){
+		StringBuilder sb = new StringBuilder();
+		for (int i = 0; i < list.size(); i++) {
+			sb.append(list.get(i));
+			if (i < list.size() - 1) {
+				sb.append(",");
+			}
+		}
+		String numbersString = sb.toString();
+		return numbersString;
+	}
+
+	public static List<Integer> stringToIntList(String numbersString){
+		String[] ids = numbersString.split(",");
+		List<Integer> idd = new FastList<Integer>();
+		for (String id : ids) {
+			idd.add(Integer.parseInt(id));
+		}
+		return idd;
 	}
 }

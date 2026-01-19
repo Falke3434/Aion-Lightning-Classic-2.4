@@ -81,6 +81,9 @@ public class GSConfig {
 	@Property(key = "gameserver.factions.character.create.max.limit.count", defaultValue = "500")
 	public static int FACTIONS_CHARACTER_CREATE_MAX_LIMIT_COUNT;
 
+    @Property(key="gameserver.players.max.level", defaultValue="55")
+    public static int PLAYER_MAX_LEVEL;
+
 	/**
 	 * Server name
 	 */

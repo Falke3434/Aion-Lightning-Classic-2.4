@@ -11,7 +11,7 @@
  Target Server Version : 50546 (5.5.46)
  File Encoding         : 65001
 
- Date: 18/01/2026 14:28:36
+ Date: 18/01/2026 18:22:29
 */
 
 SET NAMES utf8mb4;
@@ -169,7 +169,7 @@ CREATE TABLE `audit`  (
   `text` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
   `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id_audit`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 8085 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
+) ENGINE = InnoDB AUTO_INCREMENT = 8087 CHARACTER SET = latin1 COLLATE = latin1_swedish_ci ROW_FORMAT = Compact;
 
 -- ----------------------------
 -- Table structure for banned_ip
@@ -908,7 +908,7 @@ CREATE TABLE `player_pets`  (
   `gift_cd_started` bigint(20) NOT NULL DEFAULT 0,
   `dopings` varchar(80) CHARACTER SET ascii COLLATE ascii_general_ci NULL DEFAULT NULL,
   `despawn_time` timestamp NULL DEFAULT NULL,
-  `expire_time` int(11) NOT NULL,
+  `expire_time` int(11) NULL DEFAULT NULL,
   PRIMARY KEY (`player_id`, `pet_id`) USING BTREE,
   CONSTRAINT `FK_player_pets` FOREIGN KEY (`player_id`) REFERENCES `players` (`id`) ON DELETE CASCADE ON UPDATE RESTRICT
 ) ENGINE = InnoDB CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Compact;

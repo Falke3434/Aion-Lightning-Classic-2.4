@@ -55,6 +55,8 @@ public class ClassChangeService {
 					case PRIEST:
 						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 3398, 1006));
 						break;
+					default:
+						break;
 					}
 				} else if (playerRace == Race.ASMODIANS) {
 					switch (playerClass) {
@@ -69,6 +71,8 @@ public class ClassChangeService {
 						break;
 					case PRIEST:
 						PacketSendUtility.sendPacket(player, new SM_DIALOG_WINDOW(0, 4080, 2008));
+						break;
+					default:
 						break;
 					}
 				}

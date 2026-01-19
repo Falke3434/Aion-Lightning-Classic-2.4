@@ -173,6 +173,8 @@ public class ObserveController {
 		case NPCDIALOGREQUEST:
 			observer.npcdialogrequested((Npc) object[0]);
 			break;
+		default:
+			break;
 		}
 	}
 

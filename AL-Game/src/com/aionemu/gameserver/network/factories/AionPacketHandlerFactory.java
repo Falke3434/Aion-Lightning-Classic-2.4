@@ -34,14 +34,14 @@ public class AionPacketHandlerFactory {
 
 	private AionPacketHandler handler;
 
-	public static final AionPacketHandlerFactory getInstance() {
+	public static AionPacketHandlerFactory getInstance() {
 		return SingletonHolder.instance;
 	}
 
 	/**
 	 * Creates new instance of <tt>AionPacketHandlerFactory</tt><br>
 	 */
-	private AionPacketHandlerFactory() {
+	public AionPacketHandlerFactory() {
 		handler = new AionPacketHandler();
 		////////////////// 2.4/////////////////////
 		addPacket(new CM_QUESTIONNAIRE(0x163, State.IN_GAME));// FOUND 2.4
@@ -186,6 +186,13 @@ public class AionPacketHandlerFactory {
 
 		addPacket(new CM_READY_ENTER_WORLD(0x193, State.IN_GAME));// 2.4
 		addPacket(new CM_UNK_114(0x114, State.IN_GAME));// FOUND 2.4
+		addPacket(new CM_GM_COMMAND_SEND(0xC8, State.IN_GAME));
+		addPacket(new CM_GM_BOOKMARK(0xCB, State.IN_GAME));
+		addPacket(new CM_QUEST_TELEPORT(0x1BC, State.IN_GAME));
+		addPacket(new CM_UNK_0x187(0x187, State.IN_GAME)); //TODO after Teleport
+		addPacket(new CM_RANK_LIST(0x181, State.IN_GAME)); //TODO My Ranklist
+		addPacket(new CM_MY_DOCUMENTATION(0x1BE, State.IN_GAME)); //TODO
+		addPacket(new CM_GAMEGUARD(0x10A, State.IN_GAME)); //C_NCGUARD
 	}
 
 	public AionPacketHandler getPacketHandler() {

@@ -46,6 +46,7 @@ import com.aionemu.gameserver.model.PlayerClass;
 import com.aionemu.gameserver.model.Race;
 import com.aionemu.gameserver.model.TribeClass;
 import com.aionemu.gameserver.model.account.Account;
+import com.aionemu.gameserver.model.account.AccountSielEnergy;
 import com.aionemu.gameserver.model.gameobjects.Creature;
 import com.aionemu.gameserver.model.gameobjects.Item;
 import com.aionemu.gameserver.model.gameobjects.Kisk;
@@ -256,6 +257,7 @@ public class Player extends Creature {
 	private int bonusId = 0;
 	private int playersBonusId = 0;
 	private PlayerBoostEvent playerBoostEvent;
+	private AccountSielEnergy accountSielEnergy;
 
 	/**
 	 * Used for JUnit tests
@@ -2268,6 +2270,14 @@ public class Player extends Creature {
 
 	public PlayerBoostEvent getPlayerBoostEvent() {
 		return playerBoostEvent;
+	}
+
+	public AccountSielEnergy getAccountSielEnergy() {
+		return accountSielEnergy;
+	}
+
+	public void setAccountSielEnergy(AccountSielEnergy accountSielEnergy) {
+		this.accountSielEnergy = accountSielEnergy;
 	}
 
 }

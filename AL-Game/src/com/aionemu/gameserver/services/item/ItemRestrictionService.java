@@ -52,6 +52,8 @@ public class ItemRestrictionService {
 				return true;
 			}
 			break;
+		default:
+			break;
 		}
 		return false;
 	}
@@ -91,6 +93,8 @@ public class ItemRestrictionService {
 				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1300322));
 				return true;
 			}
+			break;
+		default:
 			break;
 		}
 

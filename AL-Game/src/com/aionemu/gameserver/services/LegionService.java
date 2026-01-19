@@ -755,6 +755,8 @@ public class LegionService {
 				break;
 			case VOLUNTEER:
 				msgId = 1400903;
+			default:
+				break;
 			}
 			legionMember.setRank(rank);
 

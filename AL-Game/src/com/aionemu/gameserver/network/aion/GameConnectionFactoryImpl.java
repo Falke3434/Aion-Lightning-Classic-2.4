@@ -58,10 +58,8 @@ public class GameConnectionFactoryImpl implements ConnectionFactory {
 	public GameConnectionFactoryImpl() {
 		if (NetworkConfig.ENABLE_FLOOD_CONNECTIONS) {
 			floodAcceptor = new FloodManager(NetworkConfig.Flood_Tick,
-					new FloodManager.FloodFilter(NetworkConfig.Flood_SWARN, NetworkConfig.Flood_SReject,
-							NetworkConfig.Flood_STick), // short period
-					new FloodManager.FloodFilter(NetworkConfig.Flood_LWARN, NetworkConfig.Flood_LReject,
-							NetworkConfig.Flood_LTick)); // long period
+					new FloodManager.FloodFilter(NetworkConfig.Flood_SWARN, NetworkConfig.Flood_SReject, NetworkConfig.Flood_STick), // short period
+					new FloodManager.FloodFilter(NetworkConfig.Flood_LWARN, NetworkConfig.Flood_LReject, NetworkConfig.Flood_LTick)); // long period
 		}
 	}
 

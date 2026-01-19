@@ -34,6 +34,7 @@ public class DropItem {
 	private boolean isItemWonNotCollected = false;
 	private boolean isDistributeItem = false;
 	private int npcObj;
+	private int ItemMask;
 
 	public DropItem(Drop dropTemplate) {
 		this.dropTemplate = dropTemplate;
@@ -180,6 +181,10 @@ public class DropItem {
 
 	public void setNpcObj(int npcObj) {
 		this.npcObj = npcObj;
+	}
+
+	public int getItemMask() {
+		return ItemMask;
 	}
 
 }

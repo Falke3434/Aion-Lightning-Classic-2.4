@@ -10,6 +10,7 @@ public class SM_SERVER_ENV extends AionServerPacket {
 
 	@Override
 	protected void writeImpl(AionConnection con) {
+		
 		writeH(350);
 		writeH(2561);
 		writeH(2561);

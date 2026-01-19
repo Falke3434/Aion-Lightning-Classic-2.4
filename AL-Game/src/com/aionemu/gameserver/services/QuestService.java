@@ -47,6 +47,7 @@ import com.aionemu.gameserver.model.gameobjects.player.Player;
 import com.aionemu.gameserver.model.gameobjects.player.QuestStateList;
 import com.aionemu.gameserver.model.gameobjects.player.RewardType;
 import com.aionemu.gameserver.model.gameobjects.player.npcFaction.NpcFaction;
+import com.aionemu.gameserver.model.gameobjects.state.CreatureState;
 import com.aionemu.gameserver.model.items.ItemId;
 import com.aionemu.gameserver.model.skill.PlayerSkillEntry;
 import com.aionemu.gameserver.model.team2.common.legacy.LootRuleType;
@@ -65,6 +66,7 @@ import com.aionemu.gameserver.model.templates.quest.QuestRepeatCycle;
 import com.aionemu.gameserver.model.templates.quest.QuestWorkItems;
 import com.aionemu.gameserver.model.templates.quest.Rewards;
 import com.aionemu.gameserver.model.templates.quest.XMLStartCondition;
+import com.aionemu.gameserver.model.templates.spawns.SpawnSearchResult;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_LOOT_STATUS;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_QUEST_ACTION;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SYSTEM_MESSAGE;
@@ -80,6 +82,7 @@ import com.aionemu.gameserver.services.drop.DropRegistrationService;
 import com.aionemu.gameserver.services.item.ItemPacketService.ItemUpdateType;
 import com.aionemu.gameserver.services.item.ItemService;
 import com.aionemu.gameserver.services.reward.BonusService;
+import com.aionemu.gameserver.services.teleport.TeleportService;
 import com.aionemu.gameserver.spawnengine.SpawnEngine;
 import com.aionemu.gameserver.utils.MathUtil;
 import com.aionemu.gameserver.utils.PacketSendUtility;
@@ -175,6 +178,8 @@ public final class QuestService {
 					classRewardItem = getQuestItemsbyClass(id, template.getKnightSelectableReward(), selRewIndex);
 					break;
 				}
+				default:
+					break;
 				}
 				if (classRewardItem != null) {
 					questItems.add(classRewardItem);
@@ -855,5 +860,24 @@ public final class QuestService {
 			}
 		}
 		return players;
+	}
+	
+	public static void teleportToNpc(Player player, int questId, int npcId) {
+		if (player.getQuestStateList().hasQuest(questId) &&
+		    player.getQuestStateList().getQuestState(questId).getStatus() == QuestStatus.START ||
+			player.getQuestStateList().getQuestState(questId).getStatus() == QuestStatus.REWARD) {
+			int worldId = player.getWorldId();
+			SpawnSearchResult searchResult = DataManager.SPAWNS_DATA2.getFirstSpawnByNpcId(worldId, npcId);
+			if (player.getState() == CreatureState.RESTING.getId() || player.getState() == CreatureState.FLIGHT_TELEPORT.getId() ||
+				player.getState() == CreatureState.GLIDING.getId() || player.getState() == CreatureState.LOOTING.getId() ||
+				player.getState() == CreatureState.PRIVATE_SHOP.getId() || player.getState() == CreatureState.CHAIR.getId() ||
+				player.getState() == CreatureState.TREATMENT.getId() || player.getState() == CreatureState.DEAD.getId()) {
+				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1401742));
+			} else if (searchResult == null) {
+				PacketSendUtility.sendPacket(player, new SM_SYSTEM_MESSAGE(1401744));
+				return;
+			}
+			TeleportService.teleportToNpc(player, npcId);
+		}
 	}
 }

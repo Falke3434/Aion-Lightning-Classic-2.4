@@ -297,6 +297,10 @@ public class TeleportService {
 		return teleportTo(player, worldId, x, y, z, player.getHeading(), delay);
 	}
 
+	public static boolean teleportTo(Player player, int worldId, float x, float y, float z) {
+		return teleportTo(player, worldId, x, y, z, player.getHeading());
+	}
+
 	/**
 	 * Teleport Creature to the location using current heading and instanceId
 	 *

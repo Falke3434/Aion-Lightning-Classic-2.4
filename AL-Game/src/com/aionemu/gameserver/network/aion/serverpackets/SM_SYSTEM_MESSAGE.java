@@ -22907,6 +22907,17 @@ public class SM_SYSTEM_MESSAGE extends AionServerPacket {
 		return new SM_SYSTEM_MESSAGE(900700, newLevel);
 	}
 
+	/**
+	 * SIEL ENERGY
+	 */
+	public static SM_SYSTEM_MESSAGE STR_MSG_ALARM_PLAYTIME_CLASSIC_ACCOUNT_TRIAL(int time) {
+		return new SM_SYSTEM_MESSAGE(1401419, "%DURATIONTIMENOSEC",time);
+	}
+
+	public static SM_SYSTEM_MESSAGE STR_MSG_ALARM_PLAYTIME_CLASSIC_ACCOUNT_MEMBERSHIP(int time) {
+		return new SM_SYSTEM_MESSAGE(1401417, "%DURATIONTIMENOSEC",time);
+	}
+
 	private final int code;
 	private final Object[] params;
 	private boolean npcShout = false;

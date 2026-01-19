@@ -257,6 +257,8 @@ public class TvtService extends InstanceService {
 					a = 0;
 				}
 				break;
+			default:
+				break;
 
 			}
 		}
@@ -283,6 +285,8 @@ public class TvtService extends InstanceService {
 					break;
 				case ELYOS:
 					PacketSendUtility.sendWhiteMessage(player, "[Ascension]Tvt: Manager Hippotades Waiting in Sanctum");
+					break;
+				default:
 					break;
 				}
 			}
@@ -370,6 +374,8 @@ public class TvtService extends InstanceService {
 									"[Ascension]Tvt: Registration will be ending for: " + tvt.getRemainingTime() / 60
 											+ " minutes.\nAsmodians:" + tvt.getHolders().getAsmoReg() + " | Elyos:"
 											+ tvt.getHolders().getElysReg());
+							break;
+						default:
 							break;
 						}
 					}

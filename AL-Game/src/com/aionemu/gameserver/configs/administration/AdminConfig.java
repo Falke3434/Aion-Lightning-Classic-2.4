@@ -28,6 +28,8 @@ public class AdminConfig {
 	 */
 	@Property(key = "gameserver.administration.gmlevel", defaultValue = "3")
 	public static int GM_LEVEL;
+	@Property(key = "gameserver.administration.gmpanel", defaultValue = "3")
+	public static int GM_PANEL;
 	@Property(key = "gameserver.administration.baseshield", defaultValue = "3")
 	public static int COMMAND_BASESHIELD;
 	@Property(key = "gameserver.administration.flight.freefly", defaultValue = "3")

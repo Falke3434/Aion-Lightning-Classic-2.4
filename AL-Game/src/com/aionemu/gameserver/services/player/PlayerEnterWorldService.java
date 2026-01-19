@@ -32,15 +32,10 @@ import com.aionemu.gameserver.configs.main.EventsConfig;
 import com.aionemu.gameserver.configs.main.GSConfig;
 import com.aionemu.gameserver.configs.main.HTMLConfig;
 import com.aionemu.gameserver.configs.main.PeriodicSaveConfig;
-import com.aionemu.gameserver.dao.AbyssRankDAO;
-import com.aionemu.gameserver.dao.InventoryDAO;
-import com.aionemu.gameserver.dao.ItemStoneListDAO;
 import com.aionemu.gameserver.dao.PlayerDAO;
 import com.aionemu.gameserver.dao.PlayerPasskeyDAO;
 import com.aionemu.gameserver.dao.PlayerPunishmentsDAO;
-import com.aionemu.gameserver.dao.PlayerQuestListDAO;
 import com.aionemu.gameserver.dao.PlayerRankDAO;
-import com.aionemu.gameserver.dao.PlayerSkillListDAO;
 import com.aionemu.gameserver.dao.WeddingDAO;
 import com.aionemu.gameserver.model.ChatType;
 import com.aionemu.gameserver.model.TaskId;
@@ -477,6 +472,8 @@ public final class PlayerEnterWorldService {
 			BrokerService.getInstance().onPlayerLogin(player);
 			PetitionService.getInstance().onPlayerLogin(player);
 			SiegeService.getInstance().onPlayerLogin(player);
+			SielEnergyService.getInstance().onLogin(player);
+			client.sendPacket(new SM_RECIPE_LIST(player.getRecipeList().getRecipeList()));
 			AutoGroupService2.getInstance().onPlayerLogin(player);
 			ClassChangeService.showClassChangeDialog(player);
 
@@ -527,12 +524,8 @@ public final class PlayerEnterWorldService {
 				}
 			}
 			// scheduler periodic update
-			player.getController().addTask(TaskId.PLAYER_UPDATE,
-					ThreadPoolManager.getInstance().scheduleAtFixedRate(new GeneralUpdateTask(player.getObjectId()),
-							PeriodicSaveConfig.PLAYER_GENERAL * 1000, PeriodicSaveConfig.PLAYER_GENERAL * 1000));
-			player.getController().addTask(TaskId.INVENTORY_UPDATE,
-					ThreadPoolManager.getInstance().scheduleAtFixedRate(new ItemUpdateTask(player.getObjectId()),
-							PeriodicSaveConfig.PLAYER_ITEMS * 1000, PeriodicSaveConfig.PLAYER_ITEMS * 1000));
+			player.getController().addTask(TaskId.PLAYER_UPDATE, ThreadPoolManager.getInstance().scheduleAtFixedRate(new GeneralUpdateTask(player.getObjectId()), PeriodicSaveConfig.PLAYER_GENERAL * 1000, PeriodicSaveConfig.PLAYER_GENERAL * 1000));
+			player.getController().addTask(TaskId.INVENTORY_UPDATE, ThreadPoolManager.getInstance().scheduleAtFixedRate(new ItemUpdateTask(player.getObjectId()), PeriodicSaveConfig.PLAYER_ITEMS * 1000, PeriodicSaveConfig.PLAYER_ITEMS * 1000));
 
 			SurveyService.getInstance().showAvailable(player);
 
@@ -548,7 +541,7 @@ public final class PlayerEnterWorldService {
 
 			player.setPartnerId(DAOManager.getDAO(WeddingDAO.class).loadPartnerId(player));
 			DAOManager.getDAO(PlayerRankDAO.class).loadCustomRank(player);
-			;
+
 			// DP restore
 			if (playerAccData.getPlayerCommonData().getLastOnline() != null) {
 				final long lastOnline = playerAccData.getPlayerCommonData().getLastOnline().getTime();
@@ -587,8 +580,7 @@ public final class PlayerEnterWorldService {
 		Storage inventory = player.getInventory();
 		List<Item> equipedItems = player.getEquipment().getEquippedItems();
 		if (equipedItems.size() != 0) {
-			client.sendPacket(
-					new SM_INVENTORY_INFO(player.getEquipment().getEquippedItems(), npcExpands, questExpands, player));
+			client.sendPacket(new SM_INVENTORY_INFO(player.getEquipment().getEquippedItems(), npcExpands, questExpands, player));
 		}
 
 		List<Item> unequipedItems = inventory.getItemsWithKinah();
@@ -596,12 +588,10 @@ public final class PlayerEnterWorldService {
 		if (itemsSize != 0) {
 			int index = 0;
 			while (index + 10 < itemsSize) {
-				client.sendPacket(new SM_INVENTORY_INFO(unequipedItems.subList(index, index + 10), npcExpands,
-						questExpands, player));
+				client.sendPacket(new SM_INVENTORY_INFO(unequipedItems.subList(index, index + 10), npcExpands, questExpands, player));
 				index += 10;
 			}
-			client.sendPacket(
-					new SM_INVENTORY_INFO(unequipedItems.subList(index, itemsSize), npcExpands, questExpands, player));
+			client.sendPacket(new SM_INVENTORY_INFO(unequipedItems.subList(index, itemsSize), npcExpands, questExpands, player));
 		}
 		client.sendPacket(new SM_INVENTORY_INFO());
 		client.sendPacket(new SM_STATS_INFO(player));
@@ -610,14 +600,15 @@ public final class PlayerEnterWorldService {
 
 	private static void sendMacroList(AionConnection client, Player player) {
 		client.sendPacket(new SM_MACRO_LIST(player));
+		if (player.getMacroList().getSize() > 7) {
+			client.sendPacket(new SM_MACRO_LIST(player));
+		}
 	}
-
 	/**
 	 * @param player
 	 */
 	private static void playerLoggedIn(Player player) {
-		log.info("Player logged in: " + player.getName() + " Account: "
-				+ player.getClientConnection().getAccount().getName());
+		log.info("Player logged in: " + player.getName() + " Account: " + player.getClientConnection().getAccount().getName());
 		player.getCommonData().setOnline(true);
 		DAOManager.getDAO(PlayerDAO.class).onlinePlayer(player, true);
 		player.onLoggedIn();
@@ -637,58 +628,6 @@ public final class PlayerEnterWorldService {
 				break;
 			}
 			client.sendPacket(new SM_MESSAGE(0, null, "Your account is " + accountType, ChatType.GOLDEN_YELLOW));
-		}
-	}
-
-}
-
-class GeneralUpdateTask implements Runnable {
-
-	private static final Logger log = LoggerFactory.getLogger(GeneralUpdateTask.class);
-	private final int playerId;
-
-	GeneralUpdateTask(int playerId) {
-		this.playerId = playerId;
-	}
-
-	@Override
-	public void run() {
-		Player player = World.getInstance().findPlayer(playerId);
-		if (player != null) {
-			try {
-				DAOManager.getDAO(AbyssRankDAO.class).storeAbyssRank(player);
-				DAOManager.getDAO(PlayerSkillListDAO.class).storeSkills(player);
-				DAOManager.getDAO(PlayerQuestListDAO.class).store(player);
-				DAOManager.getDAO(PlayerDAO.class).storePlayer(player);
-				DAOManager.getDAO(PlayerRankDAO.class).loadCustomRank(player);
-			} catch (Exception ex) {
-				log.error("Exception during periodic saving of player " + player.getName(), ex);
-			}
-		}
-
-	}
-
-}
-
-class ItemUpdateTask implements Runnable {
-
-	private static final Logger log = LoggerFactory.getLogger(ItemUpdateTask.class);
-	private final int playerId;
-
-	ItemUpdateTask(int playerId) {
-		this.playerId = playerId;
-	}
-
-	@Override
-	public void run() {
-		Player player = World.getInstance().findPlayer(playerId);
-		if (player != null) {
-			try {
-				DAOManager.getDAO(InventoryDAO.class).store(player);
-				DAOManager.getDAO(ItemStoneListDAO.class).save(player);
-			} catch (Exception ex) {
-				log.error("Exception during periodic saving of player items " + player.getName(), ex);
-			}
 		}
 	}
 

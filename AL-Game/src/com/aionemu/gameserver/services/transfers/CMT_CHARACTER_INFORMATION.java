@@ -417,6 +417,8 @@ public class CMT_CHARACTER_INFORMATION extends AionClientPacket {
 		case ASMODIANS:
 			pos = PlayerTransferConfig.BIND_ASMO.split(" ");
 			break;
+		default:
+			break;
 		}
 
 		player.setBindPoint(new BindPointPosition(Integer.parseInt(pos[0]), Float.parseFloat(pos[1]),

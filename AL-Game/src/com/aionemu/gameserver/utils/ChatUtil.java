@@ -43,4 +43,11 @@ public class ChatUtil {
 	public static String quest(int questId) {
 		return String.format("[quest: %d]", questId);
 	}
+
+	public static String getRealAdminName(String name) {
+		int index = name.lastIndexOf(" ");
+		if (index == -1)
+			return name;
+		return name.substring(index + 1);
+	}
 }

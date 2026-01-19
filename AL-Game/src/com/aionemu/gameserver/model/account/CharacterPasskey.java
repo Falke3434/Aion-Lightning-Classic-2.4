@@ -87,6 +87,7 @@ public class CharacterPasskey {
 	}
 
 	public enum ConnectType {
-		ENTER, DELETE
+		ENTER,
+		DELETE
 	}
 }

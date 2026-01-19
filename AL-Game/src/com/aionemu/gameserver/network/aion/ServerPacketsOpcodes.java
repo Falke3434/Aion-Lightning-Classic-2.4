@@ -258,8 +258,7 @@ public class ServerPacketsOpcodes {
 			return;
 
 		if (idSet.contains(opcode))
-			throw new IllegalArgumentException(
-					String.format("There already exists another packet with id 0x%02X", opcode));
+			throw new IllegalArgumentException(String.format("There already exists another packet with id 0x%02X", opcode));
 
 		idSet.add(opcode);
 		opcodes.put(packetClass, opcode);

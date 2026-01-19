@@ -147,6 +147,8 @@ public class ItemSplitService {
 			updateKinahCount(source, splitAmount, destination);
 			break;
 		}
+		default:
+			break;
 		}
 	}
 

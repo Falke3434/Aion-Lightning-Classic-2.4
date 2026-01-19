@@ -96,6 +96,8 @@ public class FindGroupService {
 				break;
 			}
 			break;
+		default:
+			break;
 		}
 
 		Collection<FindGroup> findGroupList = new ArrayList<FindGroup>();
@@ -117,6 +119,8 @@ public class FindGroupService {
 			findGroup = asmodianRecruitFindGroups.get(objectId);
 			findGroup.setMessage(message);
 			break;
+		default:
+			break;
 		}
 	}
 
@@ -137,6 +141,8 @@ public class FindGroupService {
 			case 0x04:
 				return asmodianApplyFindGroups.values();
 			}
+			break;
+		default:
 			break;
 		}
 		return null;
@@ -169,6 +175,8 @@ public class FindGroupService {
 				findGroup = asmodianApplyFindGroups.remove(playerObjId);
 				break;
 			}
+			break;
+		default:
 			break;
 		}
 		if (findGroup != null)

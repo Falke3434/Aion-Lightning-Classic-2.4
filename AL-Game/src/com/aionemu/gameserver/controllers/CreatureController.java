@@ -261,6 +261,8 @@ public abstract class CreatureController<T extends Creature> extends VisibleObje
 		case FP:
 			getOwner().getLifeStats().increaseFp(TYPE.FP, value);
 			break;
+		default:
+			break;
 		}
 	}
 

@@ -844,6 +844,8 @@ public class EnchantService {
 						modifiers.add(new StatEnchantFunction(item, StatEnum.MAIN_HAND_POWER));
 					else
 						modifiers.add(new StatEnchantFunction(item, StatEnum.OFF_HAND_POWER));
+				default:
+					break;
 				}
 			} else if (item.getItemTemplate().isArmor()) {
 				if (item.getItemTemplate().getArmorType() == ArmorType.SHIELD) {

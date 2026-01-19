@@ -49,8 +49,6 @@ import com.aionemu.gameserver.model.templates.spawns.SpawnGroup2;
 import com.aionemu.gameserver.model.templates.spawns.SpawnTemplate;
 import com.aionemu.gameserver.model.templates.spawns.siegespawns.SiegeSpawnTemplate;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO2;
-import com.aionemu.gameserver.network.aion.serverpackets.SM_ABYSS_ARTIFACT_INFO3;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_INFLUENCE_RATIO;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SHIELD_EFFECT;
 import com.aionemu.gameserver.network.aion.serverpackets.SM_SIEGE_LOCATION_INFO;
@@ -603,17 +601,15 @@ public class SiegeService {
 
 	public void onPlayerLogin(final Player player) {
 		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO(getSiegeLocations().values()));
-		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO2(getSiegeLocations().values()));
-		PacketSendUtility.sendPacket(player, new SM_ABYSS_ARTIFACT_INFO3(getSiegeLocations().values()));
 		// PacketSendUtility.sendPacket(player, new SM_FORTRESS_STATUS()); // TODO when
 		// send on retail?
 		PacketSendUtility.sendPacket(player, new SM_SHIELD_EFFECT());
 
 		for (FortressLocation loc : getFortresses().values()) {
 			// remove teleportation to dead teleporters
-			// if (!loc.isCanTeleport(player))
-			// PacketSendUtility.sendPacket(player, new
-			// SM_FORTRESS_INFO(loc.getLocationId(), loc.isCanTeleport(player)));
+			 //if (!loc.isCanTeleport(player))
+			 //PacketSendUtility.sendPacket(player, new
+			 //SM_FORTRESS_INFO(loc.getLocationId(), loc.isCanTeleport(player)));
 		}
 	}
 

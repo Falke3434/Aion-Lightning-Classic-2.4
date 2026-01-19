@@ -389,6 +389,8 @@ public class EffectController {
 				if (effect.getDispelCategory() == DispelCategoryType.BUFF && effect.getReqDispelLevel() <= dispelLevel)
 					number++;
 				break;
+			default:
+				break;
 			}
 		}
 
@@ -451,6 +453,8 @@ public class EffectController {
 			case NPC_DEBUFF_PHYSICAL:// DispelNpcDebuff
 				if (effect.getDispelCategory() == DispelCategoryType.NPC_DEBUFF_PHYSICAL)
 					remove = true;
+				break;
+			default:
 				break;
 			}
 
