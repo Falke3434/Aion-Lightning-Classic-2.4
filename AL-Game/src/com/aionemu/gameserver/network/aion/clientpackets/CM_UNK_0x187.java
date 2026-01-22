@@ -37,4 +37,3 @@ public class CM_UNK_0x187 extends AionClientPacket {
     protected void runImpl() {
     }
 }
-

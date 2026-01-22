@@ -2279,5 +2279,8 @@ public class Player extends Creature {
 	public void setAccountSielEnergy(AccountSielEnergy accountSielEnergy) {
 		this.accountSielEnergy = accountSielEnergy;
 	}
-
+	
+	public PlayerUpgradeArcade getUpgradeArcade() {
+		return playerCommonData.getUpgradeArcade();
+	}
 }

@@ -5,12 +5,12 @@ import com.aionemu.gameserver.network.aion.AionClientPacket;
 import com.aionemu.gameserver.network.aion.AionConnection;
 import com.aionemu.gameserver.services.QuestService;
 
-public class CM_QUEST_TELEPORT extends AionClientPacket {
+public class CM_TELEPORT_QUEST extends AionClientPacket {
 
 	private int questId;
 	private int npcId;
 
-	public CM_QUEST_TELEPORT(int opcode, AionConnection.State state, AionConnection.State... restStates) {
+	public CM_TELEPORT_QUEST(int opcode, AionConnection.State state, AionConnection.State... restStates) {
 		super(opcode, state, restStates);
 	}
 

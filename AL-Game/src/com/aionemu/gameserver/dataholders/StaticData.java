@@ -192,6 +192,9 @@ public class StaticData {
 
 	@XmlElement(name = "pvp_zone_data")
 	public PvpZoneData pvpZoneData;
+	
+	@XmlElement(name = "arcadelist")
+	public ArcadeUpgradeData arcadeUpgradeData;
 
 	@XmlElement(name = "item_groups")
 	public ItemGroupsData itemGroupsData;
@@ -253,5 +256,6 @@ public class StaticData {
 		DataManager.log.info("Loaded " + spawnsData2.size() + " spawn maps entries");
 		DataManager.log.info("Loaded " + eventData.size() + " active events");
 		DataManager.log.info("Loaded " + pvpZoneData.size() + " Pvp Zone Positions");
+		DataManager.log.info("Loaded " + arcadeUpgradeData.size() + " arcade upgrade entries");
 	}
 }

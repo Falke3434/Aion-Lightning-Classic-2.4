@@ -85,6 +85,8 @@ public class SM_RIFT_ANNOUNCE extends AionServerPacket {
 				writeD(1);
 				writeD(0);
 				break;
+			default:
+				break;
 			}
 			break;
 		case 2:

@@ -80,6 +80,7 @@ public class PlayerCommonData extends VisibleObjectTemplate {
 	private long lastUnStuck;
 	private int gmConfig;
 	private String locale;
+	private PlayerUpgradeArcade upgradeArcade;
 	
 	private BoundRadius boundRadius;
 
@@ -655,6 +656,17 @@ public class PlayerCommonData extends VisibleObjectTemplate {
 
 	public void setLocale(String locale) {
 		this.locale = locale;
+	}
+
+	public PlayerUpgradeArcade getUpgradeArcade() {
+		if (upgradeArcade == null)
+			this.upgradeArcade = new PlayerUpgradeArcade();
+
+		return upgradeArcade;
+	}
+
+	public void setUpgradeArcade(PlayerUpgradeArcade upgradeArcade) {
+		this.upgradeArcade = upgradeArcade;
 	}
 
 }

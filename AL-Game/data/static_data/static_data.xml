@@ -141,4 +141,5 @@
 	<pvp_zone_data>
 		<import file="academy/pvp_zone_data.xml" skipRoot="true"/>
 	</pvp_zone_data>
+	<import file="arcadelist.xml"/>
 </ae_static_data>

@@ -146,6 +146,8 @@ public final class DataManager {
 	public static EventData EVENT_DATA;
 
 	public static PvpZoneData PVP_ZONE_DATA;
+	
+	public static ArcadeUpgradeData ARCADE_UPGRADE_DATA;
 
 	private XmlDataLoader loader;
 
@@ -222,6 +224,7 @@ public final class DataManager {
 		AUTO_GROUP = data.autoGroupData;
 		EVENT_DATA = data.eventData;
 		PVP_ZONE_DATA = data.pvpZoneData;
+		ARCADE_UPGRADE_DATA = data.arcadeUpgradeData;
 		ITEM_DATA.cleanup();
 
 		// some sexy time message

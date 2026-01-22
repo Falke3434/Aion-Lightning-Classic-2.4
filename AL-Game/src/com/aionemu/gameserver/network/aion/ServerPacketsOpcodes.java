@@ -242,6 +242,7 @@ public class ServerPacketsOpcodes {
 		addPacketOpcode(S_NPSHOP_GOODS_COUNT.class, 0x10B, idSet);
 		addPacketOpcode(S_READY_ENTER_WORLD.class, 0x11E, idSet);
 		addPacketOpcode(S_AFTER_ENTER_WORLD.class, 0x193, idSet);
+		addPacketOpcode(SM_UPGRADE_ARCADE.class, 0x13C, idSet);
 
 	}
 

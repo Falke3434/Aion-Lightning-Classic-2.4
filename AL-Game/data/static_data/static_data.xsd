@@ -56,6 +56,7 @@
 	<xs:include schemaLocation="auto_group/auto_group.xsd"/>
 	<xs:include schemaLocation="events_config/events_config.xsd"/>
 	<xs:include schemaLocation="academy/pvp_zone_data.xsd"/>
+	<xs:include schemaLocation="arcadelist.xsd"/>
 	<xs:element name="ae_static_data">
 		<xs:complexType>
 			<xs:sequence>
@@ -115,6 +116,7 @@
 				<xs:element ref="auto_groups" minOccurs="0"/>
 				<xs:element ref="events_config" minOccurs="0"/>
 				<xs:element ref="pvp_zone_data" minOccurs="0"/>
+				<xs:element ref="arcadelist" minOccurs="0"/>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>

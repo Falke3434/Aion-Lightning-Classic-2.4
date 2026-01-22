@@ -105,6 +105,7 @@ import com.aionemu.gameserver.services.StigmaService;
 import com.aionemu.gameserver.services.SurveyService;
 import com.aionemu.gameserver.services.TranslationService;
 import com.aionemu.gameserver.services.abyss.AbyssSkillService;
+import com.aionemu.gameserver.services.events.ArcadeUpgradeService;
 import com.aionemu.gameserver.services.reward.RewardService;
 import com.aionemu.gameserver.services.teleport.TeleportService;
 import com.aionemu.gameserver.services.toypet.PetService;
@@ -536,6 +537,7 @@ public final class PlayerEnterWorldService {
 				EventService.getInstance().onPlayerLogin(player);
 			
 			BoostEventService.getInstance().boostEventLogin(player);
+			ArcadeUpgradeService.getInstance().onEnterWorld(player);
 
 			PlayerTransferService.getInstance().onEnterWorld(player);
 
